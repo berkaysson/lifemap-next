@@ -1,9 +1,12 @@
 import NewVerificationForm from "@/components/Auth/NewVerificationForm";
+import { Suspense } from "react";
 
 const NewVerificationPage = () => {
   return (
     <div>
-      <NewVerificationForm />
+      <Suspense>
+        <NewVerificationForm />
+      </Suspense>
     </div>
   );
 };

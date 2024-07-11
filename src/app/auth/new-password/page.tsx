@@ -1,9 +1,12 @@
 import NewPasswordForm from "@/components/Auth/NewPasswordForm";
+import { Suspense } from "react";
 
 const NewPasswordPage = () => {
   return (
     <div>
-      <NewPasswordForm />
+      <Suspense>
+        <NewPasswordForm />
+      </Suspense>
     </div>
   );
 };
