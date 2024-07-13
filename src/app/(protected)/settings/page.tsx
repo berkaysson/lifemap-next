@@ -1,19 +1,37 @@
 "use client";
 
 import { logout } from "@/actions/logout";
+import { reset } from "@/actions/reset";
 import { Button } from "@/components/ui/button";
+import { ResetSchema } from "@/schema";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { startTransition, useState, useTransition } from "react";
 
 const SettingsPage = () => {
+  const [isPending, startTransition] = useTransition();
   const [isPreOn, setIsPreOn] = useState(false);
+  const [message, setMessage] = useState("");
+  const router = useRouter();
   const { data: session, status } = useSession();
   console.log("🚀 ~ file: page.tsx:8 ~ SettingsPage ~ data:", session);
 
   const onClick = () => {
     logout().then(() => {
       setIsPreOn(false);
+      router.push("/auth/login");
     });
+  };
+
+  const onChangePasswordClick = () => {
+    if (session && session.user.email) {
+      const data = ResetSchema.parse({ email: session.user.email });
+      startTransition(() => {
+        reset(data).then((data: any) => {
+          setMessage(data.message);
+        });
+      });
+    }
   };
 
   return (
@@ -49,10 +67,23 @@ const SettingsPage = () => {
         ) : (
           <p className="text-gray-700">You are not authenticated.</p>
         )}
+        <div className="flex justify-between mt-8">
+          <div>
+            <Button
+              onClick={onChangePasswordClick}
+              variant="outline"
+              size={"sm"}
+              disabled={isPending}
+            >
+              Request Password Reset
+            </Button>
+            {message && <p className="p-2">{message}</p>}
+          </div>
 
-        <Button variant={"destructive"} size={"default"} onClick={onClick}>
-          Sign Out
-        </Button>
+          <Button variant={"destructive"} size={"default"} onClick={onClick}>
+            Sign Out
+          </Button>
+        </div>
       </div>
     </div>
   );
