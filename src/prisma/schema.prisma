@@ -31,6 +31,7 @@ model User {
     habits     Habit[]
     projects   Project[]
     activities Activity[]
+    categories Category[]
 }
 
 model Account {
@@ -94,6 +95,8 @@ model Category {
     activities Activity[]
     tasks      Task[]
     habits     Habit[]
+    userId      String
+    user        User     @relation(fields: [userId], references: [id])
 }
 
 model Activity {
