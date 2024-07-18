@@ -10,13 +10,13 @@ export const newVerification = async (token: string) => {
 
   // If the token does not exist, return an error message
   if (!existingToken) {
-    return { message: "Token does not exist!" };
+    return { message: "Token does not exist!", success: false };
   }
 
   // Check if the token has expired
   const hasExpired = new Date(existingToken.expires) < new Date();
   if (hasExpired) {
-    return { message: "Token has expired!" };
+    return { message: "Token has expired!", success: false };
   }
 
   // Retrieve the user associated with the token
@@ -24,7 +24,7 @@ export const newVerification = async (token: string) => {
 
   // If the user does not exist, return an error message
   if (!existingUser) {
-    return { message: "Email does not exist!" };
+    return { message: "Email does not exist!", success: false };
   }
 
   // Update the user's email and emailVerified fields
@@ -42,5 +42,5 @@ export const newVerification = async (token: string) => {
   });
 
   // Return a success message
-  return { message: "Email verified!" };
+  return { message: "Email verified!", success: true };
 };

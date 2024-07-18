@@ -13,7 +13,7 @@ export const newPassword = async (
 ) => {
   // Check if the token is valid
   if (!token) {
-    return { message: "Invalid token" };
+    return { message: "Invalid token", success: false };
   }
 
   // Validate the new password data
@@ -21,7 +21,7 @@ export const newPassword = async (
 
   // If the validation fails, return an error message
   if (!validatedFields.success) {
-    return { message: "Invalid fields!" };
+    return { message: "Invalid fields!", success: false };
   }
 
   // Retrieve the password reset token
@@ -29,12 +29,12 @@ export const newPassword = async (
 
   // If the token does not exist, return an error message
   if (!existingToken) {
-    return { message: "Token does not exist!" };
+    return { message: "Token does not exist!", success: false };
   }
 
   // Check if the token has expired
   if (new Date() > new Date(existingToken.expires)) {
-    return { message: "Token has expired!" };
+    return { message: "Token has expired!", success: false };
   }
 
   // Retrieve the user associated with the token
@@ -42,7 +42,7 @@ export const newPassword = async (
 
   // If the user does not exist, return an error message
   if (!existingUser) {
-    return { message: "User does not exist!" };
+    return { message: "User does not exist!", success: false };
   }
 
   // Hash the new password
@@ -61,5 +61,5 @@ export const newPassword = async (
   });
 
   // Return a success message
-  return { message: "Password changed successfully" };
+  return { message: "Password changed successfully", success: true };
 };

@@ -16,7 +16,7 @@ export const login = async (data: z.infer<typeof LoginSchema>) => {
 
   // If the validation fails, return an error message
   if (!validatedFields.success) {
-    return { message: "Invalid fields!" };
+    return { message: "Invalid fields!", success: false };
   }
 
   // Destructure the validated fields
@@ -25,28 +25,29 @@ export const login = async (data: z.infer<typeof LoginSchema>) => {
   // Check if the user exists and has a password
   const existingUser = await getUserByEmail(email);
   if (!existingUser || !existingUser.email || !existingUser.password) {
-    return { message: "Invalid credentials!" };
+    return { message: "Invalid credentials!", success: false };
   }
 
   // Compare the provided password with the stored password
   const isValidPassword = await bcrypt.compare(password, existingUser.password);
   if (!isValidPassword) {
-    return { message: "Invalid credentials!" };
+    return { message: "Invalid credentials!", success: false };
   }
 
+  // activate verification later
   // If the user hasn't verified their email, send a verification email and return a message
-  if (!existingUser.emailVerified) {
-    const verificationToken = await generateVerificationToken(
-      existingUser.email
-    );
+  // if (!existingUser.emailVerified) {
+  //   const verificationToken = await generateVerificationToken(
+  //     existingUser.email
+  //   );
 
-    await sendVerificationEmail(
-      verificationToken.email,
-      verificationToken.token
-    );
+  //   await sendVerificationEmail(
+  //     verificationToken.email,
+  //     verificationToken.token
+  //   );
 
-    return { message: "Confirmation email sent!" };
-  }
+  //   return { message: "Confirmation email sent!", success: true };
+  // }
 
   try {
     // Attempt to sign in the user
@@ -55,15 +56,15 @@ export const login = async (data: z.infer<typeof LoginSchema>) => {
       password,
       redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
-    return { message: "Login successful!" };
+    return { message: "Login successful!", success: true };
   } catch (error) {
     // If there's an authentication error, handle it
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return { message: "Invalid credentials!" };
+          return { message: "Invalid credentials!", success: false };
         default:
-          return { message: "Authentication error" };
+          return { message: "Authentication error", success: false };
       }
     }
 

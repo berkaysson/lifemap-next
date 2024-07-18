@@ -14,7 +14,7 @@ export const register = async (data: z.infer<typeof RegisterSchema>) => {
 
   if (!validatedFields.success) {
     // If the data is invalid, return an error message
-    return { message: "Invalid fields!" };
+    return { message: "Invalid fields!", success: false };
   }
 
   const { email, password, name } = validatedFields.data;
@@ -23,7 +23,7 @@ export const register = async (data: z.infer<typeof RegisterSchema>) => {
   // Check if the email is already in use
   const existingUser = await getUserByEmail(email);
   if (existingUser) {
-    return { message: "Email already in use!" };
+    return { message: "Email already in use!", success: false };
   }
 
   // Create a new user with the provided data
@@ -42,5 +42,5 @@ export const register = async (data: z.infer<typeof RegisterSchema>) => {
   await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
   // Return a success message
-  return { message: "Email Sent" };
+  return { message: "Email Sent", success: true };
 };

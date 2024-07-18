@@ -5,21 +5,33 @@ import { Category } from "@prisma/client";
 
 export const createCategory = async (newCategory: Category) => {
   if (!newCategory || !newCategory.name) {
-    throw new Error("newCategory is required");
+    return {
+      message: "Category name is required",
+      success: false,
+    };
   }
   try {
-    const createdCategory = await prisma.category.create({
+    await prisma.category.create({
       data: newCategory,
     });
-    return createdCategory;
+    return {
+      message: "Successfully created category",
+      success: true,
+    };
   } catch (error) {
-    throw new Error(`Failed to create category: ${error}`);
+    return {
+      message: `Failed to create category: ${error}`,
+      success: false,
+    };
   }
 };
 
 export const getCategories = async (userId: string) => {
   if (!userId) {
-    throw new Error("userId is required");
+    return {
+      message: "userId is required",
+      success: false,
+    };
   }
   try {
     const categories = await prisma.category.findMany({
@@ -27,42 +39,67 @@ export const getCategories = async (userId: string) => {
         userId,
       },
     });
-    return categories;
+    return {
+      message: "Successfully fetched categories",
+      success: true,
+      categories,
+    };
   } catch (error) {
-    throw new Error(`Failed to fetch categories: ${error}`);
+    return {
+      message: `Failed to fetch categories: ${error}`,
+      success: false,
+    };
   }
 };
 
 export const updateCategory = async (data: Category) => {
   if (!data || !data.name || !data.id) {
-    throw new Error("categoryId and categoryName are required");
+    return {
+      message: "data is required",
+      success: false,
+    };
   }
 
   try {
-    const updatedCategory = await prisma.category.update({
+    await prisma.category.update({
       where: {
         id: data.id,
       },
       data: data,
     });
-    return updatedCategory;
+    return {
+      message: "Successfully updated category",
+      success: true,
+    };
   } catch (error) {
-    throw new Error(`Failed to update category: ${error}`);
+    return {
+      message: `Failed to update category: ${error}`,
+      success: false,
+    };
   }
 };
 
 export const deleteCategory = async (id: string) => {
   if (!id) {
-    throw new Error("id is required");
+    return {
+      message: "id is required",
+      success: false,
+    };
   }
   try {
-    const deletedCategory = await prisma.category.delete({
+    await prisma.category.delete({
       where: {
         id: id,
       },
     });
-    return deletedCategory;
+    return {
+      message: "Successfully deleted category",
+      success: true,
+    };
   } catch (error) {
-    throw new Error(`Failed to delete category: ${error}`);
+    return {
+      message: `Failed to delete category: ${error}`,
+      success: false,
+    };
   }
 };

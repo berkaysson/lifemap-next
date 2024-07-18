@@ -7,11 +7,11 @@ import z from "zod";
 export async function createToDo(
   data: z.infer<typeof TodoSchema>,
   _userId: string
-): Promise<{ message: string }> {
+) {
   const validatedFields = TodoSchema.safeParse(data);
 
   if (!validatedFields.success) {
-    return { message: "Invalid fields!" };
+    return { message: "Invalid fields!", success: false };
   }
 
   const { name, description, colorCode, endDate } = validatedFields.data;
@@ -30,16 +30,15 @@ export async function createToDo(
       },
     });
 
-    return { message: "Successfully created todo" };
+    return { message: "Successfully created todo", success: true };
   } catch (error) {
-    return { message: `${error}` };
-    throw error;
+    return { message: `${error}`, success: false };
   }
 }
 
 export async function getToDos(userId: string | undefined) {
   if (!userId) {
-    throw new Error("userId is required");
+    return { message: "user is required", success: false };
   }
 
   try {
@@ -48,15 +47,15 @@ export async function getToDos(userId: string | undefined) {
         userId,
       },
     });
-    return todos;
+    return { message: "Successfully fetched todos", success: true, todos };
   } catch (error) {
-    throw new Error(`Failed to fetch todos: ${error}`);
+    return { message: `${error}`, success: false };
   }
 }
 
 export async function updateToDo(data: any) {
   if (!data || !data.id) {
-    throw new Error("id is required");
+    return { message: "data is required", success: false };
   }
 
   const { id, ...rest } = data;
@@ -66,23 +65,23 @@ export async function updateToDo(data: any) {
       where: { id },
       data: rest,
     });
-    return todo;
+    return { message: "Successfully updated todo", success: true };
   } catch (error) {
-    throw new Error(`Failed to update todo: ${error}`);
+    return { message: `${error}`, success: false };
   }
 }
 
 export async function deleteToDo(id: string) {
   if (!id) {
-    throw new Error("id is required");
+    return { message: "id is required", success: false };
   }
 
   try {
     const todo = await prisma.toDo.delete({
       where: { id },
     });
-    return todo;
+    return { message: "Successfully deleted todo", success: true };
   } catch (error) {
-    throw new Error(`Failed to delete todo: ${error}`);
+    return { message: `${error}`, success: false };
   }
 }

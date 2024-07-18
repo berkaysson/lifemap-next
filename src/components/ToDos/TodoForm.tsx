@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import { TodoSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -20,6 +19,7 @@ const TodoForm = () => {
   const { onCreateTodo } = useContext(TodoContext);
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
 
   const form = useForm<z.infer<typeof TodoSchema>>({
     resolver: zodResolver(TodoSchema),
@@ -35,6 +35,11 @@ const TodoForm = () => {
       onCreateTodo(data).then((data: any) => {
         if (data.message) {
           setMessage(data.message);
+          if (data.success) {
+            setIsError(false);
+          } else {
+            setIsError(true);
+          }
           console.log("🚀 ~ file: LoginForm.tsx:37 ~ login ~ data:", data);
         }
       });
@@ -57,7 +62,7 @@ const TodoForm = () => {
                     <Input
                       disabled={isPending}
                       {...field}
-                      placeholder="john.doe@example.com"
+                      placeholder="Todo"
                       type="text"
                     />
                   </FormControl>
@@ -105,7 +110,7 @@ const TodoForm = () => {
             />
           </div>
 
-          {message && <FormMessage>{message}</FormMessage>}
+          {message && isError && <FormMessage>{message}</FormMessage>}
 
           <Button
             disabled={isPending}

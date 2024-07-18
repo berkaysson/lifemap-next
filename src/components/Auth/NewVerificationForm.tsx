@@ -7,6 +7,7 @@ import { newVerification } from "@/actions/new-verification";
 
 const NewVerificationForm = () => {
   const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
 
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -17,8 +18,13 @@ const NewVerificationForm = () => {
       return;
     }
     newVerification(token)
-      .then((data) => {
-        setMessage(data.message);
+      .then((response) => {
+        setMessage(response.message);
+        if (response.success) {
+          setIsError(false);
+        } else {
+          setIsError(true);
+        }
       })
       .catch((error) => {
         setMessage("Something went wrong. Please try again later.");
@@ -42,7 +48,7 @@ const NewVerificationForm = () => {
       showSocial={false}
     >
       {!message && <p>Confirming your verification...</p>}
-      {message && <p>{message}</p>}
+      {message && isError && <p>{message}</p>}
     </CardWrapper>
   );
 };

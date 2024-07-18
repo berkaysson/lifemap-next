@@ -22,6 +22,7 @@ import { login } from "@/actions/login";
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -33,10 +34,14 @@ const LoginForm = () => {
 
   const onSubmit = (data: z.infer<typeof LoginSchema>) => {
     startTransition(() => {
-      login(data).then((data: any) => {
-        if (data.message) {
-          setMessage(data.message);
-          console.log("🚀 ~ file: LoginForm.tsx:37 ~ login ~ data:", data);
+      login(data).then((response: any) => {
+        if (response.message) {
+          setMessage(response.message);
+          if (response.success) {
+            setIsError(false);
+          } else {
+            setIsError(true);
+          }
         }
       });
     });
@@ -96,7 +101,7 @@ const LoginForm = () => {
             />
           </div>
 
-          {message && <FormMessage>{message}</FormMessage>}
+          {message && isError && <FormMessage>{message}</FormMessage>}
 
           <Button
             disabled={isPending}

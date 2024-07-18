@@ -10,24 +10,33 @@ import { useSession } from "next-auth/react";
 import { createContext, ReactNode, useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 
+interface ResponseValue {
+  message: string;
+  success: boolean;
+}
+
 interface TodoContextValue {
   todos: ToDo[];
-  fetchTodos: () => Promise<void>;
-  onCreateTodo: (
-    data: z.infer<typeof TodoSchema>
-  ) => Promise<{ message: string }>;
-  onUpdateTodo: (data: ToDo) => Promise<void>;
-  onDeleteTodo: (id: string) => Promise<void>;
+  fetchTodos: () => Promise<ResponseValue>;
+  onCreateTodo: (data: z.infer<typeof TodoSchema>) => Promise<ResponseValue>;
+  onUpdateTodo: (data: ToDo) => Promise<ResponseValue>;
+  onDeleteTodo: (id: string) => Promise<ResponseValue>;
 }
 
 const initialTodoContextValue: TodoContextValue = {
   todos: [],
-  fetchTodos: async () => {},
-  onCreateTodo: async (data: z.infer<typeof TodoSchema>) => {
-    return { message: "" };
+  fetchTodos: async () => {
+    return { message: "", success: false };
   },
-  onUpdateTodo: async (data: ToDo) => {},
-  onDeleteTodo: async (id: string) => {},
+  onCreateTodo: async (data: z.infer<typeof TodoSchema>) => {
+    return { message: "", success: false };
+  },
+  onUpdateTodo: async (data: ToDo) => {
+    return { message: "", success: false };
+  },
+  onDeleteTodo: async (id: string) => {
+    return { message: "", success: false };
+  },
 };
 
 export const TodoContext = createContext<TodoContextValue>(
@@ -45,39 +54,53 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
   }, [session, status]);
 
   const fetchTodos = async () => {
-    if (!session || !session.user) return;
-    const todos = await getToDos(session.user.id);
-    setTodos(todos);
+    if (!session || !session.user)
+      return { message: "Session not exist", success: false };
+    const response = await getToDos(session.user.id);
+    if (response.success && response.todos) {
+      setTodos(response.todos);
+    }
+
+    return {
+      message: response.message,
+      success: response.success,
+    };
   };
 
   const onCreateTodo = async (data: z.infer<typeof TodoSchema>) => {
     if (!session || !session.user || !data)
-      return { message: "Session or data not exist " };
-    if (!session.user.id) return { message: "User not exist" };
-    const message = await createToDo(data, session.user.id);
-    if (message) {
+      return { message: "Session or data not exist", success: false };
+    if (!session.user.id) return { message: "User not exist", success: false };
+    const response = await createToDo(data, session.user.id);
+    if (response) {
       await fetchTodos();
-      return message;
+      return response;
     }
 
-    return { message: "Failed to create todo, onCreateTodo" };
+    return { message: "Failed to create todo, onCreateTodo", success: false };
   };
 
   const onUpdateTodo = async (data: ToDo) => {
-    if (!session || !session.user) return;
-    const newTodo = await updateToDo(data);
-    if (newTodo) {
+    if (!session || !session.user)
+      return { message: "Session not exist", success: false };
+    const response = await updateToDo(data);
+    if (response.success) {
       await fetchTodos();
     }
+
+    return response;
   };
 
   const onDeleteTodo = async (id: string) => {
-    if (!session || !session.user || !id) return;
+    if (!session || !session.user || !id)
+      return { message: "Session or Todo not exist", success: false };
     try {
-      await deleteToDo(id);
-      await fetchTodos();
+      const response = await deleteToDo(id);
+      if (response.success) await fetchTodos();
+
+      return response;
     } catch (error) {
-      console.error(`Failed to delete todo with id ${id}: ${error}`);
+      return { message: `${error}`, success: false };
     }
   };
 

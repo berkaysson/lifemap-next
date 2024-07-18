@@ -12,7 +12,7 @@ export const reset = async (data: z.infer<typeof ResetSchema>) => {
 
   // If the validation fails, return an error message
   if (!validatedFields.success) {
-    return { message: "Invalid fields!" };
+    return { message: "Invalid fields!", success: false };
   }
 
   // Destructure the validated fields
@@ -21,7 +21,7 @@ export const reset = async (data: z.infer<typeof ResetSchema>) => {
   // Check if the user exists
   const user = await getUserByEmail(email);
   if (!user) {
-    return { message: "Email Sent" };
+    return { message: "Email Sent", success: true };
   }
 
   // Generate a reset password token
@@ -34,5 +34,5 @@ export const reset = async (data: z.infer<typeof ResetSchema>) => {
   );
 
   // Return a success message
-  return { message: "Email Sent" };
+  return { message: "Email Sent", success: true };
 };

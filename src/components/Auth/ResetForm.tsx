@@ -21,6 +21,7 @@ import { reset } from "@/actions/reset";
 const ResetForm = () => {
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
 
   const form = useForm<z.infer<typeof ResetSchema>>({
     resolver: zodResolver(ResetSchema),
@@ -31,8 +32,13 @@ const ResetForm = () => {
 
   const onSubmit = (data: z.infer<typeof ResetSchema>) => {
     startTransition(() => {
-      reset(data).then((data: any) => {
-        setMessage(data.message);
+      reset(data).then((response: any) => {
+        setMessage(response.message);
+        if (response.success) {
+          setIsError(false);
+        } else {
+          setIsError(true);
+        }
       });
     });
   };
@@ -65,7 +71,7 @@ const ResetForm = () => {
             />
           </div>
 
-          {message && <FormMessage>{message}</FormMessage>}
+          {message && isError && <FormMessage>{message}</FormMessage>}
 
           <Button
             disabled={isPending}
