@@ -32,6 +32,8 @@ const TodoForm = () => {
     },
   });
 
+  const { reset } = form;
+
   const onSubmit = (data: z.infer<typeof TodoSchema>) => {
     startTransition(() => {
       onCreateTodo(data).then((response: any) => {
@@ -39,6 +41,7 @@ const TodoForm = () => {
           setMessage(response.message);
           if (response.success) {
             setIsError(false);
+            reset();
           } else {
             setIsError(true);
           }
