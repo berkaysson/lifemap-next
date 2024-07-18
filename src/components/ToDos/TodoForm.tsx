@@ -34,15 +34,14 @@ const TodoForm = () => {
 
   const onSubmit = (data: z.infer<typeof TodoSchema>) => {
     startTransition(() => {
-      onCreateTodo(data).then((data: any) => {
-        if (data.message) {
-          setMessage(data.message);
-          if (data.success) {
+      onCreateTodo(data).then((response: any) => {
+        if (response.message) {
+          setMessage(response.message);
+          if (response.success) {
             setIsError(false);
           } else {
             setIsError(true);
           }
-          console.log("🚀 ~ file: LoginForm.tsx:37 ~ login ~ data:", data);
         }
       });
     });
