@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { SessionProvider } from "next-auth/react";
+import { auth } from "@/auth";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -14,11 +15,13 @@ export const metadata: Metadata = {
   description: "LifeMap Next",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth(); 
+
   return (
     <html lang="en">
       <body
@@ -27,7 +30,7 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        {children}
+        <SessionProvider session={session}>{children}</SessionProvider>
       </body>
     </html>
   );
