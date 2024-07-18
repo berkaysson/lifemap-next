@@ -34,8 +34,9 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
   const [todos, setTodos] = useState<ToDo[]>([]);
 
   useEffect(() => {
+    if (!session || !session.user || status !== "authenticated") return;
     fetchTodos();
-  }, []);
+  }, [session, status]);
 
   const fetchTodos = async () => {
     if (!session || !session.user) return;
