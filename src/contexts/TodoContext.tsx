@@ -1,3 +1,4 @@
+import { TodoSchema } from "@/schema";
 import {
   createToDo,
   deleteToDo,
@@ -7,11 +8,14 @@ import {
 import { ToDo } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { createContext, ReactNode, useEffect, useMemo, useState } from "react";
+import { z } from "zod";
 
 interface TodoContextValue {
   todos: ToDo[];
   fetchTodos: () => Promise<void>;
-  onCreateTodo: (data: ToDo) => Promise<void>;
+  onCreateTodo: (
+    data: z.infer<typeof TodoSchema>
+  ) => Promise<{ message: string }>;
   onUpdateTodo: (data: ToDo) => Promise<void>;
   onDeleteTodo: (id: string) => Promise<void>;
 }
@@ -19,7 +23,9 @@ interface TodoContextValue {
 const initialTodoContextValue: TodoContextValue = {
   todos: [],
   fetchTodos: async () => {},
-  onCreateTodo: async (data: ToDo) => {},
+  onCreateTodo: async (data: z.infer<typeof TodoSchema>) => {
+    return { message: "" };
+  },
   onUpdateTodo: async (data: ToDo) => {},
   onDeleteTodo: async (id: string) => {},
 };
@@ -44,12 +50,17 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
     setTodos(todos);
   };
 
-  const onCreateTodo = async (data: ToDo) => {
-    if (!session || !session.user) return;
-    const newTodo = await createToDo(data);
-    if (newTodo) {
+  const onCreateTodo = async (data: z.infer<typeof TodoSchema>) => {
+    if (!session || !session.user || !data)
+      return { message: "Session or data not exist " };
+    if (!session.user.id) return { message: "User not exist" };
+    const message = await createToDo(data, session.user.id);
+    if (message) {
       await fetchTodos();
+      return message;
     }
+
+    return { message: "Failed to create todo, onCreateTodo" };
   };
 
   const onUpdateTodo = async (data: ToDo) => {

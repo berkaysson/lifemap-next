@@ -1,40 +1,39 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { ToDo } from "@prisma/client";
+import { TodoSchema } from "@/schema";
+import z from "zod";
 
-export async function createToDo(newToDo: ToDo) {
-  const {
-    name,
-    startDate,
-    endDate,
-    userId,
-    description = undefined,
-    colorCode = undefined,
-    projectId = undefined,
-  } = newToDo;
+export async function createToDo(
+  data: z.infer<typeof TodoSchema>,
+  _userId: string
+): Promise<{ message: string }> {
+  const validatedFields = TodoSchema.safeParse(data);
 
-  if (!name || !startDate || !userId) {
-    throw new Error("name, startDate, and userId are required");
+  if (!validatedFields.success) {
+    return { message: "Invalid fields!" };
   }
 
+  const { name, description, colorCode, endDate } = validatedFields.data;
+
   try {
-    const createdToDo = await prisma.toDo.create({
+    await prisma.toDo.create({
       data: {
-        name,
+        name: name,
         completed: false,
-        startDate,
-        endDate,
-        userId,
-        description,
-        colorCode,
-        projectId,
+        startDate: new Date(),
+        endDate: new Date(endDate).toISOString(),
+        userId: _userId,
+        description: description || undefined,
+        colorCode: colorCode || "#000000",
+        projectId: undefined,
       },
     });
 
-    return createdToDo;
+    return { message: "Successfully created todo" };
   } catch (error) {
-    throw new Error(`Failed to create to-do: ${error}`);
+    return { message: `${error}` };
+    throw error;
   }
 }
 

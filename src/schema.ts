@@ -32,3 +32,10 @@ export const ResetSchema = z.object({
 export const NewPasswordSchema = z.object({
   password: passwordSchema,
 });
+
+export const TodoSchema = z.object({
+  name: z.string().min(1, "Title is required"),
+  description: z.string().optional(),
+  endDate: z.string().date().min(1, "End date is required"),
+  colorCode: z.string().optional(),
+});
