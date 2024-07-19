@@ -17,19 +17,26 @@ const CategoryListItem = ({
   const { onDeleteCategory, onUpdateCategory } = useContext(CategoryContext);
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState(category.name);
+  const [error, setError] = useState<string | null>(null);
 
   const handleDelete = async () => {
     await onDeleteCategory(category.id);
   };
 
   const handleEdit = async () => {
-    category.name = newName;
-    await onUpdateCategory(category);
-    setIsEditing(false);
+    setError(null);
+    const newCategory = { ...category, name: newName };
+    const response = await onUpdateCategory(newCategory);
+    if (response.success) {
+      setIsEditing(false);
+    } else {
+      setError(response.message);
+    }
   };
 
   return (
     <li className="flex flex-col gap-2 p-4 border-b">
+      {error && <p className="text-red-500 text-sm">{error}</p>}
       <div className="flex flex-row gap-2">
         {isEditing ? (
           <Input

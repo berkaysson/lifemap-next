@@ -97,10 +97,7 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
       return response;
     }
 
-    return {
-      message: "Something went wrong",
-      success: false,
-    };
+    return response;
   };
 
   const onUpdateCategory = async (data: Category) => {

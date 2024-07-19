@@ -15,6 +15,21 @@ export const createCategory = async (
       success: false,
     };
   }
+
+  const isCategoryExist = await prisma.category.findFirst({
+    where: {
+      name: newCategory.name,
+      userId,
+    },
+  });
+
+  if (isCategoryExist) {
+    return {
+      message: "Category already exists",
+      success: false,
+    };
+  }
+
   try {
     await prisma.category.create({
       data: {
@@ -64,6 +79,23 @@ export const updateCategory = async (data: Category) => {
   if (!data || !data.name || !data.id) {
     return {
       message: "data is required",
+      success: false,
+    };
+  }
+
+  const isCategoryExist = await prisma.category.findFirst({
+    where: {
+      name: data.name,
+      userId: data.userId,
+      NOT: {
+        id: data.id,
+      },
+    },
+  });
+
+  if (isCategoryExist) {
+    return {
+      message: "Category already exists",
       success: false,
     };
   }
