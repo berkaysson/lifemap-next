@@ -1,3 +1,4 @@
+import { CategorySchema } from "@/schema";
 import {
   createCategory,
   deleteCategory,
@@ -7,6 +8,7 @@ import {
 import { Category } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { createContext, ReactNode, useEffect, useMemo, useState } from "react";
+import { z } from "zod";
 
 interface ResponseValue {
   message: string;
@@ -16,7 +18,9 @@ interface ResponseValue {
 interface CategoryContextValue {
   categories: Category[];
   fetchCategories: () => Promise<ResponseValue>;
-  onCreateCategory: (data: Category) => Promise<ResponseValue>;
+  onCreateCategory: (
+    data: z.infer<typeof CategorySchema>
+  ) => Promise<ResponseValue>;
   onUpdateCategory: (data: Category) => Promise<ResponseValue>;
   onDeleteCategory: (id: string) => Promise<ResponseValue>;
 }
@@ -29,7 +33,7 @@ const initialCategoryContextValue: CategoryContextValue = {
       success: false,
     };
   },
-  onCreateCategory: async (data: Category) => {
+  onCreateCategory: async (data: z.infer<typeof CategorySchema>) => {
     return {
       message: "",
       success: false,
@@ -68,8 +72,9 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
       return { message: "Session not exist", success: false };
     if (!session.user.id) return { message: "User not exist", success: false };
     const response = await getCategories(session.user.id);
+
     if (response.success && response.categories) {
-      setCategories(categories);
+      setCategories(response.categories);
     }
 
     return {
@@ -78,18 +83,24 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
     };
   };
 
-  const onCreateCategory = async (data: Category) => {
+  const onCreateCategory = async (data: z.infer<typeof CategorySchema>) => {
     if (!session || !session.user)
       return {
         message: "Session not exist",
         success: false,
       };
-    const response = await createCategory(data);
+
+    if (!session.user.id) return { message: "User not exist", success: false };
+    const response = await createCategory(data, session.user.id);
     if (response.success) {
       await fetchCategories();
+      return response;
     }
 
-    return response;
+    return {
+      message: "Something went wrong",
+      success: false,
+    };
   };
 
   const onUpdateCategory = async (data: Category) => {

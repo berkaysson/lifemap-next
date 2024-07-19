@@ -1,9 +1,14 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { CategorySchema } from "@/schema";
 import { Category } from "@prisma/client";
+import { z } from "zod";
 
-export const createCategory = async (newCategory: Category) => {
+export const createCategory = async (
+  newCategory: z.infer<typeof CategorySchema>,
+  userId: string
+) => {
   if (!newCategory || !newCategory.name) {
     return {
       message: "Category name is required",
@@ -12,7 +17,10 @@ export const createCategory = async (newCategory: Category) => {
   }
   try {
     await prisma.category.create({
-      data: newCategory,
+      data: {
+        name: newCategory.name,
+        userId,
+      },
     });
     return {
       message: "Successfully created category",
