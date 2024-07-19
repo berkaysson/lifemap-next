@@ -18,6 +18,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { login } from "@/actions/login";
+import { refreshPage } from "@/lib/utils";
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -34,11 +35,12 @@ const LoginForm = () => {
 
   const onSubmit = (data: z.infer<typeof LoginSchema>) => {
     startTransition(() => {
-      login(data).then((response: any) => {
+      login(data).then((response) => {
         if (response.message) {
           setMessage(response.message);
           if (response.success) {
             setIsError(false);
+            refreshPage();
           } else {
             setIsError(true);
           }

@@ -3,10 +3,11 @@
 import { logout } from "@/actions/logout";
 import { reset } from "@/actions/reset";
 import { Button } from "@/components/ui/button";
+import { refreshPage } from "@/lib/utils";
 import { ResetSchema } from "@/schema";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { startTransition, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 
 const SettingsPage = () => {
   const [isPending, startTransition] = useTransition();
@@ -20,6 +21,7 @@ const SettingsPage = () => {
     logout().then(() => {
       setIsPreOn(false);
       router.push("/auth/login");
+      refreshPage();
     });
   };
 
