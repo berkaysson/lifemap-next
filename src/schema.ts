@@ -43,3 +43,9 @@ export const TodoSchema = z.object({
 export const CategorySchema = z.object({
   name: z.string().min(1, "Name is required"),
 });
+
+export const ActivitySchema = z.object({
+  description: z.string().optional(),
+  duration: z.number().min(1, "Duration is required"),
+  categoryId: z.string().min(1, "Category is required"),
+});

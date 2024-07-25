@@ -101,7 +101,7 @@ model Category {
 
 model Activity {
     id          String   @id @default(cuid())
-    description String
+    description String?
     duration    Int
     categoryId  String
     category    Category @relation(fields: [categoryId], references: [id])
