@@ -34,6 +34,12 @@ const CategoryListItem = ({
     }
   };
 
+  const handleCancelEditing = () => {
+    setIsEditing(false);
+    setNewName(category.name);
+    setError(null);
+  };
+
   return (
     <li className="flex flex-col gap-2 p-4 border-b">
       {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -66,9 +72,19 @@ const CategoryListItem = ({
           </Button>
         )}
 
-        <Button variant={"destructive"} size={"sm"} onClick={handleDelete}>
-          Delete
-        </Button>
+        {isEditing ? (
+          <Button
+            variant={"destructive"}
+            size={"sm"}
+            onClick={handleCancelEditing}
+          >
+            Cancel
+          </Button>
+        ) : (
+          <Button variant={"destructive"} size={"sm"} onClick={handleDelete}>
+            Delete
+          </Button>
+        )}
       </div>
     </li>
   );

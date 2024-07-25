@@ -12,7 +12,9 @@ const ActivityListItem = ({ activity }: { activity: Activity }) => {
   const { categories } = useContext(CategoryContext);
   const [isEditing, setIsEditing] = useState(false);
   const [newDuration, setNewDuration] = useState(activity.duration);
-  const [newDescription, setNewDescription] = useState(activity.description || "");
+  const [newDescription, setNewDescription] = useState(
+    activity.description || ""
+  );
   const [error, setError] = useState<string | null>(null);
 
   const category = categories.find((c) => c.id === activity.categoryId);
@@ -34,6 +36,13 @@ const ActivityListItem = ({ activity }: { activity: Activity }) => {
     } else {
       setError(response.message);
     }
+  };
+
+  const handleCancelEditing = () => {
+    setIsEditing(false);
+    setNewDuration(activity.duration);
+    setNewDescription(activity.description || "");
+    setError(null);
   };
 
   return (
@@ -82,9 +91,19 @@ const ActivityListItem = ({ activity }: { activity: Activity }) => {
           </Button>
         )}
 
-        <Button variant={"destructive"} size={"sm"} onClick={handleDelete}>
-          Delete
-        </Button>
+        {isEditing ? (
+          <Button
+            variant={"destructive"}
+            size={"sm"}
+            onClick={handleCancelEditing}
+          >
+            Cancel
+          </Button>
+        ) : (
+          <Button variant={"destructive"} size={"sm"} onClick={handleDelete}>
+            Delete
+          </Button>
+        )}
       </div>
     </li>
   );
