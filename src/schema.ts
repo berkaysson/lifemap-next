@@ -39,3 +39,7 @@ export const TodoSchema = z.object({
   endDate: z.string().date().min(1, "End date is required"),
   colorCode: z.string().optional(),
 });
+
+export const CategorySchema = z.object({
+  name: z.string().min(1, "Name is required"),
+});
