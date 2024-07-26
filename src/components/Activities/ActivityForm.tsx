@@ -39,7 +39,7 @@ const ActivityForm = () => {
       description: "",
       duration: 0,
       categoryId: undefined,
-      date: formatDate(new Date()),
+      date: "",
     },
   });
 
