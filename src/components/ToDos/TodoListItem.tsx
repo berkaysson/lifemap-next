@@ -3,6 +3,7 @@
 import { useContext } from "react";
 import { Button } from "../ui/button";
 import { TodoContext } from "@/contexts/TodoContext";
+import { getRemainingTime, isExpired } from "@/lib/time";
 
 const TodoListItem = ({
   todo,
@@ -21,7 +22,12 @@ const TodoListItem = ({
 }) => {
   const { onDeleteTodo, onUpdateTodo } = useContext(TodoContext);
 
-  const isExpired = todo.endDate < new Date();
+  const expired = isExpired(todo.endDate);
+  let remained = "expired";
+
+  if (!expired) {
+    remained = getRemainingTime(todo.endDate);
+  }
 
   const handleDelete = async () => {
     await onDeleteTodo(todo.id);
@@ -33,19 +39,18 @@ const TodoListItem = ({
   };
 
   return (
-    <li
-      className="flex flex-col gap-2 p-4 border-b"
-    >
+    <li className="flex flex-col gap-2 p-4 border-b">
       <div className="flex flex-col gap-2">
         <div>
           <span className="mr-2 text-xl">
-            {todo.completed ? "🟢" : isExpired ? "🔴" : "🟡"}
+            {todo.completed ? "🟢" : expired ? "🔴" : "🟡"}
           </span>
           <span>{todo.name}</span>
           <span>{todo.colorCode}</span>
         </div>
         <div>{todo.description}</div>
         <span>{todo.endDate.toISOString().slice(0, 10)}</span>
+        <span>Remainin time: {remained}</span>
       </div>
       <div className="flex flex-row gap-2">
         <Button variant={"outline"} size={"sm"} onClick={handleComplete}>
