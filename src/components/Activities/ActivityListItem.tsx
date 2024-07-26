@@ -7,6 +7,7 @@ import { Input } from "../ui/input";
 import { Activity } from "@prisma/client";
 import { CategoryContext } from "@/contexts/CategoryContext";
 import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
+import { Label } from "../ui/label";
 
 const ActivityListItem = ({ activity }: { activity: Activity }) => {
   const { onDeleteActivity, onUpdateActivity } = useContext(ActivityContext);
@@ -54,26 +55,32 @@ const ActivityListItem = ({ activity }: { activity: Activity }) => {
       {error && <p className="text-red-500 text-sm">{error}</p>}
       <div className="flex flex-row gap-2">
         {isEditing ? (
-          <Input
-            type="number"
-            value={newDuration}
-            onChange={(e) => {
-              setNewDuration(Number(e.target.value));
-            }}
-            min={1}
-          />
+          <Label>
+            Duration (min)
+            <Input
+              type="number"
+              value={newDuration}
+              onChange={(e) => {
+                setNewDuration(Number(e.target.value));
+              }}
+              min={1}
+            />
+          </Label>
         ) : (
           <span>{activity.duration}</span>
         )}
-        {isEditing && activity.description?.length ? (
-          <Input
-            type="text"
-            value={newDescription}
-            onChange={(e) => {
-              setNewDescription(e.target.value);
-            }}
-            min={""}
-          />
+        {isEditing ? (
+          <Label>
+            Description
+            <Input
+              type="text"
+              value={newDescription}
+              onChange={(e) => {
+                setNewDescription(e.target.value);
+              }}
+              min={""}
+            />
+          </Label>
         ) : (
           <span>{activity.description}</span>
         )}
