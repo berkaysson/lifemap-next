@@ -48,4 +48,5 @@ export const ActivitySchema = z.object({
   description: z.string().optional(),
   duration: z.number().min(1, "Duration is required"),
   categoryId: z.string().min(1, "Category is required"),
+  date: z.string().date().min(1, "Date is required"),
 });
