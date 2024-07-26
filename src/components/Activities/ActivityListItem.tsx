@@ -6,6 +6,7 @@ import { ActivityContext } from "@/contexts/ActivityContext";
 import { Input } from "../ui/input";
 import { Activity } from "@prisma/client";
 import { CategoryContext } from "@/contexts/CategoryContext";
+import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
 
 const ActivityListItem = ({ activity }: { activity: Activity }) => {
   const { onDeleteActivity, onUpdateActivity } = useContext(ActivityContext);
@@ -18,6 +19,9 @@ const ActivityListItem = ({ activity }: { activity: Activity }) => {
   const [error, setError] = useState<string | null>(null);
 
   const category = categories.find((c) => c.id === activity.categoryId);
+
+  const expired = isExpired(activity.date);
+  const remained = getRemainingTime(activity.date);
 
   const handleDelete = async () => {
     await onDeleteActivity(activity.id);
@@ -75,6 +79,11 @@ const ActivityListItem = ({ activity }: { activity: Activity }) => {
         )}
 
         <span>{category?.name}</span>
+      </div>
+      <div>
+        <span>
+          {formatDate(activity.date)} / {remained} {expired ? "" : "remaining"}
+        </span>
       </div>
       <div className="flex flex-row gap-2">
         {isEditing ? (

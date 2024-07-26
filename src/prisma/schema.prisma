@@ -107,6 +107,7 @@ model Activity {
     category    Category @relation(fields: [categoryId], references: [id])
     userId      String
     user        User     @relation(fields: [userId], references: [id])
+    date        DateTime
 }
 
 model Task {

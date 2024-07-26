@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { parseDate } from "@/lib/time";
 import { ActivitySchema } from "@/schema";
 import { Activity } from "@prisma/client";
 import { z } from "zod";
@@ -37,6 +38,8 @@ export const createActivity = async (
     };
   }
 
+  const date = parseDate(newActivity.date);
+
   try {
     await prisma.activity.create({
       data: {
@@ -44,6 +47,7 @@ export const createActivity = async (
         duration: newActivity.duration,
         categoryId: newActivity.categoryId,
         userId,
+        date: date,
       },
     });
     return {

@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { formatDate } from "@/lib/time";
 
 const ActivityForm = () => {
   const { onCreateActivity } = useContext(ActivityContext);
@@ -38,6 +39,7 @@ const ActivityForm = () => {
       description: "",
       duration: 0,
       categoryId: undefined,
+      date: formatDate(new Date()),
     },
   });
 
@@ -136,6 +138,34 @@ const ActivityForm = () => {
                       ))}
                     </SelectContent>
                   </Select>
+                  {form.formState.errors.categoryId && (
+                    <FormMessage>
+                      {form.formState.errors.categoryId.message}
+                    </FormMessage>
+                  )}
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="date"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Date</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isPending}
+                      {...field}
+                      placeholder="Date"
+                      type="date"
+                      required
+                    />
+                  </FormControl>
+                  {form.formState.errors.date && (
+                    <FormMessage>
+                      {form.formState.errors.date.message}
+                    </FormMessage>
+                  )}
                 </FormItem>
               )}
             />
