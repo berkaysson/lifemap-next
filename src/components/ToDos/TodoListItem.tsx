@@ -23,11 +23,7 @@ const TodoListItem = ({
   const { onDeleteTodo, onUpdateTodo } = useContext(TodoContext);
 
   const expired = isExpired(todo.endDate);
-  let remained = "expired";
-
-  if (!expired) {
-    remained = getRemainingTime(todo.endDate);
-  }
+  let remained = getRemainingTime(todo.endDate);
 
   const handleDelete = async () => {
     await onDeleteTodo(todo.id);
@@ -50,7 +46,11 @@ const TodoListItem = ({
         </div>
         <div>{todo.description}</div>
         <span>{todo.endDate.toISOString().slice(0, 10)}</span>
-        <span>Remainin time: {remained}</span>
+        {!todo.completed && (
+          <span>
+            {remained} {expired ? "expired" : "remaining"}
+          </span>
+        )}
       </div>
       <div className="flex flex-row gap-2">
         <Button variant={"outline"} size={"sm"} onClick={handleComplete}>
