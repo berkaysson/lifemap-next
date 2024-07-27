@@ -9,11 +9,10 @@ export const createCategory = async (
   newCategory: z.infer<typeof CategorySchema>,
   userId: string
 ) => {
-  if (!newCategory || !newCategory.name) {
-    return {
-      message: "Category name is required",
-      success: false,
-    };
+  const validatedFields = CategorySchema.safeParse(newCategory);
+
+  if (!validatedFields.success) {
+    return { message: "Invalid fields!", success: false };
   }
 
   const isCategoryExist = await prisma.category.findFirst({

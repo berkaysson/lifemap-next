@@ -10,9 +10,11 @@ export const createActivity = async (
   newActivity: z.infer<typeof ActivitySchema>,
   userId: string
 ) => {
-  if (!newActivity || !newActivity.duration) {
+  const validatedFields = ActivitySchema.safeParse(newActivity);
+  
+  if (!validatedFields.success) {
     return {
-      message: "Duration is required",
+      message: "Invalid fields!",
       success: false,
     };
   }
