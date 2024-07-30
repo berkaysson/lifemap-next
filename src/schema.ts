@@ -50,3 +50,12 @@ export const ActivitySchema = z.object({
   categoryId: z.string().min(1, "Category is required"),
   date: z.string().date().min(1, "Date is required"),
 });
+
+export const TaskSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  description: z.string().optional(),
+  endDate: z.string().date().min(1, "End date is required"),
+  colorCode: z.string().optional(),
+  goalDuration: z.number().min(1, "Goal duration is required"),
+  categoryId: z.string().min(1, "Category is required"),
+});
