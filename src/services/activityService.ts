@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { parseDate } from "@/lib/time";
+import { addOneDay, parseDate } from "@/lib/time";
 import { ActivitySchema } from "@/schema";
 import { Activity } from "@prisma/client";
 import { z } from "zod";
@@ -11,7 +11,7 @@ export const createActivity = async (
   userId: string
 ) => {
   const validatedFields = ActivitySchema.safeParse(newActivity);
-  
+
   if (!validatedFields.success) {
     return {
       message: "Invalid fields!",
@@ -52,6 +52,14 @@ export const createActivity = async (
         date: date,
       },
     });
+
+    await updateRelatedTasks(
+      userId,
+      newActivity.categoryId,
+      date,
+      newActivity.duration
+    );
+
     return {
       message: "Successfully created activity",
       success: true,
@@ -119,13 +127,36 @@ export const updateActivity = async (data: Activity) => {
     };
   }
 
+  const oldActivity = await prisma.activity.findFirst({
+    where: {
+      id: data.id,
+    },
+  });
+
+  if (!oldActivity) {
+    return {
+      message: "Activity does not exist",
+      success: false,
+    };
+  }
+
   try {
+    const absoluteDuration = data.duration - oldActivity.duration;
+
     await prisma.activity.update({
       where: {
         id: data.id,
       },
       data: data,
     });
+
+    await updateRelatedTasks(
+      data.userId,
+      data.categoryId,
+      oldActivity.date,
+      absoluteDuration
+    );
+
     return {
       message: "Successfully updated activity",
       success: true,
@@ -145,12 +176,34 @@ export const deleteActivity = async (id: string) => {
       success: false,
     };
   }
+
+  const activity = await prisma.activity.findFirst({
+    where: {
+      id: id,
+    },
+  });
+
+  if (!activity) {
+    return {
+      message: "Activity does not exist",
+      success: false,
+    };
+  }
+
   try {
     await prisma.activity.delete({
       where: {
         id: id,
       },
     });
+
+    await updateRelatedTasks(
+      activity.userId,
+      activity.categoryId,
+      activity.date,
+      -activity.duration
+    );
+
     return {
       message: "Successfully deleted activity",
       success: true,
@@ -160,5 +213,36 @@ export const deleteActivity = async (id: string) => {
       message: `Failed to delete activity: ${error}`,
       success: false,
     };
+  }
+};
+
+const updateRelatedTasks = async (
+  userId: string,
+  categoryId: string,
+  activityDate: Date,
+  duration: number
+) => {
+  const startDate = addOneDay(activityDate);
+
+  const tasks = await prisma.task.findMany({
+    where: {
+      userId,
+      categoryId,
+      startDate: { lte: startDate },
+      endDate: { gte: activityDate },
+    },
+  });
+
+  for (const task of tasks) {
+    const newCompletedDuration = task.completedDuration + duration;
+    const completed = newCompletedDuration >= task.goalDuration;
+
+    await prisma.task.update({
+      where: { id: task.id },
+      data: {
+        completedDuration: newCompletedDuration,
+        completed,
+      },
+    });
   }
 };

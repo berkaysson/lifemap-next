@@ -1,3 +1,5 @@
+"use client";
+
 import { ActivityContext } from "@/contexts/ActivityContext";
 import { useContext } from "react";
 import ActivityListItem from "./ActivityListItem";

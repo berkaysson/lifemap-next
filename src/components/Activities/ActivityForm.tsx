@@ -24,7 +24,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { formatDate } from "@/lib/time";
 
 const ActivityForm = () => {
   const { onCreateActivity } = useContext(ActivityContext);

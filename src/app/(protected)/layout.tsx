@@ -10,8 +10,8 @@ const ProtectedLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <TodoProvider>
       <CategoryProvider>
-        <ActivityProvider>
-          <TaskProvider>
+        <TaskProvider>
+          <ActivityProvider>
             <nav className="flex gap-4 p-4 border-b">
               <Link
                 href="/dashboard"
@@ -27,8 +27,8 @@ const ProtectedLayout = ({ children }: { children: React.ReactNode }) => {
               </Link>
             </nav>
             {children}
-          </TaskProvider>
-        </ActivityProvider>
+          </ActivityProvider>
+        </TaskProvider>
       </CategoryProvider>
     </TodoProvider>
   );

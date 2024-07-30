@@ -1,4 +1,3 @@
-import { parseDate } from "@/lib/time";
 import { ActivitySchema } from "@/schema";
 import {
   createActivity,
@@ -8,8 +7,9 @@ import {
 } from "@/services/activityService";
 import { Activity } from "@prisma/client";
 import { useSession } from "next-auth/react";
-import { createContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { z } from "zod";
+import { TaskContext } from "./TaskContext";
 
 interface ResponseValue {
   message: string;
@@ -53,11 +53,18 @@ export const ActivityProvider = ({
 }) => {
   const { data: session, status } = useSession();
   const [activities, setActivities] = useState<Activity[]>([]);
+  const { fetchTasks } = useContext(TaskContext);
 
   useEffect(() => {
     if (!session || !session.user || status !== "authenticated") return;
     fetchActivities();
   }, [session, status]);
+
+  useEffect(() => {
+    if (activities) {
+      fetchTasks();
+    }
+  }, [activities]);
 
   const fetchActivities = async () => {
     if (!session || !session.user) {
