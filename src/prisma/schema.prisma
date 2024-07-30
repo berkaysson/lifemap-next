@@ -122,7 +122,7 @@ model Task {
     description       String?
     colorCode         String?
     completed         Boolean  @default(false)
-    completedDuration Int
+    completedDuration Int      @default(0)
     goalDuration      Int
     startDate         DateTime
     endDate           DateTime
@@ -140,7 +140,6 @@ model Habit {
     description           String?
     colorCode             String?
     completed             Boolean         @default(false)
-    completedPercent      Float
     period                Period
     startDate             DateTime
     endDate               DateTime
@@ -160,7 +159,7 @@ model HabitProgress {
     id                String   @id @default(cuid())
     startDate         DateTime
     endDate           DateTime
-    completedDuration Int
+    completedDuration Int      @default(0)
     completed         Boolean  @default(false)
     habitId           String
     habit             Habit    @relation(fields: [habitId], references: [id])
