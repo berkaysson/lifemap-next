@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { parseDate } from "@/lib/time";
+import { addOneDay, checkStartDateAvailability, parseDate } from "@/lib/time";
 import { TaskSchema } from "@/schema";
 import { Task } from "@prisma/client";
 import { z } from "zod";
@@ -44,6 +44,17 @@ export const createTask = async (
   const endDate = parseDate(newTask.endDate);
 
   try {
+    const completedDuration = await calculateTaskCompletedDuration(
+      userId,
+      startDate,
+      endDate
+    );
+
+    const completed = calculateCompletion(
+      completedDuration,
+      newTask.goalDuration
+    );
+
     await prisma.task.create({
       data: {
         name: newTask.name,
@@ -55,6 +66,8 @@ export const createTask = async (
         userId,
         categoryId: newTask.categoryId,
         projectId: undefined,
+        completedDuration,
+        completed,
       },
     });
     return {
@@ -95,6 +108,193 @@ export const getTasks = async (userId: string) => {
   }
 };
 
-export const updateTask = async (data: Task) => {};
+export const updateTask = async (data: Task, updatedField: keyof Task) => {
+  if (!data || !updatedField) {
+    return {
+      message: "data is required",
+      success: false,
+    };
+  }
 
-export const deleteTask = async (id: string) => {};
+  if (updatedField === "goalDuration" && data.goalDuration < 0) {
+    return {
+      message: "Goal duration cannot be negative",
+      success: false,
+    };
+  }
+
+  if (updatedField === "categoryId") {
+    return {
+      message: "Category cannot be changed, you should create new task",
+      success: false,
+    };
+  }
+
+  try {
+    if (updatedField === "endDate") {
+      const isDateAvailable = checkStartDateAvailability(
+        data.startDate,
+        data.endDate
+      );
+
+      if (!isDateAvailable) {
+        return {
+          message: "Start date cannot be after end date",
+          success: false,
+        };
+      }
+
+      const completedDuration = await calculateTaskCompletedDuration(
+        data.userId,
+        data.startDate,
+        data.endDate
+      );
+
+      await prisma.task.update({
+        where: {
+          id: data.id,
+        },
+        data: {
+          endDate: data.endDate,
+          completedDuration,
+        },
+      });
+    } else if (updatedField === "startDate") {
+      const isDateAvailable = checkStartDateAvailability(
+        data.startDate,
+        data.endDate
+      );
+
+      if (!isDateAvailable) {
+        return {
+          message: "Start date cannot be after end date",
+          success: false,
+        };
+      }
+
+      const completedDuration = await calculateTaskCompletedDuration(
+        data.userId,
+        data.startDate,
+        data.endDate
+      );
+
+      await prisma.task.update({
+        where: {
+          id: data.id,
+        },
+        data: {
+          startDate: data.startDate,
+          completedDuration,
+        },
+      });
+    } else if (updatedField === "goalDuration") {
+      const completed = calculateCompletion(
+        data.completedDuration,
+        data.goalDuration
+      );
+
+      await prisma.task.update({
+        where: {
+          id: data.id,
+        },
+        data: {
+          goalDuration: data.goalDuration,
+          completed,
+        },
+      });
+    } else {
+      await prisma.task.update({
+        where: {
+          id: data.id,
+        },
+        data: {
+          [updatedField]: data[updatedField],
+        },
+      });
+    }
+
+    return {
+      message: "Successfully updated task",
+      success: true,
+    };
+  } catch (error) {
+    return {
+      message: `Failed to update task: ${error}`,
+      success: false,
+    };
+  }
+};
+
+export const deleteTask = async (id: string) => {
+  if (!id) {
+    return {
+      message: "id is required",
+      success: false,
+    };
+  }
+
+  const task = await prisma.task.findFirst({
+    where: {
+      id: id,
+    },
+  });
+
+  if (!task) {
+    return {
+      message: "Task does not exist",
+      success: false,
+    };
+  }
+
+  try {
+    await prisma.task.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    return {
+      message: "Successfully deleted task",
+      success: true,
+    };
+  } catch (error) {
+    return {
+      message: `Failed to delete task: ${error}`,
+      success: false,
+    };
+  }
+};
+
+const calculateTaskCompletedDuration = async (
+  userId: string,
+  startDate: Date,
+  endDate: Date
+) => {
+  const activities = await prisma.activity.findMany({
+    where: {
+      userId,
+      date: {
+        gte: startDate,
+        lte: endDate,
+      },
+    },
+  });
+
+  if (activities.length === 0) {
+    return 0;
+  }
+
+  const totalDuration = activities
+    .map((activity) => activity.duration)
+    .reduce((total, duration) => total + duration, 0);
+
+  return totalDuration;
+};
+
+const calculateCompletion = (
+  completedDuration: number,
+  goalDuration: number
+) => {
+  const isCompleted = completedDuration >= goalDuration;
+  return isCompleted;
+};

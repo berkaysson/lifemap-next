@@ -1,5 +1,5 @@
 import { TaskSchema } from "@/schema";
-import { createTask, getTasks } from "@/services/taskService";
+import { createTask, deleteTask, getTasks } from "@/services/taskService";
 import { Task } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { createContext, ReactNode, useEffect, useMemo, useState } from "react";
@@ -14,12 +14,14 @@ interface TaskContextValue {
   tasks: Task[];
   fetchTasks: () => Promise<ResponseValue>;
   onCreateTask: (data: z.infer<typeof TaskSchema>) => Promise<ResponseValue>;
+  onDeleteTask: (id: string) => Promise<ResponseValue>;
 }
 
 const initialTaskContextValue: TaskContextValue = {
   tasks: [],
   fetchTasks: async () => ({ message: "", success: false }),
   onCreateTask: async () => ({ message: "", success: false }),
+  onDeleteTask: async () => ({ message: "", success: false }),
 };
 
 export const TaskContext = createContext(initialTaskContextValue);
@@ -64,10 +66,27 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
 
   const onUpdateTask = async () => {};
 
-  const onDeleteTask = async () => {};
+  const onDeleteTask = async (id: string) => {
+    if (!session || !session.user || !id) {
+      return { message: "Session or id not exist", success: false };
+    }
+    try {
+      const response = await deleteTask(id);
+      if (response.success) {
+        await fetchTasks();
+        return response;
+      }
+      return response;
+    } catch (error) {
+      return {
+        message: `${error}`,
+        success: false,
+      };
+    }
+  };
 
   const contextValue = useMemo(
-    () => ({ tasks, fetchTasks, onCreateTask }),
+    () => ({ tasks, fetchTasks, onCreateTask, onDeleteTask }),
     [tasks]
   );
 

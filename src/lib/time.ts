@@ -31,3 +31,7 @@ export const getRemainingTime = (date: Date) => {
   const remaining = formatDistanceToNow(correctedDate, { addSuffix: true });
   return remaining;
 };
+
+export const checkStartDateAvailability = (startDate: Date, endDate: Date) => {
+  return startDate < endDate;
+};

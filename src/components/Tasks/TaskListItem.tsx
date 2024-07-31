@@ -5,13 +5,19 @@ import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
 import { Task } from "@prisma/client";
 import { useContext } from "react";
 import { Button } from "../ui/button";
+import { TaskContext } from "@/contexts/TaskContext";
 
 const TaskListItem = ({ task }: { task: Task }) => {
   const { categories } = useContext(CategoryContext);
+  const { onDeleteTask } = useContext(TaskContext);
 
   const category = categories.find((c) => c.id === task.categoryId);
   const expired = isExpired(task.endDate);
   const remained = getRemainingTime(task.endDate);
+  
+  const handleDelete = async () => {
+    await onDeleteTask(task.id);
+  };
 
   return (
     <li className="flex flex-col gap-2 p-4 border-b">
@@ -38,7 +44,7 @@ const TaskListItem = ({ task }: { task: Task }) => {
         <Button variant={"outline"} size={"sm"}>
           Edit
         </Button>
-        <Button variant={"destructive"} size={"sm"}>
+        <Button variant={"destructive"} size={"sm"} onClick={handleDelete}>
           Delete
         </Button>
       </div>
