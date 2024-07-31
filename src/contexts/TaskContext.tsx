@@ -1,5 +1,10 @@
 import { TaskSchema } from "@/schema";
-import { createTask, deleteTask, getTasks } from "@/services/taskService";
+import {
+  createTask,
+  deleteTask,
+  getTasks,
+  updateTask,
+} from "@/services/taskService";
 import { Task } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { createContext, ReactNode, useEffect, useMemo, useState } from "react";
@@ -15,6 +20,10 @@ interface TaskContextValue {
   fetchTasks: () => Promise<ResponseValue>;
   onCreateTask: (data: z.infer<typeof TaskSchema>) => Promise<ResponseValue>;
   onDeleteTask: (id: string) => Promise<ResponseValue>;
+  onUpdateTask: (
+    data: Task,
+    updatedField: keyof Task
+  ) => Promise<ResponseValue>;
 }
 
 const initialTaskContextValue: TaskContextValue = {
@@ -22,6 +31,7 @@ const initialTaskContextValue: TaskContextValue = {
   fetchTasks: async () => ({ message: "", success: false }),
   onCreateTask: async () => ({ message: "", success: false }),
   onDeleteTask: async () => ({ message: "", success: false }),
+  onUpdateTask: async () => ({ message: "", success: false }),
 };
 
 export const TaskContext = createContext(initialTaskContextValue);
@@ -64,7 +74,18 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     return response;
   };
 
-  const onUpdateTask = async () => {};
+  const onUpdateTask = async (data: Task, updatedField: keyof Task) => {
+    if (!session || !session.user || !data) {
+      return { message: "Session or data not exist", success: false };
+    }
+    if (!session.user.id) return { message: "User not exist", success: false };
+    const response = await updateTask(data, updatedField);
+    if (response.success) {
+      await fetchTasks();
+      return response;
+    }
+    return response;
+  };
 
   const onDeleteTask = async (id: string) => {
     if (!session || !session.user || !id) {
@@ -86,7 +107,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const contextValue = useMemo(
-    () => ({ tasks, fetchTasks, onCreateTask, onDeleteTask }),
+    () => ({ tasks, fetchTasks, onCreateTask, onDeleteTask, onUpdateTask }),
     [tasks]
   );
 
