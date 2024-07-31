@@ -8,6 +8,8 @@ import { Activity } from "@prisma/client";
 import { CategoryContext } from "@/contexts/CategoryContext";
 import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
 import { Label } from "../ui/label";
+import ModalDialog from "../ui/ModalDialog";
+import ActivityEditForm from "./AcitivityEditForm";
 
 const ActivityListItem = ({ activity }: { activity: Activity }) => {
   const { onDeleteActivity, onUpdateActivity } = useContext(ActivityContext);
@@ -54,37 +56,8 @@ const ActivityListItem = ({ activity }: { activity: Activity }) => {
     <li className="flex flex-col gap-2 p-4 border-b">
       {error && <p className="text-red-500 text-sm">{error}</p>}
       <div className="flex flex-row gap-2">
-        {isEditing ? (
-          <Label>
-            Duration (min)
-            <Input
-              type="number"
-              value={newDuration}
-              onChange={(e) => {
-                setNewDuration(Number(e.target.value));
-              }}
-              min={1}
-            />
-          </Label>
-        ) : (
-          <span>{activity.duration}</span>
-        )}
-        {isEditing ? (
-          <Label>
-            Description
-            <Input
-              type="text"
-              value={newDescription}
-              onChange={(e) => {
-                setNewDescription(e.target.value);
-              }}
-              min={""}
-            />
-          </Label>
-        ) : (
-          <span>{activity.description}</span>
-        )}
-
+        <span>{activity.duration}</span>
+        <span>{activity.description}</span>
         <span>{category?.name}</span>
       </div>
       <div>
@@ -93,33 +66,17 @@ const ActivityListItem = ({ activity }: { activity: Activity }) => {
         </span>
       </div>
       <div className="flex flex-row gap-2">
-        {isEditing ? (
-          <Button variant={"outline"} size={"sm"} onClick={handleEdit}>
-            Save
-          </Button>
-        ) : (
-          <Button
-            variant={"outline"}
-            size={"sm"}
-            onClick={() => setIsEditing(true)}
-          >
-            Edit
-          </Button>
-        )}
-
-        {isEditing ? (
-          <Button
-            variant={"destructive"}
-            size={"sm"}
-            onClick={handleCancelEditing}
-          >
-            Cancel
-          </Button>
-        ) : (
-          <Button variant={"destructive"} size={"sm"} onClick={handleDelete}>
-            Delete
-          </Button>
-        )}
+        <ActivityEditForm
+          initialValues={activity}
+          triggerButton={
+            <Button variant={"outline"} size={"sm"}>
+              Edit
+            </Button>
+          }
+        />
+        <Button variant={"destructive"} size={"sm"} onClick={handleDelete}>
+          Delete
+        </Button>
       </div>
     </li>
   );

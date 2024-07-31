@@ -4,6 +4,7 @@ import { useContext, useState } from "react";
 import { Button } from "../ui/button";
 import { CategoryContext } from "@/contexts/CategoryContext";
 import { Input } from "../ui/input";
+import CategoryEditForm from "./CategoryEditForm";
 
 const CategoryListItem = ({
   category,
@@ -14,77 +15,30 @@ const CategoryListItem = ({
     userId: string;
   };
 }) => {
-  const { onDeleteCategory, onUpdateCategory } = useContext(CategoryContext);
-  const [isEditing, setIsEditing] = useState(false);
-  const [newName, setNewName] = useState(category.name);
-  const [error, setError] = useState<string | null>(null);
+  const { onDeleteCategory } = useContext(CategoryContext);
 
   const handleDelete = async () => {
     await onDeleteCategory(category.id);
   };
 
-  const handleEdit = async () => {
-    setError(null);
-    const newCategory = { ...category, name: newName };
-    const response = await onUpdateCategory(newCategory);
-    if (response.success) {
-      setIsEditing(false);
-    } else {
-      setError(response.message);
-    }
-  };
-
-  const handleCancelEditing = () => {
-    setIsEditing(false);
-    setNewName(category.name);
-    setError(null);
-  };
-
   return (
     <li className="flex flex-col gap-2 p-4 border-b">
-      {error && <p className="text-red-500 text-sm">{error}</p>}
       <div className="flex flex-row gap-2">
-        {isEditing ? (
-          <Input
-            type="text"
-            value={newName}
-            onChange={(e) => {
-              setNewName(e.target.value);
-            }}
-            min={1}
-          />
-        ) : (
-          <span>{category.name}</span>
-        )}
+        <span>{category.name}</span>
       </div>
       <div className="flex flex-row gap-2">
-        {isEditing ? (
-          <Button variant={"outline"} size={"sm"} onClick={handleEdit}>
-            Save
-          </Button>
-        ) : (
-          <Button
-            variant={"outline"}
-            size={"sm"}
-            onClick={() => setIsEditing(true)}
-          >
-            Edit
-          </Button>
-        )}
+        <CategoryEditForm
+          initialValues={category}
+          triggerButton={
+            <Button variant={"outline"} size={"sm"}>
+              Edit
+            </Button>
+          }
+        />
 
-        {isEditing ? (
-          <Button
-            variant={"destructive"}
-            size={"sm"}
-            onClick={handleCancelEditing}
-          >
-            Cancel
-          </Button>
-        ) : (
-          <Button variant={"destructive"} size={"sm"} onClick={handleDelete}>
-            Delete
-          </Button>
-        )}
+        <Button variant={"destructive"} size={"sm"} onClick={handleDelete}>
+          Delete
+        </Button>
       </div>
     </li>
   );
