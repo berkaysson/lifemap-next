@@ -131,92 +131,13 @@ export const updateTask = async (data: Task, updatedField: keyof Task) => {
   }
 
   try {
-    if (updatedField === "endDate") {
-      const isDateAvailable = checkStartDateAvailability(
-        data.startDate,
-        data.endDate
-      );
-
-      if (!isDateAvailable) {
-        return {
-          message: "Start date cannot be after end date",
-          success: false,
-        };
-      }
-
-      const completedDuration = await calculateTaskCompletedDuration(
-        data.userId,
-        data.startDate,
-        data.endDate
-      );
-
-      await prisma.task.update({
-        where: {
-          id: data.id,
-        },
-        data: {
-          endDate: data.endDate,
-          completedDuration,
-        },
-      });
-    } else if (updatedField === "startDate") {
-      const isDateAvailable = checkStartDateAvailability(
-        data.startDate,
-        data.endDate
-      );
-
-      if (!isDateAvailable) {
-        return {
-          message: "Start date cannot be after end date",
-          success: false,
-        };
-      }
-
-      const completedDuration = await calculateTaskCompletedDuration(
-        data.userId,
-        data.startDate,
-        data.endDate
-      );
-
-      await prisma.task.update({
-        where: {
-          id: data.id,
-        },
-        data: {
-          startDate: data.startDate,
-          completedDuration,
-        },
-      });
+    if (updatedField === "endDate" || updatedField === "startDate") {
+      return await updateTaskDates(data, updatedField);
     } else if (updatedField === "goalDuration") {
-      const completed = calculateCompletion(
-        data.completedDuration,
-        data.goalDuration
-      );
-
-      await prisma.task.update({
-        where: {
-          id: data.id,
-        },
-        data: {
-          goalDuration: data.goalDuration,
-          completed,
-        },
-      });
+      return await updateTaskGoalDuration(data);
     } else {
-      await prisma.task.update({
-        where: {
-          id: data.id,
-        },
-        data: {
-          [updatedField]: data[updatedField],
-        },
-      });
+      return await updateTaskField(data, updatedField);
     }
-
-    return {
-      message: "Successfully updated task",
-      success: true,
-    };
   } catch (error) {
     return {
       message: `Failed to update task: ${error}`,
@@ -297,4 +218,50 @@ const calculateCompletion = (
 ) => {
   const isCompleted = completedDuration >= goalDuration;
   return isCompleted;
+};
+
+const updateTaskDates = async (
+  data: Task,
+  updatedField: "startDate" | "endDate"
+) => {
+  const isDateAvailable = checkStartDateAvailability(
+    data.startDate,
+    data.endDate
+  );
+  if (!isDateAvailable) {
+    return { message: "Start date cannot be after end date", success: false };
+  }
+
+  const completedDuration = await calculateTaskCompletedDuration(
+    data.userId,
+    data.startDate,
+    data.endDate
+  );
+
+  await prisma.task.update({
+    where: { id: data.id },
+    data: { [updatedField]: data[updatedField], completedDuration },
+  });
+
+  return { message: "Successfully updated task", success: true };
+};
+
+const updateTaskGoalDuration = async (data: Task) => {
+  const completed = calculateCompletion(
+    data.completedDuration,
+    data.goalDuration
+  );
+  await prisma.task.update({
+    where: { id: data.id },
+    data: { goalDuration: data.goalDuration, completed },
+  });
+  return { message: "Successfully updated task", success: true };
+};
+
+const updateTaskField = async (data: Task, updatedField: keyof Task) => {
+  await prisma.task.update({
+    where: { id: data.id },
+    data: { [updatedField]: data[updatedField] },
+  });
+  return { message: "Successfully updated task", success: true };
 };
