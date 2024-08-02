@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { Button } from "../ui/button";
 import { TodoContext } from "@/contexts/TodoContext";
 import { getRemainingTime, isExpired } from "@/lib/time";
+import IsCompleted from "../ui/IsCompleted";
 
 const TodoListItem = ({
   todo,
