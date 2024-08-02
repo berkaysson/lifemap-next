@@ -5,25 +5,21 @@ import {
   getTasks,
   updateTask,
 } from "@/services/taskService";
+import { ServiceResponse } from "@/types/ServiceResponse";
 import { Task } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { createContext, ReactNode, useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 
-interface ResponseValue {
-  message: string;
-  success: boolean;
-}
-
 interface TaskContextValue {
   tasks: Task[];
-  fetchTasks: () => Promise<ResponseValue>;
-  onCreateTask: (data: z.infer<typeof TaskSchema>) => Promise<ResponseValue>;
-  onDeleteTask: (id: string) => Promise<ResponseValue>;
+  fetchTasks: () => Promise<ServiceResponse>;
+  onCreateTask: (data: z.infer<typeof TaskSchema>) => Promise<ServiceResponse>;
+  onDeleteTask: (id: string) => Promise<ServiceResponse>;
   onUpdateTask: (
     id: string,
     data: Partial<Task>
-  ) => Promise<ResponseValue>;
+  ) => Promise<ServiceResponse>;
 }
 
 const initialTaskContextValue: TaskContextValue = {

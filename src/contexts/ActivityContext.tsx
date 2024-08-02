@@ -10,20 +10,16 @@ import { useSession } from "next-auth/react";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import { TaskContext } from "./TaskContext";
-
-interface ResponseValue {
-  message: string;
-  success: boolean;
-}
+import { ServiceResponse } from "@/types/ServiceResponse";
 
 interface ActivityContextValue {
   activities: Activity[];
-  fetchActivities: () => Promise<ResponseValue>;
+  fetchActivities: () => Promise<ServiceResponse>;
   onCreateActivity: (
     data: z.infer<typeof ActivitySchema>
-  ) => Promise<ResponseValue>;
-  onUpdateActivity: (data: Activity) => Promise<ResponseValue>;
-  onDeleteActivity: (id: string) => Promise<ResponseValue>;
+  ) => Promise<ServiceResponse>;
+  onUpdateActivity: (data: Activity) => Promise<ServiceResponse>;
+  onDeleteActivity: (id: string) => Promise<ServiceResponse>;
 }
 
 const initialActivityContextValue: ActivityContextValue = {

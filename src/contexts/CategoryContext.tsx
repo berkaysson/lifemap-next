@@ -5,24 +5,20 @@ import {
   getCategories,
   updateCategory,
 } from "@/services/categoryService";
+import { ServiceResponse } from "@/types/ServiceResponse";
 import { Category } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { createContext, ReactNode, useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 
-interface ResponseValue {
-  message: string;
-  success: boolean;
-}
-
 interface CategoryContextValue {
   categories: Category[];
-  fetchCategories: () => Promise<ResponseValue>;
+  fetchCategories: () => Promise<ServiceResponse>;
   onCreateCategory: (
     data: z.infer<typeof CategorySchema>
-  ) => Promise<ResponseValue>;
-  onUpdateCategory: (data: Category) => Promise<ResponseValue>;
-  onDeleteCategory: (id: string) => Promise<ResponseValue>;
+  ) => Promise<ServiceResponse>;
+  onUpdateCategory: (data: Category) => Promise<ServiceResponse>;
+  onDeleteCategory: (id: string) => Promise<ServiceResponse>;
 }
 
 const initialCategoryContextValue: CategoryContextValue = {

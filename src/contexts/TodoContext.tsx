@@ -5,22 +5,18 @@ import {
   getToDos,
   updateToDo,
 } from "@/services/todoService";
+import { ServiceResponse } from "@/types/ServiceResponse";
 import { ToDo } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { createContext, ReactNode, useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 
-interface ResponseValue {
-  message: string;
-  success: boolean;
-}
-
 interface TodoContextValue {
   todos: ToDo[];
-  fetchTodos: () => Promise<ResponseValue>;
-  onCreateTodo: (data: z.infer<typeof TodoSchema>) => Promise<ResponseValue>;
-  onUpdateTodo: (data: ToDo) => Promise<ResponseValue>;
-  onDeleteTodo: (id: string) => Promise<ResponseValue>;
+  fetchTodos: () => Promise<ServiceResponse>;
+  onCreateTodo: (data: z.infer<typeof TodoSchema>) => Promise<ServiceResponse>;
+  onUpdateTodo: (data: ToDo) => Promise<ServiceResponse>;
+  onDeleteTodo: (id: string) => Promise<ServiceResponse>;
 }
 
 const initialTodoContextValue: TodoContextValue = {
