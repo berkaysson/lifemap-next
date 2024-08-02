@@ -7,6 +7,7 @@ import { Activity } from "@prisma/client";
 import { CategoryContext } from "@/contexts/CategoryContext";
 import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
 import ActivityEditForm from "./AcitivityEditForm";
+import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
 
 const ActivityListItem = ({ activity }: { activity: Activity }) => {
   const { onDeleteActivity } = useContext(ActivityContext);
@@ -42,9 +43,12 @@ const ActivityListItem = ({ activity }: { activity: Activity }) => {
             </Button>
           }
         />
-        <Button variant={"destructive"} size={"sm"} onClick={handleDelete}>
-          Delete
-        </Button>
+        <ButtonWithConfirmation
+          variant="destructive"
+          size={"sm"}
+          buttonText={"Delete"}
+          onConfirm={handleDelete}
+        />
       </div>
     </li>
   );

@@ -9,6 +9,7 @@ import { TaskContext } from "@/contexts/TaskContext";
 import TaskEditForm from "./TaskEditForm";
 import IsCompleted from "../ui/IsCompleted";
 import ColorCircle from "../ui/ColorCircle";
+import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
 
 const TaskListItem = ({ task }: { task: Task }) => {
   const { categories } = useContext(CategoryContext);
@@ -51,9 +52,12 @@ const TaskListItem = ({ task }: { task: Task }) => {
             </Button>
           }
         />
-        <Button variant={"destructive"} size={"sm"} onClick={handleDelete}>
-          Delete
-        </Button>
+        <ButtonWithConfirmation
+          variant="destructive"
+          size={"sm"}
+          buttonText={"Delete"}
+          onConfirm={handleDelete}
+        />
       </div>
     </li>
   );

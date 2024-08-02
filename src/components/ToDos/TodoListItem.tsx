@@ -7,6 +7,7 @@ import { getRemainingTime, isExpired } from "@/lib/time";
 import IsCompleted from "../ui/IsCompleted";
 import ColorCircle from "../ui/ColorCircle";
 import TodoEditForm from "./TodoEditForm";
+import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
 
 const TodoListItem = ({
   todo,
@@ -67,9 +68,13 @@ const TodoListItem = ({
             </Button>
           }
         />
-        <Button variant={"destructive"} size={"sm"} onClick={handleDelete}>
-          Delete
-        </Button>
+
+        <ButtonWithConfirmation
+          variant="destructive"
+          size={"sm"}
+          buttonText={"Delete"}
+          onConfirm={handleDelete}
+        />
       </div>
     </li>
   );

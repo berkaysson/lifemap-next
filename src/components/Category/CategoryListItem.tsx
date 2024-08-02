@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { Button } from "../ui/button";
 import { CategoryContext } from "@/contexts/CategoryContext";
 import CategoryEditForm from "./CategoryEditForm";
+import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
 
 const CategoryListItem = ({
   category,
@@ -34,10 +35,12 @@ const CategoryListItem = ({
             </Button>
           }
         />
-
-        <Button variant={"destructive"} size={"sm"} onClick={handleDelete}>
-          Delete
-        </Button>
+        <ButtonWithConfirmation
+          variant="destructive"
+          size={"sm"}
+          buttonText={"Delete"}
+          onConfirm={handleDelete}
+        />
       </div>
     </li>
   );
