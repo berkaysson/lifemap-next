@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { parseDate } from "@/lib/time";
 import { TodoSchema } from "@/schema";
 import z from "zod";
 
@@ -21,8 +22,8 @@ export async function createToDo(
       data: {
         name: name,
         completed: false,
-        startDate: new Date(),
-        endDate: new Date(endDate).toISOString(),
+        startDate: parseDate(new Date().toISOString()),
+        endDate: parseDate(endDate),
         userId: _userId,
         description: description || undefined,
         colorCode: colorCode || "#000000",

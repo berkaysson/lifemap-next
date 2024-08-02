@@ -4,6 +4,8 @@ import {
   parseISO,
   formatDistanceToNow,
   addDays,
+  formatISO,
+  addHours,
 } from "date-fns";
 
 export const addOneDay = (date: Date) => {
@@ -23,7 +25,7 @@ export const formatDate = (date: Date) => {
 
 export const parseDate = (dateString: string) => {
   const date = parseISO(dateString);
-  return date;
+  return addHours(date, -new Date().getTimezoneOffset() / 60);
 };
 
 export const getRemainingTime = (date: Date) => {
