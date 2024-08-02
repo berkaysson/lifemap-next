@@ -7,6 +7,8 @@ import { useContext } from "react";
 import { Button } from "../ui/button";
 import { TaskContext } from "@/contexts/TaskContext";
 import TaskEditForm from "./TaskEditForm";
+import IsCompleted from "../ui/IsCompleted";
+import ColorCircle from "../ui/ColorCircle";
 
 const TaskListItem = ({ task }: { task: Task }) => {
   const { categories } = useContext(CategoryContext);
@@ -23,9 +25,8 @@ const TaskListItem = ({ task }: { task: Task }) => {
   return (
     <li className="flex flex-col gap-2 p-4 border-b">
       <div className="flex flex-row gap-2">
-        <span className="mr-2 text-xl">
-          {task.completed ? "🟢" : expired ? "🔴" : "🟡"}
-        </span>
+        <IsCompleted isCompleted={task.completed} isExpired={expired} />
+        <ColorCircle colorCode={task.colorCode || "darkblue"} />
         <span>{task.name}</span>
         <span>{task.description}</span>
         <span>{category?.name}</span>

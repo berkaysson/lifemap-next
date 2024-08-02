@@ -112,6 +112,23 @@ const TodoForm = () => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="colorCode"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Pick a Color</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="w-20 rounded-full"
+                      disabled={isPending}
+                      {...field}
+                      type="color"
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
           </div>
 
           {message && isError && <FormMessage>{message}</FormMessage>}
