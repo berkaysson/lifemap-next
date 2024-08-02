@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { TodoContext } from "@/contexts/TodoContext";
 import { getRemainingTime, isExpired } from "@/lib/time";
 import IsCompleted from "../ui/IsCompleted";
+import ColorCircle from "../ui/ColorCircle";
 
 const TodoListItem = ({
   todo,
@@ -39,11 +40,11 @@ const TodoListItem = ({
     <li className="flex flex-col gap-2 p-4 border-b">
       <div className="flex flex-col gap-2">
         <div>
-          <span className="mr-2 text-xl">
-            {todo.completed ? "🟢" : expired ? "🔴" : "🟡"}
+          <span className="mr-2 text-xl flex gap-2">
+            <IsCompleted isCompleted={todo.completed} isExpired={expired} />
+            <ColorCircle colorCode={todo.colorCode || "darkblue"} />
           </span>
           <span>{todo.name}</span>
-          <span>{todo.colorCode}</span>
         </div>
         <div>{todo.description}</div>
         <span>{todo.endDate.toISOString().slice(0, 10)}</span>
