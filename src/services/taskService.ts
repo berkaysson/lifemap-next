@@ -43,6 +43,13 @@ export const createTask = async (
   const startDate = parseDate(new Date().toISOString());
   const endDate = parseDate(newTask.endDate);
 
+  if (!checkStartDateAvailability(startDate, endDate)) {
+    return {
+      message: "Start date cannot be greater than end date",
+      success: false,
+    };
+  }
+
   try {
     const completedDuration = await calculateTaskCompletedDuration(
       userId,
