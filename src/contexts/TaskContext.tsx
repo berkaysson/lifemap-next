@@ -21,8 +21,8 @@ interface TaskContextValue {
   onCreateTask: (data: z.infer<typeof TaskSchema>) => Promise<ResponseValue>;
   onDeleteTask: (id: string) => Promise<ResponseValue>;
   onUpdateTask: (
-    data: Task,
-    updatedField: keyof Task
+    id: string,
+    data: Partial<Task>
   ) => Promise<ResponseValue>;
 }
 
@@ -74,12 +74,12 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     return response;
   };
 
-  const onUpdateTask = async (data: Task, updatedField: keyof Task) => {
+  const onUpdateTask = async (id: string, data: Partial<Task>) => {
     if (!session || !session.user || !data) {
       return { message: "Session or data not exist", success: false };
     }
     if (!session.user.id) return { message: "User not exist", success: false };
-    const response = await updateTask(data, updatedField);
+    const response = await updateTask(id, data);
     if (response.success) {
       await fetchTasks();
       return response;

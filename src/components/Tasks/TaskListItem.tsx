@@ -6,6 +6,7 @@ import { Task } from "@prisma/client";
 import { useContext } from "react";
 import { Button } from "../ui/button";
 import { TaskContext } from "@/contexts/TaskContext";
+import TaskEditForm from "./TaskEditForm";
 
 const TaskListItem = ({ task }: { task: Task }) => {
   const { categories } = useContext(CategoryContext);
@@ -14,7 +15,7 @@ const TaskListItem = ({ task }: { task: Task }) => {
   const category = categories.find((c) => c.id === task.categoryId);
   const expired = isExpired(task.endDate);
   const remained = getRemainingTime(task.endDate);
-  
+
   const handleDelete = async () => {
     await onDeleteTask(task.id);
   };
@@ -41,9 +42,14 @@ const TaskListItem = ({ task }: { task: Task }) => {
         </div>
       </div>
       <div className="flex flex-row gap-2">
-        <Button variant={"outline"} size={"sm"}>
-          Edit
-        </Button>
+        <TaskEditForm
+          initialValues={task}
+          triggerButton={
+            <Button variant={"outline"} size={"sm"}>
+              Edit
+            </Button>
+          }
+        />
         <Button variant={"destructive"} size={"sm"} onClick={handleDelete}>
           Delete
         </Button>
