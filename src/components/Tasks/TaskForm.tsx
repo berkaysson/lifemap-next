@@ -71,7 +71,7 @@ const TaskForm = () => {
                     <Input
                       disabled={isPending}
                       {...field}
-                      placeholder="Name"
+                      placeholder="Doing something..."
                       type="text"
                     />
                   </FormControl>
@@ -95,7 +95,7 @@ const TaskForm = () => {
                     <Input
                       disabled={isPending}
                       {...field}
-                      placeholder="Description"
+                      placeholder="Doing something until next month..."
                       type="text"
                     />
                   </FormControl>
@@ -109,12 +109,12 @@ const TaskForm = () => {
               name="goalDuration"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Goal Duration</FormLabel>
+                  <FormLabel>Goal Duration (min)</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isPending}
                       {...field}
-                      placeholder="Goal Duration"
+                      placeholder="Goal Duration in minutes"
                       type="number"
                       onChange={(e) => field.onChange(Number(e.target.value))}
                     />

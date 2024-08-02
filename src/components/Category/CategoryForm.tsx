@@ -64,7 +64,7 @@ const CategoryForm = () => {
                     <Input
                       disabled={isPending}
                       {...field}
-                      placeholder="Category"
+                      placeholder="Doing something..."
                       type="text"
                     />
                   </FormControl>

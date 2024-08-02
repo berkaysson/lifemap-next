@@ -47,16 +47,6 @@ const ActivityEditForm = ({
       setIsOpen={setIsOpen}
     >
       <div className="flex flex-col gap-2">
-        <Label>Duration (min)</Label>
-        <Input
-          type="number"
-          value={newDuration}
-          onChange={(e) => {
-            setNewDuration(Number(e.target.value));
-          }}
-          min={1}
-        />
-
         <Label>Description</Label>
         <Input
           type="text"
@@ -65,6 +55,18 @@ const ActivityEditForm = ({
             setNewDescription(e.target.value);
           }}
           min={""}
+          placeholder="Describe the activity"
+        />
+
+        <Label>Duration in minutes</Label>
+        <Input
+          type="number"
+          value={newDuration}
+          onChange={(e) => {
+            setNewDuration(Number(e.target.value));
+          }}
+          min={1}
+          placeholder="Your activity duration in minutes"
         />
 
         {error && <p className="text-red-500">{error}</p>}

@@ -1,10 +1,10 @@
 import { TaskContext } from "@/contexts/TaskContext";
 import { Task } from "@prisma/client";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import ModalDialog from "../ui/ModalDialog";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { addOneDay, formatDate, parseDate } from "@/lib/time";
+import { parseDate } from "@/lib/time";
 import { Button } from "../ui/button";
 
 interface TaskEditFormProps {
@@ -43,23 +43,25 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
       setIsOpen={setIsOpen}
     >
       <div className="flex flex-col gap-2">
-        <Label>Name:</Label>
+        <Label>Name</Label>
         <Input
           type="text"
           defaultValue={initialValues.name}
           onChange={(e) => handleFieldChange(e.target.value, "name")}
           min={3}
+          placeholder="Doing something"
         />
 
-        <Label>Description:</Label>
+        <Label>Description</Label>
         <Input
           type="text"
           defaultValue={initialValues.description || ""}
           onChange={(e) => handleFieldChange(e.target.value, "description")}
           min={3}
+          placeholder="Doing something until next month..."
         />
 
-        <Label>Goal Duration in minutes:</Label>
+        <Label>Goal Duration (min)</Label>
         <Input
           type="number"
           defaultValue={initialValues.goalDuration}
@@ -67,9 +69,10 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
             handleFieldChange(Number(e.target.value), "goalDuration")
           }
           min={1}
+          placeholder="Goal Duration in minutes"
         />
 
-        <Label>Start Date:</Label>
+        <Label>Start Date</Label>
         <Input
           type="date"
           defaultValue={initialValues.startDate.toISOString().slice(0, 10)}
@@ -78,7 +81,7 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
           }
         />
 
-        <Label>End Date:</Label>
+        <Label>End Date</Label>
         <Input
           type="date"
           defaultValue={initialValues.endDate.toISOString().slice(0, 10)}

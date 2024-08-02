@@ -39,7 +39,7 @@ const CategoryEditForm = ({
       setIsOpen={setIsOpen}
     >
       <div className="flex flex-col gap-2">
-        <Label>Name:</Label>
+        <Label>Name</Label>
         <Input
           type="text"
           value={newName}
@@ -47,6 +47,7 @@ const CategoryEditForm = ({
             setNewName(e.target.value);
           }}
           min={1}
+          placeholder="Learning to code"
         />
         {error && <p className="text-red-500">{error}</p>}
 

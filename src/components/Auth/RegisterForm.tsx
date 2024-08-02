@@ -110,7 +110,7 @@ const RegisterForm = () => {
                       disabled={isPending}
                       {...field}
                       placeholder="John"
-                      type="name"
+                      type="John Doe"
                     />
                   </FormControl>
                   {form.formState.errors.name && (

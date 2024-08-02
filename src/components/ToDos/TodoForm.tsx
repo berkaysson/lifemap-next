@@ -66,7 +66,7 @@ const TodoForm = () => {
                     <Input
                       disabled={isPending}
                       {...field}
-                      placeholder="Todo"
+                      placeholder="Your todo"
                       type="text"
                     />
                   </FormControl>
@@ -88,7 +88,7 @@ const TodoForm = () => {
                     <Input
                       disabled={isPending}
                       {...field}
-                      placeholder="Description"
+                      placeholder="Describe your todo"
                       type="text"
                     />
                   </FormControl>

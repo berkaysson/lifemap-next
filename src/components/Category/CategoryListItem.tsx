@@ -1,9 +1,8 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Button } from "../ui/button";
 import { CategoryContext } from "@/contexts/CategoryContext";
-import { Input } from "../ui/input";
 import CategoryEditForm from "./CategoryEditForm";
 
 const CategoryListItem = ({

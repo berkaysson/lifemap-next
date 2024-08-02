@@ -76,7 +76,7 @@ const ActivityForm = () => {
                     <Input
                       disabled={isPending}
                       {...field}
-                      placeholder="You can add a description to your activity"
+                      placeholder="Describe the activity"
                       type="text"
                     />
                   </FormControl>
@@ -101,7 +101,7 @@ const ActivityForm = () => {
                     <Input
                       disabled={isPending}
                       {...field}
-                      placeholder="Duration in minutes"
+                      placeholder="Your activity duration in minutes"
                       onChange={(e) => field.onChange(Number(e.target.value))}
                       type="number"
                     />
@@ -150,7 +150,7 @@ const ActivityForm = () => {
               name="date"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Date</FormLabel>
+                  <FormLabel>Activity Date</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isPending}
