@@ -6,6 +6,7 @@ import { TodoContext } from "@/contexts/TodoContext";
 import { getRemainingTime, isExpired } from "@/lib/time";
 import IsCompleted from "../ui/IsCompleted";
 import ColorCircle from "../ui/ColorCircle";
+import TodoEditForm from "./TodoEditForm";
 
 const TodoListItem = ({
   todo,
@@ -58,6 +59,14 @@ const TodoListItem = ({
         <Button variant={"outline"} size={"sm"} onClick={handleComplete}>
           {todo.completed ? "Uncomplete" : "Complete"}
         </Button>
+        <TodoEditForm
+          initialValues={todo}
+          triggerButton={
+            <Button variant={"outline"} size={"sm"}>
+              Edit
+            </Button>
+          }
+        />
         <Button variant={"destructive"} size={"sm"} onClick={handleDelete}>
           Delete
         </Button>

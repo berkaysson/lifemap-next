@@ -59,12 +59,10 @@ export async function updateToDo(data: any) {
     return { message: "data is required", success: false };
   }
 
-  const { id, ...rest } = data;
-
   try {
-    const todo = await prisma.toDo.update({
-      where: { id },
-      data: rest,
+    await prisma.toDo.update({
+      where: { id: data.id },
+      data,
     });
     return { message: "Successfully updated todo", success: true };
   } catch (error) {
