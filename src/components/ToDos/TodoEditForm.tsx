@@ -11,18 +11,22 @@ interface TodoEditFormProps {
   triggerButton: JSX.Element;
 }
 
-const TodoEditForm = ({
-  initialValues,
-  triggerButton,
-}: TodoEditFormProps) => {
+const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
   const [error, setError] = useState<string | null>(null);
   const [newName, setNewName] = useState(initialValues.name);
+  const [newDescription, setNewDescription] = useState(
+    initialValues.description
+  );
   const { onUpdateTodo } = useContext(TodoContext);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSubmit = async () => {
     setError(null);
-    const newTodo = { ...initialValues, name: newName };
+    const newTodo = {
+      ...initialValues,
+      name: newName,
+      description: newDescription,
+    };
     const response = await onUpdateTodo(newTodo);
     if (response.success) {
       setIsOpen(false);
@@ -50,6 +54,17 @@ const TodoEditForm = ({
           min={1}
           placeholder="Do laundry"
         />
+        <Label>Description</Label>
+        <Input
+          type="text"
+          value={newDescription || ""}
+          onChange={(e) => {
+            setNewDescription(e.target.value);
+          }}
+          min={1}
+          placeholder="Describe the ToDo"
+        />
+
         {error && <p className="text-red-500">{error}</p>}
 
         <Button variant={"outline"} size={"sm"} onClick={handleSubmit}>
