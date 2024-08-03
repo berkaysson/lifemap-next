@@ -26,6 +26,7 @@ import {
 } from "../ui/select";
 import ModalDialog from "../ui/ModalDialog";
 import { SquareActivity } from "lucide-react";
+import SelectBox from "../ui/SelectBox";
 
 const ActivityForm = () => {
   const { onCreateActivity } = useContext(ActivityContext);
@@ -40,7 +41,7 @@ const ActivityForm = () => {
     defaultValues: {
       description: "",
       duration: 0,
-      categoryId: undefined,
+      categoryId: "",
       date: "",
     },
   });
@@ -135,22 +136,15 @@ const ActivityForm = () => {
             control={form.control}
             name="categoryId"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex flex-col">
                 <FormLabel>Select a Category</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select Category" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
-                        {category.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <SelectBox
+                  field={field}
+                  options={categories}
+                  form={form}
+                  optionKey={"id"}
+                  formKey={"categoryId"}
+                />
                 {form.formState.errors.categoryId && (
                   <FormMessage>
                     {form.formState.errors.categoryId.message}

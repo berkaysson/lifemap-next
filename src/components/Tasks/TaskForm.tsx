@@ -16,9 +16,8 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
-import { SelectValue } from "@radix-ui/react-select";
 import { Button } from "../ui/button";
+import SelectBox from "../ui/SelectBox";
 
 const TaskForm = () => {
   const { onCreateTask } = useContext(TaskContext);
@@ -133,22 +132,15 @@ const TaskForm = () => {
               control={form.control}
               name="categoryId"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-col">
                   <FormLabel>Select a Category</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Select Category" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <SelectBox
+                    field={field}
+                    options={categories}
+                    form={form}
+                    optionKey={"id"}
+                    formKey={"categoryId"}
+                  />
                   {form.formState.errors.categoryId && (
                     <FormMessage>
                       {form.formState.errors.categoryId.message}
