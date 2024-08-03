@@ -1,6 +1,6 @@
 import { CategoryContext } from "@/contexts/CategoryContext";
 import { Category } from "@prisma/client";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import ModalDialog from "../ui/ModalDialog";
 import { Button } from "../ui/button";
@@ -30,6 +30,11 @@ const CategoryEditForm = ({
       setError(response.message);
     }
   };
+
+  useEffect(() => {
+    setNewName(initialValues.name);
+    setError(null);
+  }, [isOpen]);
 
   return (
     <ModalDialog

@@ -1,6 +1,6 @@
 import { TodoContext } from "@/contexts/TodoContext";
 import { ToDo } from "@prisma/client";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import ModalDialog from "../ui/ModalDialog";
 import { Button } from "../ui/button";
@@ -34,6 +34,12 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
       setError(response.message);
     }
   };
+
+  useEffect(() => {
+    setNewName(initialValues.name);
+    setNewDescription(initialValues.description);
+    setError(null);
+  }, [isOpen]);
 
   return (
     <ModalDialog

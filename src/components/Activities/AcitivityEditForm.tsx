@@ -1,6 +1,6 @@
 import { ActivityContext } from "@/contexts/ActivityContext";
 import { Activity } from "@prisma/client";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import ModalDialog from "../ui/ModalDialog";
 import { Button } from "../ui/button";
@@ -37,6 +37,12 @@ const ActivityEditForm = ({
       setError(response.message);
     }
   };
+
+  useEffect(() => {
+    setNewDuration(initialValues.duration);
+    setNewDescription(initialValues.description || "");
+    setError(null);
+  }, [isOpen]);
 
   return (
     <ModalDialog

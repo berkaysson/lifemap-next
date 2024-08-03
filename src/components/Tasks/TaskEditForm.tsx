@@ -1,6 +1,6 @@
 import { TaskContext } from "@/contexts/TaskContext";
 import { Task } from "@prisma/client";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ModalDialog from "../ui/ModalDialog";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -33,6 +33,11 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
     if (initialValues[field] === value) return;
     setNewTask({ ...newTask, [field]: value });
   };
+
+  useEffect(() => {
+    setNewTask({});
+    setError(null);
+  }, [isOpen]);
 
   return (
     <ModalDialog
