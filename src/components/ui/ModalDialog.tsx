@@ -29,7 +29,7 @@ const ModalDialog = ({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{triggerButton}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] rounded-lg">
         <DialogHeader className="sm:flex sm:items-center">
           <DialogTitle className="text-lg font-semibold">{title}</DialogTitle>
           <DialogDescription className="mt-1 text-sm leading-6">
@@ -39,9 +39,9 @@ const ModalDialog = ({
 
         {children}
 
-        <DialogFooter>
+        <DialogFooter className="mt-2 underline">
           <DialogClose asChild>
-            <Button type="button" variant={"destructive"}>
+            <Button type="button" variant={"ghost"} size={"sm"}>
               Cancel
             </Button>
           </DialogClose>
