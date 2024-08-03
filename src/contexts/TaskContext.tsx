@@ -1,3 +1,4 @@
+import { useToast } from "@/components/ui/use-toast";
 import { TaskSchema } from "@/schema";
 import {
   createTask,
@@ -35,6 +36,7 @@ export const TaskContext = createContext(initialTaskContextValue);
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const { data: session, status } = useSession();
   const [tasks, setTasks] = useState<Task[]>([]);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!session || !session.user || status !== "authenticated") return;
@@ -64,6 +66,11 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     if (!session.user.id) return { message: "User not exist", success: false };
     const response = await createTask(data, session.user.id);
     if (response.success) {
+      toast({
+        title: "Task Created",
+        description: "Task Created successfully",
+        duration: 3000,
+      });
       await fetchTasks();
       return response;
     }
@@ -77,6 +84,11 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     if (!session.user.id) return { message: "User not exist", success: false };
     const response = await updateTask(id, data);
     if (response.success) {
+      toast({
+        title: "Task Updated",
+        description: "Task Updated successfully",
+        duration: 3000,
+      });
       await fetchTasks();
       return response;
     }
@@ -90,6 +102,11 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await deleteTask(id);
       if (response.success) {
+        toast({
+          title: "Task Deleted",
+          description: "Task Deleted successfully",
+          duration: 3000,
+        });
         await fetchTasks();
         return response;
       }

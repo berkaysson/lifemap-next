@@ -1,3 +1,4 @@
+import { useToast } from "@/components/ui/use-toast";
 import { CategorySchema } from "@/schema";
 import {
   createCategory,
@@ -57,6 +58,7 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
   // Context should be inside of SessionProvider
   const { data: session, status } = useSession();
   const [categories, setCategories] = useState<Category[]>([]);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!session || !session.user || status !== "authenticated") return;
@@ -89,6 +91,11 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
     if (!session.user.id) return { message: "User not exist", success: false };
     const response = await createCategory(data, session.user.id);
     if (response.success) {
+      toast({
+        title: "Category Created",
+        description: "Category Created successfully",
+        duration: 3000,
+      });
       await fetchCategories();
       return response;
     }
@@ -104,6 +111,11 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
       };
     const response = await updateCategory(data);
     if (response.success) {
+      toast({
+        title: "Category Updated",
+        description: "Category Updated successfully",
+        duration: 3000,
+      });
       await fetchCategories();
     }
 
@@ -119,6 +131,11 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await deleteCategory(id);
       if (response.success) {
+        toast({
+          title: "Category Deleted",
+          description: "Category Deleted successfully",
+          duration: 3000,
+        });
         await fetchCategories();
       }
 

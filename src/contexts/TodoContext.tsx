@@ -1,3 +1,4 @@
+import { useToast } from "@/components/ui/use-toast";
 import { TodoSchema } from "@/schema";
 import {
   createToDo,
@@ -43,6 +44,7 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
   // Context should be inside of SessionProvider
   const { data: session, status } = useSession();
   const [todos, setTodos] = useState<ToDo[]>([]);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!session || !session.user || status !== "authenticated") return;
@@ -69,6 +71,11 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
     if (!session.user.id) return { message: "User not exist", success: false };
     const response = await createToDo(data, session.user.id);
     if (response) {
+      toast({
+        title: "Todo Created",
+        description: "Todo Created successfully",
+        duration: 3000,
+      });
       await fetchTodos();
       return response;
     }
@@ -81,6 +88,11 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
       return { message: "Session not exist", success: false };
     const response = await updateToDo(data);
     if (response.success) {
+      toast({
+        title: "Todo Updated",
+        description: "Todo Updated successfully",
+        duration: 3000,
+      });
       await fetchTodos();
     }
 
@@ -92,8 +104,14 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
       return { message: "Session or Todo not exist", success: false };
     try {
       const response = await deleteToDo(id);
-      if (response.success) await fetchTodos();
-
+      if (response.success) {
+        toast({
+          title: "Todo Deleted",
+          description: "Todo Deleted successfully",
+          duration: 3000,
+        });
+        await fetchTodos();
+      }
       return response;
     } catch (error) {
       return { message: `${error}`, success: false };

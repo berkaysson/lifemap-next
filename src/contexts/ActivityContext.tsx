@@ -11,6 +11,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import { TaskContext } from "./TaskContext";
 import { ServiceResponse } from "@/types/ServiceResponse";
+import { useToast } from "@/components/ui/use-toast";
 
 interface ActivityContextValue {
   activities: Activity[];
@@ -50,6 +51,7 @@ export const ActivityProvider = ({
   const { data: session, status } = useSession();
   const [activities, setActivities] = useState<Activity[]>([]);
   const { fetchTasks } = useContext(TaskContext);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!session || !session.user || status !== "authenticated") return;
@@ -85,6 +87,11 @@ export const ActivityProvider = ({
     if (!session.user.id) return { message: "User not exist", success: false };
     const response = await createActivity(data, session.user.id);
     if (response.success) {
+      toast({
+        title: "Activity Created",
+        description: "Activity Created successfully",
+        duration: 3000,
+      });
       await fetchActivities();
       return response;
     }
@@ -98,6 +105,11 @@ export const ActivityProvider = ({
     if (!session.user.id) return { message: "User not exist", success: false };
     const response = await updateActivity(data);
     if (response.success) {
+      toast({
+        title: "Activity Updated",
+        description: "Activity Updated successfully",
+        duration: 3000,
+      });
       await fetchActivities();
       return response;
     }
@@ -112,6 +124,11 @@ export const ActivityProvider = ({
       const response = await deleteActivity(id);
       if (response.success) {
         await fetchActivities();
+        toast({
+          title: "Activity Deleted",
+          description: "Activity Deleted successfully",
+          duration: 3000,
+        });
         return response;
       }
       return response;
