@@ -24,6 +24,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import ModalDialog from "../ui/ModalDialog";
+import { SquareActivity } from "lucide-react";
 
 const ActivityForm = () => {
   const { onCreateActivity } = useContext(ActivityContext);
@@ -31,6 +33,7 @@ const ActivityForm = () => {
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const form = useForm<z.infer<typeof ActivitySchema>>({
     resolver: zodResolver(ActivitySchema),
@@ -52,6 +55,7 @@ const ActivityForm = () => {
           if (response.success) {
             setIsError(false);
             reset();
+            setIsOpen(false);
           } else {
             setIsError(true);
           }
@@ -61,114 +65,117 @@ const ActivityForm = () => {
   };
 
   return (
-    <div className="border p-4 m-2 rounded-sm">
-      <h1>Create a Activity</h1>
+    <ModalDialog
+      triggerButton={
+        <Button
+          onClick={() => {
+            setMessage("");
+            setIsError(false);
+          }}
+          size={"lg"}
+          className="fixed bottom-4 right-4"
+        >
+          <SquareActivity className="mr-2 h-6 w-6" /> Create Activity
+        </Button>
+      }
+      title="Create Activity"
+      description="Create a new activity"
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+    >
       <Form {...form}>
-        <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="flex flex-col gap-4">
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="Describe the activity"
-                      type="text"
-                    />
-                  </FormControl>
-                  {form.formState.errors.description && (
-                    <FormMessage>
-                      {form.formState.errors.description.message}
-                    </FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-          </div>
+        <form className="space-y-2" onSubmit={form.handleSubmit(onSubmit)}>
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Input
+                    disabled={isPending}
+                    {...field}
+                    placeholder="Describe the activity"
+                    type="text"
+                  />
+                </FormControl>
+                {form.formState.errors.description && (
+                  <FormMessage>
+                    {form.formState.errors.description.message}
+                  </FormMessage>
+                )}
+              </FormItem>
+            )}
+          />
 
-          <div className="flex flex-col gap-4">
-            <FormField
-              control={form.control}
-              name="duration"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Duration (minutes)</FormLabel>
+          <FormField
+            control={form.control}
+            name="duration"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Duration (minutes)</FormLabel>
+                <FormControl>
+                  <Input
+                    disabled={isPending}
+                    {...field}
+                    placeholder="Your activity duration in minutes"
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    type="number"
+                  />
+                </FormControl>
+                {form.formState.errors.duration && (
+                  <FormMessage>
+                    {form.formState.errors.duration.message}
+                  </FormMessage>
+                )}
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="categoryId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Select a Category</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="Your activity duration in minutes"
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                      type="number"
-                    />
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Select Category" />
+                    </SelectTrigger>
                   </FormControl>
-                  {form.formState.errors.duration && (
-                    <FormMessage>
-                      {form.formState.errors.duration.message}
-                    </FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="flex flex-col gap-4">
-            <FormField
-              control={form.control}
-              name="categoryId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Select a Category</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Select Category" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {form.formState.errors.categoryId && (
-                    <FormMessage>
-                      {form.formState.errors.categoryId.message}
-                    </FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="date"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Activity Date</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="Date"
-                      type="date"
-                      required
-                    />
-                  </FormControl>
-                  {form.formState.errors.date && (
-                    <FormMessage>
-                      {form.formState.errors.date.message}
-                    </FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-          </div>
+                  <SelectContent>
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {form.formState.errors.categoryId && (
+                  <FormMessage>
+                    {form.formState.errors.categoryId.message}
+                  </FormMessage>
+                )}
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="date"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Activity Date</FormLabel>
+                <FormControl>
+                  <Input disabled={isPending} {...field} type="date" required />
+                </FormControl>
+                {form.formState.errors.date && (
+                  <FormMessage>
+                    {form.formState.errors.date.message}
+                  </FormMessage>
+                )}
+              </FormItem>
+            )}
+          />
 
           {message && isError && <FormMessage>{message}</FormMessage>}
 
@@ -182,7 +189,7 @@ const ActivityForm = () => {
           </Button>
         </form>
       </Form>
-    </div>
+    </ModalDialog>
   );
 };
 
