@@ -125,6 +125,16 @@ export const deleteCategory = async (id: string) => {
       success: false,
     };
   }
+
+  const canBeDeleted = await checkCategoryCanBeDeleted(id);
+
+  if (!canBeDeleted) {
+    return {
+      message: "Category cannot be deleted, it used in activities or tasks",
+      success: false,
+    };
+  }
+
   try {
     await prisma.category.delete({
       where: {
@@ -141,4 +151,30 @@ export const deleteCategory = async (id: string) => {
       success: false,
     };
   }
+};
+
+const checkCategoryCanBeDeleted = async (id: string) => {
+  const activitiesInCategory = await prisma.activity.findMany({
+    where: {
+      categoryId: id,
+    },
+  });
+
+  if (activitiesInCategory.length > 0) {
+    return false;
+  }
+
+  const tasksInCategory = await prisma.task.findMany({
+    where: {
+      categoryId: id,
+    },
+  });
+
+  if (tasksInCategory.length > 0) {
+    return false;
+  }
+
+  // add habit check later
+
+  return true;
 };

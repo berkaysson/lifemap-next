@@ -138,6 +138,14 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
         });
         await fetchCategories();
       }
+      else {
+        toast({
+          title: "Category Not Deleted",
+          description: response.message,
+          duration: 3000,
+          variant: "destructive",
+        });
+      }
 
       return response;
     } catch (error) {
