@@ -8,3 +8,16 @@ export function cn(...inputs: ClassValue[]) {
 export function refreshPage() {
   window.location.reload();
 }
+
+export function sortArrayOfObjectsByKey<T>(
+  items: T[],
+  sortBy: keyof T,
+  direction: "asc" | "desc" = "asc"
+): T[] {
+  if (items[0][sortBy] === undefined) return items;
+  return [...items].sort((a, b) => {
+    if (a[sortBy] < b[sortBy]) return direction === "asc" ? -1 : 1;
+    if (a[sortBy] > b[sortBy]) return direction === "asc" ? 1 : -1;
+    return 0;
+  });
+}
