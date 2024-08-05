@@ -45,7 +45,7 @@ export const createTask = async (
 
   if (!checkStartDateAvailability(startDate, endDate)) {
     return {
-      message: "Start date cannot be greater than end date",
+      message: "Start date cannot be greater than due",
       success: false,
     };
   }
@@ -153,7 +153,7 @@ export const updateTask = async (taskId: string, data: Partial<Task>) => {
 
       if (!checkStartDateAvailability(startDate, endDate)) {
         return {
-          message: "Start date cannot be after end date",
+          message: "Start date cannot be after due",
           success: false,
         };
       }

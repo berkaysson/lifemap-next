@@ -154,7 +154,7 @@ const TaskForm = () => {
               name="endDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Finish Date</FormLabel>
+                  <FormLabel>Due Date</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isPending}

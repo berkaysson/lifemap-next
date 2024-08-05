@@ -86,7 +86,7 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
           }
         />
 
-        <Label>End Date</Label>
+        <Label>Due Date</Label>
         <Input
           type="date"
           defaultValue={initialValues.endDate.toISOString().slice(0, 10)}

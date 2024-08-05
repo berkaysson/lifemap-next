@@ -100,12 +100,12 @@ const TodoForm = () => {
               name="endDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>End Date</FormLabel>
+                  <FormLabel>Due Date</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isPending}
                       {...field}
-                      placeholder="End Date"
+                      placeholder="Due Date"
                       type="date"
                     />
                   </FormControl>
