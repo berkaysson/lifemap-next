@@ -1,7 +1,7 @@
 "use client";
 
 import { CategoryContext } from "@/contexts/CategoryContext";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import CategoryListItem from "./CategoryListItem";
 import { Category } from "@prisma/client";
 import { sortArrayOfObjectsByKey } from "@/lib/utils";
@@ -10,6 +10,10 @@ import SelectSort from "../ui/SelectSort";
 const CategoryList = () => {
   const { categories } = useContext(CategoryContext);
   const [sortedCategories, setSortedCategories] = useState(categories);
+
+  useEffect(() => {
+    setSortedCategories(categories);
+  }, [categories]);
 
   const handleSort = useCallback(
     (sortBy: keyof Category, direction: "asc" | "desc") => {

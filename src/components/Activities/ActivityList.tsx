@@ -11,10 +11,21 @@ const ActivityList = () => {
   const { activities } = useContext(ActivityContext);
   const [sortedActivities, setSortedActivities] = useState(activities);
 
-  const handleSort = useCallback((sortBy: keyof Activity, direction: 'asc' | 'desc') => {
-    const sorted = sortArrayOfObjectsByKey<Activity>(activities, sortBy, direction);
-    setSortedActivities(sorted);
+  useEffect(() => {
+    setSortedActivities(activities);
   }, [activities]);
+
+  const handleSort = useCallback(
+    (sortBy: keyof Activity, direction: "asc" | "desc") => {
+      const sorted = sortArrayOfObjectsByKey<Activity>(
+        activities,
+        sortBy,
+        direction
+      );
+      setSortedActivities(sorted);
+    },
+    [activities]
+  );
 
   return (
     <div className="flex flex-col gap-2 m-2">

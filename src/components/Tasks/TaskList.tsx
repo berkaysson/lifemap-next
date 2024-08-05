@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import TaskListItem from "./TaskListItem";
 import { TaskContext } from "@/contexts/TaskContext";
 import { Task } from "@prisma/client";
@@ -10,6 +10,10 @@ import SelectSort from "../ui/SelectSort";
 const TaskList = () => {
   const { tasks } = useContext(TaskContext);
   const [sortedTasks, setSortedTasks] = useState(tasks);
+
+  useEffect(() => {
+    setSortedTasks(tasks);
+  }, [tasks]);
 
   const handleSort = useCallback(
     (sortBy: keyof Task, direction: "asc" | "desc") => {
