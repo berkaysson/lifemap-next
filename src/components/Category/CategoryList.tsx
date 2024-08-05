@@ -28,7 +28,7 @@ const CategoryList = () => {
       <SelectSort
         options={[
           { value: "name", label: "Name" },
-          { value: "createdAt", label: "Creation Date" },
+          { value: "date", label: "Creation Date" },
         ]}
         onSelect={handleSort}
       />

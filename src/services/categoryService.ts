@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { parseDate } from "@/lib/time";
 import { CategorySchema } from "@/schema";
 import { Category } from "@prisma/client";
 import { z } from "zod";
@@ -29,10 +30,13 @@ export const createCategory = async (
     };
   }
 
+  const date = parseDate(new Date().toISOString());
+
   try {
     await prisma.category.create({
       data: {
         name: newCategory.name,
+        date,
         userId,
       },
     });
