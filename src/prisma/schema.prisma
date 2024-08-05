@@ -158,6 +158,7 @@ model Habit {
 
 model HabitProgress {
     id                String   @id @default(cuid())
+    order             Int
     startDate         DateTime
     endDate           DateTime
     completedDuration Int      @default(0)
