@@ -1,3 +1,4 @@
+import { Period } from "@prisma/client";
 import {
   isBefore,
   lightFormat,
@@ -6,6 +7,8 @@ import {
   addDays,
   formatISO,
   addHours,
+  addWeeks,
+  addMonths,
 } from "date-fns";
 
 export const addOneDay = (date: Date) => {
@@ -37,3 +40,14 @@ export const getRemainingTime = (date: Date) => {
 export const checkStartDateAvailability = (startDate: Date, endDate: Date) => {
   return startDate < endDate;
 };
+
+export const calculateEndDateWithPeriod = (startDate: Date, period: Period, numberOfPeriods: number) => {
+  switch (period) {
+    case Period.DAILY:
+      return addDays(startDate, numberOfPeriods);
+    case Period.WEEKLY:
+      return addWeeks(startDate, numberOfPeriods);
+    case Period.MONTHLY:
+      return addMonths(startDate, numberOfPeriods);
+  }
+}

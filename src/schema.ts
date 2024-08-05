@@ -54,8 +54,26 @@ export const ActivitySchema = z.object({
 export const TaskSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().optional(),
-  endDate: z.string().date().min(1, "End date is required"),
+  endDate: z.string().date().min(1, "Due date is required"),
   colorCode: z.string().optional(),
   goalDuration: z.number().min(1, "Goal duration is required"),
   categoryId: z.string().min(1, "Category is required"),
+});
+
+export const HabitSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  description: z.string().optional(),
+  colorCode: z.string().optional(),
+  period: z.enum([Period.DAILY, Period.WEEKLY, Period.MONTHLY]),
+  startDate: z.string().min(1, "Start date is required"),
+  numberOfPeriods: z
+    .number()
+    .min(1, "Repeating time is required to determin due date"),
+  goalDurationPerPeriod: z
+    .number()
+    .int()
+    .positive()
+    .min(1, "Goal duration is required"),
+  categoryId: z.string().min(1, "Category is required"),
+  projectId: z.string().optional(),
 });

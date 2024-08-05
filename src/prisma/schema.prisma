@@ -16,7 +16,7 @@ enum UserRole {
 enum Period {
     DAILY
     WEEKLY
-    MONTLY
+    MONTHLY
 }
 
 model User {
@@ -142,6 +142,7 @@ model Habit {
     colorCode             String?
     completed             Boolean         @default(false)
     period                Period
+    numberOfPeriods       Int
     startDate             DateTime
     endDate               DateTime
     goalDurationPerPeriod Int
