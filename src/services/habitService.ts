@@ -153,6 +153,9 @@ const generateHabitProgresses = async (
     );
 
     const habitId = habit.id;
+    const userId = habit.userId;
+    const categoryId = habit.categoryId;
+    const goalDuration = habit.goalDurationPerPeriod;
 
     progresses.push({
       order,
@@ -161,6 +164,9 @@ const generateHabitProgresses = async (
       completedDuration,
       completed,
       habitId,
+      userId,
+      categoryId,
+      goalDuration,
     } as HabitProgress);
 
     currentDate = progressEndDate;
@@ -181,7 +187,7 @@ export const calculateHabitProgressCompletedDuration = async (
       categoryId: habit.categoryId,
       date: {
         gte: startDate,
-        lte: endDate,
+        lt: endDate,
       },
     },
   });
@@ -204,45 +210,3 @@ export const calculateHabitProgressCompletion = async (
   const isCompleted = completedDuration >= goalDurationPerPeriod;
   return isCompleted;
 };
-
-// export const updateHabitProgress = async (habitProgressId: string) => {
-//   const habitProgress = await prisma.habitProgress.findUnique({
-//     where: { id: habitProgressId },
-//     include: { habit: true },
-//   });
-
-//   if (!habitProgress) {
-//     throw new Error("HabitProgress not found");
-//   }
-
-//   const completedDuration = await calculateHabitProgressCompletedDuration(
-//     habitProgress.habitId,
-//     habitProgress.startDate,
-//     habitProgress.endDate
-//   );
-
-//   const completed = calculateHabitProgressCompletion(
-//     completedDuration,
-//     habitProgress.habit.goalDurationPerPeriod
-//   );
-
-//   await prisma.habitProgress.update({
-//     where: { id: habitProgressId },
-//     data: {
-//       completedDuration,
-//       completed,
-//     },
-//   });
-
-//   return { completedDuration, completed };
-// };
-
-// export const updateAllHabitProgresses = async (habitId: string) => {
-//   const habitProgresses = await prisma.habitProgress.findMany({
-//     where: { habitId },
-//   });
-
-//   for (const progress of habitProgresses) {
-//     await updateHabitProgress(progress.id);
-//   }
-// };

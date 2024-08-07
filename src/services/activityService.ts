@@ -60,6 +60,13 @@ export const createActivity = async (
       newActivity.duration
     );
 
+    await updateRelatedHabitProgresses(
+      userId,
+      newActivity.categoryId,
+      date,
+      newActivity.duration
+    );
+
     return {
       message: "Successfully created activity",
       success: true,
@@ -204,6 +211,13 @@ export const deleteActivity = async (id: string) => {
       -activity.duration
     );
 
+    await updateRelatedHabitProgresses(
+      activity.userId,
+      activity.categoryId,
+      activity.date,
+      -activity.duration
+    );
+
     return {
       message: "Successfully deleted activity",
       success: true,
@@ -239,6 +253,36 @@ const updateRelatedTasks = async (
 
     await prisma.task.update({
       where: { id: task.id },
+      data: {
+        completedDuration: newCompletedDuration,
+        completed,
+      },
+    });
+  }
+};
+
+const updateRelatedHabitProgresses = async (
+  userId: string,
+  categoryId: string,
+  activityDate: Date,
+  duration: number
+) => {
+  const endDate = addOneDay(activityDate);
+  const habitProgresses = await prisma.habitProgress.findMany({
+    where: {
+      userId,
+      categoryId,
+      startDate: { lte: activityDate },
+      endDate: { gte: endDate },
+    },
+  });
+
+  for (const habitProgress of habitProgresses) {
+    const newCompletedDuration = habitProgress.completedDuration + duration;
+    const completed = newCompletedDuration >= habitProgress.goalDuration;
+
+    await prisma.habitProgress.update({
+      where: { id: habitProgress.id },
       data: {
         completedDuration: newCompletedDuration,
         completed,
