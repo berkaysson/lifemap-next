@@ -7,7 +7,7 @@ import {
   parseDate,
 } from "@/lib/time";
 import { HabitSchema } from "@/schema";
-import { HabitProgress } from "@prisma/client";
+import { Habit, HabitProgress } from "@prisma/client";
 import { addDays, addMonths, addWeeks } from "date-fns";
 import { z } from "zod";
 
@@ -73,11 +73,7 @@ export const createHabit = async (
     });
 
     const habitProgresses = await generateHabitProgresses(
-      createdHabit.id,
-      startDate,
-      endDate,
-      newHabit.period,
-      newHabit.goalDurationPerPeriod
+      createdHabit,
     );
 
     await prisma.habitProgress.createMany({
@@ -126,19 +122,15 @@ export const getHabits = async (userId: string) => {
 };
 
 const generateHabitProgresses = async (
-  habitId: string,
-  startDate: Date,
-  endDate: Date,
-  period: "DAILY" | "WEEKLY" | "MONTHLY",
-  goalDurationPerPeriod: number
+  habit: Habit
 ) => {
   const progresses: HabitProgress[] = [];
-  let currentDate = startDate;
+  let currentDate = habit.startDate;
   let progressEndDate = currentDate;
   let order = 1;
 
-  while (progressEndDate < endDate) {
-    switch (period) {
+  while (progressEndDate < habit.endDate) {
+    switch (habit.period) {
       case "DAILY":
         progressEndDate = addDays(currentDate, 1);
         break;
@@ -151,14 +143,16 @@ const generateHabitProgresses = async (
     }
 
     const completedDuration = await calculateHabitProgressCompletedDuration(
-      habitId,
+      habit,
       currentDate,
       progressEndDate
     );
     const completed = await calculateHabitProgressCompletion(
       completedDuration,
-      goalDurationPerPeriod
+      habit.goalDurationPerPeriod
     );
+
+    const habitId = habit.id;
 
     progresses.push({
       order,
@@ -177,13 +171,14 @@ const generateHabitProgresses = async (
 };
 
 export const calculateHabitProgressCompletedDuration = async (
-  habitId: string,
+  habit: Habit,
   startDate: Date,
   endDate: Date
 ) => {
   const activities = await prisma.activity.findMany({
     where: {
-      id: habitId,
+      userId: habit.userId,
+      categoryId: habit.categoryId,
       date: {
         gte: startDate,
         lte: endDate,
