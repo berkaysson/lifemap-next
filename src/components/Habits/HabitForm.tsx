@@ -4,7 +4,7 @@ import { CategoryContext } from "@/contexts/CategoryContext";
 import { HabitContext } from "@/contexts/HabitContext";
 import { HabitSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext, useState, useTransition } from "react";
+import { useContext, useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -28,6 +28,9 @@ const HabitForm = () => {
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
+  const [calculatedEndDate, setCalculatedEndDate] = useState<string | null>(
+    null
+  );
 
   const form = useForm<z.infer<typeof HabitSchema>>({
     resolver: zodResolver(HabitSchema),
@@ -62,6 +65,32 @@ const HabitForm = () => {
     label: option.charAt(0) + option.substring(1).toLowerCase(),
     value: option,
   }));
+
+  const calculateEndDate = (startDate, period, numberOfPeriods) => {
+    if (startDate && period && numberOfPeriods) {
+      return formatDate(
+        calculateEndDateWithPeriod(
+          parseDate(startDate),
+          period,
+          numberOfPeriods
+        )
+      );
+    }
+    return null;
+  };
+
+  const startDate = form.watch("startDate");
+  const period = form.watch("period");
+  const numberOfPeriods = form.watch("numberOfPeriods");
+
+  useEffect(() => {
+    const newCalculatedEndDate = calculateEndDate(
+      startDate,
+      period,
+      numberOfPeriods
+    );
+    setCalculatedEndDate(newCalculatedEndDate);
+  }, [startDate, period, numberOfPeriods]);
 
   return (
     <div className="border p-4 m-2 rounded-sm">
@@ -196,24 +225,18 @@ const HabitForm = () => {
                 </FormItem>
               )}
             />
-            {form.getValues().startDate &&
-            form.getValues().period &&
-            form.getValues().numberOfPeriods ? (
+            {calculatedEndDate ? (
               <div className="text-sm text-muted-foreground mb-2">
                 <p>
                   You will need to complete this habit for{" "}
-                  {form.getValues().period.toLowerCase()}
+                  <span className="font-bold text-primary">
+                    {form.getValues().period.toLowerCase()}
+                  </span>,{" "}
+                  until:{" "}
+                  <span className="font-bold text-primary">
+                    {calculatedEndDate}
+                  </span>
                 </p>
-                Your due date for this task:{" "}
-                <span className="font-bold text-primary">
-                  {formatDate(
-                    calculateEndDateWithPeriod(
-                      parseDate(form.getValues().startDate),
-                      form.getValues().period,
-                      form.getValues().numberOfPeriods
-                    )
-                  )}
-                </span>
               </div>
             ) : null}
             <FormField
