@@ -72,9 +72,7 @@ export const createHabit = async (
       },
     });
 
-    const habitProgresses = await generateHabitProgresses(
-      createdHabit,
-    );
+    const habitProgresses = await generateHabitProgresses(createdHabit);
 
     await prisma.habitProgress.createMany({
       data: habitProgresses,
@@ -121,9 +119,55 @@ export const getHabits = async (userId: string) => {
   }
 };
 
-const generateHabitProgresses = async (
-  habit: Habit
-) => {
+export const updateHabit = async () => {};
+
+export const deleteHabit = async (id: string) => {
+  if (!id) {
+    return {
+      message: "id is required",
+      success: false,
+    };
+  }
+
+  const habit = await prisma.habit.findFirst({
+    where: {
+      id: id,
+    },
+  });
+
+  if (!habit) {
+    return {
+      message: "Habit does not exist",
+      success: false,
+    };
+  }
+
+  try {
+    await prisma.habitProgress.deleteMany({
+      where: {
+        habitId: id,
+      },
+    });
+
+    await prisma.habit.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    return {
+      message: "Successfully deleted Habit",
+      success: true,
+    };
+  } catch (error) {
+    return {
+      message: `Failed to delete Habit: ${error}`,
+      success: false,
+    };
+  }
+};
+
+const generateHabitProgresses = async (habit: Habit) => {
   const progresses: HabitProgress[] = [];
   let currentDate = habit.startDate;
   let progressEndDate = currentDate;

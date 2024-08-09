@@ -1,6 +1,6 @@
 import { useToast } from "@/components/ui/use-toast";
 import { HabitSchema } from "@/schema";
-import { createHabit, getHabits } from "@/services/habitService";
+import { createHabit, deleteHabit, getHabits } from "@/services/habitService";
 import { ServiceResponse } from "@/types/ServiceResponse";
 import { Habit } from "@prisma/client";
 import { useSession } from "next-auth/react";
@@ -83,8 +83,24 @@ export const HabitProvider = ({ children }: { children: ReactNode }) => {
     if (!session || !session.user) {
       return { message: "Session or data not exist", success: false };
     }
-    if (!session.user.id) return { message: "User not exist", success: false };
-    return { message: "", success: false };
+    try {
+      const response = await deleteHabit(id);
+      if (response.success) {
+        toast({
+          title: "Habit Deleted",
+          description: "Habit Deleted successfully",
+          duration: 3000,
+        });
+        await fetchHabits();
+        return response;
+      }
+      return response;
+    } catch (error) {
+      return {
+        message: `${error}`,
+        success: false,
+      };
+    }
   };
 
   const contextValue = useMemo(
