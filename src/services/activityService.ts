@@ -164,6 +164,13 @@ export const updateActivity = async (data: Activity) => {
       absoluteDuration
     );
 
+    await updateRelatedHabitProgresses(
+      data.userId,
+      data.categoryId,
+      oldActivity.date,
+      absoluteDuration
+    );
+
     return {
       message: "Successfully updated activity",
       success: true,
