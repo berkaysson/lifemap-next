@@ -81,6 +81,7 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
               <HabitProgressesList
                 habitProgresses={habitProgresses}
                 categoryName={category?.name}
+                period={habit.period}
               />
             </CollapsibleContent>
           </div>
