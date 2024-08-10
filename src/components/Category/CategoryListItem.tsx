@@ -5,16 +5,9 @@ import { Button } from "../ui/button";
 import { CategoryContext } from "@/contexts/CategoryContext";
 import CategoryEditForm from "./CategoryEditForm";
 import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
+import { Category } from "@prisma/client";
 
-const CategoryListItem = ({
-  category,
-}: {
-  category: {
-    id: string;
-    name: string;
-    userId: string;
-  };
-}) => {
+const CategoryListItem = ({ category }: { category: Category }) => {
   const { onDeleteCategory } = useContext(CategoryContext);
 
   const handleDelete = async () => {
