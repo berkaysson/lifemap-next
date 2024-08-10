@@ -45,6 +45,9 @@ export const HabitProvider = ({ children }: { children: ReactNode }) => {
     if (!session.user.id) return { message: "User not exist", success: false };
     const response = await getHabits(session.user.id);
     if (response.success && response.habits) {
+      response.habits.map((habit) => {
+        habit.progress.sort((a, b) => a.order - b.order);
+      });
       setHabits(response.habits);
     }
 
