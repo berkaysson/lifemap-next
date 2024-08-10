@@ -20,7 +20,7 @@ import { ExtendedHabit } from "@/types/Entitities";
 const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
   const { onDeleteHabit } = useContext(HabitContext);
   const [isHabitProgressesCollapsed, setIsHabitProgressesCollapsed] =
-    useState(true);
+    useState(false);
 
   const category = habit.category;
   const habitProgresses = habit.progress;
