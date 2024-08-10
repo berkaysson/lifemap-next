@@ -1,3 +1,4 @@
+import { Period } from "@prisma/client";
 import * as z from "zod";
 
 export const passwordSchema = z

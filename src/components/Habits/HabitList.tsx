@@ -29,10 +29,13 @@ const HabitList = () => {
         options={[
           { value: "name", label: "Name" },
           { value: "completed", label: "Completion" },
-          { value: "goalDuration", label: "Goal Activity" },
+          { value: "goalDurationPerPeriod", label: "Goal Activity" },
           { value: "startDate", label: "Start Date" },
           { value: "endDate", label: "Due Date" },
           { value: "category", label: "Category" },
+          { value: "period", label: "Period" },
+          { value: "currentStreak", label: "Current Streak" },
+          { value: "bestStreak", label: "Longest Streak" },
         ]}
         onSelect={handleSort}
       />

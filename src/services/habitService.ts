@@ -104,6 +104,7 @@ export const getHabits = async (userId: string) => {
       },
       include: {
         category: true,
+        progress: true,
       },
     });
     return {
