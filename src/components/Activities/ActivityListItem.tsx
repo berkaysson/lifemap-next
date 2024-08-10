@@ -3,17 +3,18 @@
 import { useContext } from "react";
 import { Button } from "../ui/button";
 import { ActivityContext } from "@/contexts/ActivityContext";
-import { Activity } from "@prisma/client";
-import { CategoryContext } from "@/contexts/CategoryContext";
+import { Activity, Category } from "@prisma/client";
 import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
 import ActivityEditForm from "./AcitivityEditForm";
 import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
 
-const ActivityListItem = ({ activity }: { activity: Activity }) => {
+const ActivityListItem = ({
+  activity,
+}: {
+  activity: Activity & { category: Category };
+}) => {
   const { onDeleteActivity } = useContext(ActivityContext);
-  const { categories } = useContext(CategoryContext);
-
-  const category = categories.find((c) => c.id === activity.categoryId);
+  const category = activity.category;
 
   const expired = isExpired(activity.date);
   const remained = getRemainingTime(activity.date);

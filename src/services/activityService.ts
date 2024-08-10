@@ -91,6 +91,9 @@ export const getActivities = async (userId: string) => {
       where: {
         userId,
       },
+      include: {
+        category: true,
+      },
     });
     return {
       message: "Successfully fetched activities",

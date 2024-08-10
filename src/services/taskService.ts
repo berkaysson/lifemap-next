@@ -101,6 +101,9 @@ export const getTasks = async (userId: string) => {
       where: {
         userId,
       },
+      include: {
+        category: true,
+      },
     });
     return {
       message: "Successfully fetched tasks",
