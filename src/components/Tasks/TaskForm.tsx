@@ -31,8 +31,11 @@ const TaskForm = () => {
     defaultValues: {
       name: "",
       description: "",
+      goalDuration: 0,
       categoryId: "",
+      startDate: new Date().toISOString().split("T")[0],
       endDate: "",
+      colorCode: "#12a1cc",
     },
   });
 
@@ -161,7 +164,6 @@ const TaskForm = () => {
                       {...field}
                       placeholder="Date"
                       type="date"
-                      defaultValue={new Date().toISOString().split("T")[0]}
                       required
                     />
                   </FormControl>

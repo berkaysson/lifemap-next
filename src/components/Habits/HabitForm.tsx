@@ -37,9 +37,12 @@ const HabitForm = () => {
     defaultValues: {
       name: "",
       description: "",
-      categoryId: "",
-      numberOfPeriods: 1,
       period: Period.DAILY,
+      startDate: new Date().toISOString().split("T")[0],
+      numberOfPeriods: 2,
+      goalDurationPerPeriod: 0,
+      categoryId: "",
+      colorCode: "#38328a",
     },
   });
 
@@ -190,7 +193,6 @@ const HabitForm = () => {
                       disabled={isPending}
                       {...field}
                       placeholder="Starting Date"
-                      defaultValue={new Date().toISOString().split("T")[0]}
                       type="date"
                       required
                     />
@@ -232,8 +234,8 @@ const HabitForm = () => {
                   You will need to complete this habit for{" "}
                   <span className="font-bold text-primary">
                     {form.getValues().period.toLowerCase()}
-                  </span>,{" "}
-                  until:{" "}
+                  </span>
+                  , until:{" "}
                   <span className="font-bold text-primary">
                     {calculatedEndDate}
                   </span>

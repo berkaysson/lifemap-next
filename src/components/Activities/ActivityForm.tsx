@@ -17,13 +17,6 @@ import { z } from "zod";
 import { ActivitySchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CategoryContext } from "@/contexts/CategoryContext";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 import ModalDialog from "../ui/ModalDialog";
 import { SquareActivity } from "lucide-react";
 import SelectBox from "../ui/SelectBox";
@@ -42,6 +35,7 @@ const ActivityForm = () => {
       description: "",
       duration: 0,
       categoryId: "",
+      date: new Date().toISOString().split("T")[0],
     },
   });
 
@@ -159,13 +153,7 @@ const ActivityForm = () => {
               <FormItem>
                 <FormLabel>Activity Date</FormLabel>
                 <FormControl>
-                  <Input
-                    disabled={isPending}
-                    {...field}
-                    type="date"
-                    required
-                    defaultValue={new Date().toISOString().split("T")[0]}
-                  />
+                  <Input disabled={isPending} {...field} type="date" required />
                 </FormControl>
                 {form.formState.errors.date && (
                   <FormMessage>

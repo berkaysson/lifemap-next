@@ -29,6 +29,7 @@ const TodoForm = () => {
       name: "",
       description: "",
       endDate: "",
+      colorCode: "#b83280",
     },
   });
 
