@@ -6,6 +6,7 @@ import { TaskContext } from "@/contexts/TaskContext";
 import { Task } from "@prisma/client";
 import { sortArrayOfObjectsByKey } from "@/lib/utils";
 import SelectSort from "../ui/SelectSort";
+import { ExtendedTask } from "@/types/Entitities";
 
 const TaskList = () => {
   const { tasks } = useContext(TaskContext);
@@ -17,7 +18,7 @@ const TaskList = () => {
 
   const handleSort = useCallback(
     (sortBy: keyof Task, direction: "asc" | "desc") => {
-      const sorted = sortArrayOfObjectsByKey<Task>(tasks, sortBy, direction);
+      const sorted = sortArrayOfObjectsByKey<ExtendedTask>(tasks, sortBy, direction);
       setSortedTasks(sorted);
     },
     [tasks]

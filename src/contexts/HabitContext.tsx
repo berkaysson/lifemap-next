@@ -1,6 +1,7 @@
 import { useToast } from "@/components/ui/use-toast";
 import { HabitSchema } from "@/schema";
 import { createHabit, deleteHabit, getHabits } from "@/services/habitService";
+import { ExtendedHabit } from "@/types/Entitities";
 import { ServiceResponse } from "@/types/ServiceResponse";
 import { Habit } from "@prisma/client";
 import { useSession } from "next-auth/react";
@@ -8,7 +9,7 @@ import { createContext, ReactNode, useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 
 interface HabitContextValue {
-  habits: Habit[];
+  habits: ExtendedHabit[];
   fetchHabits: () => Promise<ServiceResponse>;
   onCreateHabit: (
     data: z.infer<typeof HabitSchema>
@@ -29,7 +30,7 @@ export const HabitContext = createContext(initialHabitContextValue);
 
 export const HabitProvider = ({ children }: { children: ReactNode }) => {
   const { data: session, status } = useSession();
-  const [habits, setHabits] = useState<Habit[]>([]);
+  const [habits, setHabits] = useState<ExtendedHabit[]>([]);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -104,7 +105,13 @@ export const HabitProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const contextValue = useMemo(
-    () => ({ habits, fetchHabits, onCreateHabit, onUpdateHabit, onDeleteHabit }),
+    () => ({
+      habits,
+      fetchHabits,
+      onCreateHabit,
+      onUpdateHabit,
+      onDeleteHabit,
+    }),
     [habits]
   );
   return (

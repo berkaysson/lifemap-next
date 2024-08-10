@@ -6,6 +6,7 @@ import {
   getTasks,
   updateTask,
 } from "@/services/taskService";
+import { ExtendedTask } from "@/types/Entitities";
 import { ServiceResponse } from "@/types/ServiceResponse";
 import { Task } from "@prisma/client";
 import { useSession } from "next-auth/react";
@@ -13,7 +14,7 @@ import { createContext, ReactNode, useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 
 interface TaskContextValue {
-  tasks: Task[];
+  tasks: ExtendedTask[];
   fetchTasks: () => Promise<ServiceResponse>;
   onCreateTask: (data: z.infer<typeof TaskSchema>) => Promise<ServiceResponse>;
   onDeleteTask: (id: string) => Promise<ServiceResponse>;
@@ -35,7 +36,7 @@ export const TaskContext = createContext(initialTaskContextValue);
 
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const { data: session, status } = useSession();
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<ExtendedTask[]>([]);
   const { toast } = useToast();
 
   useEffect(() => {

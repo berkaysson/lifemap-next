@@ -13,9 +13,10 @@ import { TaskContext } from "./TaskContext";
 import { ServiceResponse } from "@/types/ServiceResponse";
 import { useToast } from "@/components/ui/use-toast";
 import { HabitContext } from "./HabitContext";
+import { ExtendedActivity } from "@/types/Entitities";
 
 interface ActivityContextValue {
-  activities: Activity[];
+  activities: ExtendedActivity[];
   fetchActivities: () => Promise<ServiceResponse>;
   onCreateActivity: (
     data: z.infer<typeof ActivitySchema>
@@ -50,7 +51,7 @@ export const ActivityProvider = ({
   children: React.ReactNode;
 }) => {
   const { data: session, status } = useSession();
-  const [activities, setActivities] = useState<Activity[]>([]);
+  const [activities, setActivities] = useState<ExtendedActivity[]>([]);
   const { fetchTasks } = useContext(TaskContext);
   const { fetchHabits } = useContext(HabitContext);
   const { toast } = useToast();

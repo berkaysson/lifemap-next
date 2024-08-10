@@ -6,6 +6,7 @@ import { HabitContext } from "@/contexts/HabitContext";
 import { Habit } from "@prisma/client";
 import { sortArrayOfObjectsByKey } from "@/lib/utils";
 import SelectSort from "../ui/SelectSort";
+import { ExtendedHabit } from "@/types/Entitities";
 
 const HabitList = () => {
   const { habits } = useContext(HabitContext);
@@ -17,7 +18,11 @@ const HabitList = () => {
 
   const handleSort = useCallback(
     (sortBy: keyof Habit, direction: "asc" | "desc") => {
-      const sorted = sortArrayOfObjectsByKey<Habit>(habits, sortBy, direction);
+      const sorted = sortArrayOfObjectsByKey<ExtendedHabit>(
+        habits,
+        sortBy,
+        direction
+      );
       setSortedHabits(sorted);
     },
     [habits]

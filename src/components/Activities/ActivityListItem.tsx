@@ -3,15 +3,15 @@
 import { useContext } from "react";
 import { Button } from "../ui/button";
 import { ActivityContext } from "@/contexts/ActivityContext";
-import { Activity, Category } from "@prisma/client";
 import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
 import ActivityEditForm from "./AcitivityEditForm";
 import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
+import { ExtendedActivity } from "@/types/Entitities";
 
 const ActivityListItem = ({
   activity,
 }: {
-  activity: Activity & { category: Category };
+  activity: ExtendedActivity;
 }) => {
   const { onDeleteActivity } = useContext(ActivityContext);
   const category = activity.category;

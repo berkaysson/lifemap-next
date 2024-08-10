@@ -1,8 +1,6 @@
 "use client";
 
-import { CategoryContext } from "@/contexts/CategoryContext";
 import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
-import { Category, Habit, HabitProgress } from "@prisma/client";
 import { useContext, useState } from "react";
 import { Button } from "../ui/button";
 import { HabitContext } from "@/contexts/HabitContext";
@@ -17,12 +15,9 @@ import {
 } from "../ui/collapsible";
 import { ChevronsUpDown } from "lucide-react";
 import HabitProgressesList from "./HabitProgressesList";
+import { ExtendedHabit } from "@/types/Entitities";
 
-const HabitListItem = ({
-  habit,
-}: {
-  habit: Habit & { category: Category } & { progress: HabitProgress[] };
-}) => {
+const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
   const { onDeleteHabit } = useContext(HabitContext);
   const [isHabitProgressesCollapsed, setIsHabitProgressesCollapsed] =
     useState(true);

@@ -1,7 +1,6 @@
 "use client";
 
 import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
-import { Category, Task } from "@prisma/client";
 import { useContext } from "react";
 import { Button } from "../ui/button";
 import { TaskContext } from "@/contexts/TaskContext";
@@ -9,8 +8,9 @@ import TaskEditForm from "./TaskEditForm";
 import IsCompleted from "../ui/IsCompleted";
 import ColorCircle from "../ui/ColorCircle";
 import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
+import { ExtendedTask } from "@/types/Entitities";
 
-const TaskListItem = ({ task }: { task: Task & { category: Category } }) => {
+const TaskListItem = ({ task }: { task: ExtendedTask }) => {
   const { onDeleteTask } = useContext(TaskContext);
 
   const category = task.category;

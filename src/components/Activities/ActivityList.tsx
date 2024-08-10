@@ -6,6 +6,7 @@ import ActivityListItem from "./ActivityListItem";
 import SelectSort from "../ui/SelectSort";
 import { sortArrayOfObjectsByKey } from "@/lib/utils";
 import { Activity } from "@prisma/client";
+import { ExtendedActivity } from "@/types/Entitities";
 
 const ActivityList = () => {
   const { activities } = useContext(ActivityContext);
@@ -17,7 +18,7 @@ const ActivityList = () => {
 
   const handleSort = useCallback(
     (sortBy: keyof Activity, direction: "asc" | "desc") => {
-      const sorted = sortArrayOfObjectsByKey<Activity>(
+      const sorted = sortArrayOfObjectsByKey<ExtendedActivity>(
         activities,
         sortBy,
         direction
