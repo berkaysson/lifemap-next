@@ -151,6 +151,30 @@ const TaskForm = () => {
             />
             <FormField
               control={form.control}
+              name="startDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Start Date</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isPending}
+                      {...field}
+                      placeholder="Date"
+                      type="date"
+                      defaultValue={new Date().toISOString().split("T")[0]}
+                      required
+                    />
+                  </FormControl>
+                  {form.formState.errors.startDate && (
+                    <FormMessage>
+                      {form.formState.errors.startDate.message}
+                    </FormMessage>
+                  )}
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="endDate"
               render={({ field }) => (
                 <FormItem>

@@ -40,7 +40,7 @@ export const createTask = async (
     };
   }
 
-  const startDate = parseDate(new Date().toISOString());
+  const startDate = parseDate(newTask.startDate);
   const endDate = parseDate(newTask.endDate);
 
   if (!checkStartDateAvailability(startDate, endDate)) {

@@ -37,7 +37,7 @@ export const NewPasswordSchema = z.object({
 export const TodoSchema = z.object({
   name: z.string().min(1, "Title is required"),
   description: z.string().optional(),
-  endDate: z.string().date().min(1, "End date is required"),
+  endDate: z.string().date().min(1, "Due date is required"),
   colorCode: z.string().optional(),
 });
 
@@ -55,6 +55,7 @@ export const ActivitySchema = z.object({
 export const TaskSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().optional(),
+  startDate: z.string().date().min(1, "Start date is required"),
   endDate: z.string().date().min(1, "Due date is required"),
   colorCode: z.string().optional(),
   goalDuration: z.number().min(1, "Goal duration is required"),
