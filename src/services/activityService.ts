@@ -277,7 +277,7 @@ const updateRelatedHabitProgresses = async (
   activityDate: Date,
   duration: number
 ) => {
-  const endDate = addOneDay(activityDate);
+  const endDate = activityDate;
   const habitProgresses = await prisma.habitProgress.findMany({
     where: {
       userId,

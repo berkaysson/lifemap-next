@@ -20,7 +20,12 @@ import { Button } from "../ui/button";
 import SelectBox from "../ui/SelectBox";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Period } from "@prisma/client";
-import { calculateEndDateWithPeriod, formatDate, parseDate } from "@/lib/time";
+import {
+  calculateEndDateWithPeriod,
+  formatDate,
+  parseDate,
+  removeOneDay,
+} from "@/lib/time";
 
 const HabitForm = () => {
   const { onCreateHabit } = useContext(HabitContext);
@@ -72,10 +77,12 @@ const HabitForm = () => {
   const calculateEndDate = (startDate, period, numberOfPeriods) => {
     if (startDate && period && numberOfPeriods) {
       return formatDate(
-        calculateEndDateWithPeriod(
-          parseDate(startDate),
-          period,
-          numberOfPeriods
+        removeOneDay(
+          calculateEndDateWithPeriod(
+            parseDate(startDate),
+            period,
+            numberOfPeriods
+          )
         )
       );
     }

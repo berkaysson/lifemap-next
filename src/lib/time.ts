@@ -5,7 +5,6 @@ import {
   parseISO,
   formatDistanceToNow,
   addDays,
-  formatISO,
   addHours,
   addWeeks,
   addMonths,
@@ -13,6 +12,10 @@ import {
 
 export const addOneDay = (date: Date) => {
   return addDays(date, 1);
+};
+
+export const removeOneDay = (date: Date) => {
+  return addDays(date, -1);
 };
 
 export const isExpired = (date: Date) => {

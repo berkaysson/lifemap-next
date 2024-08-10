@@ -5,6 +5,7 @@ import {
   calculateEndDateWithPeriod,
   checkStartDateAvailability,
   parseDate,
+  removeOneDay,
 } from "@/lib/time";
 import { HabitSchema } from "@/schema";
 import { Habit, HabitProgress } from "@prisma/client";
@@ -39,10 +40,12 @@ export const createHabit = async (
   }
 
   const startDate = parseDate(newHabit.startDate);
-  const endDate = calculateEndDateWithPeriod(
-    startDate,
-    newHabit.period,
-    newHabit.numberOfPeriods
+  const endDate = removeOneDay(
+    calculateEndDateWithPeriod(
+      startDate,
+      newHabit.period,
+      newHabit.numberOfPeriods
+    )
   );
 
   if (!checkStartDateAvailability(startDate, endDate)) {
@@ -174,7 +177,7 @@ const generateHabitProgresses = async (habit: Habit) => {
   let progressEndDate = currentDate;
   let order = 1;
 
-  while (progressEndDate < habit.endDate) {
+  while (progressEndDate <= habit.endDate) {
     switch (habit.period) {
       case "DAILY":
         progressEndDate = addDays(currentDate, 1);
@@ -205,7 +208,7 @@ const generateHabitProgresses = async (habit: Habit) => {
     progresses.push({
       order,
       startDate: new Date(currentDate),
-      endDate: new Date(progressEndDate),
+      endDate: removeOneDay(new Date(progressEndDate)),
       completedDuration,
       completed,
       habitId,
