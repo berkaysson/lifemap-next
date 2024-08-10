@@ -44,11 +44,11 @@ const HabitList = () => {
         ]}
         onSelect={handleSort}
       />
-      <div className="border rounded-sm">
+      <ul className="border rounded-sm">
         {sortedHabits.map((habit) => (
           <HabitListItem key={habit.id} habit={habit} />
         ))}
-      </div>
+      </ul>
     </div>
   );
 };

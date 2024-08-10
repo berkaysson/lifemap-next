@@ -34,11 +34,11 @@ const TodoList = () => {
         ]}
         onSelect={handleSort}
       />
-      <div className="border rounded-sm">
+      <ul className="border rounded-sm">
         {sortedTodos.map((todo) => (
           <TodoListItem key={todo.id} todo={todo} />
         ))}
-      </div>
+      </ul>
     </div>
   );
 };

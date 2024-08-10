@@ -38,11 +38,11 @@ const TaskList = () => {
         ]}
         onSelect={handleSort}
       />
-      <div className="border rounded-sm">
+      <ul className="border rounded-sm">
         {sortedTasks.map((task) => (
           <TaskListItem key={task.id} task={task} />
         ))}
-      </div>
+      </ul>
     </div>
   );
 };

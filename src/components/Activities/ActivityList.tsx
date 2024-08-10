@@ -38,11 +38,11 @@ const ActivityList = () => {
         ]}
         onSelect={handleSort}
       />
-      <div className="border rounded-sm">
+      <ul className="border rounded-sm">
         {sortedActivities.map((activity) => (
           <ActivityListItem key={activity.id} activity={activity} />
         ))}
-      </div>
+      </ul>
     </div>
   );
 };
