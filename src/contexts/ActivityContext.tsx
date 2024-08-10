@@ -12,6 +12,7 @@ import { z } from "zod";
 import { TaskContext } from "./TaskContext";
 import { ServiceResponse } from "@/types/ServiceResponse";
 import { useToast } from "@/components/ui/use-toast";
+import { HabitContext } from "./HabitContext";
 
 interface ActivityContextValue {
   activities: Activity[];
@@ -51,6 +52,7 @@ export const ActivityProvider = ({
   const { data: session, status } = useSession();
   const [activities, setActivities] = useState<Activity[]>([]);
   const { fetchTasks } = useContext(TaskContext);
+  const { fetchHabits } = useContext(HabitContext);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -61,6 +63,7 @@ export const ActivityProvider = ({
   useEffect(() => {
     if (activities) {
       fetchTasks();
+      fetchHabits();
     }
   }, [activities]);
 
