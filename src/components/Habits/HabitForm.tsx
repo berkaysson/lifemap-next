@@ -190,6 +190,7 @@ const HabitForm = () => {
                       disabled={isPending}
                       {...field}
                       placeholder="Starting Date"
+                      defaultValue={new Date().toISOString().split("T")[0]}
                       type="date"
                       required
                     />

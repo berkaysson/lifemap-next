@@ -42,7 +42,6 @@ const ActivityForm = () => {
       description: "",
       duration: 0,
       categoryId: "",
-      date: "",
     },
   });
 
@@ -160,7 +159,13 @@ const ActivityForm = () => {
               <FormItem>
                 <FormLabel>Activity Date</FormLabel>
                 <FormControl>
-                  <Input disabled={isPending} {...field} type="date" required />
+                  <Input
+                    disabled={isPending}
+                    {...field}
+                    type="date"
+                    required
+                    defaultValue={new Date().toISOString().split("T")[0]}
+                  />
                 </FormControl>
                 {form.formState.errors.date && (
                   <FormMessage>
