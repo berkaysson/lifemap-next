@@ -246,13 +246,11 @@ const updateRelatedTasks = async (
   activityDate: Date,
   duration: number
 ) => {
-  const startDate = addOneDay(activityDate);
-
   const tasks = await prisma.task.findMany({
     where: {
       userId,
       categoryId,
-      startDate: { lte: startDate },
+      startDate: { lte: activityDate },
       endDate: { gte: activityDate },
     },
   });
