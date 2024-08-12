@@ -81,6 +81,19 @@ export const createHabit = async (
       data: habitProgresses,
     });
 
+    const isHabitCompleted = calculateHabitCompletion(habitProgresses);
+
+    if (isHabitCompleted) {
+      await prisma.habit.update({
+        where: {
+          id: createdHabit.id,
+        },
+        data: {
+          completed: true,
+        },
+      });
+    }
+
     return {
       message: "Successfully created habit",
       success: true,
@@ -256,5 +269,10 @@ export const calculateHabitProgressCompletion = async (
   goalDurationPerPeriod: number
 ) => {
   const isCompleted = completedDuration >= goalDurationPerPeriod;
+  return isCompleted;
+};
+
+export const calculateHabitCompletion = (progresses: HabitProgress[]) => {
+  const isCompleted = progresses.every((progress) => progress.completed);
   return isCompleted;
 };

@@ -1,10 +1,11 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { addOneDay, parseDate } from "@/lib/time";
+import { parseDate } from "@/lib/time";
 import { ActivitySchema } from "@/schema";
-import { Activity } from "@prisma/client";
+import { Activity, HabitProgress } from "@prisma/client";
 import { z } from "zod";
+import { calculateHabitCompletion } from "./habitService";
 
 export const createActivity = async (
   newActivity: z.infer<typeof ActivitySchema>,
@@ -295,6 +296,16 @@ const updateRelatedHabitProgresses = async (
         completedDuration: newCompletedDuration,
         completed,
       },
+    });
+
+    const allHabitProgresses = await prisma.habitProgress.findMany({
+      where: { habitId: habitProgress.habitId },
+    });
+
+    const isHabitCompleted = await calculateHabitCompletion(allHabitProgresses);
+    await prisma.habit.update({
+      where: { id: habitProgress.habitId },
+      data: { completed: isHabitCompleted },
     });
   }
 };
