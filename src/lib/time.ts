@@ -40,7 +40,7 @@ export const getRemainingTime = (date: Date) => {
   return remaining;
 };
 
-export const checkStartDateAvailability = (startDate: Date, endDate: Date) => {
+export const checkIsStartDateBeforeEndDate = (startDate: Date, endDate: Date) => {
   return startDate < endDate;
 };
 

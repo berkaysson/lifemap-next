@@ -1,5 +1,9 @@
 "use server";
 
+import {
+  checkIsCategoryExistByCategoryName,
+  checkIsCategoryUsed,
+} from "@/data/category";
 import prisma from "@/lib/prisma";
 import { parseDate } from "@/lib/time";
 import { CategorySchema } from "@/schema";
@@ -16,12 +20,10 @@ export const createCategory = async (
     return { message: "Invalid fields!", success: false };
   }
 
-  const isCategoryExist = await prisma.category.findFirst({
-    where: {
-      name: newCategory.name,
-      userId,
-    },
-  });
+  const isCategoryExist = await checkIsCategoryExistByCategoryName(
+    newCategory.name,
+    userId
+  );
 
   if (isCategoryExist) {
     return {
@@ -40,6 +42,7 @@ export const createCategory = async (
         userId,
       },
     });
+
     return {
       message: "Successfully created category",
       success: true,
@@ -86,15 +89,10 @@ export const updateCategory = async (data: Category) => {
     };
   }
 
-  const isCategoryExist = await prisma.category.findFirst({
-    where: {
-      name: data.name,
-      userId: data.userId,
-      NOT: {
-        id: data.id,
-      },
-    },
-  });
+  const isCategoryExist = await checkIsCategoryExistByCategoryName(
+    data.name,
+    data.userId
+  );
 
   if (isCategoryExist) {
     return {
@@ -130,11 +128,11 @@ export const deleteCategory = async (id: string) => {
     };
   }
 
-  const canBeDeleted = await checkCategoryCanBeDeleted(id);
+  const canBeDeleted = await checkIsCategoryUsed(id);
 
   if (!canBeDeleted) {
     return {
-      message: "Category cannot be deleted, it used in activities or tasks",
+      message: "Category cannot be deleted, it is used",
       success: false,
     };
   }
@@ -155,30 +153,4 @@ export const deleteCategory = async (id: string) => {
       success: false,
     };
   }
-};
-
-const checkCategoryCanBeDeleted = async (id: string) => {
-  const activitiesInCategory = await prisma.activity.findMany({
-    where: {
-      categoryId: id,
-    },
-  });
-
-  if (activitiesInCategory.length > 0) {
-    return false;
-  }
-
-  const tasksInCategory = await prisma.task.findMany({
-    where: {
-      categoryId: id,
-    },
-  });
-
-  if (tasksInCategory.length > 0) {
-    return false;
-  }
-
-  // add habit check later
-
-  return true;
 };

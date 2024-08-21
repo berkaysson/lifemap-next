@@ -1,7 +1,9 @@
 "use server";
 
+import { getActivitiesTotalDurationBetweenDates } from "@/data/activity";
+import { checkIsCategoryExistsByCategoryId } from "@/data/category";
 import prisma from "@/lib/prisma";
-import { checkStartDateAvailability, parseDate } from "@/lib/time";
+import { checkIsStartDateBeforeEndDate, parseDate } from "@/lib/time";
 import { TaskSchema } from "@/schema";
 import { Task } from "@prisma/client";
 import { z } from "zod";
@@ -19,12 +21,10 @@ export const createTask = async (
     };
   }
 
-  const isCategoryExist = await prisma.category.findFirst({
-    where: {
-      id: newTask.categoryId,
-      userId,
-    },
-  });
+  const isCategoryExist = await checkIsCategoryExistsByCategoryId(
+    newTask.categoryId,
+    userId
+  );
 
   if (!isCategoryExist) {
     return {
@@ -43,7 +43,7 @@ export const createTask = async (
   const startDate = parseDate(newTask.startDate);
   const endDate = parseDate(newTask.endDate);
 
-  if (!checkStartDateAvailability(startDate, endDate)) {
+  if (!checkIsStartDateBeforeEndDate(startDate, endDate)) {
     return {
       message: "Start date cannot be greater than due",
       success: false,
@@ -51,16 +51,14 @@ export const createTask = async (
   }
 
   try {
-    const completedDuration = await calculateTaskCompletedDuration(
+    const completedDuration = await getActivitiesTotalDurationBetweenDates(
       userId,
+      newTask.categoryId,
       startDate,
       endDate
     );
 
-    const completed = calculateCompletion(
-      completedDuration,
-      newTask.goalDuration
-    );
+    const completed = completedDuration >= newTask.goalDuration;
 
     await prisma.task.create({
       data: {
@@ -144,6 +142,7 @@ export const updateTask = async (taskId: string, data: Partial<Task>) => {
     const existingTask = await prisma.task.findUnique({
       where: { id: taskId },
     });
+
     if (!existingTask) {
       return { message: "Task not found", success: false };
     }
@@ -154,27 +153,26 @@ export const updateTask = async (taskId: string, data: Partial<Task>) => {
       const startDate = data.startDate || existingTask.startDate;
       const endDate = data.endDate || existingTask.endDate;
 
-      if (!checkStartDateAvailability(startDate, endDate)) {
+      if (!checkIsStartDateBeforeEndDate(startDate, endDate)) {
         return {
           message: "Start date cannot be after due",
           success: false,
         };
       }
 
-      updateData.completedDuration = await calculateTaskCompletedDuration(
-        existingTask.userId,
-        startDate,
-        endDate
-      );
+      updateData.completedDuration =
+        await getActivitiesTotalDurationBetweenDates(
+          existingTask.userId,
+          existingTask.categoryId,
+          startDate,
+          endDate
+        );
     }
 
     if ("goalDuration" in data) {
       const goalDuration = data.goalDuration ?? existingTask.goalDuration;
       const completedDuration = existingTask.completedDuration;
-      updateData.completed = calculateCompletion(
-        completedDuration,
-        goalDuration
-      );
+      updateData.completed = goalDuration <= completedDuration;
     }
 
     await prisma.task.update({
@@ -202,20 +200,20 @@ export const deleteTask = async (id: string) => {
     };
   }
 
-  const task = await prisma.task.findFirst({
-    where: {
-      id: id,
-    },
-  });
-
-  if (!task) {
-    return {
-      message: "Task does not exist",
-      success: false,
-    };
-  }
-
   try {
+    const task = await prisma.task.findFirst({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!task) {
+      return {
+        message: "Task does not exist",
+        success: false,
+      };
+    }
+
     await prisma.task.delete({
       where: {
         id: id,
@@ -232,38 +230,4 @@ export const deleteTask = async (id: string) => {
       success: false,
     };
   }
-};
-
-const calculateTaskCompletedDuration = async (
-  userId: string,
-  startDate: Date,
-  endDate: Date
-) => {
-  const activities = await prisma.activity.findMany({
-    where: {
-      userId,
-      date: {
-        gte: startDate,
-        lte: endDate,
-      },
-    },
-  });
-
-  if (activities.length === 0) {
-    return 0;
-  }
-
-  const totalDuration = activities
-    .map((activity) => activity.duration)
-    .reduce((total, duration) => total + duration, 0);
-
-  return totalDuration;
-};
-
-const calculateCompletion = (
-  completedDuration: number,
-  goalDuration: number
-) => {
-  const isCompleted = completedDuration >= goalDuration;
-  return isCompleted;
 };

@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import { parseDate } from "@/lib/time";
 import { TodoSchema } from "@/schema";
+import { ToDo } from "@prisma/client";
 import z from "zod";
 
 export async function createToDo(
@@ -15,9 +16,9 @@ export async function createToDo(
     return { message: "Invalid fields!", success: false };
   }
 
-  const { name, description, colorCode, endDate } = validatedFields.data;
-
   try {
+    const { name, description, colorCode, endDate } = validatedFields.data;
+
     await prisma.toDo.create({
       data: {
         name: name,
@@ -54,7 +55,7 @@ export async function getToDos(userId: string | undefined) {
   }
 }
 
-export async function updateToDo(data: any) {
+export async function updateToDo(data: ToDo) {
   if (!data || !data.id) {
     return { message: "data is required", success: false };
   }
@@ -76,7 +77,7 @@ export async function deleteToDo(id: string) {
   }
 
   try {
-    const todo = await prisma.toDo.delete({
+    await prisma.toDo.delete({
       where: { id },
     });
     return { message: "Successfully deleted todo", success: true };

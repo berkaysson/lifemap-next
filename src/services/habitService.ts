@@ -1,15 +1,14 @@
 "use server";
 
+import { createHabitProgresses, updateHabitCompleted } from "@/data/habit";
 import prisma from "@/lib/prisma";
 import {
   calculateEndDateWithPeriod,
-  checkStartDateAvailability,
+  checkIsStartDateBeforeEndDate,
   parseDate,
   removeOneDay,
 } from "@/lib/time";
 import { HabitSchema } from "@/schema";
-import { Habit, HabitProgress } from "@prisma/client";
-import { addDays, addMonths, addWeeks } from "date-fns";
 import { z } from "zod";
 
 export const createHabit = async (
@@ -48,7 +47,7 @@ export const createHabit = async (
     )
   );
 
-  if (!checkStartDateAvailability(startDate, endDate)) {
+  if (!checkIsStartDateBeforeEndDate(startDate, endDate)) {
     return {
       message: "Start date cannot be greater than due date",
       success: false,
@@ -75,24 +74,8 @@ export const createHabit = async (
       },
     });
 
-    const habitProgresses = await generateHabitProgresses(createdHabit);
-
-    await prisma.habitProgress.createMany({
-      data: habitProgresses,
-    });
-
-    const isHabitCompleted = calculateHabitCompletion(habitProgresses);
-
-    if (isHabitCompleted) {
-      await prisma.habit.update({
-        where: {
-          id: createdHabit.id,
-        },
-        data: {
-          completed: true,
-        },
-      });
-    }
+    await createHabitProgresses(createdHabit);
+    await updateHabitCompleted(createdHabit.id);
 
     return {
       message: "Successfully created habit",
@@ -146,20 +129,20 @@ export const deleteHabit = async (id: string) => {
     };
   }
 
-  const habit = await prisma.habit.findFirst({
-    where: {
-      id: id,
-    },
-  });
-
-  if (!habit) {
-    return {
-      message: "Habit does not exist",
-      success: false,
-    };
-  }
-
   try {
+    const habit = await prisma.habit.findFirst({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!habit) {
+      return {
+        message: "Habit does not exist",
+        success: false,
+      };
+    }
+
     await prisma.habitProgress.deleteMany({
       where: {
         habitId: id,
@@ -182,97 +165,4 @@ export const deleteHabit = async (id: string) => {
       success: false,
     };
   }
-};
-
-const generateHabitProgresses = async (habit: Habit) => {
-  const progresses: HabitProgress[] = [];
-  let currentDate = habit.startDate;
-  let progressEndDate = currentDate;
-  let order = 1;
-
-  while (progressEndDate <= habit.endDate) {
-    switch (habit.period) {
-      case "DAILY":
-        progressEndDate = addDays(currentDate, 1);
-        break;
-      case "WEEKLY":
-        progressEndDate = addWeeks(currentDate, 1);
-        break;
-      case "MONTHLY":
-        progressEndDate = addMonths(currentDate, 1);
-        break;
-    }
-
-    const completedDuration = await calculateHabitProgressCompletedDuration(
-      habit,
-      currentDate,
-      progressEndDate
-    );
-    const completed = await calculateHabitProgressCompletion(
-      completedDuration,
-      habit.goalDurationPerPeriod
-    );
-
-    const habitId = habit.id;
-    const userId = habit.userId;
-    const categoryId = habit.categoryId;
-    const goalDuration = habit.goalDurationPerPeriod;
-
-    progresses.push({
-      order,
-      startDate: new Date(currentDate),
-      endDate: removeOneDay(new Date(progressEndDate)),
-      completedDuration,
-      completed,
-      habitId,
-      userId,
-      categoryId,
-      goalDuration,
-    } as HabitProgress);
-
-    currentDate = progressEndDate;
-    order++;
-  }
-
-  return progresses;
-};
-
-export const calculateHabitProgressCompletedDuration = async (
-  habit: Habit,
-  startDate: Date,
-  endDate: Date
-) => {
-  const activities = await prisma.activity.findMany({
-    where: {
-      userId: habit.userId,
-      categoryId: habit.categoryId,
-      date: {
-        gte: startDate,
-        lt: endDate,
-      },
-    },
-  });
-
-  if (activities.length === 0) {
-    return 0;
-  }
-
-  const totalDuration = activities
-    .map((activity) => activity.duration)
-    .reduce((total, duration) => total + duration, 0);
-
-  return totalDuration;
-};
-
-export const calculateHabitProgressCompletion = async (
-  completedDuration: number,
-  goalDurationPerPeriod: number
-) => {
-  const isCompleted = completedDuration >= goalDurationPerPeriod;
-  return isCompleted;
-};
-
-export const calculateHabitCompletion = (progresses: HabitProgress[]) => {
-  const isCompleted = progresses.every((progress) => progress.completed);
-  return isCompleted;
 };

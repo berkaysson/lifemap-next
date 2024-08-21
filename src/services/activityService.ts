@@ -3,9 +3,12 @@
 import prisma from "@/lib/prisma";
 import { parseDate } from "@/lib/time";
 import { ActivitySchema } from "@/schema";
-import { Activity, HabitProgress } from "@prisma/client";
+import { Activity } from "@prisma/client";
 import { z } from "zod";
-import { calculateHabitCompletion } from "./habitService";
+import { checkIsCategoryExistsByCategoryId } from "@/data/category";
+import { updateTasksCompletedDurationByActivityDate } from "@/data/task";
+import { updateHabitsCompletedDurationByActivityDate } from "@/data/habit";
+import { getActivityById, getActivityDuration } from "@/data/activity";
 
 export const createActivity = async (
   newActivity: z.infer<typeof ActivitySchema>,
@@ -20,12 +23,10 @@ export const createActivity = async (
     };
   }
 
-  const isCategoryExist = await prisma.category.findFirst({
-    where: {
-      id: newActivity.categoryId,
-      userId,
-    },
-  });
+  const isCategoryExist = await checkIsCategoryExistsByCategoryId(
+    newActivity.categoryId,
+    userId
+  );
 
   if (!isCategoryExist) {
     return {
@@ -54,14 +55,14 @@ export const createActivity = async (
       },
     });
 
-    await updateRelatedTasks(
+    await updateTasksCompletedDurationByActivityDate(
       userId,
       newActivity.categoryId,
       date,
       newActivity.duration
     );
 
-    await updateRelatedHabitProgresses(
+    await updateHabitsCompletedDurationByActivityDate(
       userId,
       newActivity.categoryId,
       date,
@@ -117,12 +118,10 @@ export const updateActivity = async (data: Activity) => {
     };
   }
 
-  const isCategoryExist = await prisma.category.findFirst({
-    where: {
-      id: data.categoryId,
-      userId: data.userId,
-    },
-  });
+  const isCategoryExist = await checkIsCategoryExistsByCategoryId(
+    data.categoryId,
+    data.userId
+  );
 
   if (!isCategoryExist) {
     return {
@@ -138,40 +137,41 @@ export const updateActivity = async (data: Activity) => {
     };
   }
 
-  const oldActivity = await prisma.activity.findFirst({
-    where: {
-      id: data.id,
-    },
-  });
-
-  if (!oldActivity) {
-    return {
-      message: "Activity does not exist",
-      success: false,
-    };
-  }
-
   try {
-    const absoluteDuration = data.duration - oldActivity.duration;
+    const oldActivityDuration = await getActivityDuration(data.id);
+
+    if (!oldActivityDuration) {
+      return {
+        message: "Activity does not exist",
+        success: false,
+      };
+    }
+
+    const absoluteDuration = data.duration - oldActivityDuration;
 
     await prisma.activity.update({
       where: {
         id: data.id,
       },
-      data: data,
+      data: {
+        description: data.description || undefined,
+        duration: data.duration,
+        categoryId: data.categoryId,
+        date: data.date,
+      },
     });
 
-    await updateRelatedTasks(
+    await updateTasksCompletedDurationByActivityDate(
       data.userId,
       data.categoryId,
-      oldActivity.date,
+      data.date,
       absoluteDuration
     );
 
-    await updateRelatedHabitProgresses(
+    await updateHabitsCompletedDurationByActivityDate(
       data.userId,
       data.categoryId,
-      oldActivity.date,
+      data.date,
       absoluteDuration
     );
 
@@ -195,34 +195,30 @@ export const deleteActivity = async (id: string) => {
     };
   }
 
-  const activity = await prisma.activity.findFirst({
-    where: {
-      id: id,
-    },
-  });
-
-  if (!activity) {
-    return {
-      message: "Activity does not exist",
-      success: false,
-    };
-  }
-
   try {
+    const activity = await getActivityById(id);
+
+    if (!activity) {
+      return {
+        message: "Activity does not exist",
+        success: false,
+      };
+    }
+
     await prisma.activity.delete({
       where: {
         id: id,
       },
     });
 
-    await updateRelatedTasks(
+    await updateTasksCompletedDurationByActivityDate(
       activity.userId,
       activity.categoryId,
       activity.date,
       -activity.duration
     );
 
-    await updateRelatedHabitProgresses(
+    await updateHabitsCompletedDurationByActivityDate(
       activity.userId,
       activity.categoryId,
       activity.date,
@@ -238,74 +234,5 @@ export const deleteActivity = async (id: string) => {
       message: `Failed to delete activity: ${error}`,
       success: false,
     };
-  }
-};
-
-const updateRelatedTasks = async (
-  userId: string,
-  categoryId: string,
-  activityDate: Date,
-  duration: number
-) => {
-  const tasks = await prisma.task.findMany({
-    where: {
-      userId,
-      categoryId,
-      startDate: { lte: activityDate },
-      endDate: { gte: activityDate },
-    },
-  });
-
-  for (const task of tasks) {
-    const newCompletedDuration = task.completedDuration + duration;
-    const completed = newCompletedDuration >= task.goalDuration;
-
-    await prisma.task.update({
-      where: { id: task.id },
-      data: {
-        completedDuration: newCompletedDuration,
-        completed,
-      },
-    });
-  }
-};
-
-const updateRelatedHabitProgresses = async (
-  userId: string,
-  categoryId: string,
-  activityDate: Date,
-  duration: number
-) => {
-  const endDate = activityDate;
-  const habitProgresses = await prisma.habitProgress.findMany({
-    where: {
-      userId,
-      categoryId,
-      startDate: { lte: activityDate },
-      endDate: { gte: endDate },
-    },
-  });
-
-  for (const habitProgress of habitProgresses) {
-    const newCompletedDuration = habitProgress.completedDuration + duration;
-    const completed = newCompletedDuration >= habitProgress.goalDuration;
-
-    await prisma.habitProgress.update({
-      where: { id: habitProgress.id },
-      data: {
-        completedDuration: newCompletedDuration,
-        completed,
-      },
-    });
-
-    const allHabitProgresses = await prisma.habitProgress.findMany({
-      where: { habitId: habitProgress.habitId },
-    });
-
-    const isHabitCompleted = await calculateHabitCompletion(allHabitProgresses);
-    await prisma.habit.update({
-      where: { id: habitProgress.habitId },
-      data: { completed: isHabitCompleted },
-    });
   }
 };
