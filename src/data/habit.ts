@@ -29,9 +29,19 @@ export const createHabitProgresses = async (habit: Habit) => {
   let currentDate = habit.startDate;
   const progresses: HabitProgress[] = [];
   let order = 1;
+  let currentStreak = 0;
+  let bestStreak = 0;
 
   while (currentDate <= habit.endDate) {
     const progress = await calculateProgress(habit, currentDate, order);
+
+    if (progress.completed) {
+      currentStreak++;
+      bestStreak = Math.max(bestStreak, currentStreak);
+    } else {
+      currentStreak = 0;
+    }
+
     progresses.push(progress);
     currentDate = addDays(progress.endDate, 1);
     order++;
@@ -39,6 +49,12 @@ export const createHabitProgresses = async (habit: Habit) => {
 
   try {
     await prisma.habitProgress.createMany({ data: progresses });
+    if (currentStreak > 0 || bestStreak > 0) {
+      await prisma.habit.update({
+        where: { id: habit.id },
+        data: { currentStreak, bestStreak },
+      });
+    }
   } catch (error) {
     throw error;
   }
@@ -46,9 +62,11 @@ export const createHabitProgresses = async (habit: Habit) => {
 
 export const updateHabitCompleted = async (habitId: string) => {
   const isHabitCompleted = await calculateIsHabitCompleted(habitId);
+  const { currentStreak, bestStreak } = await calculateStreaks(habitId);
+
   await prisma.habit.update({
     where: { id: habitId },
-    data: { completed: isHabitCompleted },
+    data: { completed: isHabitCompleted, currentStreak, bestStreak },
   });
 };
 
@@ -78,7 +96,11 @@ const updateHabitProgress = async (
   await updateHabitCompleted(habitProgress.habitId);
 };
 
-const calculateProgress = async (habit: Habit, currentDate: Date, order: number) => {
+const calculateProgress = async (
+  habit: Habit,
+  currentDate: Date,
+  order: number
+) => {
   const endDate = getEndDate(habit.period, currentDate);
   const correctedEndDate = removeOneDay(endDate);
 
@@ -103,11 +125,41 @@ const calculateProgress = async (habit: Habit, currentDate: Date, order: number)
   } as HabitProgress;
 };
 
+const calculateStreaks = async (habitId: string) => {
+  const habitProgresses = await prisma.habitProgress.findMany({
+    where: { habitId },
+    orderBy: { startDate: "asc" },
+  });
+
+  let currentStreak = 0;
+  let bestStreak = 0;
+  let prevCompleted = false;
+
+  for (const progress of habitProgresses) {
+    if (progress.completed) {
+      currentStreak++;
+      bestStreak = Math.max(bestStreak, currentStreak);
+      prevCompleted = true;
+    } else {
+      if (prevCompleted) {
+        currentStreak = 0;
+      }
+      prevCompleted = false;
+    }
+  }
+
+  return { currentStreak, bestStreak };
+};
+
 const getEndDate = (period: string, date: Date) => {
   switch (period) {
-    case "DAILY": return addDays(date, 1);
-    case "WEEKLY": return addWeeks(date, 1);
-    case "MONTHLY": return addMonths(date, 1);
-    default: return date;
+    case "DAILY":
+      return addDays(date, 1);
+    case "WEEKLY":
+      return addWeeks(date, 1);
+    case "MONTHLY":
+      return addMonths(date, 1);
+    default:
+      return date;
   }
 };

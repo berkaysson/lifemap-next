@@ -65,6 +65,14 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
         />
       </div>
       <div>
+        <div>
+          Best Streak: {habit.bestStreak} days
+        </div>
+        <div>
+          Current Streak: {habit.currentStreak} days
+        </div>
+      </div>
+      <div>
         <Collapsible
           open={isHabitProgressesCollapsed}
           onOpenChange={setIsHabitProgressesCollapsed}
