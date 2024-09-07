@@ -70,7 +70,14 @@ export const HabitSchema = z.object({
   startDate: z.string().min(1, "Start date is required"),
   numberOfPeriods: z
     .number()
-    .min(1, "Repeating time is required to determin due date"),
+    .min(
+      2,
+      "Number of periods must be at least 2, if you want to create one period habit, you should create a Task"
+    )
+    .max(
+      90,
+      "Number of periods cannot exceed 90, for longer times change the period to weekly or monthly"
+    ),
   goalDurationPerPeriod: z
     .number()
     .int()

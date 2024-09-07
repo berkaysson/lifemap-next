@@ -1,6 +1,10 @@
 "use server";
 
-import { createHabitProgresses, updateHabitCompleted } from "@/data/habit";
+import {
+  createHabitProgresses,
+  updateHabitCompleted,
+  validateHabitPeriodAndDate,
+} from "@/data/habit";
 import prisma from "@/lib/prisma";
 import {
   calculateEndDateWithPeriod,
@@ -52,6 +56,16 @@ export const createHabit = async (
       message: "Start date cannot be greater than due date",
       success: false,
     };
+  }
+
+  const validatedPeriodAndDate = validateHabitPeriodAndDate(
+    newHabit.numberOfPeriods,
+    startDate,
+    endDate
+  );
+
+  if (!validatedPeriodAndDate.success) {
+    return validatedPeriodAndDate;
   }
 
   try {

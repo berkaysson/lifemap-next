@@ -1,8 +1,9 @@
 import prisma from "@/lib/prisma";
 import { Habit, HabitProgress } from "@prisma/client";
-import { addDays, addMonths, addWeeks } from "date-fns";
+import { addDays, addMonths, addWeeks, addYears } from "date-fns";
 import { getActivitiesTotalDurationBetweenDates } from "./activity";
 import { removeOneDay } from "@/lib/time";
+import { ServiceResponse } from "@/types/ServiceResponse";
 
 export const updateHabitsCompletedDurationByActivityDate = async (
   userId: string,
@@ -162,4 +163,38 @@ const getEndDate = (period: string, date: Date) => {
     default:
       return date;
   }
+};
+
+export const validateHabitPeriodAndDate = (
+  numberOfPeriods: number,
+  startDate: Date,
+  endDate: Date
+): ServiceResponse => {
+  if (numberOfPeriods < 2) {
+    return {
+      message:
+        "Number of periods must be at least 2. If you want to create a one-period habit, you should create a Task.",
+      success: false,
+    };
+  }
+
+  if (numberOfPeriods > 90) {
+    return {
+      message: "Number of periods cannot exceed 90.",
+      success: false,
+    };
+  }
+
+  const maxEndDate = addYears(startDate, 1);
+  if (endDate > maxEndDate) {
+    return {
+      message: `End date cannot be more than 1 year from the start date.`,
+      success: false,
+    };
+  }
+
+  return {
+    message: "Habit creation is valid.",
+    success: true,
+  };
 };
