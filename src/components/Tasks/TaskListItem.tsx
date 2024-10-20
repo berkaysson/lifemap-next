@@ -1,7 +1,7 @@
 "use client";
 
 import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Button } from "../ui/button";
 import { TaskContext } from "@/contexts/TaskContext";
 import TaskEditForm from "./TaskEditForm";
@@ -9,9 +9,19 @@ import IsCompleted from "../ui/IsCompleted";
 import ColorCircle from "../ui/ColorCircle";
 import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
 import { ExtendedTask } from "@/types/Entitities";
+import { ProjectContext } from "@/contexts/ProjectContext";
+import ProjectSelect from "../ui/ProjectSelect";
 
 const TaskListItem = ({ task }: { task: ExtendedTask }) => {
-  const { onDeleteTask } = useContext(TaskContext);
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
+    null
+  );
+
+  const { onDeleteTask, fetchTasks } = useContext(TaskContext);
+  const { projects, onAddTaskToProject, onDeleteTaskFromProject } =
+    useContext(ProjectContext);
+
+  const taskProject = projects.find((project) => project.id === task.projectId);
 
   const category = task.category;
   const expired = isExpired(task.endDate);
@@ -19,6 +29,20 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
 
   const handleDelete = async () => {
     await onDeleteTask(task.id);
+  };
+
+  const handleAddToProject = () => {
+    if (selectedProjectId && !taskProject) {
+      onAddTaskToProject(task.id, selectedProjectId);
+      fetchTasks();
+    }
+  };
+
+  const handleDeleteFromProject = () => {
+    if (taskProject) {
+      onDeleteTaskFromProject(task.id, taskProject.id);
+      fetchTasks();
+    }
   };
 
   return (
@@ -39,6 +63,34 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
         </span>
         <div>
           {expired ? "Expired" : "ends"} {remained}
+        </div>
+        <div className="flex flex-row gap-2">
+          {taskProject ? (
+            <div className="flex flex-row gap-2 items-center">
+              <span>{taskProject.name}</span>
+              <Button
+                variant={"outline"}
+                size={"sm"}
+                onClick={handleDeleteFromProject}
+              >
+                Remove
+              </Button>
+            </div>
+          ) : (
+            <>
+              <ProjectSelect
+                onSelect={(projectId) => setSelectedProjectId(projectId)}
+              />
+              <Button
+                disabled={selectedProjectId === null}
+                onClick={handleAddToProject}
+                size={"sm"}
+                variant={"outline"}
+              >
+                Add to Project
+              </Button>
+            </>
+          )}
         </div>
       </div>
       <div className="flex flex-row gap-2">

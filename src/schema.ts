@@ -86,3 +86,8 @@ export const HabitSchema = z.object({
   categoryId: z.string().min(1, "Category is required"),
   projectId: z.string().optional(),
 });
+
+export const ProjectSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  description: z.string().optional(),
+});

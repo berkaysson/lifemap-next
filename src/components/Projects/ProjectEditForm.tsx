@@ -1,31 +1,29 @@
-import { HabitContext } from "@/contexts/HabitContext";
-import { Habit } from "@prisma/client";
+import { ProjectContext } from "@/contexts/ProjectContext";
+import { Project } from "@prisma/client";
 import { useContext, useEffect, useState } from "react";
 import ModalDialog from "../ui/ModalDialog";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { parseDate } from "@/lib/time";
 import { Button } from "../ui/button";
-import ProjectSelect from "../ui/ProjectSelect";
 
-interface HabitEditFormProps {
-  initialValues: Habit;
+interface ProjectEditFormProps {
+  initialValues: Project;
   triggerButton: JSX.Element;
 }
 
-const HabitEditForm = ({
+const ProjectEditForm = ({
   initialValues,
   triggerButton,
-}: HabitEditFormProps) => {
+}: ProjectEditFormProps) => {
   const [error, setError] = useState<string | null>(null);
-  const { onUpdateHabit } = useContext(HabitContext);
+  const { onUpdateProject } = useContext(ProjectContext);
   const [isOpen, setIsOpen] = useState(false);
-  const [newHabit, setNewHabit] = useState<Partial<Habit>>({});
+  const [newProject, setNewProject] = useState<Project>(initialValues);
 
   const handleSubmit = async () => {
     setError(null);
 
-    const response = await onUpdateHabit(initialValues.id, newHabit);
+    const response = await onUpdateProject(newProject);
     if (response.success) {
       setIsOpen(false);
     } else {
@@ -33,21 +31,23 @@ const HabitEditForm = ({
     }
   };
 
-  const handleFieldChange = (value: any, field: keyof Habit) => {
+  const handleFieldChange = (value: any, field: keyof Project) => {
     if (initialValues[field] === value) return;
-    setNewHabit({ ...newHabit, [field]: value });
+    setNewProject({ ...newProject, [field]: value });
   };
 
   useEffect(() => {
-    setNewHabit({});
+    setNewProject({
+      ...initialValues,
+    });
     setError(null);
   }, [isOpen]);
 
   return (
     <ModalDialog
       triggerButton={triggerButton}
-      title="Edit habit"
-      description="If you want to edit category of habit you should create new habit."
+      title="Edit project"
+      description="Edit your project or new tasks, todos, and habits"
       isOpen={isOpen}
       setIsOpen={setIsOpen}
     >
@@ -58,13 +58,16 @@ const HabitEditForm = ({
           defaultValue={initialValues.name}
           onChange={(e) => handleFieldChange(e.target.value, "name")}
           min={3}
-          placeholder="Doing something"
+          placeholder="My project..."
         />
 
-        <Label>Project</Label>
-        <ProjectSelect
-          defaultValue={initialValues.projectId || ""}
-          onSelect={(projectId) => handleFieldChange(projectId, "projectId")}
+        <Label>Description</Label>
+        <Input
+          type="text"
+          defaultValue={initialValues.description || ""}
+          onChange={(e) => handleFieldChange(e.target.value, "description")}
+          min={3}
+          placeholder="My project is a great project..."
         />
 
         {error && <p className="text-red-500">{error}</p>}
@@ -77,4 +80,4 @@ const HabitEditForm = ({
   );
 };
 
-export default HabitEditForm;
+export default ProjectEditForm;

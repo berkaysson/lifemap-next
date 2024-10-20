@@ -5,6 +5,7 @@ import { Input } from "../ui/input";
 import ModalDialog from "../ui/ModalDialog";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
+import ProjectSelect from "../ui/ProjectSelect";
 
 interface TodoEditFormProps {
   initialValues: ToDo;
@@ -17,6 +18,8 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
   const [newDescription, setNewDescription] = useState(
     initialValues.description
   );
+  const [projectId, setProjectId] = useState(initialValues.projectId);
+
   const { onUpdateTodo } = useContext(TodoContext);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -26,6 +29,7 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
       ...initialValues,
       name: newName,
       description: newDescription,
+      projectId: projectId,
     };
     const response = await onUpdateTodo(newTodo);
     if (response.success) {
@@ -70,6 +74,9 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
           min={1}
           placeholder="Describe the ToDo"
         />
+
+        <Label>Project</Label>
+        <ProjectSelect defaultValue={projectId || ""} onSelect={setProjectId} />
 
         {error && <p className="text-red-500">{error}</p>}
 

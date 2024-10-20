@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Button } from "../ui/button";
 import { TodoContext } from "@/contexts/TodoContext";
 import { getRemainingTime, isExpired } from "@/lib/time";
@@ -8,6 +8,8 @@ import IsCompleted from "../ui/IsCompleted";
 import ColorCircle from "../ui/ColorCircle";
 import TodoEditForm from "./TodoEditForm";
 import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
+import { ProjectContext } from "@/contexts/ProjectContext";
+import ProjectSelect from "../ui/ProjectSelect";
 
 const TodoListItem = ({
   todo,
@@ -24,7 +26,15 @@ const TodoListItem = ({
     projectId: string | null;
   };
 }) => {
-  const { onDeleteTodo, onUpdateTodo } = useContext(TodoContext);
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
+    null
+  );
+
+  const { onDeleteTodo, onUpdateTodo, fetchTodos } = useContext(TodoContext);
+  const { projects, onAddToDoToProject, onDeleteToDoFromProject } =
+    useContext(ProjectContext);
+
+  const todoProject = projects.find((project) => project.id === todo.projectId);
 
   const expired = isExpired(todo.endDate);
   let remained = getRemainingTime(todo.endDate);
@@ -36,6 +46,20 @@ const TodoListItem = ({
   const handleComplete = async () => {
     todo.completed = !todo.completed;
     await onUpdateTodo(todo);
+  };
+
+  const handleAddToProject = () => {
+    if (selectedProjectId && !todoProject) {
+      onAddToDoToProject(todo.id, selectedProjectId);
+      fetchTodos();
+    }
+  };
+
+  const handleDeleteFromProject = () => {
+    if (todoProject) {
+      onDeleteToDoFromProject(todo.id, todoProject.id);
+      fetchTodos();
+    }
   };
 
   return (
@@ -55,6 +79,34 @@ const TodoListItem = ({
             {remained} {expired ? "expired" : "remaining"}
           </span>
         )}
+        <div className="flex flex-row gap-2">
+          {todoProject ? (
+            <div className="flex flex-row gap-2 items-center">
+              <span>{todoProject.name}</span>
+              <Button
+                variant={"outline"}
+                size={"sm"}
+                onClick={handleDeleteFromProject}
+              >
+                Remove
+              </Button>
+            </div>
+          ) : (
+            <>
+              <ProjectSelect
+                onSelect={(projectId) => setSelectedProjectId(projectId)}
+              />
+              <Button
+                disabled={selectedProjectId === null}
+                onClick={handleAddToProject}
+                size={"sm"}
+                variant={"outline"}
+              >
+                Add to Project
+              </Button>
+            </>
+          )}
+        </div>
       </div>
       <div className="flex flex-row gap-2">
         <Button variant={"outline"} size={"sm"} onClick={handleComplete}>

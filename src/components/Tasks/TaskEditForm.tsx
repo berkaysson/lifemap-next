@@ -6,6 +6,7 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { parseDate } from "@/lib/time";
 import { Button } from "../ui/button";
+import ProjectSelect from "../ui/ProjectSelect";
 
 interface TaskEditFormProps {
   initialValues: Task;
@@ -93,6 +94,12 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
           onChange={(e) =>
             handleFieldChange(parseDate(e.target.value), "endDate")
           }
+        />
+
+        <Label>Project</Label>
+        <ProjectSelect
+          defaultValue={initialValues.projectId || ""}
+          onSelect={(projectId) => handleFieldChange(projectId, "projectId")}
         />
 
         {error && <p className="text-red-500">{error}</p>}

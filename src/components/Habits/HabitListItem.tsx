@@ -16,11 +16,23 @@ import {
 import { ChevronsUpDown } from "lucide-react";
 import HabitProgressesList from "./HabitProgressesList";
 import { ExtendedHabit } from "@/types/Entitities";
+import { ProjectContext } from "@/contexts/ProjectContext";
+import ProjectSelect from "../ui/ProjectSelect";
 
 const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
-  const { onDeleteHabit } = useContext(HabitContext);
   const [isHabitProgressesCollapsed, setIsHabitProgressesCollapsed] =
     useState(false);
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
+    null
+  );
+
+  const { onDeleteHabit, fetchHabits } = useContext(HabitContext);
+  const { projects, onAddHabitToProject, onDeleteHabitFromProject } =
+    useContext(ProjectContext);
+
+  const habitProject = projects.find(
+    (project) => project.id === habit.projectId
+  );
 
   const category = habit.category;
   const habitProgresses = habit.progress;
@@ -29,6 +41,20 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
 
   const handleDelete = async () => {
     await onDeleteHabit(habit.id);
+  };
+
+  const handleAddToProject = () => {
+    if (selectedProjectId && !habitProject) {
+      onAddHabitToProject(habit.id, selectedProjectId);
+      fetchHabits();
+    }
+  };
+
+  const handleDeleteFromProject = () => {
+    if (habitProject) {
+      onDeleteHabitFromProject(habit.id, habitProject.id);
+      fetchHabits();
+    }
   };
 
   return (
@@ -46,6 +72,34 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
         </span>
         <div>
           {expired ? "Expired" : "ends"} {remained}
+        </div>
+        <div className="flex flex-row gap-2">
+          {habitProject ? (
+            <div className="flex flex-row gap-2 items-center">
+              <span>{habitProject.name}</span>
+              <Button
+                variant={"outline"}
+                size={"sm"}
+                onClick={handleDeleteFromProject}
+              >
+                Remove
+              </Button>
+            </div>
+          ) : (
+            <>
+              <ProjectSelect
+                onSelect={(projectId) => setSelectedProjectId(projectId)}
+              />
+              <Button
+                disabled={selectedProjectId === null}
+                onClick={handleAddToProject}
+                size={"sm"}
+                variant={"outline"}
+              >
+                Add to Project
+              </Button>
+            </>
+          )}
         </div>
       </div>
       <div className="flex flex-row gap-2">
@@ -65,12 +119,8 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
         />
       </div>
       <div>
-        <div>
-          Best Streak: {habit.bestStreak} days
-        </div>
-        <div>
-          Current Streak: {habit.currentStreak} days
-        </div>
+        <div>Best Streak: {habit.bestStreak} days</div>
+        <div>Current Streak: {habit.currentStreak} days</div>
       </div>
       <div>
         <Collapsible
