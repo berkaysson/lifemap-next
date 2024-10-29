@@ -1,22 +1,25 @@
 "use client";
 
-import { TodoContext } from "@/contexts/TodoContext";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import TodoListItem from "./TodoListItem";
 import { ToDo } from "@prisma/client";
 import { sortArrayOfObjectsByKey } from "@/lib/utils";
 import SelectSort from "../ui/SelectSort";
+import { useFetchTodos } from "@/queries/todoQueries";
 
 const TodoList = () => {
-  const { todos } = useContext(TodoContext);
-  const [sortedTodos, setSortedTodos] = useState(todos);
+  const { data: todos, isLoading, isError, error } = useFetchTodos();
+  const [sortedTodos, setSortedTodos] = useState<ToDo[]>(todos || []);
 
   useEffect(() => {
-    setSortedTodos(todos);
+    if (todos) {
+      setSortedTodos(todos);
+    }
   }, [todos]);
 
   const handleSort = useCallback(
     (sortBy: keyof ToDo, direction: "asc" | "desc") => {
+      if (!todos) return;
       const sorted = sortArrayOfObjectsByKey<ToDo>(todos, sortBy, direction);
       setSortedTodos(sorted);
     },
@@ -34,6 +37,8 @@ const TodoList = () => {
         ]}
         onSelect={handleSort}
       />
+      {isLoading && <div>Loading todos...</div>}
+      {isError && <div>Error loading todos: {error.message}</div>}
       <ul className="border rounded-sm">
         {sortedTodos.map((todo) => (
           <TodoListItem key={todo.id} todo={todo} />

@@ -2,7 +2,6 @@
 
 import { useContext, useState } from "react";
 import { Button } from "../ui/button";
-import { TodoContext } from "@/contexts/TodoContext";
 import { getRemainingTime, isExpired } from "@/lib/time";
 import IsCompleted from "../ui/IsCompleted";
 import ColorCircle from "../ui/ColorCircle";
@@ -10,6 +9,7 @@ import TodoEditForm from "./TodoEditForm";
 import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
 import { ProjectContext } from "@/contexts/ProjectContext";
 import ProjectSelect from "../ui/ProjectSelect";
+import { useDeleteTodo, useUpdateTodo } from "@/queries/todoQueries";
 
 const TodoListItem = ({
   todo,
@@ -30,7 +30,8 @@ const TodoListItem = ({
     null
   );
 
-  const { onDeleteTodo, onUpdateTodo, fetchTodos } = useContext(TodoContext);
+  const { mutateAsync: deleteTodo } = useDeleteTodo();
+  const updateTodoMutation = useUpdateTodo();
   const { projects, onAddToDoToProject, onDeleteToDoFromProject } =
     useContext(ProjectContext);
 
@@ -40,25 +41,23 @@ const TodoListItem = ({
   let remained = getRemainingTime(todo.endDate);
 
   const handleDelete = async () => {
-    await onDeleteTodo(todo.id);
+    await deleteTodo(todo.id);
   };
 
   const handleComplete = async () => {
-    todo.completed = !todo.completed;
-    await onUpdateTodo(todo);
+    const updatedTodo = { ...todo, completed: !todo.completed };
+    await updateTodoMutation.mutateAsync(updatedTodo);
   };
 
   const handleAddToProject = () => {
     if (selectedProjectId && !todoProject) {
       onAddToDoToProject(todo.id, selectedProjectId);
-      fetchTodos();
     }
   };
 
   const handleDeleteFromProject = () => {
     if (todoProject) {
       onDeleteToDoFromProject(todo.id, todoProject.id);
-      fetchTodos();
     }
   };
 

@@ -1,0 +1,176 @@
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/components/ui/use-toast";
+import { TodoSchema } from "@/schema";
+import {
+  createToDo,
+  deleteToDo,
+  getToDos,
+  updateToDo,
+} from "@/services/todoService";
+import { ToDo } from "@prisma/client";
+import { z } from "zod";
+import { useSession } from "next-auth/react";
+import { validateSession } from "@/lib/session";
+
+const TODO_QUERY_KEY = "todos";
+
+// 1. Fetch Todos Query
+export const useFetchTodos = () => {
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+
+  return useQuery({
+    queryKey: [TODO_QUERY_KEY, userId],
+    queryFn: async () => {
+      validateSession(session);
+      const response = await getToDos(userId!);
+      if (!response.success) throw new Error(response.message);
+      return response.todos as ToDo[];
+    },
+    enabled: !!userId,
+    staleTime: 1000 * 60 * 5,
+  });
+};
+
+// 2. Create Todo Mutation
+export const useCreateTodo = () => {
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const userId = session?.user?.id;
+
+  return useMutation({
+    mutationFn: async (data: z.infer<typeof TodoSchema>) => {
+      validateSession(session);
+      const response = await createToDo(data, userId!);
+      if (!response.success) throw new Error(response.message);
+      return response;
+    },
+    onSuccess: () => {
+      toast({
+        title: "Todo Created",
+        description: "Todo created successfully",
+        duration: 3000,
+      });
+
+      queryClient.invalidateQueries({ queryKey: [TODO_QUERY_KEY, userId] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Todo Not Created",
+        description:
+          error.message || "An error occurred while creating the todo.",
+        duration: 3000,
+        variant: "destructive",
+      });
+    },
+  });
+};
+
+// 3. Update Todo Mutation
+export const useUpdateTodo = () => {
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const userId = session?.user?.id;
+
+  return useMutation({
+    mutationFn: async (data: ToDo) => {
+      validateSession(session);
+      const response = await updateToDo(data);
+      if (!response.success) throw new Error(response.message);
+      return response;
+    },
+    onMutate: async (updatedTodo) => {
+      await queryClient.cancelQueries({ queryKey: [TODO_QUERY_KEY, userId] });
+
+      const previousTodos = queryClient.getQueryData([TODO_QUERY_KEY, userId]);
+
+      queryClient.setQueryData(
+        [TODO_QUERY_KEY, userId],
+        (old: ToDo[] | undefined) => {
+          if (!old) return [updatedTodo];
+          return old.map((todo) =>
+            todo.id === updatedTodo.id ? updatedTodo : todo
+          );
+        }
+      );
+
+      return { previousTodos };
+    },
+    onSuccess: () => {
+      toast({
+        title: "Todo Updated",
+        description: "Todo updated successfully",
+        duration: 3000,
+      });
+      queryClient.invalidateQueries({ queryKey: [TODO_QUERY_KEY, userId] });
+    },
+    onError: (error: any, _, context) => {
+      queryClient.setQueryData(
+        [TODO_QUERY_KEY, userId],
+        context?.previousTodos
+      );
+      toast({
+        title: "Todo Not Updated",
+        description:
+          error.message || "An error occurred while updating the todo.",
+        duration: 3000,
+        variant: "destructive",
+      });
+    },
+  });
+};
+
+// 4. Delete Todo Mutation
+export const useDeleteTodo = () => {
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const userId = session?.user?.id;
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      validateSession(session);
+      const response = await deleteToDo(id);
+      if (!response.success) throw new Error(response.message);
+      return response;
+    },
+    onMutate: async (deletedId) => {
+      await queryClient.cancelQueries({ queryKey: [TODO_QUERY_KEY, userId] });
+
+      const previousTodos = queryClient.getQueryData([TODO_QUERY_KEY, userId]);
+
+      queryClient.setQueryData(
+        [TODO_QUERY_KEY, userId],
+        (old: ToDo[] | undefined) => {
+          if (!old) return [];
+          return old.filter((todo) => todo.id !== deletedId);
+        }
+      );
+
+      return { previousTodos };
+    },
+    onSuccess: () => {
+      toast({
+        title: "Todo Deleted",
+        description: "Todo deleted successfully",
+        duration: 3000,
+      });
+      queryClient.invalidateQueries({ queryKey: [TODO_QUERY_KEY, userId] });
+    },
+    onError: (error: any, _, context) => {
+      queryClient.setQueryData(
+        [TODO_QUERY_KEY, userId],
+        context?.previousTodos
+      );
+      toast({
+        title: "Todo Not Deleted",
+        description:
+          error.message || "An error occurred while deleting the todo.",
+        duration: 3000,
+        variant: "destructive",
+      });
+    },
+  });
+};

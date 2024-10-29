@@ -15,10 +15,10 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { TodoContext } from "@/contexts/TodoContext";
+import { useCreateTodo } from "@/queries/todoQueries";
 
 const TodoForm = () => {
-  const { onCreateTodo } = useContext(TodoContext);
+  const { mutateAsync: createTodo } = useCreateTodo();
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
@@ -36,8 +36,9 @@ const TodoForm = () => {
   const { reset } = form;
 
   const onSubmit = (data: z.infer<typeof TodoSchema>) => {
-    startTransition(() => {
-      onCreateTodo(data).then((response: any) => {
+    startTransition(async () => {
+      try {
+        const response = await createTodo(data);
         if (response.message) {
           setMessage(response.message);
           if (response.success) {
@@ -47,7 +48,10 @@ const TodoForm = () => {
             setIsError(true);
           }
         }
-      });
+      } catch (error: any) {
+        setMessage(error.message || "An error occurred");
+        setIsError(true);
+      }
     });
   };
 

@@ -1,11 +1,11 @@
-import { TodoContext } from "@/contexts/TodoContext";
 import { ToDo } from "@prisma/client";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import ModalDialog from "../ui/ModalDialog";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import ProjectSelect from "../ui/ProjectSelect";
+import { useUpdateTodo } from "@/queries/todoQueries";
 
 interface TodoEditFormProps {
   initialValues: ToDo;
@@ -20,7 +20,7 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
   );
   const [projectId, setProjectId] = useState(initialValues.projectId);
 
-  const { onUpdateTodo } = useContext(TodoContext);
+  const { mutateAsync: updateTodo } = useUpdateTodo();
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSubmit = async () => {
@@ -30,12 +30,18 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
       name: newName,
       description: newDescription,
       projectId: projectId,
-    };
-    const response = await onUpdateTodo(newTodo);
-    if (response.success) {
-      setIsOpen(false);
-    } else {
-      setError(response.message);
+    } as ToDo;
+    try {
+      const response = await updateTodo(newTodo);
+      if (response.success) {
+        setIsOpen(false);
+      } else {
+        setError(response.message);
+      }
+    } catch (error: any) {
+      setError(
+        error.message || "An error occurred while updating the category."
+      );
     }
   };
 

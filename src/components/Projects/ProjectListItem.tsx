@@ -4,11 +4,11 @@ import { useContext } from "react";
 import { ProjectContext } from "@/contexts/ProjectContext";
 import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
 import { ExtendedProject } from "@/types/Entitities";
-import { TodoContext } from "@/contexts/TodoContext";
 import { TaskContext } from "@/contexts/TaskContext";
 import { HabitContext } from "@/contexts/HabitContext";
 import ProjectEditForm from "./ProjectEditForm";
 import { Button } from "../ui/button";
+import { useFetchTodos } from "@/queries/todoQueries";
 
 const ProjectListItem = ({ project }: { project: ExtendedProject }) => {
   const {
@@ -17,7 +17,7 @@ const ProjectListItem = ({ project }: { project: ExtendedProject }) => {
     onDeleteTaskFromProject,
     onDeleteToDoFromProject,
   } = useContext(ProjectContext);
-  const { todos } = useContext(TodoContext);
+  const { data: todos } = useFetchTodos();
   const { tasks } = useContext(TaskContext);
   const { habits } = useContext(HabitContext);
 
