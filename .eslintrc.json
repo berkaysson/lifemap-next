@@ -1,3 +1,15 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:import/errors",
+    "plugin:import/warnings"
+  ],
+  "plugins": ["import"],
+  "rules": {
+    "no-unused-vars": "warn",
+    "import/named": "warn",
+    "import/namespace": "warn",
+    "import/no-unresolved": "error",
+    "import/no-unused-modules": [1]
+  }
 }
