@@ -1,6 +1,5 @@
 "use client";
 
-import { CategoryContext } from "@/contexts/CategoryContext";
 import { TaskContext } from "@/contexts/TaskContext";
 import { TaskSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,10 +17,11 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import SelectBox from "../ui/SelectBox";
+import { useFetchCategories } from "@/queries/categoryQueries";
 
 const TaskForm = () => {
   const { onCreateTask } = useContext(TaskContext);
-  const { categories } = useContext(CategoryContext);
+  const { data: categories } = useFetchCategories();
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
@@ -139,7 +139,7 @@ const TaskForm = () => {
                   <FormLabel>Select a Category</FormLabel>
                   <SelectBox
                     field={field}
-                    options={categories}
+                    options={categories || []}
                     form={form}
                     optionKey={"id"}
                     formKey={"categoryId"}

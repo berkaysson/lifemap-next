@@ -1,6 +1,5 @@
 "use client";
 
-import { CategoryContext } from "@/contexts/CategoryContext";
 import { HabitContext } from "@/contexts/HabitContext";
 import { HabitSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,10 +25,11 @@ import {
   parseDate,
   removeOneDay,
 } from "@/lib/time";
+import { useFetchCategories } from "@/queries/categoryQueries";
 
 const HabitForm = () => {
   const { onCreateHabit } = useContext(HabitContext);
-  const { categories } = useContext(CategoryContext);
+  const { data: categories } = useFetchCategories();
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
@@ -282,7 +282,7 @@ const HabitForm = () => {
                   <FormLabel>Select a Category</FormLabel>
                   <SelectBox
                     field={field}
-                    options={categories}
+                    options={categories || []}
                     form={form}
                     optionKey={"id"}
                     formKey={"categoryId"}

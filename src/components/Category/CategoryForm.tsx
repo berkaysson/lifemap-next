@@ -6,7 +6,7 @@ import { Input } from "../ui/input";
 import { CategorySchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useContext, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import {
   Form,
   FormControl,
@@ -15,10 +15,10 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { CategoryContext } from "@/contexts/CategoryContext";
+import { useCreateCategory } from "@/queries/categoryQueries";
 
 const CategoryForm = () => {
-  const { onCreateCategory } = useContext(CategoryContext);
+  const { mutateAsync: createCategory } = useCreateCategory();
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
@@ -32,9 +32,10 @@ const CategoryForm = () => {
 
   const { reset } = form;
 
-  const onSubmit = (data: z.infer<typeof CategorySchema>) => {
-    startTransition(() => {
-      onCreateCategory(data).then((response: any) => {
+  const onSubmit = async (data: z.infer<typeof CategorySchema>) => {
+    startTransition(async () => {
+      try {
+        const response = await createCategory(data);
         if (response.message) {
           setMessage(response.message);
           if (response.success) {
@@ -44,7 +45,10 @@ const CategoryForm = () => {
             setIsError(true);
           }
         }
-      });
+      } catch (error: any) {
+        setMessage(error.message || "An error occurred");
+        setIsError(true);
+      }
     });
   };
 
@@ -64,7 +68,7 @@ const CategoryForm = () => {
                     <Input
                       disabled={isPending}
                       {...field}
-                      placeholder="Doing something..."
+                      placeholder="Enter category name..."
                       type="text"
                     />
                   </FormControl>

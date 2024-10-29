@@ -1,17 +1,20 @@
 "use client";
 
-import { useContext } from "react";
+import { useDeleteCategory } from "@/queries/categoryQueries";
 import { Button } from "../ui/button";
-import { CategoryContext } from "@/contexts/CategoryContext";
 import CategoryEditForm from "./CategoryEditForm";
 import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
 import { Category } from "@prisma/client";
 
 const CategoryListItem = ({ category }: { category: Category }) => {
-  const { onDeleteCategory } = useContext(CategoryContext);
+  const { mutateAsync: deleteCategory } = useDeleteCategory();
 
   const handleDelete = async () => {
-    await onDeleteCategory(category.id);
+    try {
+      await deleteCategory(category.id);
+    } catch (error) {
+      console.error("Delete failed:", error);
+    }
   };
 
   return (

@@ -1,6 +1,8 @@
-import { CategoryContext } from "@/contexts/CategoryContext";
+"use client";
+
+import { useUpdateCategory } from "@/queries/categoryQueries";
 import { Category } from "@prisma/client";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import ModalDialog from "../ui/ModalDialog";
 import { Button } from "../ui/button";
@@ -17,24 +19,30 @@ const CategoryEditForm = ({
 }: CategoryEditFormProps) => {
   const [error, setError] = useState<string | null>(null);
   const [newName, setNewName] = useState(initialValues.name);
-  const { onUpdateCategory } = useContext(CategoryContext);
+  const { mutateAsync: updateCategory } = useUpdateCategory();
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSubmit = async () => {
     setError(null);
     const newCategory = { ...initialValues, name: newName };
-    const response = await onUpdateCategory(newCategory);
-    if (response.success) {
-      setIsOpen(false);
-    } else {
-      setError(response.message);
+    try {
+      const response = await updateCategory(newCategory);
+      if (response.success) {
+        setIsOpen(false);
+      } else {
+        setError(response.message);
+      }
+    } catch (error: any) {
+      setError(
+        error.message || "An error occurred while updating the category."
+      );
     }
   };
 
   useEffect(() => {
     setNewName(initialValues.name);
     setError(null);
-  }, [isOpen]);
+  }, [initialValues, isOpen]);
 
   return (
     <ModalDialog

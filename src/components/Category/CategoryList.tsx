@@ -1,22 +1,27 @@
 "use client";
 
-import { CategoryContext } from "@/contexts/CategoryContext";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import CategoryListItem from "./CategoryListItem";
 import { Category } from "@prisma/client";
 import { sortArrayOfObjectsByKey } from "@/lib/utils";
 import SelectSort from "../ui/SelectSort";
+import { useFetchCategories } from "@/queries/categoryQueries";
 
 const CategoryList = () => {
-  const { categories } = useContext(CategoryContext);
-  const [sortedCategories, setSortedCategories] = useState(categories);
+  const { data: categories, isLoading, isError, error } = useFetchCategories();
+  const [sortedCategories, setSortedCategories] = useState<Category[]>(
+    categories || []
+  );
 
   useEffect(() => {
-    setSortedCategories(categories);
+    if (categories) {
+      setSortedCategories(categories);
+    }
   }, [categories]);
 
   const handleSort = useCallback(
     (sortBy: keyof Category, direction: "asc" | "desc") => {
+      if (!categories) return;
       const sorted = sortArrayOfObjectsByKey<Category>(
         categories,
         sortBy,
@@ -36,6 +41,8 @@ const CategoryList = () => {
         ]}
         onSelect={handleSort}
       />
+      {isLoading && <div>Loading categories...</div>}
+      {isError && <div>Error loading categories: {error.message}</div>}
       <ul className="border rounded-sm">
         {sortedCategories.map((category) => (
           <CategoryListItem key={category.id} category={category} />

@@ -16,14 +16,14 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ActivitySchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CategoryContext } from "@/contexts/CategoryContext";
 import ModalDialog from "../ui/ModalDialog";
 import { SquareActivity } from "lucide-react";
 import SelectBox from "../ui/SelectBox";
+import { useFetchCategories } from "@/queries/categoryQueries";
 
 const ActivityForm = () => {
   const { onCreateActivity } = useContext(ActivityContext);
-  const { categories } = useContext(CategoryContext);
+  const { data: categories } = useFetchCategories();
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
@@ -133,7 +133,7 @@ const ActivityForm = () => {
                 <FormLabel>Select a Category</FormLabel>
                 <SelectBox
                   field={field}
-                  options={categories}
+                  options={categories || []}
                   form={form}
                   optionKey={"id"}
                   formKey={"categoryId"}

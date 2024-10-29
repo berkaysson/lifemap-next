@@ -1,18 +1,20 @@
 "use client";
 
 import { ActivityProvider } from "@/contexts/ActivityContext";
-import { CategoryProvider } from "@/contexts/CategoryContext";
 import { HabitProvider } from "@/contexts/HabitContext";
 import { ProjectProvider } from "@/contexts/ProjectContext";
 import { TaskProvider } from "@/contexts/TaskContext";
 import { TodoProvider } from "@/contexts/TodoContext";
 import Link from "next/link";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const ProtectedLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <ProjectProvider>
-      <TodoProvider>
-        <CategoryProvider>
+    <QueryClientProvider client={queryClient}>
+      <ProjectProvider>
+        <TodoProvider>
           <TaskProvider>
             <HabitProvider>
               <ActivityProvider>
@@ -34,9 +36,9 @@ const ProtectedLayout = ({ children }: { children: React.ReactNode }) => {
               </ActivityProvider>
             </HabitProvider>
           </TaskProvider>
-        </CategoryProvider>
-      </TodoProvider>
-    </ProjectProvider>
+        </TodoProvider>
+      </ProjectProvider>
+    </QueryClientProvider>
   );
 };
 
