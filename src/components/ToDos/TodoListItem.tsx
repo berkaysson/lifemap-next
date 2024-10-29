@@ -9,7 +9,12 @@ import TodoEditForm from "./TodoEditForm";
 import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
 import { ProjectContext } from "@/contexts/ProjectContext";
 import ProjectSelect from "../ui/ProjectSelect";
-import { useDeleteTodo, useUpdateTodo } from "@/queries/todoQueries";
+import {
+  TODO_QUERY_KEY,
+  useDeleteTodo,
+  useUpdateTodo,
+} from "@/queries/todoQueries";
+import { useQueryClient } from "@tanstack/react-query";
 
 const TodoListItem = ({
   todo,
@@ -32,6 +37,7 @@ const TodoListItem = ({
 
   const { mutateAsync: deleteTodo } = useDeleteTodo();
   const updateTodoMutation = useUpdateTodo();
+  const queryClient = useQueryClient();
   const { projects, onAddToDoToProject, onDeleteToDoFromProject } =
     useContext(ProjectContext);
 
@@ -52,12 +58,18 @@ const TodoListItem = ({
   const handleAddToProject = () => {
     if (selectedProjectId && !todoProject) {
       onAddToDoToProject(todo.id, selectedProjectId);
+      queryClient.invalidateQueries({
+        queryKey: [TODO_QUERY_KEY, todo.userId],
+      });
     }
   };
 
   const handleDeleteFromProject = () => {
     if (todoProject) {
       onDeleteToDoFromProject(todo.id, todoProject.id);
+      queryClient.invalidateQueries({
+        queryKey: [TODO_QUERY_KEY, todo.userId],
+      });
     }
   };
 

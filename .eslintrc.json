@@ -6,7 +6,6 @@
   ],
   "plugins": ["import"],
   "rules": {
-    "no-unused-vars": "warn",
     "import/named": "warn",
     "import/namespace": "warn",
     "import/no-unresolved": "error",

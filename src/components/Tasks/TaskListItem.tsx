@@ -3,7 +3,6 @@
 import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
 import { useContext, useState } from "react";
 import { Button } from "../ui/button";
-import { TaskContext } from "@/contexts/TaskContext";
 import TaskEditForm from "./TaskEditForm";
 import IsCompleted from "../ui/IsCompleted";
 import ColorCircle from "../ui/ColorCircle";
@@ -11,13 +10,16 @@ import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
 import { ExtendedTask } from "@/types/Entitities";
 import { ProjectContext } from "@/contexts/ProjectContext";
 import ProjectSelect from "../ui/ProjectSelect";
+import { TASK_QUERY_KEY, useDeleteTask } from "@/queries/taskQueries";
+import { useQueryClient } from "@tanstack/react-query";
 
 const TaskListItem = ({ task }: { task: ExtendedTask }) => {
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
     null
   );
 
-  const { onDeleteTask, fetchTasks } = useContext(TaskContext);
+  const { mutateAsync: deleteTask } = useDeleteTask();
+  const queryClient = useQueryClient();
   const { projects, onAddTaskToProject, onDeleteTaskFromProject } =
     useContext(ProjectContext);
 
@@ -28,20 +30,24 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
   const remained = getRemainingTime(task.endDate);
 
   const handleDelete = async () => {
-    await onDeleteTask(task.id);
+    await deleteTask(task.id);
   };
 
   const handleAddToProject = () => {
     if (selectedProjectId && !taskProject) {
       onAddTaskToProject(task.id, selectedProjectId);
-      fetchTasks();
+      queryClient.invalidateQueries({
+        queryKey: [TASK_QUERY_KEY, task.userId],
+      });
     }
   };
 
   const handleDeleteFromProject = () => {
     if (taskProject) {
       onDeleteTaskFromProject(task.id, taskProject.id);
-      fetchTasks();
+      queryClient.invalidateQueries({
+        queryKey: [TASK_QUERY_KEY, task.userId],
+      });
     }
   };
 

@@ -1,23 +1,26 @@
 "use client";
 
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import HabitListItem from "./HabitListItem";
-import { HabitContext } from "@/contexts/HabitContext";
 import { Habit } from "@prisma/client";
 import { sortArrayOfObjectsByKey } from "@/lib/utils";
 import SelectSort from "../ui/SelectSort";
 import { ExtendedHabit } from "@/types/Entitities";
+import { useFetchHabits } from "@/queries/habitQueries";
 
 const HabitList = () => {
-  const { habits } = useContext(HabitContext);
-  const [sortedHabits, setSortedHabits] = useState(habits);
+  const { data: habits, isLoading, isError, error } = useFetchHabits();
+  const [sortedHabits, setSortedHabits] = useState(habits || []);
 
   useEffect(() => {
-    setSortedHabits(habits);
+    if (habits) {
+      setSortedHabits(habits);
+    }
   }, [habits]);
 
   const handleSort = useCallback(
     (sortBy: keyof Habit, direction: "asc" | "desc") => {
+      if (!habits) return;
       const sorted = sortArrayOfObjectsByKey<ExtendedHabit>(
         habits,
         sortBy,
@@ -44,6 +47,8 @@ const HabitList = () => {
         ]}
         onSelect={handleSort}
       />
+      {isLoading && <div>Loading categories...</div>}
+      {isError && <div>Error loading categories: {error.message}</div>}
       <ul className="border rounded-sm">
         {sortedHabits.map((habit) => (
           <HabitListItem key={habit.id} habit={habit} />

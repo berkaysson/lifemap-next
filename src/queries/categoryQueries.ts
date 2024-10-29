@@ -12,7 +12,7 @@ import { z } from "zod";
 import { useSession } from "next-auth/react";
 import { validateSession } from "@/lib/session";
 
-const CATEGORY_QUERY_KEY = "categories";
+export const CATEGORY_QUERY_KEY = "categories";
 
 // 1. Fetch Categories Query
 export const useFetchCategories = () => {

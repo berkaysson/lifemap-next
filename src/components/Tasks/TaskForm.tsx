@@ -1,9 +1,8 @@
 "use client";
 
-import { TaskContext } from "@/contexts/TaskContext";
 import { TaskSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -18,9 +17,10 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import SelectBox from "../ui/SelectBox";
 import { useFetchCategories } from "@/queries/categoryQueries";
+import { useCreateTask } from "@/queries/taskQueries";
 
 const TaskForm = () => {
-  const { onCreateTask } = useContext(TaskContext);
+  const { mutateAsync: createTask } = useCreateTask();
   const { data: categories } = useFetchCategories();
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
@@ -42,8 +42,9 @@ const TaskForm = () => {
   const { reset } = form;
 
   const onSubmit = (data: z.infer<typeof TaskSchema>) => {
-    startTransition(() => {
-      onCreateTask(data).then((response: any) => {
+    startTransition(async () => {
+      try {
+        const response = await createTask(data);
         if (response.message) {
           setMessage(response.message);
           if (response.success) {
@@ -53,7 +54,10 @@ const TaskForm = () => {
             setIsError(true);
           }
         }
-      });
+      } catch (error: any) {
+        setMessage(error.message || "An error occurred");
+        setIsError(true);
+      }
     });
   };
 

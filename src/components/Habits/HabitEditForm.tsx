@@ -1,12 +1,11 @@
-import { HabitContext } from "@/contexts/HabitContext";
 import { Habit } from "@prisma/client";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ModalDialog from "../ui/ModalDialog";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { parseDate } from "@/lib/time";
 import { Button } from "../ui/button";
 import ProjectSelect from "../ui/ProjectSelect";
+import { useUpdateHabit } from "@/queries/habitQueries";
 
 interface HabitEditFormProps {
   initialValues: Habit;
@@ -18,18 +17,26 @@ const HabitEditForm = ({
   triggerButton,
 }: HabitEditFormProps) => {
   const [error, setError] = useState<string | null>(null);
-  const { onUpdateHabit } = useContext(HabitContext);
   const [isOpen, setIsOpen] = useState(false);
   const [newHabit, setNewHabit] = useState<Partial<Habit>>({});
+
+  const { mutateAsync: updateHabit } = useUpdateHabit();
 
   const handleSubmit = async () => {
     setError(null);
 
-    const response = await onUpdateHabit(initialValues.id, newHabit);
-    if (response.success) {
-      setIsOpen(false);
-    } else {
-      setError(response.message);
+    try {
+      const response = await updateHabit({
+        id: initialValues.id,
+        data: newHabit,
+      });
+      if (response.success) {
+        setIsOpen(false);
+      } else {
+        setError(response.message);
+      }
+    } catch (error: any) {
+      setError(error.message || "An error occurred while updating the habit.");
     }
   };
 

@@ -12,7 +12,7 @@ import { z } from "zod";
 import { useSession } from "next-auth/react";
 import { validateSession } from "@/lib/session";
 
-const TODO_QUERY_KEY = "todos";
+export const TODO_QUERY_KEY = "todos";
 
 // 1. Fetch Todos Query
 export const useFetchTodos = () => {

@@ -1,9 +1,8 @@
 "use client";
 
-import { HabitContext } from "@/contexts/HabitContext";
 import { HabitSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext, useEffect, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -26,9 +25,10 @@ import {
   removeOneDay,
 } from "@/lib/time";
 import { useFetchCategories } from "@/queries/categoryQueries";
+import { useCreateHabit } from "@/queries/habitQueries";
 
 const HabitForm = () => {
-  const { onCreateHabit } = useContext(HabitContext);
+  const { mutateAsync: createHabit } = useCreateHabit();
   const { data: categories } = useFetchCategories();
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
@@ -54,8 +54,9 @@ const HabitForm = () => {
   const { reset } = form;
 
   const onSubmit = (data: z.infer<typeof HabitSchema>) => {
-    startTransition(() => {
-      onCreateHabit(data).then((response: any) => {
+    startTransition(async () => {
+      try {
+        const response = await createHabit(data);
         if (response.message) {
           setMessage(response.message);
           if (response.success) {
@@ -65,7 +66,10 @@ const HabitForm = () => {
             setIsError(true);
           }
         }
-      });
+      } catch (error: any) {
+        setMessage(error.message || "An error occurred");
+        setIsError(true);
+      }
     });
   };
 

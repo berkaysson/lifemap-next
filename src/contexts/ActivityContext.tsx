@@ -7,13 +7,14 @@ import {
 } from "@/services/activityService";
 import { Activity } from "@prisma/client";
 import { useSession } from "next-auth/react";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import { z } from "zod";
-import { TaskContext } from "./TaskContext";
 import { ServiceResponse } from "@/types/ServiceResponse";
 import { useToast } from "@/components/ui/use-toast";
-import { HabitContext } from "./HabitContext";
 import { ExtendedActivity } from "@/types/Entitities";
+import { useQueryClient } from "@tanstack/react-query";
+import { TASK_QUERY_KEY } from "@/queries/taskQueries";
+import { HABIT_QUERY_KEY } from "@/queries/habitQueries";
 
 interface ActivityContextValue {
   activities: ExtendedActivity[];
@@ -52,9 +53,8 @@ export const ActivityProvider = ({
 }) => {
   const { data: session, status } = useSession();
   const [activities, setActivities] = useState<ExtendedActivity[]>([]);
-  const { fetchTasks } = useContext(TaskContext);
-  const { fetchHabits } = useContext(HabitContext);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (!session || !session.user || status !== "authenticated") return;
@@ -63,8 +63,12 @@ export const ActivityProvider = ({
 
   useEffect(() => {
     if (activities) {
-      fetchTasks();
-      fetchHabits();
+      queryClient.invalidateQueries({
+        queryKey: [TASK_QUERY_KEY, session?.user?.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [HABIT_QUERY_KEY, session?.user?.id],
+      });
     }
   }, [activities]);
 

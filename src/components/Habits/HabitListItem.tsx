@@ -3,7 +3,6 @@
 import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
 import { useContext, useState } from "react";
 import { Button } from "../ui/button";
-import { HabitContext } from "@/contexts/HabitContext";
 import HabitEditForm from "./HabitEditForm";
 import IsCompleted from "../ui/IsCompleted";
 import ColorCircle from "../ui/ColorCircle";
@@ -18,6 +17,8 @@ import HabitProgressesList from "./HabitProgressesList";
 import { ExtendedHabit } from "@/types/Entitities";
 import { ProjectContext } from "@/contexts/ProjectContext";
 import ProjectSelect from "../ui/ProjectSelect";
+import { useQueryClient } from "@tanstack/react-query";
+import { HABIT_QUERY_KEY, useDeleteHabit } from "@/queries/habitQueries";
 
 const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
   const [isHabitProgressesCollapsed, setIsHabitProgressesCollapsed] =
@@ -26,7 +27,8 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
     null
   );
 
-  const { onDeleteHabit, fetchHabits } = useContext(HabitContext);
+  const { mutateAsync: deleteHabit } = useDeleteHabit();
+  const queryClient = useQueryClient();
   const { projects, onAddHabitToProject, onDeleteHabitFromProject } =
     useContext(ProjectContext);
 
@@ -40,20 +42,24 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
   const remained = getRemainingTime(habit.endDate);
 
   const handleDelete = async () => {
-    await onDeleteHabit(habit.id);
+    await deleteHabit(habit.id);
   };
 
   const handleAddToProject = () => {
     if (selectedProjectId && !habitProject) {
       onAddHabitToProject(habit.id, selectedProjectId);
-      fetchHabits();
+      queryClient.invalidateQueries({
+        queryKey: [HABIT_QUERY_KEY, habit.userId],
+      });
     }
   };
 
   const handleDeleteFromProject = () => {
     if (habitProject) {
       onDeleteHabitFromProject(habit.id, habitProject.id);
-      fetchHabits();
+      queryClient.invalidateQueries({
+        queryKey: [HABIT_QUERY_KEY, habit.userId],
+      });
     }
   };
 
