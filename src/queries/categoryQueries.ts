@@ -12,19 +12,22 @@ import { z } from "zod";
 import { useSession } from "next-auth/react";
 import { validateSession } from "@/lib/session";
 
+const CATEGORY_QUERY_KEY = "categories";
+
 // 1. Fetch Categories Query
 export const useFetchCategories = () => {
   const { data: session } = useSession();
+  const userId = session?.user?.id;
 
   return useQuery({
-    queryKey: ["categories", session?.user?.id],
+    queryKey: [CATEGORY_QUERY_KEY, userId],
     queryFn: async () => {
       validateSession(session);
-      const response = await getCategories(session?.user.id!);
+      const response = await getCategories(userId!);
       if (!response.success) throw new Error(response.message);
       return response.categories as Category[];
     },
-    enabled: !!session?.user?.id,
+    enabled: !!userId,
     staleTime: 1000 * 60 * 5,
   });
 };
@@ -34,11 +37,12 @@ export const useCreateCategory = () => {
   const { data: session } = useSession();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const userId = session?.user?.id;
 
   return useMutation({
     mutationFn: async (data: z.infer<typeof CategorySchema>) => {
       validateSession(session);
-      const response = await createCategory(data, session?.user.id!);
+      const response = await createCategory(data, userId!);
       if (!response.success) throw new Error(response.message);
       return response;
     },
@@ -67,8 +71,9 @@ export const useCreateCategory = () => {
 // 3. Update Category Mutation
 export const useUpdateCategory = () => {
   const { data: session } = useSession();
-  const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const userId = session?.user?.id;
 
   return useMutation({
     mutationFn: async (data: Category) => {
@@ -77,17 +82,41 @@ export const useUpdateCategory = () => {
       if (!response.success) throw new Error(response.message);
       return response;
     },
+    onMutate: async (updatedCategory) => {
+      await queryClient.cancelQueries({
+        queryKey: [CATEGORY_QUERY_KEY, userId],
+      });
+
+      const previousCategories = queryClient.getQueryData([
+        CATEGORY_QUERY_KEY,
+        userId,
+      ]);
+
+      queryClient.setQueryData(
+        [CATEGORY_QUERY_KEY, userId],
+        (old: Category[] | undefined) => {
+          if (!old) return [updatedCategory];
+          return old.map((category) =>
+            category.id === updatedCategory.id ? updatedCategory : category
+          );
+        }
+      );
+
+      return { previousCategories };
+    },
     onSuccess: () => {
       toast({
         title: "Category Updated",
         description: "Category updated successfully",
         duration: 3000,
       });
-      queryClient.invalidateQueries({
-        queryKey: ["categories"],
-      });
+      queryClient.invalidateQueries({ queryKey: [CATEGORY_QUERY_KEY, userId] });
     },
-    onError: (error: any) => {
+    onError: (error: any, _, context) => {
+      queryClient.setQueryData(
+        [CATEGORY_QUERY_KEY, userId],
+        context?.previousCategories
+      );
       toast({
         title: "Category Not Updated",
         description:
@@ -102,8 +131,9 @@ export const useUpdateCategory = () => {
 // 4. Delete Category Mutation
 export const useDeleteCategory = () => {
   const { data: session } = useSession();
-  const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const userId = session?.user?.id;
 
   return useMutation({
     mutationFn: async (id: string) => {
@@ -112,17 +142,39 @@ export const useDeleteCategory = () => {
       if (!response.success) throw new Error(response.message);
       return response;
     },
+    onMutate: async (deletedId) => {
+      await queryClient.cancelQueries({
+        queryKey: [CATEGORY_QUERY_KEY, userId],
+      });
+
+      const previousCategories = queryClient.getQueryData([
+        CATEGORY_QUERY_KEY,
+        userId,
+      ]);
+
+      queryClient.setQueryData(
+        [CATEGORY_QUERY_KEY, userId],
+        (old: Category[] | undefined) => {
+          if (!old) return [];
+          return old.filter((category) => category.id !== deletedId);
+        }
+      );
+
+      return { previousCategories };
+    },
     onSuccess: () => {
       toast({
         title: "Category Deleted",
         description: "Category deleted successfully",
         duration: 3000,
       });
-      queryClient.invalidateQueries({
-        queryKey: ["categories"],
-      });
+      queryClient.invalidateQueries({ queryKey: [CATEGORY_QUERY_KEY, userId] });
     },
-    onError: (error: any) => {
+    onError: (error: any, _, context) => {
+      queryClient.setQueryData(
+        [CATEGORY_QUERY_KEY, userId],
+        context?.previousCategories
+      );
       toast({
         title: "Category Not Deleted",
         description:
