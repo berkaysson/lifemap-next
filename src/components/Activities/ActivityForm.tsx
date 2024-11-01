@@ -11,7 +11,6 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { ActivityContext } from "@/contexts/ActivityContext";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ActivitySchema } from "@/schema";
@@ -20,9 +19,10 @@ import ModalDialog from "../ui/ModalDialog";
 import { SquareActivity } from "lucide-react";
 import SelectBox from "../ui/SelectBox";
 import { useFetchCategories } from "@/queries/categoryQueries";
+import { useCreateActivity } from "@/queries/activityQueries";
 
 const ActivityForm = () => {
-  const { onCreateActivity } = useContext(ActivityContext);
+  const { mutateAsync: createActivity } = useCreateActivity();
   const { data: categories } = useFetchCategories();
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
@@ -42,19 +42,22 @@ const ActivityForm = () => {
   const { reset } = form;
 
   const onSubmit = (data: z.infer<typeof ActivitySchema>) => {
-    startTransition(() => {
-      onCreateActivity(data).then((response: any) => {
+    startTransition(async () => {
+      try {
+        const response = await createActivity(data);
         if (response.message) {
           setMessage(response.message);
           if (response.success) {
             setIsError(false);
             reset();
-            setIsOpen(false);
           } else {
             setIsError(true);
           }
         }
-      });
+      } catch (error: any) {
+        setMessage(error.message || "An error occurred");
+        setIsError(true);
+      }
     });
   };
 

@@ -1,10 +1,10 @@
-import { ActivityContext } from "@/contexts/ActivityContext";
 import { Activity } from "@prisma/client";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import ModalDialog from "../ui/ModalDialog";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
+import { useUpdateActivity } from "@/queries/activityQueries";
 
 interface ActivityEditFormProps {
   initialValues: Activity;
@@ -16,12 +16,13 @@ const ActivityEditForm = ({
   triggerButton,
 }: ActivityEditFormProps) => {
   const [error, setError] = useState<string | null>(null);
-  const { onUpdateActivity } = useContext(ActivityContext);
   const [isOpen, setIsOpen] = useState(false);
   const [newDuration, setNewDuration] = useState(initialValues.duration);
   const [newDescription, setNewDescription] = useState(
     initialValues.description || ""
   );
+
+  const { mutateAsync: updateActivity } = useUpdateActivity();
 
   const handleSubmit = async () => {
     setError(null);
@@ -30,7 +31,7 @@ const ActivityEditForm = ({
       duration: newDuration,
       description: newDescription,
     };
-    const response = await onUpdateActivity(newActivity);
+    const response = await updateActivity(newActivity);
     if (response.success) {
       setIsOpen(false);
     } else {
@@ -42,7 +43,7 @@ const ActivityEditForm = ({
     setNewDuration(initialValues.duration);
     setNewDescription(initialValues.description || "");
     setError(null);
-  }, [isOpen]);
+  }, [initialValues.description, initialValues.duration, isOpen]);
 
   return (
     <ModalDialog

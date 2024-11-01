@@ -1,23 +1,26 @@
 "use client";
 
-import { ActivityContext } from "@/contexts/ActivityContext";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ActivityListItem from "./ActivityListItem";
 import SelectSort from "../ui/SelectSort";
 import { sortArrayOfObjectsByKey } from "@/lib/utils";
 import { Activity } from "@prisma/client";
 import { ExtendedActivity } from "@/types/Entitities";
+import { useFetchActivities } from "@/queries/activityQueries";
 
 const ActivityList = () => {
-  const { activities } = useContext(ActivityContext);
-  const [sortedActivities, setSortedActivities] = useState(activities);
+  const { data: activities, isLoading, isError, error } = useFetchActivities();
+  const [sortedActivities, setSortedActivities] = useState(activities || []);
 
   useEffect(() => {
-    setSortedActivities(activities);
+    if (activities) {
+      setSortedActivities(activities);
+    }
   }, [activities]);
 
   const handleSort = useCallback(
     (sortBy: keyof Activity, direction: "asc" | "desc") => {
+      if (!activities) return;
       const sorted = sortArrayOfObjectsByKey<ExtendedActivity>(
         activities,
         sortBy,
@@ -38,6 +41,8 @@ const ActivityList = () => {
         ]}
         onSelect={handleSort}
       />
+      {isLoading && <div>Loading activities...</div>}
+      {isError && <div>Error loading activities: {error.message}</div>}
       <ul className="border rounded-sm">
         {sortedActivities.map((activity) => (
           <ActivityListItem key={activity.id} activity={activity} />

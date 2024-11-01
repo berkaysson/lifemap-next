@@ -1,26 +1,26 @@
 "use client";
 
-import { useContext } from "react";
 import { Button } from "../ui/button";
-import { ActivityContext } from "@/contexts/ActivityContext";
 import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
 import ActivityEditForm from "./AcitivityEditForm";
 import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
 import { ExtendedActivity } from "@/types/Entitities";
+import { useDeleteActivity } from "@/queries/activityQueries";
 
 const ActivityListItem = ({
   activity,
 }: {
   activity: ExtendedActivity;
 }) => {
-  const { onDeleteActivity } = useContext(ActivityContext);
+  const { mutateAsync: deleteActivity } = useDeleteActivity();
+
   const category = activity.category;
 
   const expired = isExpired(activity.date);
   const remained = getRemainingTime(activity.date);
 
   const handleDelete = async () => {
-    await onDeleteActivity(activity.id);
+    await deleteActivity(activity.id);
   };
 
   return (

@@ -1,0 +1,197 @@
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/components/ui/use-toast";
+import { ActivitySchema } from "@/schema";
+import {
+  createActivity,
+  deleteActivity,
+  getActivities,
+  updateActivity,
+} from "@/services/activityService";
+import { Activity } from "@prisma/client";
+import { useSession } from "next-auth/react";
+import { z } from "zod";
+import { validateSession } from "@/lib/session";
+import { ExtendedActivity } from "@/types/Entitities";
+import { TASK_QUERY_KEY } from "./taskQueries";
+import { HABIT_QUERY_KEY } from "./habitQueries";
+
+export const ACTIVITY_QUERY_KEY = "activities";
+
+// 1. Fetch Activities Query
+export const useFetchActivities = () => {
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+
+  return useQuery({
+    queryKey: [ACTIVITY_QUERY_KEY, userId],
+    queryFn: async () => {
+      validateSession(session);
+      const response = await getActivities(userId!);
+      if (!response.success) throw new Error(response.message);
+      return response.activities as ExtendedActivity[];
+    },
+    enabled: !!userId,
+    staleTime: 1000 * 60 * 5,
+  });
+};
+
+// 2. Create Activity Mutation
+export const useCreateActivity = () => {
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const userId = session?.user?.id;
+
+  return useMutation({
+    mutationFn: async (data: z.infer<typeof ActivitySchema>) => {
+      validateSession(session);
+      const response = await createActivity(data, userId!);
+      if (!response.success) throw new Error(response.message);
+      return response;
+    },
+    onSuccess: () => {
+      toast({
+        title: "Activity Created",
+        description: "Activity created successfully",
+        duration: 3000,
+      });
+
+      queryClient.invalidateQueries({ queryKey: [ACTIVITY_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: [HABIT_QUERY_KEY, userId] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Activity Not Created",
+        description:
+          error.message || "An error occurred while creating the activity.",
+        duration: 3000,
+        variant: "destructive",
+      });
+    },
+  });
+};
+
+// 3. Update Activity Mutation
+export const useUpdateActivity = () => {
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const userId = session?.user?.id;
+
+  return useMutation({
+    mutationFn: async (data: Activity) => {
+      validateSession(session);
+      const response = await updateActivity(data);
+      if (!response.success) throw new Error(response.message);
+      return response;
+    },
+    onMutate: async (updatedActivity) => {
+      await queryClient.cancelQueries({
+        queryKey: [ACTIVITY_QUERY_KEY, userId],
+      });
+
+      const previousActivities = queryClient.getQueryData([
+        ACTIVITY_QUERY_KEY,
+        userId,
+      ]);
+
+      queryClient.setQueryData(
+        [ACTIVITY_QUERY_KEY, userId],
+        (old: ExtendedActivity[] | undefined) => {
+          if (!old) return [updatedActivity];
+          return old.map((activity) =>
+            activity.id === updatedActivity.id
+              ? { ...activity, ...updatedActivity }
+              : activity
+          );
+        }
+      );
+
+      return { previousActivities };
+    },
+    onSuccess: () => {
+      toast({
+        title: "Activity Updated",
+        description: "Activity updated successfully",
+        duration: 3000,
+      });
+      queryClient.invalidateQueries({ queryKey: [ACTIVITY_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: [HABIT_QUERY_KEY, userId] });
+    },
+    onError: (error: any, _, context) => {
+      queryClient.setQueryData(
+        [ACTIVITY_QUERY_KEY, userId],
+        context?.previousActivities
+      );
+      toast({
+        title: "Activity Not Updated",
+        description:
+          error.message || "An error occurred while updating the activity.",
+        duration: 3000,
+        variant: "destructive",
+      });
+    },
+  });
+};
+
+// 4. Delete Activity Mutation
+export const useDeleteActivity = () => {
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const userId = session?.user?.id;
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      validateSession(session);
+      const response = await deleteActivity(id);
+      if (!response.success) throw new Error(response.message);
+      return response;
+    },
+    onMutate: async (deletedId) => {
+      await queryClient.cancelQueries({
+        queryKey: [ACTIVITY_QUERY_KEY, userId],
+      });
+
+      const previousActivities = queryClient.getQueryData([
+        ACTIVITY_QUERY_KEY,
+        userId,
+      ]);
+
+      queryClient.setQueryData(
+        [ACTIVITY_QUERY_KEY, userId],
+        (old: ExtendedActivity[] | undefined) => {
+          if (!old) return [];
+          return old.filter((activity) => activity.id !== deletedId);
+        }
+      );
+
+      return { previousActivities };
+    },
+    onSuccess: () => {
+      toast({
+        title: "Activity Deleted",
+        description: "Activity deleted successfully",
+        duration: 3000,
+      });
+      queryClient.invalidateQueries({ queryKey: [ACTIVITY_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: [HABIT_QUERY_KEY, userId] });
+    },
+    onError: (error: any, _, context) => {
+      queryClient.setQueryData(
+        [ACTIVITY_QUERY_KEY, userId],
+        context?.previousActivities
+      );
+      toast({
+        title: "Activity Not Deleted",
+        description:
+          error.message || "An error occurred while deleting the activity.",
+        duration: 3000,
+        variant: "destructive",
+      });
+    },
+  });
+};
