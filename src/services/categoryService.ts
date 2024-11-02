@@ -6,6 +6,7 @@ import {
 } from "@/data/category";
 import prisma from "@/lib/prisma";
 import { parseDate } from "@/lib/time";
+import { logService } from "@/lib/utils";
 import { CategorySchema } from "@/schema";
 import { Category } from "@prisma/client";
 import { z } from "zod";
@@ -14,6 +15,7 @@ export const createCategory = async (
   newCategory: z.infer<typeof CategorySchema>,
   userId: string
 ) => {
+  logService("createCategory");
   const validatedFields = CategorySchema.safeParse(newCategory);
 
   if (!validatedFields.success) {
@@ -56,6 +58,7 @@ export const createCategory = async (
 };
 
 export const getCategories = async (userId: string) => {
+  logService("getCategories");
   if (!userId) {
     return {
       message: "userId is required",
@@ -82,6 +85,7 @@ export const getCategories = async (userId: string) => {
 };
 
 export const updateCategory = async (data: Category) => {
+  logService("updateCategory");
   if (!data || !data.name || !data.id) {
     return {
       message: "data is required",
@@ -121,6 +125,7 @@ export const updateCategory = async (data: Category) => {
 };
 
 export const deleteCategory = async (id: string) => {
+  logService("deleteCategory");
   if (!id) {
     return {
       message: "id is required",

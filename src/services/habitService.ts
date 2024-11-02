@@ -12,6 +12,7 @@ import {
   parseDate,
   removeOneDay,
 } from "@/lib/time";
+import { logService } from "@/lib/utils";
 import { HabitSchema } from "@/schema";
 import { z } from "zod";
 
@@ -19,6 +20,7 @@ export const createHabit = async (
   newHabit: z.infer<typeof HabitSchema>,
   userId: string
 ) => {
+  logService("createHabit");
   const validatedFields = HabitSchema.safeParse(newHabit);
 
   if (!validatedFields.success) {
@@ -104,6 +106,7 @@ export const createHabit = async (
 };
 
 export const getHabits = async (userId: string) => {
+  logService("getHabits");
   if (!userId) {
     return {
       message: "userId is required",
@@ -133,9 +136,12 @@ export const getHabits = async (userId: string) => {
   }
 };
 
-export const updateHabit = async () => {};
+export const updateHabit = async () => {
+  logService("updateHabit");
+};
 
 export const deleteHabit = async (id: string) => {
+  logService("deleteHabit");
   if (!id) {
     return {
       message: "id is required",

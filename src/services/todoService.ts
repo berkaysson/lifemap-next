@@ -2,14 +2,16 @@
 
 import prisma from "@/lib/prisma";
 import { parseDate } from "@/lib/time";
+import { logService } from "@/lib/utils";
 import { TodoSchema } from "@/schema";
 import { ToDo } from "@prisma/client";
-import z from "zod";
+import { z } from "zod";
 
 export async function createToDo(
   data: z.infer<typeof TodoSchema>,
   _userId: string
 ) {
+  logService("createToDo");
   const validatedFields = TodoSchema.safeParse(data);
 
   if (!validatedFields.success) {
@@ -39,6 +41,7 @@ export async function createToDo(
 }
 
 export async function getToDos(userId: string | undefined) {
+  logService("getToDos");
   if (!userId) {
     return { message: "user is required", success: false };
   }
@@ -56,6 +59,7 @@ export async function getToDos(userId: string | undefined) {
 }
 
 export async function updateToDo(data: ToDo) {
+  logService("updateToDo");
   if (!data || !data.id) {
     return { message: "data is required", success: false };
   }
@@ -72,6 +76,7 @@ export async function updateToDo(data: ToDo) {
 }
 
 export async function deleteToDo(id: string) {
+  logService("deleteToDo");
   if (!id) {
     return { message: "id is required", success: false };
   }

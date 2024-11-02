@@ -21,3 +21,7 @@ export function sortArrayOfObjectsByKey<T>(
     return 0;
   });
 }
+
+export function logService(service: string) {
+  console.log(`Service: ${service}`);
+}

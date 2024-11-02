@@ -9,11 +9,13 @@ import { checkIsCategoryExistsByCategoryId } from "@/data/category";
 import { updateTasksCompletedDurationByActivityDate } from "@/data/task";
 import { updateHabitsCompletedDurationByActivityDate } from "@/data/habit";
 import { getActivityById, getActivityDuration } from "@/data/activity";
+import { logService } from "@/lib/utils";
 
 export const createActivity = async (
   newActivity: z.infer<typeof ActivitySchema>,
   userId: string
 ) => {
+  logService("createActivity");
   const validatedFields = ActivitySchema.safeParse(newActivity);
 
   if (!validatedFields.success) {
@@ -82,6 +84,7 @@ export const createActivity = async (
 };
 
 export const getActivities = async (userId: string) => {
+  logService("getActivities");
   if (!userId) {
     return {
       message: "userId is required",
@@ -111,6 +114,7 @@ export const getActivities = async (userId: string) => {
 };
 
 export const updateActivity = async (data: Activity) => {
+  logService("updateActivity");
   if (!data || !data.categoryId || !data.id) {
     return {
       message: "data is required",
@@ -188,6 +192,7 @@ export const updateActivity = async (data: Activity) => {
 };
 
 export const deleteActivity = async (id: string) => {
+  logService("deleteActivity");
   if (!id) {
     return {
       message: "id is required",

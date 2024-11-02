@@ -4,6 +4,7 @@ import { getActivitiesTotalDurationBetweenDates } from "@/data/activity";
 import { checkIsCategoryExistsByCategoryId } from "@/data/category";
 import prisma from "@/lib/prisma";
 import { checkIsStartDateBeforeEndDate, parseDate } from "@/lib/time";
+import { logService } from "@/lib/utils";
 import { TaskSchema } from "@/schema";
 import { Task } from "@prisma/client";
 import { z } from "zod";
@@ -12,6 +13,7 @@ export const createTask = async (
   newTask: z.infer<typeof TaskSchema>,
   userId: string
 ) => {
+  logService("createTask");
   const validatedFields = TaskSchema.safeParse(newTask);
 
   if (!validatedFields.success) {
@@ -88,6 +90,7 @@ export const createTask = async (
 };
 
 export const getTasks = async (userId: string) => {
+  logService("getTasks");
   if (!userId) {
     return {
       message: "userId is required",
@@ -117,6 +120,7 @@ export const getTasks = async (userId: string) => {
 };
 
 export const updateTask = async (taskId: string, data: Partial<Task>) => {
+  logService("updateTask");
   if (!taskId || Object.keys(data).length === 0) {
     return {
       message: "data is required",
@@ -193,6 +197,7 @@ export const updateTask = async (taskId: string, data: Partial<Task>) => {
 };
 
 export const deleteTask = async (id: string) => {
+  logService("deleteTask");
   if (!id) {
     return {
       message: "id is required",

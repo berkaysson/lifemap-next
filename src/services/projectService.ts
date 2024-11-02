@@ -2,6 +2,7 @@
 
 import { checkIsProjectExistByProjectName } from "@/data/project";
 import prisma from "@/lib/prisma";
+import { logService } from "@/lib/utils";
 import { ProjectSchema } from "@/schema";
 import { Project } from "@prisma/client";
 import { z } from "zod";
@@ -10,6 +11,7 @@ export const createProject = async (
   newProject: z.infer<typeof ProjectSchema>,
   userId: string
 ) => {
+  logService("createProject");
   const validatedFields = ProjectSchema.safeParse(newProject);
 
   if (!validatedFields.success) {
@@ -49,6 +51,7 @@ export const createProject = async (
 };
 
 export const getProjects = async (userId: string) => {
+  logService("getProjects");
   if (!userId) {
     return {
       message: "userId is required",
@@ -80,6 +83,7 @@ export const getProjects = async (userId: string) => {
 };
 
 export const updateProject = async (data: Project) => {
+  logService("updateProject");
   if (!data || !data.name || !data.id) {
     return {
       message: "data is required",
@@ -120,6 +124,7 @@ export const updateProject = async (data: Project) => {
 };
 
 export const deleteProject = async (id: string) => {
+  logService("deleteProject");
   if (!id) {
     return {
       message: "id is required",
@@ -146,6 +151,7 @@ export const deleteProject = async (id: string) => {
 };
 
 export const addToDoToProject = async (todoId: string, projectId: string) => {
+  logService("addToDoToProject");
   try {
     const project = await prisma.project.update({
       where: {
@@ -170,6 +176,7 @@ export const deleteToDoFromProject = async (
   todoId: string,
   projectId: string
 ) => {
+  logService("deleteToDoFromProject");
   try {
     const project = await prisma.project.update({
       where: {
@@ -191,6 +198,7 @@ export const deleteToDoFromProject = async (
 };
 
 export const addTaskToProject = async (taskId: string, projectId: string) => {
+  logService("addTaskToProject");
   try {
     const project = await prisma.project.update({
       where: {
@@ -215,6 +223,7 @@ export const deleteTaskFromProject = async (
   taskId: string,
   projectId: string
 ) => {
+  logService("deleteTaskFromProject");
   try {
     const project = await prisma.project.update({
       where: {
@@ -236,6 +245,7 @@ export const deleteTaskFromProject = async (
 };
 
 export const addHabitToProject = async (habitId: string, projectId: string) => {
+  logService("addHabitToProject");
   try {
     const project = await prisma.project.update({
       where: {
@@ -260,6 +270,7 @@ export const deleteHabitFromProject = async (
   habitId: string,
   projectId: string
 ) => {
+  logService("deleteHabitFromProject");
   try {
     const project = await prisma.project.update({
       where: {
