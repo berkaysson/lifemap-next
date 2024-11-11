@@ -34,6 +34,7 @@ export const createProject = async (
     await prisma.project.create({
       data: {
         name: newProject.name,
+        description: newProject.description,
         userId,
       },
     });
@@ -165,10 +166,16 @@ export const addToDoToProject = async (todoId: string, projectId: string) => {
         },
       },
     });
-    return project;
+    return {
+      message: "Successfully added todo to project",
+      success: true,
+      project,
+    };
   } catch (error) {
-    console.error(error);
-    throw error;
+    return {
+      message: `Failed to add todo to project: ${error}`,
+      success: false,
+    };
   }
 };
 
@@ -190,10 +197,16 @@ export const deleteToDoFromProject = async (
         },
       },
     });
-    return project;
+    return {
+      message: "Successfully removed todo from project",
+      success: true,
+      project,
+    };
   } catch (error) {
-    console.error(error);
-    throw error;
+    return {
+      message: `Failed to remove todo from project: ${error}`,
+      success: false,
+    };
   }
 };
 
@@ -212,10 +225,16 @@ export const addTaskToProject = async (taskId: string, projectId: string) => {
         },
       },
     });
-    return project;
+    return {
+      message: "Successfully added task to project",
+      success: true,
+      project,
+    };
   } catch (error) {
-    console.error(error);
-    throw error;
+    return {
+      message: `Failed to add task to project: ${error}`,
+      success: false,
+    };
   }
 };
 
@@ -237,10 +256,16 @@ export const deleteTaskFromProject = async (
         },
       },
     });
-    return project;
+    return {
+      message: "Successfully removed task from project",
+      success: true,
+      project,
+    };
   } catch (error) {
-    console.error(error);
-    throw error;
+    return {
+      message: `Failed to remove task from project: ${error}`,
+      success: false,
+    };
   }
 };
 
@@ -259,10 +284,16 @@ export const addHabitToProject = async (habitId: string, projectId: string) => {
         },
       },
     });
-    return project;
+    return {
+      message: "Successfully added habit to project",
+      success: true,
+      project,
+    };
   } catch (error) {
-    console.error(error);
-    throw error;
+    return {
+      message: `Failed to add habit to project: ${error}`,
+      success: false,
+    };
   }
 };
 
@@ -284,9 +315,15 @@ export const deleteHabitFromProject = async (
         },
       },
     });
-    return project;
+    return {
+      message: "Successfully removed habit from project",
+      success: true,
+      project,
+    };
   } catch (error) {
-    console.error(error);
-    throw error;
+    return {
+      message: `Failed to remove habit from project: ${error}`,
+      success: false,
+    };
   }
 };

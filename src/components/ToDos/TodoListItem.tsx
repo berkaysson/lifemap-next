@@ -1,13 +1,12 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Button } from "../ui/button";
 import { getRemainingTime, isExpired } from "@/lib/time";
 import IsCompleted from "../ui/IsCompleted";
 import ColorCircle from "../ui/ColorCircle";
 import TodoEditForm from "./TodoEditForm";
 import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
-import { ProjectContext } from "@/contexts/ProjectContext";
 import ProjectSelect from "../ui/ProjectSelect";
 import {
   TODO_QUERY_KEY,
@@ -15,36 +14,27 @@ import {
   useUpdateTodo,
 } from "@/queries/todoQueries";
 import { useQueryClient } from "@tanstack/react-query";
+import {
+  useFetchProjects,
+  useAddToDoToProject,
+  useRemoveToDoFromProject,
+} from "@/queries/projectQueries";
 
-const TodoListItem = ({
-  todo,
-}: {
-  todo: {
-    id: string;
-    name: string;
-    description: string | null;
-    colorCode: string | null;
-    completed: boolean;
-    startDate: Date;
-    endDate: Date;
-    userId: string;
-    projectId: string | null;
-  };
-}) => {
+const TodoListItem = ({ todo }) => {
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
     null
   );
 
+  const { data: projects = [] } = useFetchProjects();
   const { mutateAsync: deleteTodo } = useDeleteTodo();
   const updateTodoMutation = useUpdateTodo();
+  const addToProjectMutation = useAddToDoToProject();
+  const removeFromProjectMutation = useRemoveToDoFromProject();
   const queryClient = useQueryClient();
-  const { projects, onAddToDoToProject, onDeleteToDoFromProject } =
-    useContext(ProjectContext);
 
   const todoProject = projects.find((project) => project.id === todo.projectId);
-
   const expired = isExpired(todo.endDate);
-  let remained = getRemainingTime(todo.endDate);
+  const remained = getRemainingTime(todo.endDate);
 
   const handleDelete = async () => {
     await deleteTodo(todo.id);
@@ -55,18 +45,24 @@ const TodoListItem = ({
     await updateTodoMutation.mutateAsync(updatedTodo);
   };
 
-  const handleAddToProject = () => {
+  const handleAddToProject = async () => {
     if (selectedProjectId && !todoProject) {
-      onAddToDoToProject(todo.id, selectedProjectId);
+      await addToProjectMutation.mutateAsync({
+        entityId: todo.id,
+        projectId: selectedProjectId,
+      });
       queryClient.invalidateQueries({
         queryKey: [TODO_QUERY_KEY, todo.userId],
       });
     }
   };
 
-  const handleDeleteFromProject = () => {
+  const handleDeleteFromProject = async () => {
     if (todoProject) {
-      onDeleteToDoFromProject(todo.id, todoProject.id);
+      await removeFromProjectMutation.mutateAsync({
+        entityId: todo.id,
+        projectId: todoProject.id,
+      });
       queryClient.invalidateQueries({
         queryKey: [TODO_QUERY_KEY, todo.userId],
       });
@@ -98,6 +94,7 @@ const TodoListItem = ({
                 variant={"outline"}
                 size={"sm"}
                 onClick={handleDeleteFromProject}
+                disabled={removeFromProjectMutation.isPending}
               >
                 Remove
               </Button>
@@ -108,7 +105,9 @@ const TodoListItem = ({
                 onSelect={(projectId) => setSelectedProjectId(projectId)}
               />
               <Button
-                disabled={selectedProjectId === null}
+                disabled={
+                  selectedProjectId === null || addToProjectMutation.isPending
+                }
                 onClick={handleAddToProject}
                 size={"sm"}
                 variant={"outline"}

@@ -1,10 +1,10 @@
-import { ProjectContext } from "@/contexts/ProjectContext";
 import { Project } from "@prisma/client";
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import ModalDialog from "../ui/ModalDialog";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { useUpdateProject } from "@/queries/projectQueries";
 
 interface ProjectEditFormProps {
   initialValues: Project;
@@ -16,42 +16,36 @@ const ProjectEditForm = ({
   triggerButton,
 }: ProjectEditFormProps) => {
   const [error, setError] = useState<string | null>(null);
-  const { onUpdateProject } = useContext(ProjectContext);
   const [isOpen, setIsOpen] = useState(false);
   const [newProject, setNewProject] = useState<Project>(initialValues);
+  const updateProjectMutation = useUpdateProject();
 
   const handleSubmit = async () => {
     setError(null);
-
-    const response = await onUpdateProject(newProject);
-    if (response.success) {
+    try {
+      await updateProjectMutation.mutateAsync(newProject);
       setIsOpen(false);
-    } else {
-      setError(response.message);
+    } catch (error: any) {
+      setError(error.message || "Failed to update project");
     }
   };
 
-  const handleFieldChange = (value: any, field: keyof Project) => {
-    if (initialValues[field] === value) return;
-    setNewProject({ ...newProject, [field]: value });
+  const handleFieldChange = (value: string, field: keyof Project) => {
+    setNewProject((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
-
-  useEffect(() => {
-    setNewProject({
-      ...initialValues,
-    });
-    setError(null);
-  }, [isOpen]);
 
   return (
     <ModalDialog
-      triggerButton={triggerButton}
-      title="Edit project"
-      description="Edit your project or new tasks, todos, and habits"
+      title="Edit Project"
+      description="Edit your project"
       isOpen={isOpen}
       setIsOpen={setIsOpen}
+      triggerButton={triggerButton}
     >
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4">
         <Label>Name</Label>
         <Input
           type="text"
@@ -59,6 +53,7 @@ const ProjectEditForm = ({
           onChange={(e) => handleFieldChange(e.target.value, "name")}
           min={3}
           placeholder="My project..."
+          disabled={updateProjectMutation.isPending}
         />
 
         <Label>Description</Label>
@@ -68,12 +63,18 @@ const ProjectEditForm = ({
           onChange={(e) => handleFieldChange(e.target.value, "description")}
           min={3}
           placeholder="My project is a great project..."
+          disabled={updateProjectMutation.isPending}
         />
 
         {error && <p className="text-red-500">{error}</p>}
 
-        <Button variant={"outline"} size={"sm"} onClick={handleSubmit}>
-          Save
+        <Button 
+          variant={"outline"} 
+          size={"sm"} 
+          onClick={handleSubmit}
+          disabled={updateProjectMutation.isPending}
+        >
+          {updateProjectMutation.isPending ? "Saving..." : "Save"}
         </Button>
       </div>
     </ModalDialog>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./select";
-import { ProjectContext } from "@/contexts/ProjectContext";
+import { useFetchProjects } from "@/queries/projectQueries";
 
 interface ProjectSelectProps {
   onSelect: (projectId: string) => void;
@@ -19,7 +19,7 @@ const ProjectSelect: React.FC<ProjectSelectProps> = ({
   onSelect,
   defaultValue,
 }) => {
-  const { projects } = useContext(ProjectContext);
+  const { data: projects = [] } = useFetchProjects();
   const [selectedProjectId, setSelectedProjectId] = useState("");
 
   const handleProjectChange = (projectId: string) => {

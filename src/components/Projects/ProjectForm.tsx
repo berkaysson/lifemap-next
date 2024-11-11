@@ -6,7 +6,7 @@ import { Input } from "../ui/input";
 import { ProjectSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useContext, useState, useTransition } from "react";
+import { useState } from "react";
 import {
   Form,
   FormControl,
@@ -15,11 +15,10 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { ProjectContext } from "@/contexts/ProjectContext";
+import { useCreateProject } from "@/queries/projectQueries";
 
 const ProjectForm = () => {
-  const { onCreateProject } = useContext(ProjectContext);
-  const [isPending, startTransition] = useTransition();
+  const createProjectMutation = useCreateProject();
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
 
@@ -27,25 +26,24 @@ const ProjectForm = () => {
     resolver: zodResolver(ProjectSchema),
     defaultValues: {
       name: "",
+      description: "",
     },
   });
 
   const { reset } = form;
 
-  const onSubmit = (data: z.infer<typeof ProjectSchema>) => {
-    startTransition(() => {
-      onCreateProject(data).then((response: any) => {
-        if (response.message) {
-          setMessage(response.message);
-          if (response.success) {
-            setIsError(false);
-            reset();
-          } else {
-            setIsError(true);
-          }
-        }
-      });
-    });
+  const onSubmit = async (data: z.infer<typeof ProjectSchema>) => {
+    try {
+      const response = await createProjectMutation.mutateAsync(data);
+      if (response.success) {
+        setIsError(false);
+        setMessage("Project created successfully");
+        reset();
+      }
+    } catch (error: any) {
+      setIsError(true);
+      setMessage(error.message || "Failed to create project");
+    }
   };
 
   return (
@@ -62,7 +60,7 @@ const ProjectForm = () => {
                   <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
-                      disabled={isPending}
+                      disabled={createProjectMutation.isPending}
                       {...field}
                       placeholder="My project..."
                       type="text"
@@ -85,7 +83,7 @@ const ProjectForm = () => {
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Input
-                      disabled={isPending}
+                      disabled={createProjectMutation.isPending}
                       {...field}
                       placeholder="My project to improve my skills..."
                       type="text"
@@ -101,15 +99,19 @@ const ProjectForm = () => {
             />
           </div>
 
-          {message && isError && <FormMessage>{message}</FormMessage>}
+          {message && (
+            <FormMessage className={isError ? "text-red-500" : "text-green-500"}>
+              {message}
+            </FormMessage>
+          )}
 
           <Button
-            disabled={isPending}
+            disabled={createProjectMutation.isPending}
             variant="default"
             type="submit"
             className="w-full"
           >
-            Create
+            {createProjectMutation.isPending ? "Creating..." : "Create"}
           </Button>
         </form>
       </Form>

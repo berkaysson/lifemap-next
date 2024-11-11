@@ -1,7 +1,6 @@
 "use client";
 
-import { useContext } from "react";
-import { ProjectContext } from "@/contexts/ProjectContext";
+import { useDeleteProject, useRemoveToDoFromProject, useRemoveTaskFromProject, useRemoveHabitFromProject } from "@/queries/projectQueries";
 import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
 import { ExtendedProject } from "@/types/Entitities";
 import ProjectEditForm from "./ProjectEditForm";
@@ -11,18 +10,16 @@ import { useFetchTasks } from "@/queries/taskQueries";
 import { useFetchHabits } from "@/queries/habitQueries";
 
 const ProjectListItem = ({ project }: { project: ExtendedProject }) => {
-  const {
-    onDeleteProject,
-    onDeleteHabitFromProject,
-    onDeleteTaskFromProject,
-    onDeleteToDoFromProject,
-  } = useContext(ProjectContext);
+  const deleteProjectMutation = useDeleteProject();
   const { data: todos } = useFetchTodos();
   const { data: tasks } = useFetchTasks();
   const { data: habits } = useFetchHabits();
+  const removeToDoMutation = useRemoveToDoFromProject();
+  const removeTaskMutation = useRemoveTaskFromProject();
+  const removeHabitMutation = useRemoveHabitFromProject();
 
   const handleDelete = async () => {
-    await onDeleteProject(project.id);
+    await deleteProjectMutation.mutateAsync(project.id);
   };
 
   const { todos: _, tasks: __, habits: ___, ...projectOnly } = project;
@@ -51,7 +48,10 @@ const ProjectListItem = ({ project }: { project: ExtendedProject }) => {
                   <Button
                     variant={"outline"}
                     size={"sm"}
-                    onClick={() => onDeleteToDoFromProject(todo.id, project.id)}
+                    onClick={() => removeToDoMutation.mutate({ 
+                      entityId: todo.id, 
+                      projectId: project.id 
+                    })}
                   >
                     Remove
                   </Button>
@@ -71,7 +71,10 @@ const ProjectListItem = ({ project }: { project: ExtendedProject }) => {
                   <Button
                     variant={"outline"}
                     size={"sm"}
-                    onClick={() => onDeleteTaskFromProject(task.id, project.id)}
+                    onClick={() => removeTaskMutation.mutate({ 
+                      entityId: task.id, 
+                      projectId: project.id 
+                    })}
                   >
                     Remove
                   </Button>
@@ -91,9 +94,10 @@ const ProjectListItem = ({ project }: { project: ExtendedProject }) => {
                   <Button
                     variant={"outline"}
                     size={"sm"}
-                    onClick={() =>
-                      onDeleteHabitFromProject(habit.id, project.id)
-                    }
+                    onClick={() => removeHabitMutation.mutate({ 
+                      entityId: habit.id, 
+                      projectId: project.id 
+                    })}
                   >
                     Remove
                   </Button>

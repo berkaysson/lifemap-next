@@ -1,22 +1,25 @@
 "use client";
 
-import { ProjectContext } from "@/contexts/ProjectContext";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ProjectListItem from "./ProjectListItem";
 import { sortArrayOfObjectsByKey } from "@/lib/utils";
 import SelectSort from "../ui/SelectSort";
 import { ExtendedProject } from "@/types/Entitities";
+import { useFetchProjects } from "@/queries/projectQueries";
 
 const ProjectList = () => {
-  const { projects } = useContext(ProjectContext);
-  const [sortedProjects, setSortedProjects] = useState(projects);
+  const { data: projects, isLoading, isError, error } = useFetchProjects();
+  const [sortedProjects, setSortedProjects] = useState(projects || []);
 
   useEffect(() => {
-    setSortedProjects(projects);
+    if (projects) {
+      setSortedProjects(projects);
+    }
   }, [projects]);
 
   const handleSort = useCallback(
     (sortBy: keyof ExtendedProject, direction: "asc" | "desc") => {
+      if (!projects) return;
       const sorted = sortArrayOfObjectsByKey<ExtendedProject>(
         projects,
         sortBy,
@@ -30,9 +33,7 @@ const ProjectList = () => {
   return (
     <div className="flex flex-col gap-2 m-2">
       <SelectSort
-        options={[
-          { value: "name", label: "Name" },
-        ]}
+        options={[{ value: "name", label: "Name" }]}
         onSelect={handleSort}
       />
       <ul className="border rounded-sm">

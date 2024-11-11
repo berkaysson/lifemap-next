@@ -15,10 +15,14 @@ import {
 import { ChevronsUpDown } from "lucide-react";
 import HabitProgressesList from "./HabitProgressesList";
 import { ExtendedHabit } from "@/types/Entitities";
-import { ProjectContext } from "@/contexts/ProjectContext";
-import ProjectSelect from "../ui/ProjectSelect";
+import {
+  useFetchProjects,
+  useAddHabitToProject,
+  useRemoveHabitFromProject,
+} from "@/queries/projectQueries";
 import { useQueryClient } from "@tanstack/react-query";
 import { HABIT_QUERY_KEY, useDeleteHabit } from "@/queries/habitQueries";
+import ProjectSelect from "../ui/ProjectSelect";
 
 const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
   const [isHabitProgressesCollapsed, setIsHabitProgressesCollapsed] =
@@ -29,8 +33,9 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
 
   const { mutateAsync: deleteHabit } = useDeleteHabit();
   const queryClient = useQueryClient();
-  const { projects, onAddHabitToProject, onDeleteHabitFromProject } =
-    useContext(ProjectContext);
+  const { data: projects = [] } = useFetchProjects();
+  const addToProjectMutation = useAddHabitToProject();
+  const removeFromProjectMutation = useRemoveHabitFromProject();
 
   const habitProject = projects.find(
     (project) => project.id === habit.projectId
@@ -45,18 +50,24 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
     await deleteHabit(habit.id);
   };
 
-  const handleAddToProject = () => {
+  const handleAddToProject = async () => {
     if (selectedProjectId && !habitProject) {
-      onAddHabitToProject(habit.id, selectedProjectId);
+      await addToProjectMutation.mutateAsync({
+        entityId: habit.id,
+        projectId: selectedProjectId,
+      });
       queryClient.invalidateQueries({
         queryKey: [HABIT_QUERY_KEY, habit.userId],
       });
     }
   };
 
-  const handleDeleteFromProject = () => {
+  const handleDeleteFromProject = async () => {
     if (habitProject) {
-      onDeleteHabitFromProject(habit.id, habitProject.id);
+      await removeFromProjectMutation.mutateAsync({
+        entityId: habit.id,
+        projectId: habitProject.id,
+      });
       queryClient.invalidateQueries({
         queryKey: [HABIT_QUERY_KEY, habit.userId],
       });
