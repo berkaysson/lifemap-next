@@ -90,3 +90,63 @@ export async function deleteToDo(id: string) {
     return { message: `${error}`, success: false };
   }
 }
+
+export async function archiveToDo(id: string) {
+  logService("archiveToDo");
+  if (!id) {
+    return { message: "id is required", success: false };
+  }
+
+  try {
+    // Get the todo with its project
+    const todo = await prisma.toDo.findUnique({
+      where: { id },
+    });
+
+    if (!todo) {
+      return { message: "Todo not found", success: false };
+    }
+
+    // Create archived version
+    await prisma.archivedToDo.create({
+      data: {
+        name: todo.name,
+        description: todo.description,
+        colorCode: todo.colorCode,
+        completed: todo.completed,
+        startDate: todo.startDate,
+        endDate: todo.endDate,
+        userId: todo.userId,
+        projectId: todo.projectId,
+      },
+    });
+
+    // Delete the original todo
+    await prisma.toDo.delete({
+      where: { id },
+    });
+
+    return { message: "Successfully archived todo", success: true };
+  } catch (error) {
+    return { message: `${error}`, success: false };
+  }
+}
+
+export async function getArchivedToDos(userId: string) {
+  logService("getArchivedToDos");
+  try {
+    const archivedTodos = await prisma.archivedToDo.findMany({
+      where: { userId },
+      include: {
+        project: true,
+      },
+    });
+    return {
+      message: "Successfully fetched archived todos",
+      success: true,
+      archivedTodos,
+    };
+  } catch (error) {
+    return { message: `${error}`, success: false };
+  }
+}

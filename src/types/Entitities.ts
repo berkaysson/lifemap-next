@@ -1,5 +1,6 @@
 import {
   Activity,
+  ArchivedToDo,
   Category,
   Habit,
   HabitProgress,
@@ -25,6 +26,10 @@ export interface ExtendedProject extends Project {
   todos: ToDo[];
   tasks: Task[];
   habits: Habit[];
+}
+
+export interface ExtendedArchivedToDo extends ArchivedToDo {
+  project: Project;
 }
 
 export type EntityType = "todo" | "task" | "habit";

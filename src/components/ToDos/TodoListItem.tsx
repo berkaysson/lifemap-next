@@ -12,6 +12,7 @@ import {
   TODO_QUERY_KEY,
   useDeleteTodo,
   useUpdateTodo,
+  useArchiveTodo,
 } from "@/queries/todoQueries";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -31,6 +32,7 @@ const TodoListItem = ({ todo }) => {
   const addToProjectMutation = useAddToDoToProject();
   const removeFromProjectMutation = useRemoveToDoFromProject();
   const queryClient = useQueryClient();
+  const { mutateAsync: archiveTodo } = useArchiveTodo();
 
   const todoProject = projects.find((project) => project.id === todo.projectId);
   const expired = isExpired(todo.endDate);
@@ -67,6 +69,10 @@ const TodoListItem = ({ todo }) => {
         queryKey: [TODO_QUERY_KEY, todo.userId],
       });
     }
+  };
+
+  const handleArchive = async () => {
+    await archiveTodo(todo.id);
   };
 
   return (
@@ -130,7 +136,9 @@ const TodoListItem = ({ todo }) => {
             </Button>
           }
         />
-
+        <Button variant={"outline"} size={"sm"} onClick={handleArchive}>
+          Archive
+        </Button>
         <ButtonWithConfirmation
           variant="destructive"
           size={"sm"}

@@ -6,6 +6,8 @@ import {
   deleteToDo,
   getToDos,
   updateToDo,
+  archiveToDo,
+  getArchivedToDos,
 } from "@/services/todoService";
 import { ToDo } from "@prisma/client";
 import { z } from "zod";
@@ -172,5 +174,78 @@ export const useDeleteTodo = () => {
         variant: "destructive",
       });
     },
+  });
+};
+
+// 5. Archive Todo Mutation
+export const useArchiveTodo = () => {
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const userId = session?.user?.id;
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      validateSession(session);
+      const response = await archiveToDo(id);
+      if (!response.success) throw new Error(response.message);
+      return response;
+    },
+    onMutate: async (archivedId) => {
+      await queryClient.cancelQueries({ queryKey: [TODO_QUERY_KEY, userId] });
+
+      const previousTodos = queryClient.getQueryData([TODO_QUERY_KEY, userId]);
+
+      queryClient.setQueryData(
+        [TODO_QUERY_KEY, userId],
+        (old: ToDo[] | undefined) => {
+          if (!old) return [];
+          return old.filter((todo) => todo.id !== archivedId);
+        }
+      );
+
+      return { previousTodos };
+    },
+    onSuccess: () => {
+      toast({
+        title: "Todo Archived",
+        description: "Todo archived successfully",
+        duration: 3000,
+      });
+      queryClient.invalidateQueries({ queryKey: [TODO_QUERY_KEY, userId] });
+      // Also invalidate archived todos query if it exists
+      queryClient.invalidateQueries({ queryKey: ["archivedTodos", userId] });
+    },
+    onError: (error: any, _, context) => {
+      queryClient.setQueryData(
+        [TODO_QUERY_KEY, userId],
+        context?.previousTodos
+      );
+      toast({
+        title: "Todo Not Archived",
+        description:
+          error.message || "An error occurred while archiving the todo.",
+        duration: 3000,
+        variant: "destructive",
+      });
+    },
+  });
+};
+
+// 6. Fetch Archived Todos Query
+export const useFetchArchivedTodos = () => {
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+
+  return useQuery({
+    queryKey: ["archivedTodos", userId],
+    queryFn: async () => {
+      validateSession(session);
+      const response = await getArchivedToDos(userId!);
+      if (!response.success) throw new Error(response.message);
+      return response.archivedTodos;
+    },
+    enabled: !!userId,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 };

@@ -21,10 +21,10 @@ const DashboardPage = () => {
       <p>Project List</p>
       <ProjectList />
 
-      <p>Habit Form</p>
+      {/* <p>Habit Form</p>
       <HabitForm />
       <p>Habit List</p>
-      <HabitList />
+      <HabitList /> */}
 
       <p>Task Form</p>
       <TaskForm />
@@ -41,10 +41,10 @@ const DashboardPage = () => {
       <p>Category List</p>
       <CategoryList />
 
-      <p>Todo Form</p>
+      {/* <p>Todo Form</p>
       <TodoForm />
       <p>Todo List</p>
-      <TodoList />
+      <TodoList /> */}
     </div>
   );
 };
