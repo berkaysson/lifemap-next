@@ -172,12 +172,71 @@ model HabitProgress {
 }
 
 model Project {
-    id          String  @id @default(cuid())
+    id             String          @id @default(cuid())
+    name           String
+    description    String?
+    tasks          Task[]
+    todos          ToDo[]
+    userId         String
+    user           User            @relation(fields: [userId], references: [id])
+    habits         Habit[]
+    archivedTodos  ArchivedToDo[]
+    archivedTasks  ArchivedTask[]
+    archivedHabits ArchivedHabit[]
+}
+
+model ArchivedToDo {
+    id          String   @id @default(cuid())
     name        String
     description String?
-    tasks       Task[]
-    todos       ToDo[]
+    colorCode   String?
+    completed   Boolean
+    startDate   DateTime
+    endDate     DateTime
     userId      String
-    user        User    @relation(fields: [userId], references: [id])
-    habits      Habit[]
+    project     Project? @relation(fields: [projectId], references: [id])
+    projectId   String?
+
+    archivedAt DateTime @default(now())
+}
+
+model ArchivedTask {
+    id                String   @id @default(cuid())
+    name              String
+    description       String?
+    colorCode         String?
+    completed         Boolean
+    completedDuration Int
+    goalDuration      Int
+    startDate         DateTime
+    endDate           DateTime
+    categoryId        String
+    categoryName      String
+    userId            String
+    project           Project? @relation(fields: [projectId], references: [id])
+    projectId         String?
+
+    archivedAt DateTime @default(now())
+}
+
+model ArchivedHabit {
+    id                    String   @id @default(cuid())
+    name                  String
+    description           String?
+    colorCode             String?
+    completed             Boolean
+    period                Period
+    numberOfPeriods       Int
+    startDate             DateTime
+    endDate               DateTime
+    goalDurationPerPeriod Int
+    currentStreak         Int
+    bestStreak            Int
+    categoryId            String
+    categoryName          String
+    userId                String
+    project               Project? @relation(fields: [projectId], references: [id])
+    projectId             String?
+
+    archivedAt DateTime @default(now())
 }
