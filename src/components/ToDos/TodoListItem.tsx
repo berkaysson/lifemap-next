@@ -136,14 +136,17 @@ const TodoListItem = ({ todo }) => {
             </Button>
           }
         />
-        <Button variant={"outline"} size={"sm"} onClick={handleArchive}>
-          Archive
-        </Button>
         <ButtonWithConfirmation
           variant="destructive"
           size={"sm"}
           buttonText={"Delete"}
           onConfirm={handleDelete}
+        />
+        <ButtonWithConfirmation
+          variant="destructive"
+          size={"sm"}
+          buttonText={"Archive"}
+          onConfirm={handleArchive}
         />
       </div>
     </li>

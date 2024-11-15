@@ -8,8 +8,16 @@ import IsCompleted from "../ui/IsCompleted";
 import ColorCircle from "../ui/ColorCircle";
 import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
 import { ExtendedTask } from "@/types/Entitities";
-import { useFetchProjects, useAddTaskToProject, useRemoveTaskFromProject } from "@/queries/projectQueries";
-import { TASK_QUERY_KEY, useDeleteTask } from "@/queries/taskQueries";
+import {
+  useFetchProjects,
+  useAddTaskToProject,
+  useRemoveTaskFromProject,
+} from "@/queries/projectQueries";
+import {
+  TASK_QUERY_KEY,
+  useDeleteTask,
+  useArchiveTask,
+} from "@/queries/taskQueries";
 import { useQueryClient } from "@tanstack/react-query";
 import ProjectSelect from "../ui/ProjectSelect";
 
@@ -19,6 +27,7 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
   );
 
   const { mutateAsync: deleteTask } = useDeleteTask();
+  const { mutateAsync: archiveTask } = useArchiveTask();
   const queryClient = useQueryClient();
   const { data: projects = [] } = useFetchProjects();
   const addToProjectMutation = useAddTaskToProject();
@@ -38,9 +47,11 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
     if (selectedProjectId && !taskProject) {
       await addToProjectMutation.mutateAsync({
         entityId: task.id,
-        projectId: selectedProjectId
+        projectId: selectedProjectId,
       });
-      queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEY, task.userId] });
+      queryClient.invalidateQueries({
+        queryKey: [TASK_QUERY_KEY, task.userId],
+      });
     }
   };
 
@@ -48,10 +59,16 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
     if (taskProject) {
       await removeFromProjectMutation.mutateAsync({
         entityId: task.id,
-        projectId: taskProject.id
+        projectId: taskProject.id,
       });
-      queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEY, task.userId] });
+      queryClient.invalidateQueries({
+        queryKey: [TASK_QUERY_KEY, task.userId],
+      });
     }
+  };
+
+  const handleArchive = async () => {
+    await archiveTask(task.id);
   };
 
   return (
@@ -116,6 +133,12 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
           size={"sm"}
           buttonText={"Delete"}
           onConfirm={handleDelete}
+        />
+        <ButtonWithConfirmation
+          variant="destructive"
+          size={"sm"}
+          buttonText={"Archive"}
+          onConfirm={handleArchive}
         />
       </div>
     </li>

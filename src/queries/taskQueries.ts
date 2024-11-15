@@ -6,6 +6,8 @@ import {
   deleteTask,
   getTasks,
   updateTask,
+  archiveTask,
+  getArchivedTasks,
 } from "@/services/taskService";
 import { ExtendedTask } from "@/types/Entitities";
 import { Task } from "@prisma/client";
@@ -173,5 +175,77 @@ export const useDeleteTask = () => {
         variant: "destructive",
       });
     },
+  });
+};
+
+// 5. Archive Task Mutation
+export const useArchiveTask = () => {
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const userId = session?.user?.id;
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      validateSession(session);
+      const response = await archiveTask(id);
+      if (!response.success) throw new Error(response.message);
+      return response;
+    },
+    onMutate: async (archivedId) => {
+      await queryClient.cancelQueries({ queryKey: [TASK_QUERY_KEY, userId] });
+
+      const previousTasks = queryClient.getQueryData([TASK_QUERY_KEY, userId]);
+
+      queryClient.setQueryData(
+        [TASK_QUERY_KEY, userId],
+        (old: ExtendedTask[] | undefined) => {
+          if (!old) return [];
+          return old.filter((task) => task.id !== archivedId);
+        }
+      );
+
+      return { previousTasks };
+    },
+    onSuccess: () => {
+      toast({
+        title: "Task Archived",
+        description: "Task archived successfully",
+        duration: 3000,
+      });
+      queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: ["archivedTasks", userId] });
+    },
+    onError: (error: any, _, context) => {
+      queryClient.setQueryData(
+        [TASK_QUERY_KEY, userId],
+        context?.previousTasks
+      );
+      toast({
+        title: "Task Not Archived",
+        description:
+          error.message || "An error occurred while archiving the task.",
+        duration: 3000,
+        variant: "destructive",
+      });
+    },
+  });
+};
+
+// 6. Fetch Archived Tasks Query
+export const useFetchArchivedTasks = () => {
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+
+  return useQuery({
+    queryKey: ["archivedTasks", userId],
+    queryFn: async () => {
+      validateSession(session);
+      const response = await getArchivedTasks(userId!);
+      if (!response.success) throw new Error(response.message);
+      return response.archivedTasks;
+    },
+    enabled: !!userId,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 };
