@@ -21,7 +21,7 @@ import {
   useRemoveHabitFromProject,
 } from "@/queries/projectQueries";
 import { useQueryClient } from "@tanstack/react-query";
-import { HABIT_QUERY_KEY, useDeleteHabit } from "@/queries/habitQueries";
+import { HABIT_QUERY_KEY, useDeleteHabit, useArchiveHabit } from "@/queries/habitQueries";
 import ProjectSelect from "../ui/ProjectSelect";
 
 const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
@@ -32,6 +32,7 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
   );
 
   const { mutateAsync: deleteHabit } = useDeleteHabit();
+  const { mutateAsync: archiveHabit } = useArchiveHabit();
   const queryClient = useQueryClient();
   const { data: projects = [] } = useFetchProjects();
   const addToProjectMutation = useAddHabitToProject();
@@ -72,6 +73,10 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
         queryKey: [HABIT_QUERY_KEY, habit.userId],
       });
     }
+  };
+
+  const handleArchive = async () => {
+    await archiveHabit(habit.id);
   };
 
   return (
@@ -133,6 +138,12 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
           size={"sm"}
           buttonText={"Delete"}
           onConfirm={handleDelete}
+        />
+        <ButtonWithConfirmation
+          variant="destructive"
+          size={"sm"}
+          buttonText={"Archive"}
+          onConfirm={handleArchive}
         />
       </div>
       <div>

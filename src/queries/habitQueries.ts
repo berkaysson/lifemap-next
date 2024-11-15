@@ -1,7 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { HabitSchema } from "@/schema";
-import { createHabit, deleteHabit, getHabits } from "@/services/habitService";
+import {
+  createHabit,
+  deleteHabit,
+  getHabits,
+  archiveHabit,
+  getArchivedHabits,
+} from "@/services/habitService";
 import { ExtendedHabit } from "@/types/Entitities";
 import { Habit } from "@prisma/client";
 import { useSession } from "next-auth/react";
@@ -178,5 +184,80 @@ export const useDeleteHabit = () => {
         variant: "destructive",
       });
     },
+  });
+};
+
+// 5. Archive Habit Mutation
+export const useArchiveHabit = () => {
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const userId = session?.user?.id;
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      validateSession(session);
+      const response = await archiveHabit(id);
+      if (!response.success) throw new Error(response.message);
+      return response;
+    },
+    onMutate: async (archivedId) => {
+      await queryClient.cancelQueries({ queryKey: [HABIT_QUERY_KEY, userId] });
+
+      const previousHabits = queryClient.getQueryData([
+        HABIT_QUERY_KEY,
+        userId,
+      ]);
+
+      queryClient.setQueryData(
+        [HABIT_QUERY_KEY, userId],
+        (old: ExtendedHabit[] | undefined) => {
+          if (!old) return [];
+          return old.filter((habit) => habit.id !== archivedId);
+        }
+      );
+
+      return { previousHabits };
+    },
+    onSuccess: () => {
+      toast({
+        title: "Habit Archived",
+        description: "Habit archived successfully",
+        duration: 3000,
+      });
+      queryClient.invalidateQueries({ queryKey: [HABIT_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: ["archivedHabits", userId] });
+    },
+    onError: (error: any, _, context) => {
+      queryClient.setQueryData(
+        [HABIT_QUERY_KEY, userId],
+        context?.previousHabits
+      );
+      toast({
+        title: "Habit Not Archived",
+        description:
+          error.message || "An error occurred while archiving the habit.",
+        duration: 3000,
+        variant: "destructive",
+      });
+    },
+  });
+};
+
+// 6. Fetch Archived Habits Query
+export const useFetchArchivedHabits = () => {
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+
+  return useQuery({
+    queryKey: ["archivedHabits", userId],
+    queryFn: async () => {
+      validateSession(session);
+      const response = await getArchivedHabits(userId!);
+      if (!response.success) throw new Error(response.message);
+      return response.archivedHabits;
+    },
+    enabled: !!userId,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 };
