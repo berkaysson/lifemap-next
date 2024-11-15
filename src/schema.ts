@@ -17,12 +17,12 @@ export const passwordSchema = z
 
 export const LoginSchema = z.object({
   email: z.string().email().min(1, "Email is required"),
-  password: z.string().min(6, "Password too short"),
+  password: z.string().min(3, "Password too short"),
 });
 
 export const RegisterSchema = z.object({
   email: z.string().email().min(1, "Email is required"),
-  password: passwordSchema,
+  password: z.string().min(3, "Password too short"), // change here later to passwordSchema
   name: z.string().min(1, "Name is required"),
 });
 
@@ -31,7 +31,7 @@ export const ResetSchema = z.object({
 });
 
 export const NewPasswordSchema = z.object({
-  password: passwordSchema,
+  password: z.string().min(3, "Password too short"), // change here later to passwordSchema
 });
 
 export const TodoSchema = z.object({

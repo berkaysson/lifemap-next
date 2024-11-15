@@ -12,10 +12,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       if (!user.id) return false;
       const existingUser = await getUserById(user.id);
-      if (!existingUser || existingUser.emailVerified === null) {
-        return false;
-      }
-
+      // activate verification later
+      // if (!existingUser || existingUser.emailVerified === null) {
+      //   return false;
+      // }
+      
       return true;
     },
     async session({ token, session }) {
