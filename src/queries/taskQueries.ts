@@ -8,6 +8,7 @@ import {
   updateTask,
   archiveTask,
   getArchivedTasks,
+  deleteArchivedTask,
 } from "@/services/taskService";
 import { ExtendedTask } from "@/types/Entitities";
 import { Task } from "@prisma/client";
@@ -247,5 +248,40 @@ export const useFetchArchivedTasks = () => {
     },
     enabled: !!userId,
     staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+};
+
+// 7. Delete Archived Task Mutation
+export const useDeleteArchivedTask = () => {
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const userId = session?.user?.id;
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      validateSession(session);
+      const response = await deleteArchivedTask(id);
+      if (!response.success) throw new Error(response.message);
+      return response;
+    },
+    onSuccess: () => {
+      toast({
+        title: "Archived Task Deleted",
+        description: "Archived task deleted successfully",
+        duration: 3000,
+      });
+      queryClient.invalidateQueries({ queryKey: ["archivedTasks", userId] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Archived Task Not Deleted",
+        description:
+          error.message ||
+          "An error occurred while deleting the archived task.",
+        duration: 3000,
+        variant: "destructive",
+      });
+    },
   });
 };

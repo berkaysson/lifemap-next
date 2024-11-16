@@ -311,3 +311,19 @@ export async function getArchivedTasks(userId: string) {
     };
   }
 }
+
+export async function deleteArchivedTask(id: string) {
+  logService("deleteArchivedTask");
+  if (!id) {
+    return { message: "id is required", success: false };
+  }
+
+  try {
+    await prisma.archivedTask.delete({
+      where: { id },
+    });
+    return { message: "Successfully deleted archived task", success: true };
+  } catch (error) {
+    return { message: `Failed to delete archived task: ${error}`, success: false };
+  }
+}

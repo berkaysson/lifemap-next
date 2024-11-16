@@ -7,6 +7,7 @@ import {
   getHabits,
   archiveHabit,
   getArchivedHabits,
+  deleteArchivedHabit,
 } from "@/services/habitService";
 import { ExtendedHabit } from "@/types/Entitities";
 import { Habit } from "@prisma/client";
@@ -259,5 +260,40 @@ export const useFetchArchivedHabits = () => {
     },
     enabled: !!userId,
     staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+};
+
+// 7. Delete Archived Habit Mutation
+export const useDeleteArchivedHabit = () => {
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const userId = session?.user?.id;
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      validateSession(session);
+      const response = await deleteArchivedHabit(id);
+      if (!response.success) throw new Error(response.message);
+      return response;
+    },
+    onSuccess: () => {
+      toast({
+        title: "Archived Habit Deleted",
+        description: "Archived habit deleted successfully",
+        duration: 3000,
+      });
+      queryClient.invalidateQueries({ queryKey: ["archivedHabits", userId] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Archived Habit Not Deleted",
+        description:
+          error.message ||
+          "An error occurred while deleting the archived habit.",
+        duration: 3000,
+        variant: "destructive",
+      });
+    },
   });
 };

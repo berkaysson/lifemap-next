@@ -8,6 +8,7 @@ import {
   updateToDo,
   archiveToDo,
   getArchivedToDos,
+  deleteArchivedToDo,
 } from "@/services/todoService";
 import { ToDo } from "@prisma/client";
 import { z } from "zod";
@@ -247,5 +248,40 @@ export const useFetchArchivedTodos = () => {
     },
     enabled: !!userId,
     staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+};
+
+// 7. Delete Archived Todo Mutation
+export const useDeleteArchivedTodo = () => {
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const userId = session?.user?.id;
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      validateSession(session);
+      const response = await deleteArchivedToDo(id);
+      if (!response.success) throw new Error(response.message);
+      return response;
+    },
+    onSuccess: () => {
+      toast({
+        title: "Archived Todo Deleted",
+        description: "Archived todo deleted successfully",
+        duration: 3000,
+      });
+      queryClient.invalidateQueries({ queryKey: ["archivedTodos", userId] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Archived Todo Not Deleted",
+        description:
+          error.message ||
+          "An error occurred while deleting the archived todo.",
+        duration: 3000,
+        variant: "destructive",
+      });
+    },
   });
 };

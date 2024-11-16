@@ -272,3 +272,22 @@ export async function getArchivedHabits(userId: string) {
     };
   }
 }
+
+export async function deleteArchivedHabit(id: string) {
+  logService("deleteArchivedHabit");
+  if (!id) {
+    return { message: "id is required", success: false };
+  }
+
+  try {
+    await prisma.archivedHabit.delete({
+      where: { id },
+    });
+    return { message: "Successfully deleted archived habit", success: true };
+  } catch (error) {
+    return {
+      message: `Failed to delete archived habit: ${error}`,
+      success: false,
+    };
+  }
+}

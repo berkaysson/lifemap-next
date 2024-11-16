@@ -150,3 +150,19 @@ export async function getArchivedToDos(userId: string) {
     return { message: `${error}`, success: false };
   }
 }
+
+export async function deleteArchivedToDo(id: string) {
+  logService("deleteArchivedToDo");
+  if (!id) {
+    return { message: "id is required", success: false };
+  }
+
+  try {
+    await prisma.archivedToDo.delete({
+      where: { id },
+    });
+    return { message: "Successfully deleted archived todo", success: true };
+  } catch (error) {
+    return { message: `Failed to delete archived todo: ${error}`, success: false };
+  }
+}
