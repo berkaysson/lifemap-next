@@ -129,23 +129,21 @@ const calculateProgress = async (
 const calculateStreaks = async (habitId: string) => {
   const habitProgresses = await prisma.habitProgress.findMany({
     where: { habitId },
-    orderBy: { startDate: "asc" },
+    orderBy: { startDate: "desc" },
   });
 
   let currentStreak = 0;
   let bestStreak = 0;
-  let prevCompleted = false;
+  let tempStreak = 0;
+
+  // Calculate current streak, streak should contain today
 
   for (const progress of habitProgresses) {
     if (progress.completed) {
-      currentStreak++;
-      bestStreak = Math.max(bestStreak, currentStreak);
-      prevCompleted = true;
+      tempStreak++;
+      bestStreak = Math.max(bestStreak, tempStreak);
     } else {
-      if (prevCompleted) {
-        currentStreak = 0;
-      }
-      prevCompleted = false;
+      tempStreak = 0;
     }
   }
 
