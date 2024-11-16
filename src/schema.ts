@@ -37,7 +37,13 @@ export const NewPasswordSchema = z.object({
 export const TodoSchema = z.object({
   name: z.string().min(1, "Title is required"),
   description: z.string().optional(),
-  endDate: z.string().date().min(1, "Due date is required"),
+  endDate: z
+    .string()
+    .datetime()
+    .refine(
+      (date) => new Date(date) > new Date(),
+      "Due date must be in the future"
+    ),
   colorCode: z.string().optional(),
 });
 
@@ -52,15 +58,26 @@ export const ActivitySchema = z.object({
   date: z.string().date().min(1, "Date is required"),
 });
 
-export const TaskSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  description: z.string().optional(),
-  startDate: z.string().date().min(1, "Start date is required"),
-  endDate: z.string().date().min(1, "Due date is required"),
-  colorCode: z.string().optional(),
-  goalDuration: z.number().min(1, "Goal duration is required"),
-  categoryId: z.string().min(1, "Category is required"),
-});
+export const TaskSchema = z
+  .object({
+    name: z.string().min(1, "Name is required"),
+    description: z.string().optional(),
+    startDate: z.string().datetime(),
+    endDate: z
+      .string()
+      .datetime()
+      .refine(
+        (date) => new Date(date) > new Date(),
+        "Due date must be in the future"
+      ),
+    colorCode: z.string().optional(),
+    goalDuration: z.number().min(1, "Goal duration is required"),
+    categoryId: z.string().min(1, "Category is required"),
+  })
+  .refine((data) => new Date(data.startDate) < new Date(data.endDate), {
+    message: "Start date must be before end date",
+    path: ["startDate"],
+  });
 
 export const HabitSchema = z.object({
   name: z.string().min(1, "Name is required"),
