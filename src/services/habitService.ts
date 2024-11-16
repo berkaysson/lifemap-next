@@ -4,7 +4,7 @@ import {
   createHabitProgresses,
   updateHabitCompleted,
   validateHabitPeriodAndDate,
-} from "@/data/habit";
+} from "@/helpers/habit";
 import prisma from "@/lib/prisma";
 import {
   calculateEndDateWithPeriod,

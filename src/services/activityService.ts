@@ -5,10 +5,10 @@ import { parseDate } from "@/lib/time";
 import { ActivitySchema } from "@/schema";
 import { Activity } from "@prisma/client";
 import { z } from "zod";
-import { checkIsCategoryExistsByCategoryId } from "@/data/category";
-import { updateTasksCompletedDurationByActivityDate } from "@/data/task";
-import { updateHabitsCompletedDurationByActivityDate } from "@/data/habit";
-import { getActivityById, getActivityDuration } from "@/data/activity";
+import { checkIsCategoryExistsByCategoryId } from "@/helpers/category";
+import { updateTasksCompletedDurationByActivityDate } from "@/helpers/task";
+import { updateHabitsCompletedDurationByActivityDate } from "@/helpers/habit";
+import { getActivityById, getActivityDuration } from "@/helpers/activity";
 import { logService } from "@/lib/utils";
 
 export const createActivity = async (

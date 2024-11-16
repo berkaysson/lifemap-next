@@ -1,7 +1,7 @@
 "use server";
 
-import { getResetPasswordTokenByToken } from "@/data/reset-password-token";
-import { getUserByEmail } from "@/data/user";
+import { getResetPasswordTokenByToken } from "@/helpers/reset-password-token";
+import { getUserByEmail } from "@/helpers/user";
 import prisma from "@/lib/prisma";
 import { NewPasswordSchema } from "@/schema";
 import { z } from "zod";

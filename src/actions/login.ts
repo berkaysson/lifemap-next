@@ -1,8 +1,8 @@
 "use server";
 
 import { signIn } from "@/auth";
-import { generateVerificationToken } from "@/data/tokens";
-import { getUserByEmail } from "@/data/user";
+import { generateVerificationToken } from "@/helpers/tokens";
+import { getUserByEmail } from "@/helpers/user";
 import { sendVerificationEmail } from "@/lib/mail";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";

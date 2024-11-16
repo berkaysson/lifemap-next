@@ -1,7 +1,7 @@
 "use server";
 
-import { getActivitiesTotalDurationBetweenDates } from "@/data/activity";
-import { checkIsCategoryExistsByCategoryId } from "@/data/category";
+import { getActivitiesTotalDurationBetweenDates } from "@/helpers/activity";
+import { checkIsCategoryExistsByCategoryId } from "@/helpers/category";
 import prisma from "@/lib/prisma";
 import { checkIsStartDateBeforeEndDate, parseDate } from "@/lib/time";
 import { logService } from "@/lib/utils";

@@ -1,7 +1,7 @@
 "use server";
 
-import { generateVerificationToken } from "@/data/tokens";
-import { getUserByEmail } from "@/data/user";
+import { generateVerificationToken } from "@/helpers/tokens";
+import { getUserByEmail } from "@/helpers/user";
 import prisma from "@/lib/prisma";
 import { sendVerificationEmail } from "@/lib/mail";
 import { z } from "zod";

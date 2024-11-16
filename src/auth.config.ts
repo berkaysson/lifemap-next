@@ -4,7 +4,7 @@ import google from "next-auth/providers/google";
 import { LoginSchema } from "./schema";
 import { NextAuthConfig } from "next-auth";
 import bcrypt from "bcryptjs";
-import { getUserByEmail } from "./data/user";
+import { getUserByEmail } from "./helpers/user";
 
 export default {
   providers: [

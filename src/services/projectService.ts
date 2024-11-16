@@ -1,6 +1,6 @@
 "use server";
 
-import { checkIsProjectExistByProjectName } from "@/data/project";
+import { checkIsProjectExistByProjectName } from "@/helpers/project";
 import prisma from "@/lib/prisma";
 import { logService } from "@/lib/utils";
 import { ProjectSchema } from "@/schema";
