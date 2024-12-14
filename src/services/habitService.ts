@@ -1,7 +1,7 @@
 "use server";
 
 import {
-  createHabitProgresses,
+  calculateProgress,
   updateHabitCompleted,
   validateHabitPeriodAndDate,
 } from "@/helpers/habit";
@@ -14,6 +14,8 @@ import {
 } from "@/lib/time";
 import { logService } from "@/lib/utils";
 import { HabitSchema } from "@/schema";
+import { Habit, HabitProgress } from "@prisma/client";
+import { addDays } from "date-fns";
 import { z } from "zod";
 
 export const createHabit = async (
@@ -184,6 +186,42 @@ export const deleteHabit = async (id: string) => {
       message: `Failed to delete Habit: ${error}`,
       success: false,
     };
+  }
+};
+
+const createHabitProgresses = async (habit: Habit) => {
+  let currentDate = habit.startDate;
+  const progresses: HabitProgress[] = [];
+  let order = 1;
+  let currentStreak = 0;
+  let bestStreak = 0;
+
+  while (currentDate <= habit.endDate) {
+    logService("createHabitProgresses");
+    const progress = await calculateProgress(habit, currentDate, order);
+
+    if (progress.completed) {
+      currentStreak++;
+      bestStreak = Math.max(bestStreak, currentStreak);
+    } else {
+      currentStreak = 0;
+    }
+
+    progresses.push(progress);
+    currentDate = addDays(progress.endDate, 1);
+    order++;
+  }
+
+  try {
+    await prisma.habitProgress.createMany({ data: progresses });
+    if (currentStreak > 0 || bestStreak > 0) {
+      await prisma.habit.update({
+        where: { id: habit.id },
+        data: { currentStreak, bestStreak },
+      });
+    }
+  } catch (error) {
+    throw error;
   }
 };
 

@@ -26,41 +26,6 @@ export const updateHabitsCompletedDurationByActivityDate = async (
   );
 };
 
-export const createHabitProgresses = async (habit: Habit) => {
-  let currentDate = habit.startDate;
-  const progresses: HabitProgress[] = [];
-  let order = 1;
-  let currentStreak = 0;
-  let bestStreak = 0;
-
-  while (currentDate <= habit.endDate) {
-    const progress = await calculateProgress(habit, currentDate, order);
-
-    if (progress.completed) {
-      currentStreak++;
-      bestStreak = Math.max(bestStreak, currentStreak);
-    } else {
-      currentStreak = 0;
-    }
-
-    progresses.push(progress);
-    currentDate = addDays(progress.endDate, 1);
-    order++;
-  }
-
-  try {
-    await prisma.habitProgress.createMany({ data: progresses });
-    if (currentStreak > 0 || bestStreak > 0) {
-      await prisma.habit.update({
-        where: { id: habit.id },
-        data: { currentStreak, bestStreak },
-      });
-    }
-  } catch (error) {
-    throw error;
-  }
-};
-
 export const updateHabitCompleted = async (habitId: string) => {
   const isHabitCompleted = await calculateIsHabitCompleted(habitId);
   const { currentStreak, bestStreak } = await calculateStreaks(habitId);
@@ -97,7 +62,7 @@ const updateHabitProgress = async (
   await updateHabitCompleted(habitProgress.habitId);
 };
 
-const calculateProgress = async (
+export const calculateProgress = async (
   habit: Habit,
   currentDate: Date,
   order: number
