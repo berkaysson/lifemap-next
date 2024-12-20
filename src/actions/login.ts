@@ -9,6 +9,7 @@ import { AuthError } from "next-auth";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { LoginSchema } from "@/schema";
+import { archiveOutdatedEntities } from "@/services/archiveService";
 
 export const login = async (data: z.infer<typeof LoginSchema>) => {
   // Validate the login data
@@ -56,6 +57,10 @@ export const login = async (data: z.infer<typeof LoginSchema>) => {
       password,
       redirect: false,
     });
+
+    // Archive outdated entities
+    await archiveOutdatedEntities();
+
     return { message: "Login successful!", success: true };
   } catch (error) {
     // If there's an authentication error, handle it

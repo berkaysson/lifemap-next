@@ -240,3 +240,11 @@ model ArchivedHabit {
 
     archivedAt DateTime @default(now())
 }
+
+model FunctionExecution {
+    id        String   @id @default(cuid())
+    name      String   @unique
+    lastRun   DateTime @default(now())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
