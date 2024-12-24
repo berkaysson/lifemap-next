@@ -190,6 +190,22 @@ export const deleteHabit = async (id: string) => {
 };
 
 const createHabitProgresses = async (habit: Habit) => {
+  // Fetch all activities once
+  const activities = await prisma.activity.findMany({
+    where: {
+      userId: habit.userId,
+      categoryId: habit.categoryId,
+      date: {
+        gte: habit.startDate,
+        lte: habit.endDate,
+      },
+    },
+    select: {
+      date: true,
+      duration: true,
+    },
+  });
+
   let currentDate = habit.startDate;
   const progresses: HabitProgress[] = [];
   let order = 1;
@@ -198,7 +214,12 @@ const createHabitProgresses = async (habit: Habit) => {
 
   while (currentDate <= habit.endDate) {
     logService("createHabitProgresses");
-    const progress = await calculateProgress(habit, currentDate, order);
+    const progress = await calculateProgress(
+      habit,
+      currentDate,
+      order,
+      activities
+    );
 
     if (progress.completed) {
       currentStreak++;

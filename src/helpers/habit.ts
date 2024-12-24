@@ -65,14 +65,14 @@ const updateHabitProgress = async (
 export const calculateProgress = async (
   habit: Habit,
   currentDate: Date,
-  order: number
+  order: number,
+  activities: { date: Date; duration: number }[]
 ) => {
   const endDate = getEndDate(habit.period, currentDate);
   const correctedEndDate = removeOneDay(endDate);
 
-  const completedDuration = await getActivitiesTotalDurationBetweenDates(
-    habit.userId,
-    habit.categoryId,
+  const completedDuration = calculateTotalDurationForDateRange(
+    activities,
     currentDate,
     correctedEndDate
   );
@@ -89,6 +89,19 @@ export const calculateProgress = async (
     categoryId: habit.categoryId,
     goalDuration: habit.goalDurationPerPeriod,
   } as HabitProgress;
+};
+
+const calculateTotalDurationForDateRange = (
+  activities: { date: Date; duration: number }[],
+  startDate: Date,
+  endDate: Date
+): number => {
+  return activities
+    .filter(
+      (activity) =>
+        activity.date >= startDate && activity.date <= endDate
+    )
+    .reduce((total, activity) => total + activity.duration, 0);
 };
 
 const calculateStreaks = async (habitId: string) => {
