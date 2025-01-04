@@ -1,12 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { ActivitySchema } from "@/schema";
-import {
-  createActivity,
-  deleteActivity,
-  getActivities,
-  updateActivity,
-} from "@/services/activityService";
 import { Activity } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { z } from "zod";
@@ -14,6 +8,10 @@ import { validateSession } from "@/lib/session";
 import { ExtendedActivity } from "@/types/Entitities";
 import { TASK_QUERY_KEY } from "./taskQueries";
 import { HABIT_QUERY_KEY } from "./habitQueries";
+import { getActivities } from "@/services/activity/getActivites";
+import { createActivity } from "@/services/activity/createActivity";
+import { updateActivity } from "@/services/activity/updateActivity";
+import { deleteActivity } from "@/services/activity/deleteActivity";
 
 export const ACTIVITY_QUERY_KEY = "activities";
 

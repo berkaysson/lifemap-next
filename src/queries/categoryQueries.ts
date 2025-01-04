@@ -1,16 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { CategorySchema } from "@/schema";
-import {
-  createCategory,
-  deleteCategory,
-  getCategories,
-  updateCategory,
-} from "@/services/categoryService";
 import { Category } from "@prisma/client";
 import { z } from "zod";
 import { useSession } from "next-auth/react";
 import { validateSession } from "@/lib/session";
+import { getCategories } from "@/services/category/getCategories";
+import { createCategory } from "@/services/category/createCategory";
+import { updateCategory } from "@/services/category/updateCategory";
+import { deleteCategory } from "@/services/category/deleteCategory";
 
 export const CATEGORY_QUERY_KEY = "categories";
 

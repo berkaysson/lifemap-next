@@ -1,20 +1,20 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { TaskSchema } from "@/schema";
-import {
-  createTask,
-  deleteTask,
-  getTasks,
-  updateTask,
-  archiveTask,
-  getArchivedTasks,
-  deleteArchivedTask,
-} from "@/services/taskService";
 import { ExtendedTask } from "@/types/Entitities";
 import { Task } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { z } from "zod";
 import { validateSession } from "@/lib/session";
+import { getTasks } from "@/services/task/getTasks";
+import { createTask } from "@/services/task/createTask";
+import { updateTask } from "@/services/task/updateTask";
+import { deleteTask } from "@/services/task/deleteTask";
+import {
+  archiveTask,
+  deleteArchivedTask,
+  getArchivedTasks,
+} from "@/services/task/archiveTask";
 
 export const TASK_QUERY_KEY = "tasks";
 

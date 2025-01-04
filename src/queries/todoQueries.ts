@@ -1,19 +1,19 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { TodoSchema } from "@/schema";
-import {
-  createToDo,
-  deleteToDo,
-  getToDos,
-  updateToDo,
-  archiveToDo,
-  getArchivedToDos,
-  deleteArchivedToDo,
-} from "@/services/todoService";
 import { ToDo } from "@prisma/client";
 import { z } from "zod";
 import { useSession } from "next-auth/react";
 import { validateSession } from "@/lib/session";
+import { getToDos } from "@/services/todo/getTodos";
+import { createToDo } from "@/services/todo/createTodo";
+import { updateToDo } from "@/services/todo/updateTodo";
+import { deleteToDo } from "@/services/todo/deleteTodo";
+import {
+  archiveToDo,
+  deleteArchivedToDo,
+  getArchivedToDos,
+} from "@/services/todo/archiveTodo";
 
 export const TODO_QUERY_KEY = "todos";
 

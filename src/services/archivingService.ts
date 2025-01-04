@@ -3,9 +3,9 @@
 import prisma from "@/lib/prisma";
 import { logService } from "@/lib/utils";
 import { subDays } from "date-fns";
-import { archiveHabit } from "./habitService";
-import { archiveTask } from "./taskService";
-import { archiveToDo } from "./todoService";
+import { archiveToDo } from "./todo/archiveTodo";
+import { archiveTask } from "./task/archiveTask";
+import { archiveHabit } from "./habit/archiveHabits";
 
 async function trackFunctionExecution(functionName: string) {
   try {
@@ -42,11 +42,11 @@ export async function getLastExecutionTime(functionName: string) {
 
 export async function archiveOutdatedEntities() {
   logService("archiveOutdatedEntities");
-  
+
   try {
-    const lastRun = await getLastExecutionTime('archiveOutdatedEntities');
+    const lastRun = await getLastExecutionTime("archiveOutdatedEntities");
     const minimumInterval = 1000 * 60 * 60 * 24; // 24 hours
-    
+
     if (lastRun && Date.now() - lastRun.getTime() < minimumInterval) {
       return {
         message: "Archive check was performed recently",
@@ -92,7 +92,7 @@ export async function archiveOutdatedEntities() {
     ];
 
     await Promise.all(archivePromises);
-    await trackFunctionExecution('archiveOutdatedEntities');
+    await trackFunctionExecution("archiveOutdatedEntities");
 
     return {
       message: "Successfully archived outdated entities",

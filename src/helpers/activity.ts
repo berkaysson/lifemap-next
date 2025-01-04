@@ -10,16 +10,6 @@ export const getActivityDuration = async (activityId: string) => {
   return oldActivity?.duration;
 };
 
-export const getActivityById = async (activityId: string) => {
-  const activity = await prisma.activity.findFirst({
-    where: {
-      id: activityId,
-    },
-  });
-
-  return activity;
-};
-
 export const getActivitiesTotalDurationBetweenDates = async (
   userId: string,
   categoryId: string,

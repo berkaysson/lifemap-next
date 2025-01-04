@@ -1,28 +1,26 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { ProjectSchema } from "@/schema";
-import {
-  createProject,
-  deleteProject,
-  getProjects,
-  updateProject,
-  addToDoToProject,
-  addTaskToProject,
-  addHabitToProject,
-  deleteToDoFromProject,
-  deleteTaskFromProject,
-  deleteHabitFromProject,
-} from "@/services/projectService";
-import {
-  EntityAction,
-  EntityMutationConfig,
-  EntityType,
-  ExtendedProject,
-} from "@/types/Entitities";
+
+import { EntityMutationConfig, ExtendedProject } from "@/types/Entitities";
 import { Project } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { z } from "zod";
 import { validateSession } from "@/lib/session";
+import { getProjects } from "@/services/project/getProjects";
+import { createProject } from "@/services/project/createProject";
+import { updateProject } from "@/services/project/updateProject";
+import { deleteProject } from "@/services/project/deleteProject";
+import {
+  addHabitToProject,
+  addTaskToProject,
+  addToDoToProject,
+} from "@/services/project/addEntityToProject";
+import {
+  deleteHabitFromProject,
+  deleteTaskFromProject,
+  deleteToDoFromProject,
+} from "@/services/project/deleteEntitityFromProject";
 
 export const PROJECT_QUERY_KEY = "projects";
 

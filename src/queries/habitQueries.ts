@@ -1,19 +1,15 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { HabitSchema } from "@/schema";
-import {
-  createHabit,
-  deleteHabit,
-  getHabits,
-  archiveHabit,
-  getArchivedHabits,
-  deleteArchivedHabit,
-} from "@/services/habitService";
 import { ExtendedHabit } from "@/types/Entitities";
 import { Habit } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { z } from "zod";
 import { validateSession } from "@/lib/session";
+import { getHabits } from "@/services/habit/getHabits";
+import { createHabit } from "@/services/habit/createHabit";
+import { deleteHabit } from "@/services/habit/deleteHabit";
+import { archiveHabit, deleteArchivedHabit, getArchivedHabits } from "@/services/habit/archiveHabits";
 
 export const HABIT_QUERY_KEY = "habits";
 

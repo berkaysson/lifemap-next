@@ -9,7 +9,7 @@ import { AuthError } from "next-auth";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { LoginSchema } from "@/schema";
-import { archiveOutdatedEntities } from "@/services/archiveService";
+import { archiveOutdatedEntities } from "@/services/archivingService";
 
 export const login = async (data: z.infer<typeof LoginSchema>) => {
   // Validate the login data
