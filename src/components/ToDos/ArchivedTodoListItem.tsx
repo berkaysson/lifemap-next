@@ -7,7 +7,7 @@ import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
 import { useDeleteArchivedTodo } from "@/queries/todoQueries";
 
 const ArchivedTodoListItem = ({ todo }) => {
-  const expired = isExpired(todo.endDate);
+  const expired = todo.endDate && isExpired(todo.endDate);
   const deleteArchivedTodo = useDeleteArchivedTodo();
 
   const handleDelete = () => {
@@ -20,7 +20,9 @@ const ArchivedTodoListItem = ({ todo }) => {
         <div className="flex flex-col gap-2">
           <div>
             <span className="mr-2 text-xl flex gap-2">
-              <IsCompleted isCompleted={todo.completed} isExpired={expired} />
+              {todo.endDate && (
+                <IsCompleted isCompleted={todo.completed} isExpired={expired} />
+              )}
               <ColorCircle colorCode={todo.colorCode || "darkblue"} />
             </span>
             <span>{todo.name}</span>
@@ -28,7 +30,9 @@ const ArchivedTodoListItem = ({ todo }) => {
           {todo.description && <div>{todo.description}</div>}
           <div className="text-sm text-muted-foreground">
             <div>Start: {todo.startDate.toLocaleDateString()}</div>
-            <div>Due: {todo.endDate.toLocaleDateString()}</div>
+            {todo.endDate && (
+              <div>Due: {todo.endDate.toLocaleDateString()}</div>
+            )}
             <div>Archived: {todo.archivedAt.toLocaleDateString()}</div>
           </div>
           {todo.project && (
