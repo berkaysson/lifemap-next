@@ -114,9 +114,15 @@ const TodoForm = () => {
                       type="date"
                     />
                   </FormControl>
+                  {form.formState.errors.endDate && (
+                    <FormMessage>
+                      {form.formState.errors.endDate.message}
+                    </FormMessage>
+                  )}
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="colorCode"

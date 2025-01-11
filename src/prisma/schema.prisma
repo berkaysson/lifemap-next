@@ -88,7 +88,7 @@ model ToDo {
     colorCode   String?
     completed   Boolean  @default(false)
     startDate   DateTime
-    endDate     DateTime
+    endDate     DateTime?
     userId      String
     user        User     @relation(fields: [userId], references: [id])
     Project     Project? @relation(fields: [projectId], references: [id])
@@ -192,7 +192,7 @@ model ArchivedToDo {
     colorCode   String?
     completed   Boolean
     startDate   DateTime
-    endDate     DateTime
+    endDate     DateTime?
     userId      String
     project     Project? @relation(fields: [projectId], references: [id])
     projectId   String?

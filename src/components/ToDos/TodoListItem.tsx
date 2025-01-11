@@ -36,7 +36,7 @@ const TodoListItem = ({ todo }) => {
 
   const todoProject = projects.find((project) => project.id === todo.projectId);
   const expired = isExpired(todo.endDate);
-  const remained = getRemainingTime(todo.endDate);
+  const remained = todo.endDate && getRemainingTime(todo.endDate);
 
   const handleDelete = async () => {
     await deleteTodo(todo.id);
@@ -86,8 +86,8 @@ const TodoListItem = ({ todo }) => {
           <span>{todo.name}</span>
         </div>
         <div>{todo.description}</div>
-        <span>{todo.endDate.toISOString().slice(0, 10)}</span>
-        {!todo.completed && (
+        <span>{todo.endDate && todo.endDate.toISOString().slice(0, 10)}</span>
+        {!todo.completed && todo.endDate && (
           <span>
             {remained} {expired ? "expired" : "remaining"}
           </span>

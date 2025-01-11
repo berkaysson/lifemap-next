@@ -39,10 +39,12 @@ export const TodoSchema = z.object({
   description: z.string().optional(),
   endDate: z
     .string()
-    .datetime()
+    .optional()
     .refine(
-      (date) => new Date(date) > new Date(),
-      "Due date must be in the future"
+      (date) => !date || new Date(date) > new Date(),
+      {
+        message: "Due date must be in the future",
+      }
     ),
   colorCode: z.string().optional(),
 });
@@ -62,10 +64,10 @@ export const TaskSchema = z
   .object({
     name: z.string().min(1, "Name is required"),
     description: z.string().optional(),
-    startDate: z.string().datetime(),
+    startDate: z.string().date(),
     endDate: z
       .string()
-      .datetime()
+      .date()
       .refine(
         (date) => new Date(date) > new Date(),
         "Due date must be in the future"

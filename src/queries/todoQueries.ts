@@ -78,7 +78,7 @@ export const useUpdateTodo = () => {
   const userId = session?.user?.id;
 
   return useMutation({
-    mutationFn: async (data: ToDo) => {
+    mutationFn: async (data: Partial<ToDo>) => {
       validateSession(session);
       const response = await updateToDo(data);
       if (!response.success) throw new Error(response.message);
