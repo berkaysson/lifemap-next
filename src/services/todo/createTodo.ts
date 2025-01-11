@@ -11,30 +11,41 @@ export async function createToDo(
   _userId: string
 ) {
   logService("createToDo");
-  const validatedFields = TodoSchema.safeParse(data);
 
+  const validatedFields = TodoSchema.safeParse(data);
   if (!validatedFields.success) {
     return { message: "Invalid fields!", success: false };
   }
 
-  try {
-    const { name, description, colorCode, endDate } = validatedFields.data;
+  const {
+    name,
+    description = undefined,
+    colorCode = "#000000",
+    endDate,
+  } = validatedFields.data;
 
+  const startDate = parseDate(new Date().toISOString());
+  const parsedEndDate = endDate && parseDate(endDate);
+
+  try {
     await prisma.toDo.create({
       data: {
-        name: name,
+        name,
         completed: false,
-        startDate: parseDate(new Date().toISOString()),
-        endDate: parseDate(endDate),
+        startDate,
+        endDate: parsedEndDate || undefined,
         userId: _userId,
-        description: description || undefined,
-        colorCode: colorCode || "#000000",
+        description,
+        colorCode,
         projectId: undefined,
       },
     });
 
     return { message: "Successfully created todo", success: true };
-  } catch (error) {
-    return { message: `${error}`, success: false };
+  } catch (error: any) {
+    return {
+      message: `Failed to create todo: ${error.message}`,
+      success: false,
+    };
   }
 }
