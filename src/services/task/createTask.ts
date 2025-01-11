@@ -1,7 +1,5 @@
 "use server";
 
-import { getActivitiesTotalDurationBetweenDates } from "@/helpers/activity";
-import { checkIsCategoryExistsByCategoryId } from "@/helpers/category";
 import prisma from "@/lib/prisma";
 import { checkIsStartDateBeforeEndDate, parseDate } from "@/lib/time";
 import { logService } from "@/lib/utils";
@@ -16,47 +14,43 @@ export const createTask = async (
   const validatedFields = TaskSchema.safeParse(newTask);
 
   if (!validatedFields.success) {
-    return {
-      message: "Invalid fields!",
-      success: false,
-    };
-  }
-
-  const isCategoryExist = await checkIsCategoryExistsByCategoryId(
-    newTask.categoryId,
-    userId
-  );
-
-  if (!isCategoryExist) {
-    return {
-      message: "Category does not exist",
-      success: false,
-    };
+    return { message: "Invalid fields!", success: false };
   }
 
   if (newTask.goalDuration < 0) {
-    return {
-      message: "Goal duration cannot be negative",
-      success: false,
-    };
+    return { message: "Goal duration cannot be negative", success: false };
   }
 
   const startDate = parseDate(newTask.startDate);
   const endDate = parseDate(newTask.endDate);
 
   if (!checkIsStartDateBeforeEndDate(startDate, endDate)) {
-    return {
-      message: "Start date cannot be greater than due",
-      success: false,
-    };
+    return { message: "Start date cannot be greater than due", success: false };
   }
 
   try {
-    const completedDuration = await getActivitiesTotalDurationBetweenDates(
-      userId,
-      newTask.categoryId,
-      startDate,
-      endDate
+    const categoryWithActivities = await prisma.category.findFirst({
+      where: { id: newTask.categoryId, userId },
+      include: {
+        activities: {
+          where: {
+            date: {
+              gte: startDate,
+              lte: endDate,
+            },
+          },
+          select: { duration: true },
+        },
+      },
+    });
+
+    if (!categoryWithActivities) {
+      return { message: "Category does not exist", success: false };
+    }
+
+    const completedDuration = categoryWithActivities.activities.reduce(
+      (total, activity) => total + activity.duration,
+      0
     );
 
     const completed = completedDuration >= newTask.goalDuration;
@@ -76,13 +70,11 @@ export const createTask = async (
         completed,
       },
     });
+
+    return { message: "Successfully created task", success: true };
+  } catch (error: any) {
     return {
-      message: "Successfully created task",
-      success: true,
-    };
-  } catch (error) {
-    return {
-      message: `Failed to create task: ${error}`,
+      message: `Failed to create task: ${error.message}`,
       success: false,
     };
   }

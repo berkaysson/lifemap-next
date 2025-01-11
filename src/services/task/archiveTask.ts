@@ -1,13 +1,7 @@
 "use server";
 
-import { getActivitiesTotalDurationBetweenDates } from "@/helpers/activity";
-import { checkIsCategoryExistsByCategoryId } from "@/helpers/category";
 import prisma from "@/lib/prisma";
-import { checkIsStartDateBeforeEndDate, parseDate } from "@/lib/time";
 import { logService } from "@/lib/utils";
-import { TaskSchema } from "@/schema";
-import { Task } from "@prisma/client";
-import { z } from "zod";
 
 export async function archiveTask(id: string) {
   logService("archiveTask");
@@ -16,13 +10,10 @@ export async function archiveTask(id: string) {
   }
 
   try {
-    // Get the task with its category information
     const task = await prisma.task.findUnique({
       where: { id },
       include: {
-        category: {
-          select: { name: true },
-        },
+        category: { select: { name: true } },
       },
     });
 
@@ -30,55 +21,42 @@ export async function archiveTask(id: string) {
       return { message: "Task not found", success: false };
     }
 
-    // Create archived version
-    await prisma.archivedTask.create({
-      data: {
-        name: task.name,
-        description: task.description,
-        colorCode: task.colorCode,
-        completed: task.completed,
-        completedDuration: task.completedDuration,
-        goalDuration: task.goalDuration,
-        startDate: task.startDate,
-        endDate: task.endDate,
-        categoryId: task.categoryId,
-        categoryName: task.category.name,
-        userId: task.userId,
-        projectId: task.projectId,
-      },
-    });
+    // Archive task
+    await prisma.archivedTask.create({ data: mapTaskToArchivedTask(task) });
 
-    // Delete the original task
-    await prisma.task.delete({
-      where: { id },
-    });
+    // Delete original task
+    await prisma.task.delete({ where: { id } });
 
     return { message: "Successfully archived task", success: true };
-  } catch (error) {
-    return { message: `Failed to archive task: ${error}`, success: false };
+  } catch (error: any) {
+    return {
+      message: `Failed to archive task: ${error.message}`,
+      success: false,
+    };
   }
 }
 
 export async function getArchivedTasks(userId: string) {
   logService("getArchivedTasks");
+  if (!userId) {
+    return { message: "userId is required", success: false };
+  }
+
   try {
     const archivedTasks = await prisma.archivedTask.findMany({
       where: { userId },
-      include: {
-        project: true,
-      },
-      orderBy: {
-        archivedAt: "desc",
-      },
+      include: { project: true },
+      orderBy: { archivedAt: "desc" },
     });
+
     return {
       message: "Successfully fetched archived tasks",
       success: true,
       archivedTasks,
     };
-  } catch (error) {
+  } catch (error: any) {
     return {
-      message: `Failed to fetch archived tasks: ${error}`,
+      message: `Failed to fetch archived tasks: ${error.message}`,
       success: false,
     };
   }
@@ -91,14 +69,29 @@ export async function deleteArchivedTask(id: string) {
   }
 
   try {
-    await prisma.archivedTask.delete({
-      where: { id },
-    });
+    await prisma.archivedTask.delete({ where: { id } });
     return { message: "Successfully deleted archived task", success: true };
-  } catch (error) {
+  } catch (error: any) {
     return {
-      message: `Failed to delete archived task: ${error}`,
+      message: `Failed to delete archived task: ${error.message}`,
       success: false,
     };
   }
+}
+
+function mapTaskToArchivedTask(task) {
+  return {
+    name: task.name,
+    description: task.description,
+    colorCode: task.colorCode,
+    completed: task.completed,
+    completedDuration: task.completedDuration,
+    goalDuration: task.goalDuration,
+    startDate: task.startDate,
+    endDate: task.endDate,
+    categoryId: task.categoryId,
+    categoryName: task.category?.name || null,
+    userId: task.userId,
+    projectId: task.projectId,
+  };
 }
