@@ -23,33 +23,33 @@ export const checkIsCategoryExistByCategoryName = async (
 };
 
 export const checkIsCategoryUsed = async (categoryId: string) => {
-  const activitiesInCategory = await prisma.activity.findMany({
+  const activitiesInCategory = await prisma.activity.findFirst({
     where: {
       categoryId,
     },
   });
 
-  if (activitiesInCategory.length > 0) {
+  if (activitiesInCategory) {
     return false;
   }
 
-  const tasksInCategory = await prisma.task.findMany({
+  const tasksInCategory = await prisma.task.findFirst({
     where: {
       categoryId,
     },
   });
 
-  if (tasksInCategory.length > 0) {
+  if (tasksInCategory) {
     return false;
   }
 
-  const habitsInCategory = await prisma.habit.findMany({
+  const habitsInCategory = await prisma.habit.findFirst({
     where: {
       categoryId,
     },
   });
 
-  if (habitsInCategory.length > 0) {
+  if (habitsInCategory) {
     return false;
   }
 
