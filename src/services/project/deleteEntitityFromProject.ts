@@ -3,95 +3,51 @@
 import prisma from "@/lib/prisma";
 import { logService } from "@/lib/utils";
 
-export const deleteToDoFromProject = async (
-  todoId: string,
+// Generic delete function
+const deleteFromProject = async (
+  relation: "todos" | "tasks" | "habits",
+  itemId: string,
   projectId: string
 ) => {
-  logService("deleteToDoFromProject");
+  logService(
+    `delete${relation.charAt(0).toUpperCase() + relation.slice(1)}FromProject`
+  );
   try {
     const project = await prisma.project.update({
-      where: {
-        id: projectId,
-      },
+      where: { id: projectId },
       data: {
-        todos: {
+        [relation]: {
           disconnect: {
-            id: todoId,
+            id: itemId,
           },
         },
       },
     });
+
     return {
-      message: "Successfully removed todo from project",
+      message: `Successfully removed ${relation.slice(0, -1)} from project`,
       success: true,
       project,
     };
   } catch (error) {
     return {
-      message: `Failed to remove todo from project: ${error}`,
+      message: `Failed to remove ${relation.slice(
+        0,
+        -1
+      )} from project: ${error}`,
       success: false,
     };
   }
 };
 
-export const deleteTaskFromProject = async (
-  taskId: string,
-  projectId: string
-) => {
-  logService("deleteTaskFromProject");
-  try {
-    const project = await prisma.project.update({
-      where: {
-        id: projectId,
-      },
-      data: {
-        tasks: {
-          disconnect: {
-            id: taskId,
-          },
-        },
-      },
-    });
-    return {
-      message: "Successfully removed task from project",
-      success: true,
-      project,
-    };
-  } catch (error) {
-    return {
-      message: `Failed to remove task from project: ${error}`,
-      success: false,
-    };
-  }
+export const deleteToDoFromProject = (todoId: string, projectId: string) => {
+  return deleteFromProject("todos", todoId, projectId);
 };
 
-export const deleteHabitFromProject = async (
-  habitId: string,
-  projectId: string
-) => {
-  logService("deleteHabitFromProject");
-  try {
-    const project = await prisma.project.update({
-      where: {
-        id: projectId,
-      },
-      data: {
-        habits: {
-          disconnect: {
-            id: habitId,
-          },
-        },
-      },
-    });
-    return {
-      message: "Successfully removed habit from project",
-      success: true,
-      project,
-    };
-  } catch (error) {
-    return {
-      message: `Failed to remove habit from project: ${error}`,
-      success: false,
-    };
-  }
+export const deleteTaskFromProject = (taskId: string, projectId: string) => {
+  return deleteFromProject("tasks", taskId, projectId);
+};
+
+export const deleteHabitFromProject = (habitId: string, projectId: string) => {
+  return deleteFromProject("habits", habitId, projectId);
 };

@@ -3,86 +3,51 @@
 import prisma from "@/lib/prisma";
 import { logService } from "@/lib/utils";
 
-export const addToDoToProject = async (todoId: string, projectId: string) => {
-  logService("addToDoToProject");
+export const addItemToProject = async (
+  projectId: string,
+  itemId: string,
+  itemType: "todos" | "tasks" | "habits"
+) => {
+  logService(`addItemToProject - ${itemType}`);
+
+  // Input validation
+  if (!projectId || !itemId) {
+    return {
+      message: "Project ID and item ID are required",
+      success: false,
+    };
+  }
+
   try {
+    // Dynamically update the project with the appropriate item type
     const project = await prisma.project.update({
-      where: {
-        id: projectId,
-      },
+      where: { id: projectId },
       data: {
-        todos: {
-          connect: {
-            id: todoId,
-          },
+        [itemType]: {
+          connect: { id: itemId },
         },
       },
     });
+
     return {
-      message: "Successfully added todo to project",
+      message: `Successfully added ${itemType.slice(0, -1)} to project`,
       success: true,
       project,
     };
   } catch (error) {
     return {
-      message: `Failed to add todo to project: ${error}`,
+      message: `Failed to add ${itemType.slice(0, -1)} to project: ${error}`,
       success: false,
     };
   }
 };
 
-export const addTaskToProject = async (taskId: string, projectId: string) => {
-  logService("addTaskToProject");
-  try {
-    const project = await prisma.project.update({
-      where: {
-        id: projectId,
-      },
-      data: {
-        tasks: {
-          connect: {
-            id: taskId,
-          },
-        },
-      },
-    });
-    return {
-      message: "Successfully added task to project",
-      success: true,
-      project,
-    };
-  } catch (error) {
-    return {
-      message: `Failed to add task to project: ${error}`,
-      success: false,
-    };
-  }
-};
+// Example usages for specific item types
+export const addToDoToProject = (todoId: string, projectId: string) =>
+  addItemToProject(projectId, todoId, "todos");
 
-export const addHabitToProject = async (habitId: string, projectId: string) => {
-  logService("addHabitToProject");
-  try {
-    const project = await prisma.project.update({
-      where: {
-        id: projectId,
-      },
-      data: {
-        habits: {
-          connect: {
-            id: habitId,
-          },
-        },
-      },
-    });
-    return {
-      message: "Successfully added habit to project",
-      success: true,
-      project,
-    };
-  } catch (error) {
-    return {
-      message: `Failed to add habit to project: ${error}`,
-      success: false,
-    };
-  }
-};
+export const addTaskToProject = (taskId: string, projectId: string) =>
+  addItemToProject(projectId, taskId, "tasks");
+
+export const addHabitToProject = (habitId: string, projectId: string) =>
+  addItemToProject(projectId, habitId, "habits");
