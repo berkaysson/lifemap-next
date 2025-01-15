@@ -92,8 +92,24 @@ export const createHabit = async (
       },
     });
 
-    await createHabitProgresses(createdHabit);
-    await updateHabitCompleted(createdHabit.id);
+    const createdHabitProgresses = await createHabitProgresses(createdHabit);
+    if (createdHabitProgresses.length === 0) {
+      return {
+        message: "Failed to create habit progresses",
+        success: false,
+      };
+    }
+
+    const isHabitCompleted = createdHabitProgresses.every(
+      (progress) => progress.completed
+    );
+
+    if (isHabitCompleted) {
+      await prisma.habit.update({
+        where: { id: createdHabit.id },
+        data: { completed: true },
+      });
+    }
 
     return {
       message: "Successfully created habit",
@@ -152,13 +168,17 @@ const createHabitProgresses = async (habit: Habit) => {
   }
 
   try {
-    await prisma.habitProgress.createMany({ data: progresses });
+    await prisma.habitProgress.createMany({
+      data: progresses,
+    });
+    // Update habit streaks
     if (currentStreak > 0 || bestStreak > 0) {
       await prisma.habit.update({
         where: { id: habit.id },
         data: { currentStreak, bestStreak },
       });
     }
+    return progresses;
   } catch (error) {
     throw error;
   }

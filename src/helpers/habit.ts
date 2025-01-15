@@ -1,7 +1,6 @@
 import prisma from "@/lib/prisma";
 import { Habit, HabitProgress } from "@prisma/client";
 import { addDays, addMonths, addWeeks, addYears } from "date-fns";
-import { getActivitiesTotalDurationBetweenDates } from "./activity";
 import { removeOneDay } from "@/lib/time";
 import { ServiceResponse } from "@/types/ServiceResponse";
 
@@ -19,16 +18,31 @@ export const updateHabitsCompletedDurationByActivityDate = async (
       startDate: { lte: activityDate },
       endDate: { gte: endDate },
     },
+    include: { habit: true },
   });
 
+  for (const habitProgress of habitProgresses) {
+    const newCompletedDuration = habitProgress.completedDuration + duration;
+    const completed = newCompletedDuration >= habitProgress.goalDuration;
+    await prisma.habitProgress.update({
+      where: { id: habitProgress.id },
+      data: { completedDuration: newCompletedDuration, completed },
+    });
+  }
+
   await Promise.all(
-    habitProgresses.map((hp) => updateHabitProgress(hp, duration))
+    habitProgresses.map((habitProgress) =>
+      updateHabitCompleted(habitProgress.habitId)
+    )
   );
 };
 
 export const updateHabitCompleted = async (habitId: string) => {
-  const isHabitCompleted = await calculateIsHabitCompleted(habitId);
-  const { currentStreak, bestStreak } = await calculateStreaks(habitId);
+  const habitProgresses = await prisma.habitProgress.findMany({
+    where: { habitId },
+  });
+  const isHabitCompleted = await calculateIsHabitCompleted(habitProgresses);
+  const { currentStreak, bestStreak } = await calculateStreaks(habitProgresses);
 
   await prisma.habit.update({
     where: { id: habitId },
@@ -36,30 +50,14 @@ export const updateHabitCompleted = async (habitId: string) => {
   });
 };
 
-export const calculateIsHabitCompleted = async (habitId: string) => {
-  const allHabitProgresses = await prisma.habitProgress.findMany({
-    where: { habitId },
-  });
-  const isHabitCompleted = allHabitProgresses.every(
+export const calculateIsHabitCompleted = async (
+  habitProgresses: HabitProgress[]
+) => {
+  const isHabitCompleted = habitProgresses.every(
     (progress) => progress.completed
   );
 
   return isHabitCompleted;
-};
-
-const updateHabitProgress = async (
-  habitProgress: HabitProgress,
-  duration: number
-) => {
-  const newCompletedDuration = habitProgress.completedDuration + duration;
-  const completed = newCompletedDuration >= habitProgress.goalDuration;
-
-  await prisma.habitProgress.update({
-    where: { id: habitProgress.id },
-    data: { completedDuration: newCompletedDuration, completed },
-  });
-
-  await updateHabitCompleted(habitProgress.habitId);
 };
 
 export const calculateProgress = async (
@@ -98,18 +96,12 @@ const calculateTotalDurationForDateRange = (
 ): number => {
   return activities
     .filter(
-      (activity) =>
-        activity.date >= startDate && activity.date <= endDate
+      (activity) => activity.date >= startDate && activity.date <= endDate
     )
     .reduce((total, activity) => total + activity.duration, 0);
 };
 
-const calculateStreaks = async (habitId: string) => {
-  const habitProgresses = await prisma.habitProgress.findMany({
-    where: { habitId },
-    orderBy: { startDate: "desc" },
-  });
-
+const calculateStreaks = async (habitProgresses: HabitProgress[]) => {
   let currentStreak = 0;
   let bestStreak = 0;
   let tempStreak = 0;
