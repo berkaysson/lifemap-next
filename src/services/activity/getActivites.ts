@@ -32,13 +32,3 @@ export const getActivities = async (userId: string) => {
     };
   }
 };
-
-export const getActivityById = async (activityId: string) => {
-  const activity = await prisma.activity.findFirst({
-    where: {
-      id: activityId,
-    },
-  });
-
-  return activity;
-};

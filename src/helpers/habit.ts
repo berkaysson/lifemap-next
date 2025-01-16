@@ -11,6 +11,8 @@ export const updateHabitsCompletedDurationByActivityDate = async (
   duration: number
 ) => {
   const endDate = activityDate;
+
+  // Fetch habit progress for the given date range
   const habitProgresses = await prisma.habitProgress.findMany({
     where: {
       userId,
@@ -21,20 +23,26 @@ export const updateHabitsCompletedDurationByActivityDate = async (
     include: { habit: true },
   });
 
-  for (const habitProgress of habitProgresses) {
+  // Batch update for habit progresses
+  const habitProgressUpdates = habitProgresses.map((habitProgress) => {
     const newCompletedDuration = habitProgress.completedDuration + duration;
     const completed = newCompletedDuration >= habitProgress.goalDuration;
-    await prisma.habitProgress.update({
+    return prisma.habitProgress.update({
       where: { id: habitProgress.id },
       data: { completedDuration: newCompletedDuration, completed },
     });
-  }
+  });
 
-  await Promise.all(
-    habitProgresses.map((habitProgress) =>
-      updateHabitCompleted(habitProgress.habitId)
-    )
+  // Await all updates in parallel
+  await Promise.all(habitProgressUpdates);
+
+  // Update the habits after all progress updates
+  const habitIds = habitProgresses.map((hp) => hp.habitId);
+  const habitCompletionUpdates = habitIds.map((habitId) =>
+    updateHabitCompleted(habitId)
   );
+
+  await Promise.all(habitCompletionUpdates);
 };
 
 export const updateHabitCompleted = async (habitId: string) => {

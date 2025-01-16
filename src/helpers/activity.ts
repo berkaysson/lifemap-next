@@ -16,7 +16,7 @@ export const getActivitiesTotalDurationBetweenDates = async (
   startDate: Date,
   endDate: Date
 ) => {
-  const activities = await prisma.activity.findMany({
+  const result = await prisma.activity.aggregate({
     where: {
       userId,
       categoryId,
@@ -25,15 +25,10 @@ export const getActivitiesTotalDurationBetweenDates = async (
         lte: endDate,
       },
     },
+    _sum: {
+      duration: true,
+    },
   });
 
-  if (activities.length === 0) {
-    return 0;
-  }
-
-  const totalDuration = activities
-    .map((activity) => activity.duration)
-    .reduce((total, duration) => total + duration, 0);
-
-  return totalDuration;
+  return result._sum.duration || 0;
 };

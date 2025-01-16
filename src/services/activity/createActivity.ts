@@ -4,7 +4,6 @@ import prisma from "@/lib/prisma";
 import { parseDate } from "@/lib/time";
 import { ActivitySchema } from "@/schema";
 import { z } from "zod";
-import { checkIsCategoryExistsByCategoryId } from "@/helpers/category";
 import { updateTasksCompletedDurationByActivityDate } from "@/helpers/task";
 import { updateHabitsCompletedDurationByActivityDate } from "@/helpers/habit";
 import { logService } from "@/lib/utils";
@@ -19,18 +18,6 @@ export const createActivity = async (
   if (!validatedFields.success) {
     return {
       message: "Invalid fields!",
-      success: false,
-    };
-  }
-
-  const isCategoryExist = await checkIsCategoryExistsByCategoryId(
-    newActivity.categoryId,
-    userId
-  );
-
-  if (!isCategoryExist) {
-    return {
-      message: "Category does not exist",
       success: false,
     };
   }
@@ -55,19 +42,22 @@ export const createActivity = async (
       },
     });
 
-    await updateTasksCompletedDurationByActivityDate(
-      userId,
-      newActivity.categoryId,
-      date,
-      newActivity.duration
-    );
+    const updates = [
+      updateTasksCompletedDurationByActivityDate(
+        userId,
+        newActivity.categoryId,
+        date,
+        newActivity.duration
+      ),
+      updateHabitsCompletedDurationByActivityDate(
+        userId,
+        newActivity.categoryId,
+        date,
+        newActivity.duration
+      ),
+    ];
 
-    await updateHabitsCompletedDurationByActivityDate(
-      userId,
-      newActivity.categoryId,
-      date,
-      newActivity.duration
-    );
+    await Promise.all(updates);
 
     return {
       message: "Successfully created activity",

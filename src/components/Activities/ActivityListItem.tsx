@@ -20,7 +20,7 @@ const ActivityListItem = ({
   const remained = getRemainingTime(activity.date);
 
   const handleDelete = async () => {
-    await deleteActivity(activity.id);
+    await deleteActivity(activity);
   };
 
   return (

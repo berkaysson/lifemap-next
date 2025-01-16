@@ -2,7 +2,6 @@
 
 import prisma from "@/lib/prisma";
 import { Activity } from "@prisma/client";
-import { checkIsCategoryExistsByCategoryId } from "@/helpers/category";
 import { updateTasksCompletedDurationByActivityDate } from "@/helpers/task";
 import { updateHabitsCompletedDurationByActivityDate } from "@/helpers/habit";
 import { getActivityDuration } from "@/helpers/activity";
@@ -13,18 +12,6 @@ export const updateActivity = async (data: Activity) => {
   if (!data || !data.categoryId || !data.id) {
     return {
       message: "data is required",
-      success: false,
-    };
-  }
-
-  const isCategoryExist = await checkIsCategoryExistsByCategoryId(
-    data.categoryId,
-    data.userId
-  );
-
-  if (!isCategoryExist) {
-    return {
-      message: "Category does not exist",
       success: false,
     };
   }
@@ -60,19 +47,22 @@ export const updateActivity = async (data: Activity) => {
       },
     });
 
-    await updateTasksCompletedDurationByActivityDate(
-      data.userId,
-      data.categoryId,
-      data.date,
-      absoluteDuration
-    );
+    const updates = [
+      updateTasksCompletedDurationByActivityDate(
+        data.userId,
+        data.categoryId,
+        data.date,
+        absoluteDuration
+      ),
+      updateHabitsCompletedDurationByActivityDate(
+        data.userId,
+        data.categoryId,
+        data.date,
+        absoluteDuration
+      ),
+    ];
 
-    await updateHabitsCompletedDurationByActivityDate(
-      data.userId,
-      data.categoryId,
-      data.date,
-      absoluteDuration
-    );
+    await Promise.all(updates);
 
     return {
       message: "Successfully updated activity",

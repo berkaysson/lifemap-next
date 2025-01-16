@@ -142,13 +142,13 @@ export const useDeleteActivity = () => {
   const userId = session?.user?.id;
 
   return useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async (activity: ExtendedActivity) => {
       validateSession(session);
-      const response = await deleteActivity(id);
+      const response = await deleteActivity(activity);
       if (!response.success) throw new Error(response.message);
       return response;
     },
-    onMutate: async (deletedId) => {
+    onMutate: async (deletedActivity) => {
       await queryClient.cancelQueries({
         queryKey: [ACTIVITY_QUERY_KEY, userId],
       });
@@ -162,7 +162,7 @@ export const useDeleteActivity = () => {
         [ACTIVITY_QUERY_KEY, userId],
         (old: ExtendedActivity[] | undefined) => {
           if (!old) return [];
-          return old.filter((activity) => activity.id !== deletedId);
+          return old.filter((activity) => activity.id !== deletedActivity.id);
         }
       );
 

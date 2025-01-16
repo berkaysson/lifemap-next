@@ -4,10 +4,19 @@ import prisma from "@/lib/prisma";
 import { updateTasksCompletedDurationByActivityDate } from "@/helpers/task";
 import { updateHabitsCompletedDurationByActivityDate } from "@/helpers/habit";
 import { logService } from "@/lib/utils";
-import { getActivityById } from "./getActivites";
+import { ExtendedActivity } from "@/types/Entitities";
 
-export const deleteActivity = async (id: string) => {
+export const deleteActivity = async (activity: ExtendedActivity) => {
   logService("deleteActivity");
+  if (!activity) {
+    return {
+      message: "Activity does not exist",
+      success: false,
+    };
+  }
+
+  const { id } = activity;
+
   if (!id) {
     return {
       message: "id is required",
@@ -16,34 +25,28 @@ export const deleteActivity = async (id: string) => {
   }
 
   try {
-    const activity = await getActivityById(id);
-
-    if (!activity) {
-      return {
-        message: "Activity does not exist",
-        success: false,
-      };
-    }
-
     await prisma.activity.delete({
       where: {
         id: id,
       },
     });
 
-    await updateTasksCompletedDurationByActivityDate(
-      activity.userId,
-      activity.categoryId,
-      activity.date,
-      -activity.duration
-    );
+    const updates = [
+      updateTasksCompletedDurationByActivityDate(
+        activity.userId,
+        activity.categoryId,
+        activity.date,
+        -activity.duration
+      ),
+      updateHabitsCompletedDurationByActivityDate(
+        activity.userId,
+        activity.categoryId,
+        activity.date,
+        -activity.duration
+      ),
+    ];
 
-    await updateHabitsCompletedDurationByActivityDate(
-      activity.userId,
-      activity.categoryId,
-      activity.date,
-      -activity.duration
-    );
+    await Promise.all(updates);
 
     return {
       message: "Successfully deleted activity",
