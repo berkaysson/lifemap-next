@@ -93,6 +93,8 @@ model ToDo {
     user        User     @relation(fields: [userId], references: [id])
     Project     Project? @relation(fields: [projectId], references: [id])
     projectId   String?
+
+    @@index([userId])
 }
 
 model Category {
@@ -104,6 +106,8 @@ model Category {
     habits     Habit[]
     userId     String
     user       User       @relation(fields: [userId], references: [id])
+
+    @@index([userId])
 }
 
 model Activity {
@@ -115,6 +119,8 @@ model Activity {
     userId      String
     user        User     @relation(fields: [userId], references: [id])
     date        DateTime
+
+    @@index([userId])
 }
 
 model Task {
@@ -133,6 +139,8 @@ model Task {
     user              User     @relation(fields: [userId], references: [id])
     Project           Project? @relation(fields: [projectId], references: [id])
     projectId         String?
+
+    @@index([userId])
 }
 
 model Habit {
@@ -155,6 +163,8 @@ model Habit {
     Project               Project?        @relation(fields: [projectId], references: [id])
     projectId             String?
     progress              HabitProgress[]
+
+    @@index([userId])
 }
 
 model HabitProgress {
@@ -183,6 +193,8 @@ model Project {
     archivedTodos  ArchivedToDo[]
     archivedTasks  ArchivedTask[]
     archivedHabits ArchivedHabit[]
+
+    @@index([userId])
 }
 
 model ArchivedToDo {
@@ -198,6 +210,8 @@ model ArchivedToDo {
     projectId   String?
 
     archivedAt DateTime @default(now())
+
+    @@index([userId])
 }
 
 model ArchivedTask {
@@ -217,6 +231,8 @@ model ArchivedTask {
     projectId         String?
 
     archivedAt DateTime @default(now())
+
+    @@index([userId])
 }
 
 model ArchivedHabit {
@@ -239,6 +255,8 @@ model ArchivedHabit {
     projectId             String?
 
     archivedAt DateTime @default(now())
+
+    @@index([userId])
 }
 
 model FunctionExecution {
