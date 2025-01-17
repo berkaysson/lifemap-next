@@ -1,6 +1,7 @@
 "use client";
 
 import ActivityForm from "@/components/Activities/ActivityForm";
+import { DashboardContent } from "@/components/Dashboard/dashboard-content";
 import Link from "next/link";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
@@ -44,7 +45,8 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           Categories
         </Link>
       </nav>
-      {children}
+      <DashboardContent>{children}</DashboardContent>
+
       <ActivityForm />
     </div>
   );
