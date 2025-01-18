@@ -2,17 +2,14 @@
 
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
+import { Card } from "../ui/card";
 
 interface MainProps extends React.ComponentPropsWithoutRef<"main"> {
   children: React.ReactNode;
   sx?: object;
 }
 
-export const Main: React.FC<MainProps> = ({
-  children,
-  sx,
-  ...other
-}) => {
+export const Main: React.FC<MainProps> = ({ children, sx, ...other }) => {
   return (
     <Box
       component="main"
@@ -65,7 +62,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({
       }}
       {...other}
     >
-      {children}
+      <Card className="min-h-[50vh]">{children}</Card>
     </Container>
   );
 };
