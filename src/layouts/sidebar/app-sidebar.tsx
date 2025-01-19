@@ -80,22 +80,22 @@ export function AppSidebar() {
   const isLinkActive = (url: string) => pathname === url;
 
   return (
-    <Sidebar variant="floating" collapsible="icon">
+    <Sidebar variant="floating" collapsible="icon" className="group-data-[collapsible=icon]:w-[70px]">
       <SidebarTrigger className="md:hidden group-data-[collapsible=icon]:hidden absolute top-4 right-4" />
-      <SidebarHeader className="p-4">
+      <SidebarHeader className="p-4 group-data-[collapsible=icon]:p-1">
         <Link href="/" className="flex items-center space-x-2">
           <Image
-            src="/placeholder.svg?height=40&width=40"
+            src="/logo.svg"
             alt="Logo"
-            width={40}
-            height={40}
-            className="rounded-md"
+            width={50}
+            height={50}
           />
-          <span className="text-lg font-bold group-data-[collapsible=icon]:hidden">
+          <span className="text-lg font-bold text-themeAlt dark:text-theme group-data-[collapsible=icon]:hidden">
             lifemap
           </span>
         </Link>
       </SidebarHeader>
+
       <SidebarContent className="overflow-x-hidden">
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
