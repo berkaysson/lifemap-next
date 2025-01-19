@@ -11,6 +11,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarTrigger,
 } from "@/layouts/sidebar/sidebar";
 import { Button } from "@/components/ui/Buttons/button";
 import { useSession } from "next-auth/react";
@@ -80,6 +81,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar variant="floating" collapsible="icon">
+      <SidebarTrigger className="md:hidden group-data-[collapsible=icon]:hidden absolute top-4 right-4" />
       <SidebarHeader className="p-4">
         <Link href="/" className="flex items-center space-x-2">
           <Image
@@ -89,7 +91,9 @@ export function AppSidebar() {
             height={40}
             className="rounded-md"
           />
-          <span className="text-lg font-bold group-data-[collapsible=icon]:hidden">lifemap</span>
+          <span className="text-lg font-bold group-data-[collapsible=icon]:hidden">
+            lifemap
+          </span>
         </Link>
       </SidebarHeader>
       <SidebarContent className="overflow-x-hidden">
@@ -139,9 +143,7 @@ export function AppSidebar() {
                   )}
                 >
                   <Link href={item.url}>
-                    <Iconify
-                      icon={isActive ? item.activeIcon : item.icon}
-                    />
+                    <Iconify icon={isActive ? item.activeIcon : item.icon} />
                     {item.title === "Profile" ? session?.user.name : item.title}
                   </Link>
                 </SidebarMenuButton>
