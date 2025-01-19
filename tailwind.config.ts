@@ -26,6 +26,8 @@ const config = {
                 ]
   		},
   		colors: {
+			theme: "#ABC4FF",
+			themeAlt: "#525B76",
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
