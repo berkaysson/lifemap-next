@@ -1,6 +1,6 @@
-import { Separator } from "../ui/separator";
-import { SidebarTrigger } from "../ui/sidebar";
-import ThemeToggle from "../ui/theme-toggle";
+import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "../../layouts/sidebar/sidebar";
+import ThemeToggle from "@/components/ui/theme-toggle";
 
 const DashboardHeader = ({ title }: { title: string }) => {
   return (

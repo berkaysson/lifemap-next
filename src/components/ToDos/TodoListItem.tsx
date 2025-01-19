@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "../ui/button";
+import { Button } from "../ui/Buttons/button";
 import { getRemainingTime, isExpired } from "@/lib/time";
-import IsCompleted from "../ui/IsCompleted";
-import ColorCircle from "../ui/ColorCircle";
+import IsCompleted from "../ui/Shared/IsCompleted";
+import ColorCircle from "../ui/Shared/ColorCircle";
 import TodoEditForm from "./TodoEditForm";
-import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
-import ProjectSelect from "../ui/ProjectSelect";
+import ButtonWithConfirmation from "../ui/Buttons/ButtonWithConfirmation";
+import ProjectSelect from "../ui/Shared/ProjectSelect";
 import {
   TODO_QUERY_KEY,
   useDeleteTodo,

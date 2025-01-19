@@ -5,7 +5,7 @@ import TaskListItem from "./TaskListItem";
 import ArchivedTaskListItem from "./ArchivedTaskListItem";
 import { Task } from "@prisma/client";
 import { sortArrayOfObjectsByKey } from "@/lib/utils";
-import SelectSort from "../ui/SelectSort";
+import SelectSort from "../ui/Shared/SelectSort";
 import { ExtendedTask } from "@/types/Entitities";
 import { useFetchTasks, useFetchArchivedTasks } from "@/queries/taskQueries";
 import { Separator } from "../ui/separator";

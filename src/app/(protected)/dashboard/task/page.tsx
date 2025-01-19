@@ -1,4 +1,4 @@
-import DashboardHeader from "@/components/Dashboard/dashboard-header";
+import DashboardHeader from "@/layouts/sidebar/dashboard-header";
 import TaskForm from "@/components/Tasks/TaskForm";
 import TaskList from "@/components/Tasks/TaskList";
 

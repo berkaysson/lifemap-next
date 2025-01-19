@@ -5,7 +5,7 @@ import { AppSidebar } from "@/layouts/sidebar/app-sidebar";
 import {
   SidebarInset,
   SidebarProvider,
-} from "@/components/ui/sidebar";
+} from "@/layouts/sidebar/sidebar";
 
 const queryClient = new QueryClient();
 

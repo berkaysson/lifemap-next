@@ -1,9 +1,9 @@
 "use client";
 
-import IsCompleted from "../ui/IsCompleted";
-import ColorCircle from "../ui/ColorCircle";
+import IsCompleted from "../ui/Shared/IsCompleted";
+import ColorCircle from "../ui/Shared/ColorCircle";
 import { isExpired } from "@/lib/time";
-import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
+import ButtonWithConfirmation from "../ui/Buttons/ButtonWithConfirmation";
 import { useDeleteArchivedTodo } from "@/queries/todoQueries";
 
 const ArchivedTodoListItem = ({ todo }) => {

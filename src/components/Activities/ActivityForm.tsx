@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext, useState, useTransition } from "react";
-import { Button } from "../ui/button";
+import { Button } from "../ui/Buttons/button";
 import {
   Form,
   FormControl,
@@ -9,17 +9,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
+} from "../ui/Forms/form";
+import { Input } from "../ui/Forms/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ActivitySchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import ModalDialog from "../ui/ModalDialog";
 import { SquareActivity } from "lucide-react";
-import SelectBox from "../ui/SelectBox";
+import SelectBox from "../ui/Shared/SelectBox";
 import { useFetchCategories } from "@/queries/categoryQueries";
 import { useCreateActivity } from "@/queries/activityQueries";
+import ModalDialog from "../ui/Modals/ModalDialog";
 
 const ActivityForm = () => {
   const { mutateAsync: createActivity } = useCreateActivity();

@@ -1,6 +1,6 @@
 import { formatDate, isExpired } from "@/lib/time";
 import { HabitProgress, Period } from "@prisma/client";
-import IsCompleted from "../ui/IsCompleted";
+import IsCompleted from "../ui/Shared/IsCompleted";
 
 const HabitProgressesListItem = ({
   progress,

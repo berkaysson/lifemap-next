@@ -3,10 +3,10 @@
 import { useUpdateCategory } from "@/queries/categoryQueries";
 import { Category } from "@prisma/client";
 import { useEffect, useState } from "react";
-import { Input } from "../ui/input";
-import ModalDialog from "../ui/ModalDialog";
-import { Button } from "../ui/button";
-import { Label } from "../ui/label";
+import { Input } from "../ui/Forms/input";
+import ModalDialog from "../ui/Modals/ModalDialog";
+import { Button } from "../ui/Buttons/button";
+import { Label } from "../ui/Forms/label";
 
 interface CategoryEditFormProps {
   initialValues: Category;

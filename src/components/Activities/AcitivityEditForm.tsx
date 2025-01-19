@@ -1,10 +1,10 @@
 import { Activity } from "@prisma/client";
 import { useEffect, useState } from "react";
-import { Input } from "../ui/input";
-import ModalDialog from "../ui/ModalDialog";
-import { Button } from "../ui/button";
-import { Label } from "../ui/label";
+import { Input } from "../ui/Forms/input";
+import { Button } from "../ui/Buttons/button";
+import { Label } from "../ui/Forms/label";
 import { useUpdateActivity } from "@/queries/activityQueries";
+import ModalDialog from "../ui/Modals/ModalDialog";
 
 interface ActivityEditFormProps {
   initialValues: Activity;

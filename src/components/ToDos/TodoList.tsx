@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import TodoListItem from "./TodoListItem";
 import { ToDo } from "@prisma/client";
 import { sortArrayOfObjectsByKey } from "@/lib/utils";
-import SelectSort from "../ui/SelectSort";
+import SelectSort from "../ui/Shared/SelectSort";
 import { useFetchTodos, useFetchArchivedTodos } from "@/queries/todoQueries";
 import { Separator } from "../ui/separator";
 import ArchivedTodoListItem from "./ArchivedTodoListItem";

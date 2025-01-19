@@ -1,7 +1,7 @@
 "use client";
 
 import ActivityList from "@/components/Activities/ActivityList";
-import DashboardHeader from "@/components/Dashboard/dashboard-header";
+import DashboardHeader from "@/layouts/sidebar/dashboard-header";
 
 
 const Page = () => {

@@ -1,9 +1,9 @@
 "use client";
 
-import { Button } from "../ui/button";
+import { Button } from "../ui/Buttons/button";
 import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
 import ActivityEditForm from "./AcitivityEditForm";
-import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
+import ButtonWithConfirmation from "../ui/Buttons/ButtonWithConfirmation";
 import { ExtendedActivity } from "@/types/Entitities";
 import { useDeleteActivity } from "@/queries/activityQueries";
 

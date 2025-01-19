@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/Misc/use-toast";
 import { HabitSchema } from "@/schema";
 import { ExtendedHabit } from "@/types/Entitities";
 import { Habit } from "@prisma/client";

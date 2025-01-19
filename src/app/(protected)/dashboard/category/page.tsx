@@ -1,6 +1,6 @@
 import CategoryForm from "@/components/Category/CategoryForm";
 import CategoryList from "@/components/Category/CategoryList";
-import DashboardHeader from "@/components/Dashboard/dashboard-header";
+import DashboardHeader from "@/layouts/sidebar/dashboard-header";
 
 const CategoryPage = () => {
   return (

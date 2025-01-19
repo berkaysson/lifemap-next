@@ -1,6 +1,6 @@
-import DashboardHeader from "@/components/Dashboard/dashboard-header";
 import TodoForm from "@/components/ToDos/TodoForm";
 import TodoList from "@/components/ToDos/TodoList";
+import DashboardHeader from "@/layouts/sidebar/dashboard-header";
 
 const TodoPage = () => {
   return (

@@ -2,11 +2,11 @@
 
 import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
 import { useContext, useState } from "react";
-import { Button } from "../ui/button";
+import { Button } from "../ui/Buttons/button";
 import TaskEditForm from "./TaskEditForm";
-import IsCompleted from "../ui/IsCompleted";
-import ColorCircle from "../ui/ColorCircle";
-import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
+import IsCompleted from "../ui/Shared/IsCompleted";
+import ColorCircle from "../ui/Shared/ColorCircle";
+import ButtonWithConfirmation from "../ui/Buttons/ButtonWithConfirmation";
 import { ExtendedTask } from "@/types/Entitities";
 import {
   useFetchProjects,
@@ -19,7 +19,7 @@ import {
   useArchiveTask,
 } from "@/queries/taskQueries";
 import { useQueryClient } from "@tanstack/react-query";
-import ProjectSelect from "../ui/ProjectSelect";
+import ProjectSelect from "../ui/Shared/ProjectSelect";
 
 const TaskListItem = ({ task }: { task: ExtendedTask }) => {
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(

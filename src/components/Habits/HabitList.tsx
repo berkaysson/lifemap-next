@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import HabitListItem from "./HabitListItem";
 import { Habit } from "@prisma/client";
 import { sortArrayOfObjectsByKey } from "@/lib/utils";
-import SelectSort from "../ui/SelectSort";
+import SelectSort from "../ui/Shared/SelectSort";
 import { ExtendedHabit } from "@/types/Entitities";
 import { useFetchArchivedHabits, useFetchHabits } from "@/queries/habitQueries";
 import { Separator } from "../ui/separator";

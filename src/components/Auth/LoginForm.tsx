@@ -13,9 +13,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+} from "../ui/Forms/form";
+import { Input } from "../ui/Forms/input";
+import { Button } from "../ui/Buttons/button";
 import Link from "next/link";
 import { login } from "@/actions/login";
 import { refreshPage } from "@/lib/utils";

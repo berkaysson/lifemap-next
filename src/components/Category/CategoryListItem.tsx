@@ -1,9 +1,9 @@
 "use client";
 
 import { useDeleteCategory } from "@/queries/categoryQueries";
-import { Button } from "../ui/button";
+import { Button } from "../ui/Buttons/button";
 import CategoryEditForm from "./CategoryEditForm";
-import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
+import ButtonWithConfirmation from "../ui/Buttons/ButtonWithConfirmation";
 import { Category } from "@prisma/client";
 
 const CategoryListItem = ({ category }: { category: Category }) => {

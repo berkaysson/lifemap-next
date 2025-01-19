@@ -7,9 +7,9 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "./select";
+} from "../select";
 import { SortAsc, SortDesc } from "lucide-react";
-import { Button } from "./button";
+import { Button } from "../Buttons/button";
 
 interface SortOption {
   value: string;

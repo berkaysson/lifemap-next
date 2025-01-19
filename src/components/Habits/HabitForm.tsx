@@ -12,10 +12,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import SelectBox from "../ui/SelectBox";
+} from "../ui/Forms/form";
+import { Input } from "../ui/Forms/input";
+import { Button } from "../ui/Buttons/button";
+import SelectBox from "../ui/Shared/SelectBox";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Period } from "@prisma/client";
 import {

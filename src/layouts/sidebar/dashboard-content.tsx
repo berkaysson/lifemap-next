@@ -2,7 +2,7 @@
 
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import { Card } from "../ui/card";
+import { Card } from "../../components/ui/card";
 
 interface MainProps extends React.ComponentPropsWithoutRef<"main"> {
   children: React.ReactNode;

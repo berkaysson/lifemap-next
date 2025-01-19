@@ -1,10 +1,10 @@
 import { ToDo } from "@prisma/client";
 import { useEffect, useState } from "react";
-import { Input } from "../ui/input";
-import ModalDialog from "../ui/ModalDialog";
-import { Button } from "../ui/button";
-import { Label } from "../ui/label";
-import ProjectSelect from "../ui/ProjectSelect";
+import { Input } from "../ui/Forms/input";
+import ModalDialog from "../ui/Modals/ModalDialog";
+import { Button } from "../ui/Buttons/button";
+import { Label } from "../ui/Forms/label";
+import ProjectSelect from "../ui/Shared/ProjectSelect";
 import { useUpdateTodo } from "@/queries/todoQueries";
 
 interface TodoEditFormProps {

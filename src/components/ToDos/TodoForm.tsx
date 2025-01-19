@@ -1,8 +1,8 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { Button } from "../ui/Buttons/button";
+import { Input } from "../ui/Forms/input";
 import { TodoSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -14,7 +14,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
+} from "../ui/Forms/form";
 import { useCreateTodo } from "@/queries/todoQueries";
 
 const TodoForm = () => {

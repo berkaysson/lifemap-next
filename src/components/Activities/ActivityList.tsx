@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import ActivityListItem from "./ActivityListItem";
-import SelectSort from "../ui/SelectSort";
+import SelectSort from "../ui/Shared/SelectSort";
 import { sortArrayOfObjectsByKey } from "@/lib/utils";
 import { Activity } from "@prisma/client";
 import { ExtendedActivity } from "@/types/Entitities";

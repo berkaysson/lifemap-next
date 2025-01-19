@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/Misc/use-toast";
 import { CategorySchema } from "@/schema";
 import { Category } from "@prisma/client";
 import { z } from "zod";

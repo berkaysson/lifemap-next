@@ -1,5 +1,5 @@
 import { CheckIcon, Search } from "lucide-react";
-import { Button } from "./button";
+import { Button } from "../Buttons/button";
 import {
   Command,
   CommandEmpty,
@@ -7,9 +7,9 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "./command";
-import { FormControl } from "./form";
-import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+} from "../command";
+import { FormControl } from "../Forms/form";
+import { Popover, PopoverContent, PopoverTrigger } from "../popover";
 import { cn } from "@/lib/utils";
 
 /**

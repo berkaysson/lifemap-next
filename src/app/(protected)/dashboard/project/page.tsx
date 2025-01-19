@@ -1,4 +1,4 @@
-import DashboardHeader from "@/components/Dashboard/dashboard-header";
+import DashboardHeader from "@/layouts/sidebar/dashboard-header";
 import ProjectForm from "@/components/Projects/ProjectForm";
 import ProjectList from "@/components/Projects/ProjectList";
 

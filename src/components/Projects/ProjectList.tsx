@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import ProjectListItem from "./ProjectListItem";
 import { sortArrayOfObjectsByKey } from "@/lib/utils";
-import SelectSort from "../ui/SelectSort";
+import SelectSort from "../ui/Shared/SelectSort";
 import { ExtendedProject } from "@/types/Entitities";
 import { useFetchProjects } from "@/queries/projectQueries";
 

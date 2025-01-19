@@ -7,7 +7,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "./select";
+} from "../select";
 import { useFetchProjects } from "@/queries/projectQueries";
 
 interface ProjectSelectProps {

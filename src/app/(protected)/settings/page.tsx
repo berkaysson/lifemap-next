@@ -2,7 +2,7 @@
 
 import { logout } from "@/actions/logout";
 import { reset } from "@/actions/reset";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Buttons/button";
 import { refreshPage } from "@/lib/utils";
 import { ResetSchema } from "@/schema";
 import { useSession } from "next-auth/react";

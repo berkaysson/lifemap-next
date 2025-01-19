@@ -1,10 +1,10 @@
 "use client";
 
 import { useDeleteProject, useRemoveToDoFromProject, useRemoveTaskFromProject, useRemoveHabitFromProject } from "@/queries/projectQueries";
-import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
+import ButtonWithConfirmation from "../ui/Buttons/ButtonWithConfirmation";
 import { ExtendedProject } from "@/types/Entitities";
 import ProjectEditForm from "./ProjectEditForm";
-import { Button } from "../ui/button";
+import { Button } from "../ui/Buttons/button";
 import { useFetchTodos } from "@/queries/todoQueries";
 import { useFetchTasks } from "@/queries/taskQueries";
 import { useFetchHabits } from "@/queries/habitQueries";

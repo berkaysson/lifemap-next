@@ -2,11 +2,11 @@
 
 import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
 import { useContext, useState } from "react";
-import { Button } from "../ui/button";
+import { Button } from "../ui/Buttons/button";
 import HabitEditForm from "./HabitEditForm";
-import IsCompleted from "../ui/IsCompleted";
-import ColorCircle from "../ui/ColorCircle";
-import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
+import IsCompleted from "../ui/Shared/IsCompleted";
+import ColorCircle from "../ui/Shared/ColorCircle";
+import ButtonWithConfirmation from "../ui/Buttons/ButtonWithConfirmation";
 import {
   Collapsible,
   CollapsibleContent,
@@ -22,7 +22,7 @@ import {
 } from "@/queries/projectQueries";
 import { useQueryClient } from "@tanstack/react-query";
 import { HABIT_QUERY_KEY, useDeleteHabit, useArchiveHabit } from "@/queries/habitQueries";
-import ProjectSelect from "../ui/ProjectSelect";
+import ProjectSelect from "../ui/Shared/ProjectSelect";
 
 const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
   const [isHabitProgressesCollapsed, setIsHabitProgressesCollapsed] =

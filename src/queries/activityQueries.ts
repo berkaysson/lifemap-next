@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/Misc/use-toast";
 import { ActivitySchema } from "@/schema";
 import { Activity } from "@prisma/client";
 import { useSession } from "next-auth/react";

@@ -1,7 +1,7 @@
 "use client";
 
 import ActivityForm from "@/components/Activities/ActivityForm";
-import { DashboardContent } from "@/components/Dashboard/dashboard-content";
+import { DashboardContent } from "@/layouts/sidebar/dashboard-content";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (

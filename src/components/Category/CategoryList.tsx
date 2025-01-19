@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import CategoryListItem from "./CategoryListItem";
 import { Category } from "@prisma/client";
 import { sortArrayOfObjectsByKey } from "@/lib/utils";
-import SelectSort from "../ui/SelectSort";
+import SelectSort from "../ui/Shared/SelectSort";
 import { useFetchCategories } from "@/queries/categoryQueries";
 
 const CategoryList = () => {

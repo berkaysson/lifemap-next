@@ -1,9 +1,9 @@
 "use client";
 
 import { isExpired } from "@/lib/time";
-import IsCompleted from "../ui/IsCompleted";
-import ColorCircle from "../ui/ColorCircle";
-import ButtonWithConfirmation from "../ui/ButtonWithConfirmation";
+import IsCompleted from "../ui/Shared/IsCompleted";
+import ColorCircle from "../ui/Shared/ColorCircle";
+import ButtonWithConfirmation from "../ui/Buttons/ButtonWithConfirmation";
 import { useDeleteArchivedHabit } from "@/queries/habitQueries";
 
 const ArchivedHabitListItem = ({ habit }) => {

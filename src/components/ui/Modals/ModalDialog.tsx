@@ -7,7 +7,7 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "./dialog";
-import { Button } from "./button";
+import { Button } from "../Buttons/button";
 
 interface ModalDialogProps {
   triggerButton: JSX.Element;
