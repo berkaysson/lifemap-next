@@ -79,7 +79,7 @@ export function AppSidebar() {
   const isLinkActive = (url: string) => pathname === url;
 
   return (
-    <Sidebar variant="inset">
+    <Sidebar variant="floating" collapsible="icon">
       <SidebarHeader className="p-4">
         <Link href="/" className="flex items-center space-x-2">
           <Image
@@ -89,10 +89,10 @@ export function AppSidebar() {
             height={40}
             className="rounded-md"
           />
-          <span className="text-lg font-bold">lifemap</span>
+          <span className="text-lg font-bold group-data-[collapsible=icon]:hidden">lifemap</span>
         </Link>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="overflow-x-hidden">
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
