@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { User } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -17,31 +16,44 @@ import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Iconify } from "@/components/ui/iconify";
 
 const items = [
   {
     title: "Activities",
     url: "/dashboard/activity",
+    icon: "solar:bolt-bold",
+    activeIcon: "solar:bolt-bold-duotone",
   },
   {
     title: "ToDos",
     url: "/dashboard/todo",
+    icon: "solar:checklist-minimalistic-bold",
+    activeIcon: "solar:checklist-minimalistic-bold-duotone",
   },
   {
     title: "Tasks",
     url: "/dashboard/task",
+    icon: "solar:diploma-verified-bold",
+    activeIcon: "solar:diploma-verified-bold-duotone",
   },
   {
     title: "Habits",
     url: "/dashboard/habit",
+    icon: "solar:golf-bold",
+    activeIcon: "solar:golf-bold-duotone",
   },
   {
     title: "Projects",
     url: "/dashboard/project",
+    icon: "solar:folder-with-files-bold",
+    activeIcon: "solar:folder-with-files-bold-duotone",
   },
   {
     title: "Categories",
     url: "/dashboard/category",
+    icon: "solar:hashtag-square-bold",
+    activeIcon: "solar:hashtag-square-bold-duotone",
   },
 ];
 
@@ -49,12 +61,14 @@ const footerItems = [
   {
     title: "Settings",
     url: "/settings",
-    icon: null,
+    icon: "solar:settings-bold",
+    activeIcon: "solar:settings-bold-duotone",
   },
   {
     title: "Profile",
     url: "/profile",
-    icon: User,
+    icon: "solar:user-rounded-bold",
+    activeIcon: "solar:user-rounded-bold-duotone",
   },
 ];
 
@@ -96,6 +110,9 @@ export function AppSidebar() {
                       )}
                     >
                       <Link href={item.url}>
+                        <Iconify
+                          icon={isActive ? item.activeIcon : item.icon}
+                        />
                         <span>{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
@@ -122,7 +139,9 @@ export function AppSidebar() {
                   )}
                 >
                   <Link href={item.url}>
-                    {Icon && <Icon className="mr-2 h-4 w-4" />}
+                    <Iconify
+                      icon={isActive ? item.activeIcon : item.icon}
+                    />
                     {item.title === "Profile" ? session?.user.name : item.title}
                   </Link>
                 </SidebarMenuButton>
