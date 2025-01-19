@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { Icon, disableCache } from "@iconify/react";
+import { Icon } from "@iconify/react";
 import Box from "@mui/material/Box";
 import NoSsr from "@mui/material/NoSsr";
 
@@ -50,6 +50,3 @@ export const Iconify = forwardRef<HTMLElement, IconifyProps>(
 );
 
 Iconify.displayName = "Iconify";
-
-// Disable Iconify cache for local icons
-disableCache("local");
