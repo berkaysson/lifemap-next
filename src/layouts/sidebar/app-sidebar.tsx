@@ -45,9 +45,24 @@ const items = [
   },
 ];
 
+const footerItems = [
+  {
+    title: "Settings",
+    url: "/settings",
+    icon: null,
+  },
+  {
+    title: "Profile",
+    url: "/profile",
+    icon: User,
+  },
+];
+
 export function AppSidebar() {
   const { data: session } = useSession();
   const pathname = usePathname();
+
+  const isLinkActive = (url: string) => pathname === url;
 
   return (
     <Sidebar variant="inset">
@@ -69,7 +84,7 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
-                const isActive = pathname === item.url;
+                const isActive = isLinkActive(item.url);
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton
@@ -92,12 +107,29 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <Button variant="ghost" className="w-full justify-start" asChild>
-          <Link href="/profile">
-            <User className="mr-2 h-4 w-4" />
-            {session?.user.name}
-          </Link>
-        </Button>
+        <SidebarMenu>
+          {footerItems.map((item) => {
+            const isActive = isLinkActive(item.url);
+            const Icon = item.icon;
+            return (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={isActive}
+                  className={cn(
+                    isActive && "bg-primary text-primary-foreground",
+                    "transition-colors hover:bg-primary/90 hover:text-primary-foreground w-full justify-start"
+                  )}
+                >
+                  <Link href={item.url}>
+                    {Icon && <Icon className="mr-2 h-4 w-4" />}
+                    {item.title === "Profile" ? session?.user.name : item.title}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })}
+        </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   );

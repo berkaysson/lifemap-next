@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { Toaster } from "@/components/ui/toaster";
+import ThemeProvider from "@/contexts/theme-provider";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -21,7 +22,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth(); 
+  const session = await auth();
 
   return (
     <html lang="en">
@@ -31,7 +32,9 @@ export default async function RootLayout({
           fontSans.variable
         )}
       >
-        <SessionProvider session={session}>{children}</SessionProvider>
+        <ThemeProvider>
+          <SessionProvider session={session}>{children}</SessionProvider>
+        </ThemeProvider>
         <Toaster />
       </body>
     </html>
