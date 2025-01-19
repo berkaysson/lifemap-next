@@ -3,6 +3,7 @@
 import { logout } from "@/actions/logout";
 import { reset } from "@/actions/reset";
 import { Button } from "@/components/ui/Buttons/button";
+import DashboardHeader from "@/layouts/sidebar/dashboard-header";
 import { refreshPage } from "@/lib/utils";
 import { ResetSchema } from "@/schema";
 import { useSession } from "next-auth/react";
@@ -37,8 +38,10 @@ const SettingsPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md p-8 bg-white rounded shadow-md">
+    <div>
+      <DashboardHeader title="Settings" />
+
+      <div className="flex flex-col gap-2 m-2">
         <h2 className="text-2xl font-semibold mb-4">User Settings</h2>
         {status === "authenticated" ? (
           <div className="mb-4">

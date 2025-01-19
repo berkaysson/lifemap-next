@@ -60,13 +60,13 @@ const items = [
 const footerItems = [
   {
     title: "Settings",
-    url: "/settings",
+    url: "/dashboard/settings",
     icon: "solar:settings-bold",
     activeIcon: "solar:settings-bold-duotone",
   },
   {
     title: "Profile",
-    url: "/profile",
+    url: "/dashboard/profile",
     icon: "solar:user-rounded-bold",
     activeIcon: "solar:user-rounded-bold-duotone",
   },
