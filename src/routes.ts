@@ -28,7 +28,7 @@ export const apiAuthRoute = "/api/auth";
  * The default redirect route after successful login.
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = "/settings";
+export const DEFAULT_LOGIN_REDIRECT = "/dashboard/settings";
 
 /**
  * The main domain of the application.
