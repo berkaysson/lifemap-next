@@ -26,6 +26,7 @@ import {
 } from "@/lib/time";
 import { useFetchCategories } from "@/queries/categoryQueries";
 import { useCreateHabit } from "@/queries/habitQueries";
+import { LoadingButton } from "../ui/Buttons/loading-button";
 
 const HabitForm = () => {
   const { mutateAsync: createHabit } = useCreateHabit();
@@ -318,14 +319,16 @@ const HabitForm = () => {
             />
           </div>
           {message && isError && <FormMessage>{message}</FormMessage>}
-          <Button
+          <LoadingButton
             disabled={isPending}
+            isLoading={isPending}
+            loadingText="Creating..."
             variant="default"
             type="submit"
             className="w-full"
           >
             Create
-          </Button>
+          </LoadingButton>
         </form>
       </Form>
     </div>

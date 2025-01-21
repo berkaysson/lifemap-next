@@ -7,6 +7,7 @@ import { parseDate } from "@/lib/time";
 import { Button } from "../ui/Buttons/button";
 import ProjectSelect from "../ui/Shared/ProjectSelect";
 import { useUpdateTask } from "@/queries/taskQueries";
+import { LoadingButton } from "../ui/Buttons/loading-button";
 
 interface TaskEditFormProps {
   initialValues: Task;
@@ -17,11 +18,13 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
   const [error, setError] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [newTask, setNewTask] = useState<Partial<Task>>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const { mutateAsync: updateTask } = useUpdateTask();
 
   const handleSubmit = async () => {
     setError(null);
+    setIsLoading(true);
 
     try {
       const response = await updateTask({
@@ -35,6 +38,8 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
       }
     } catch (error: any) {
       setError(error.message || "An error occurred while updating the task.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -112,9 +117,15 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
 
         {error && <p className="text-red-500">{error}</p>}
 
-        <Button variant={"outline"} size={"sm"} onClick={handleSubmit}>
+        <LoadingButton
+          isLoading={isLoading}
+          loadingText="Saving..."
+          variant={"outline"}
+          size={"sm"}
+          onClick={handleSubmit}
+        >
           Save
-        </Button>
+        </LoadingButton>
       </div>
     </ModalDialog>
   );

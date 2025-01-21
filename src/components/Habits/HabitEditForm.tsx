@@ -6,6 +6,7 @@ import { Input } from "../ui/Forms/input";
 import { Button } from "../ui/Buttons/button";
 import ProjectSelect from "../ui/Shared/ProjectSelect";
 import { useUpdateHabit } from "@/queries/habitQueries";
+import { LoadingButton } from "../ui/Buttons/loading-button";
 
 interface HabitEditFormProps {
   initialValues: Habit;
@@ -19,11 +20,13 @@ const HabitEditForm = ({
   const [error, setError] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [newHabit, setNewHabit] = useState<Partial<Habit>>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const { mutateAsync: updateHabit } = useUpdateHabit();
 
   const handleSubmit = async () => {
     setError(null);
+    setIsLoading(true);
 
     try {
       const response = await updateHabit({
@@ -37,6 +40,8 @@ const HabitEditForm = ({
       }
     } catch (error: any) {
       setError(error.message || "An error occurred while updating the habit.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -76,9 +81,15 @@ const HabitEditForm = ({
 
         {error && <p className="text-red-500">{error}</p>}
 
-        <Button variant={"outline"} size={"sm"} onClick={handleSubmit}>
+        <LoadingButton
+          isLoading={isLoading}
+          loadingText="Saving..."
+          variant={"outline"}
+          size={"sm"}
+          onClick={handleSubmit}
+        >
           Save
-        </Button>
+        </LoadingButton>
       </div>
     </ModalDialog>
   );

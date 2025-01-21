@@ -7,6 +7,7 @@ import { Input } from "../ui/Forms/input";
 import ModalDialog from "../ui/Modals/ModalDialog";
 import { Button } from "../ui/Buttons/button";
 import { Label } from "../ui/Forms/label";
+import { LoadingButton } from "../ui/Buttons/loading-button";
 
 interface CategoryEditFormProps {
   initialValues: Category;
@@ -21,8 +22,10 @@ const CategoryEditForm = ({
   const [newName, setNewName] = useState(initialValues.name);
   const { mutateAsync: updateCategory } = useUpdateCategory();
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     setError(null);
     const newCategory = { ...initialValues, name: newName };
     try {
@@ -37,6 +40,7 @@ const CategoryEditForm = ({
         error.message || "An error occurred while updating the category."
       );
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -64,9 +68,16 @@ const CategoryEditForm = ({
         />
         {error && <p className="text-red-500">{error}</p>}
 
-        <Button variant={"outline"} size={"sm"} onClick={handleSubmit}>
+        <LoadingButton
+          isLoading={isLoading}
+          disabled={isLoading}
+          loadingText="Saving..."
+          variant={"outline"}
+          size={"sm"}
+          onClick={handleSubmit}
+        >
           Save
-        </Button>
+        </LoadingButton>
       </div>
     </ModalDialog>
   );

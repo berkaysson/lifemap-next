@@ -16,11 +16,13 @@ import {
   FormMessage,
 } from "../ui/Forms/form";
 import { useCreateProject } from "@/queries/projectQueries";
+import { LoadingButton } from "../ui/Buttons/loading-button";
 
 const ProjectForm = () => {
   const createProjectMutation = useCreateProject();
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof ProjectSchema>>({
     resolver: zodResolver(ProjectSchema),
@@ -33,6 +35,7 @@ const ProjectForm = () => {
   const { reset } = form;
 
   const onSubmit = async (data: z.infer<typeof ProjectSchema>) => {
+    setIsLoading(true);
     try {
       const response = await createProjectMutation.mutateAsync(data);
       if (response.success) {
@@ -43,6 +46,8 @@ const ProjectForm = () => {
     } catch (error: any) {
       setIsError(true);
       setMessage(error.message || "Failed to create project");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -100,19 +105,22 @@ const ProjectForm = () => {
           </div>
 
           {message && (
-            <FormMessage className={isError ? "text-red-500" : "text-green-500"}>
+            <FormMessage
+              className={isError ? "text-red-500" : "text-green-500"}
+            >
               {message}
             </FormMessage>
           )}
 
-          <Button
-            disabled={createProjectMutation.isPending}
+          <LoadingButton
+            isLoading={isLoading}
+            loadingText="Creating..."
             variant="default"
             type="submit"
             className="w-full"
           >
-            {createProjectMutation.isPending ? "Creating..." : "Create"}
-          </Button>
+            Create
+          </LoadingButton>
         </form>
       </Form>
     </div>

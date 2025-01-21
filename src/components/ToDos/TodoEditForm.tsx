@@ -6,6 +6,7 @@ import { Button } from "../ui/Buttons/button";
 import { Label } from "../ui/Forms/label";
 import ProjectSelect from "../ui/Shared/ProjectSelect";
 import { useUpdateTodo } from "@/queries/todoQueries";
+import { LoadingButton } from "../ui/Buttons/loading-button";
 
 interface TodoEditFormProps {
   initialValues: ToDo;
@@ -14,6 +15,7 @@ interface TodoEditFormProps {
 
 const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [newName, setNewName] = useState(initialValues.name);
   const [newDescription, setNewDescription] = useState(
     initialValues.description
@@ -25,6 +27,7 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
 
   const handleSubmit = async () => {
     setError(null);
+    setIsLoading(true);
     const newTodo = {
       ...initialValues,
       name: newName,
@@ -42,6 +45,8 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
       setError(
         error.message || "An error occurred while updating the category."
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -49,6 +54,7 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
     setNewName(initialValues.name);
     setNewDescription(initialValues.description);
     setError(null);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
   return (
@@ -86,9 +92,15 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
 
         {error && <p className="text-red-500">{error}</p>}
 
-        <Button variant={"outline"} size={"sm"} onClick={handleSubmit}>
+        <LoadingButton
+          isLoading={isLoading}
+          loadingText="Saving..."
+          variant={"outline"}
+          size={"sm"}
+          onClick={handleSubmit}
+        >
           Save
-        </Button>
+        </LoadingButton>
       </div>
     </ModalDialog>
   );

@@ -5,6 +5,7 @@ import { Label } from "../ui/Forms/label";
 import { Input } from "../ui/Forms/input";
 import { Button } from "../ui/Buttons/button";
 import { useUpdateProject } from "@/queries/projectQueries";
+import { LoadingButton } from "../ui/Buttons/loading-button";
 
 interface ProjectEditFormProps {
   initialValues: Project;
@@ -17,16 +18,21 @@ const ProjectEditForm = ({
 }: ProjectEditFormProps) => {
   const [error, setError] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [newProject, setNewProject] = useState<Project>(initialValues);
   const updateProjectMutation = useUpdateProject();
 
   const handleSubmit = async () => {
     setError(null);
+    setIsLoading(true);
+
     try {
       await updateProjectMutation.mutateAsync(newProject);
       setIsOpen(false);
     } catch (error: any) {
       setError(error.message || "Failed to update project");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -68,14 +74,15 @@ const ProjectEditForm = ({
 
         {error && <p className="text-red-500">{error}</p>}
 
-        <Button 
-          variant={"outline"} 
-          size={"sm"} 
+        <LoadingButton
+          isLoading={isLoading}
+          variant={"outline"}
+          size={"sm"}
           onClick={handleSubmit}
-          disabled={updateProjectMutation.isPending}
+          loadingText="Saving..."
         >
-          {updateProjectMutation.isPending ? "Saving..." : "Save"}
-        </Button>
+          Save
+        </LoadingButton>
       </div>
     </ModalDialog>
   );

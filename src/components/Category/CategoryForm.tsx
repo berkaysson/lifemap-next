@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Button } from "../ui/Buttons/button";
+import { LoadingButton } from "../ui/Buttons/loading-button";
 import { Input } from "../ui/Forms/input";
 import { CategorySchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,6 +22,7 @@ const CategoryForm = () => {
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof CategorySchema>>({
     resolver: zodResolver(CategorySchema),
@@ -33,6 +34,7 @@ const CategoryForm = () => {
   const { reset } = form;
 
   const onSubmit = async (data: z.infer<typeof CategorySchema>) => {
+    setIsLoading(true);
     startTransition(async () => {
       try {
         const response = await createCategory(data);
@@ -49,6 +51,7 @@ const CategoryForm = () => {
         setMessage(error.message || "An error occurred");
         setIsError(true);
       }
+      setIsLoading(false);
     });
   };
 
@@ -84,14 +87,16 @@ const CategoryForm = () => {
 
           {message && isError && <FormMessage>{message}</FormMessage>}
 
-          <Button
+          <LoadingButton
             disabled={isPending}
             variant="default"
             type="submit"
             className="w-full"
+            isLoading={isLoading}
+            loadingText="Creating..."
           >
             Create
-          </Button>
+          </LoadingButton>
         </form>
       </Form>
     </div>

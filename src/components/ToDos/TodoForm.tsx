@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "../ui/Forms/form";
 import { useCreateTodo } from "@/queries/todoQueries";
+import { LoadingButton } from "../ui/Buttons/loading-button";
 
 const TodoForm = () => {
   const { mutateAsync: createTodo } = useCreateTodo();
@@ -144,14 +145,16 @@ const TodoForm = () => {
 
           {message && isError && <FormMessage>{message}</FormMessage>}
 
-          <Button
+          <LoadingButton
+            isLoading={isPending}
+            loadingText="Creating..."
             disabled={isPending}
             variant="default"
             type="submit"
             className="w-full"
           >
             Create
-          </Button>
+          </LoadingButton>
         </form>
       </Form>
     </div>

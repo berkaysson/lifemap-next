@@ -18,6 +18,7 @@ import { Button } from "../ui/Buttons/button";
 import SelectBox from "../ui/Shared/SelectBox";
 import { useFetchCategories } from "@/queries/categoryQueries";
 import { useCreateTask } from "@/queries/taskQueries";
+import { LoadingButton } from "../ui/Buttons/loading-button";
 
 const TaskForm = () => {
   const { mutateAsync: createTask } = useCreateTask();
@@ -221,14 +222,16 @@ const TaskForm = () => {
             />
           </div>
           {message && isError && <FormMessage>{message}</FormMessage>}
-          <Button
+          <LoadingButton
             disabled={isPending}
+            isLoading={isPending}
+            loadingText="Creating..."
             variant="default"
             type="submit"
             className="w-full"
           >
             Create
-          </Button>
+          </LoadingButton>
         </form>
       </Form>
     </div>

@@ -1,7 +1,7 @@
 "use client";
 
-import { useContext, useState, useTransition } from "react";
-import { Button } from "../ui/Buttons/button";
+import { useState, useTransition } from "react";
+import { LoadingButton } from "../ui/Buttons/loading-button";
 import {
   Form,
   FormControl,
@@ -20,6 +20,7 @@ import SelectBox from "../ui/Shared/SelectBox";
 import { useFetchCategories } from "@/queries/categoryQueries";
 import { useCreateActivity } from "@/queries/activityQueries";
 import ModalDialog from "../ui/Modals/ModalDialog";
+import { Button } from "../ui/Buttons/button";
 
 const ActivityForm = () => {
   const { mutateAsync: createActivity } = useCreateActivity();
@@ -169,14 +170,16 @@ const ActivityForm = () => {
 
           {message && isError && <FormMessage>{message}</FormMessage>}
 
-          <Button
+          <LoadingButton
             disabled={isPending}
             variant="default"
             type="submit"
             className="w-full"
+            isLoading={isPending}
+            loadingText="Creating..."
           >
             Create
-          </Button>
+          </LoadingButton>
         </form>
       </Form>
     </ModalDialog>

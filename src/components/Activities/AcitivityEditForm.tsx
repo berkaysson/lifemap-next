@@ -1,7 +1,7 @@
 import { Activity } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { Input } from "../ui/Forms/input";
-import { Button } from "../ui/Buttons/button";
+import { LoadingButton } from "../ui/Buttons/loading-button";
 import { Label } from "../ui/Forms/label";
 import { useUpdateActivity } from "@/queries/activityQueries";
 import ModalDialog from "../ui/Modals/ModalDialog";
@@ -21,17 +21,20 @@ const ActivityEditForm = ({
   const [newDescription, setNewDescription] = useState(
     initialValues.description || ""
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   const { mutateAsync: updateActivity } = useUpdateActivity();
 
   const handleSubmit = async () => {
     setError(null);
+    setIsLoading(true);
     const newActivity = {
       ...initialValues,
       duration: newDuration,
       description: newDescription,
     };
     const response = await updateActivity(newActivity);
+    setIsLoading(false);
     if (response.success) {
       setIsOpen(false);
     } else {
@@ -78,9 +81,16 @@ const ActivityEditForm = ({
 
         {error && <p className="text-red-500">{error}</p>}
 
-        <Button variant={"outline"} size={"sm"} onClick={handleSubmit}>
+        <LoadingButton
+          variant={"outline"}
+          size={"sm"}
+          onClick={handleSubmit}
+          isLoading={isLoading}
+          disabled={isLoading}
+          loadingText="Saving..."
+        >
           Save
-        </Button>
+        </LoadingButton>
       </div>
     </ModalDialog>
   );
