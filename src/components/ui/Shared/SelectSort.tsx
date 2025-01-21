@@ -8,8 +8,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../select";
-import { SortAsc, SortDesc } from "lucide-react";
 import { Button } from "../Buttons/button";
+import { Iconify } from "../iconify";
+import { IconButton } from "@mui/material";
 
 interface SortOption {
   value: string;
@@ -53,9 +54,19 @@ const SelectSort: React.FC<SortSelectProps> = ({ options, onSelect }) => {
           </SelectGroup>
         </SelectContent>
       </Select>
-      <Button size={"icon"} variant={"ghost"} onClick={toggleDirection}>
-        {direction === "asc" ? <SortAsc /> : <SortDesc />}
-      </Button>
+      <IconButton onClick={toggleDirection}>
+        {direction === "asc" ? (
+          <Iconify
+            icon="solar:sort-from-bottom-to-top-bold"
+            className="dark:text-white text-black"
+          />
+        ) : (
+          <Iconify
+            icon="solar:sort-from-top-to-bottom-bold"
+            className="dark:text-white text-black"
+          />
+        )}
+      </IconButton>
     </div>
   );
 };
