@@ -21,6 +21,16 @@ import { useFetchCategories } from "@/queries/categoryQueries";
 import { useCreateActivity } from "@/queries/activityQueries";
 import ModalDialog from "../ui/Modals/ModalDialog";
 import { Button } from "../ui/Buttons/button";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "../ui/drawer";
 
 const ActivityForm = () => {
   const { mutateAsync: createActivity } = useCreateActivity();
@@ -63,126 +73,131 @@ const ActivityForm = () => {
   };
 
   return (
-    <ModalDialog
-      triggerButton={
+    <Drawer open={isOpen} onOpenChange={setIsOpen}>
+      <DrawerTrigger asChild>
         <Button
           onClick={() => {
             setMessage("");
             setIsError(false);
           }}
-          size={"lg"}
+          size="lg"
           className="fixed bottom-4 right-4"
         >
           <SquareActivity className="mr-2 h-6 w-6" /> Create Activity
         </Button>
-      }
-      title="Create Activity"
-      description="Create a new activity"
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-    >
-      <Form {...form}>
-        <form className="space-y-2" onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <Input
-                    disabled={isPending}
-                    {...field}
-                    placeholder="Describe the activity"
-                    type="text"
-                  />
-                </FormControl>
-                {form.formState.errors.description && (
-                  <FormMessage>
-                    {form.formState.errors.description.message}
-                  </FormMessage>
-                )}
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="duration"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Duration (minutes)</FormLabel>
-                <FormControl>
-                  <Input
-                    disabled={isPending}
-                    {...field}
-                    placeholder="Your activity duration in minutes"
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                    type="number"
-                  />
-                </FormControl>
-                {form.formState.errors.duration && (
-                  <FormMessage>
-                    {form.formState.errors.duration.message}
-                  </FormMessage>
-                )}
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="categoryId"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Select a Category</FormLabel>
-                <SelectBox
-                  field={field}
-                  options={categories || []}
-                  form={form}
-                  optionKey={"id"}
-                  formKey={"categoryId"}
+      </DrawerTrigger>
+      <DrawerContent>
+        <div className="mx-auto w-full max-w-sm">
+          <DrawerHeader>
+            <DrawerTitle>Create Activity</DrawerTitle>
+            <DrawerDescription>Create a new activity</DrawerDescription>
+          </DrawerHeader>
+          <div className="p-4">
+            <Form {...form}>
+              <form
+                className="space-y-4"
+                onSubmit={form.handleSubmit(onSubmit)}
+              >
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Input
+                          disabled={isPending}
+                          {...field}
+                          placeholder="Describe the activity"
+                          type="text"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-                {form.formState.errors.categoryId && (
-                  <FormMessage>
-                    {form.formState.errors.categoryId.message}
-                  </FormMessage>
-                )}
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="date"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Activity Date</FormLabel>
-                <FormControl>
-                  <Input disabled={isPending} {...field} type="date" required />
-                </FormControl>
-                {form.formState.errors.date && (
-                  <FormMessage>
-                    {form.formState.errors.date.message}
-                  </FormMessage>
-                )}
-              </FormItem>
-            )}
-          />
 
-          {message && isError && <FormMessage>{message}</FormMessage>}
+                <FormField
+                  control={form.control}
+                  name="duration"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Duration (minutes)</FormLabel>
+                      <FormControl>
+                        <Input
+                          disabled={isPending}
+                          {...field}
+                          placeholder="Your activity duration in minutes"
+                          onChange={(e) =>
+                            field.onChange(Number(e.target.value))
+                          }
+                          type="number"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-          <LoadingButton
-            disabled={isPending}
-            variant="default"
-            type="submit"
-            className="w-full"
-            isLoading={isPending}
-            loadingText="Creating..."
-          >
-            Create
-          </LoadingButton>
-        </form>
-      </Form>
-    </ModalDialog>
+                <FormField
+                  control={form.control}
+                  name="categoryId"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Select a Category</FormLabel>
+                      <SelectBox
+                        field={field}
+                        options={categories || []}
+                        form={form}
+                        optionKey="id"
+                        formKey="categoryId"
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="date"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Activity Date</FormLabel>
+                      <FormControl>
+                        <Input
+                          disabled={isPending}
+                          {...field}
+                          type="date"
+                          required
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {message && isError && <FormMessage>{message}</FormMessage>}
+
+                <LoadingButton
+                  disabled={isPending}
+                  type="submit"
+                  className="w-full"
+                  isLoading={isPending}
+                  loadingText="Creating..."
+                >
+                  Create
+                </LoadingButton>
+              </form>
+            </Form>
+          </div>
+          <DrawerFooter>
+            <DrawerClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </div>
+      </DrawerContent>
+    </Drawer>
   );
 };
 
