@@ -40,14 +40,14 @@ const deleteFromProject = async (
   }
 };
 
-export const deleteToDoFromProject = (todoId: string, projectId: string) => {
-  return deleteFromProject("todos", todoId, projectId);
+export const deleteToDoFromProject = async (todoId: string, projectId: string) => {
+  return await deleteFromProject("todos", todoId, projectId);
 };
 
-export const deleteTaskFromProject = (taskId: string, projectId: string) => {
-  return deleteFromProject("tasks", taskId, projectId);
+export const deleteTaskFromProject = async (taskId: string, projectId: string) => {
+  return await deleteFromProject("tasks", taskId, projectId);
 };
 
-export const deleteHabitFromProject = (habitId: string, projectId: string) => {
-  return deleteFromProject("habits", habitId, projectId);
+export const deleteHabitFromProject = async (habitId: string, projectId: string) => {
+  return await deleteFromProject("habits", habitId, projectId);
 };

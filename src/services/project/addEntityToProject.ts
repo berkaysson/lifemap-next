@@ -43,11 +43,11 @@ export const addItemToProject = async (
 };
 
 // Example usages for specific item types
-export const addToDoToProject = (todoId: string, projectId: string) =>
-  addItemToProject(projectId, todoId, "todos");
+export const addToDoToProject = async (todoId: string, projectId: string) =>
+  await addItemToProject(projectId, todoId, "todos");
 
-export const addTaskToProject = (taskId: string, projectId: string) =>
-  addItemToProject(projectId, taskId, "tasks");
+export const addTaskToProject = async (taskId: string, projectId: string) =>
+  await addItemToProject(projectId, taskId, "tasks");
 
-export const addHabitToProject = (habitId: string, projectId: string) =>
-  addItemToProject(projectId, habitId, "habits");
+export const addHabitToProject = async (habitId: string, projectId: string) =>
+  await addItemToProject(projectId, habitId, "habits");
