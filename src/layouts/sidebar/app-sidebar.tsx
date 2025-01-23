@@ -11,9 +11,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger,
 } from "@/layouts/sidebar/sidebar";
-import { Button } from "@/components/ui/Buttons/button";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -81,7 +79,6 @@ export function AppSidebar() {
 
   return (
     <Sidebar variant="floating" collapsible="icon" className="group-data-[collapsible=icon]:w-[70px]">
-      <SidebarTrigger className="md:hidden group-data-[collapsible=icon]:hidden absolute top-4 right-4" />
       <SidebarHeader className="p-4 group-data-[collapsible=icon]:p-1">
         <Link href="/" className="flex items-center space-x-2">
           <Image
@@ -131,7 +128,6 @@ export function AppSidebar() {
         <SidebarMenu>
           {footerItems.map((item) => {
             const isActive = isLinkActive(item.url);
-            const Icon = item.icon;
             return (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
