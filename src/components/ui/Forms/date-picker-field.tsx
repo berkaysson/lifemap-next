@@ -1,45 +1,44 @@
-import React from "react";
-import { FieldPath, FieldValues, UseFormReturn } from "react-hook-form";
-import { FormControl, FormField, FormLabel, FormItem } from "./form";
-import { Input } from "./input";
+import * as React from "react";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "../Buttons/button";
 
-type DatePickerFieldProps<TFieldValues extends FieldValues> = {
-  form: UseFormReturn<TFieldValues>;
-  name: FieldPath<TFieldValues>;
-  label: string;
-  placeholder?: string;
-  disabled?: boolean;
-};
+interface DatePickerProps {
+  date: Date | undefined;
+  onSelect: (date: Date | undefined) => void;
+}
 
-export function DatePickerField<TFieldValues extends FieldValues>({
-  form,
-  name,
-  label,
-  placeholder,
-  disabled,
-}: DatePickerFieldProps<TFieldValues>) {
+export function DatePicker({ date, onSelect }: DatePickerProps) {
   return (
-    <FormField
-      control={form.control}
-      name={name}
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>{label}</FormLabel>
-          <FormControl>
-            <Input
-              type="date"
-              placeholder={placeholder}
-              disabled={disabled}
-              value={field.value ? field.value.split("T")[0] : ""}
-              onChange={(e) => {
-                const date = e.target.value;
-                field.onChange(date);
-              }}
-            />
-          </FormControl>
-        </FormItem>
-      )}
-    />
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant={"outline"}
+          className={cn(
+            "w-full justify-start text-left font-normal",
+            !date && "text-muted-foreground"
+          )}
+        >
+          <CalendarIcon className="mr-2 h-4 w-4" />
+          {date ? format(date, "PPP") : <span>Pick a date</span>}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0">
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={onSelect}
+          initialFocus
+        />
+      </PopoverContent>
+    </Popover>
   );
 }

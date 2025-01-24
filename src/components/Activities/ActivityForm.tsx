@@ -31,6 +31,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "../ui/drawer";
+import { DatePicker } from "../ui/Forms/date-picker-field";
 
 const ActivityForm = () => {
   const { mutateAsync: createActivity } = useCreateActivity();
@@ -161,6 +162,29 @@ const ActivityForm = () => {
                   control={form.control}
                   name="date"
                   render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Activity Date</FormLabel>
+                      <FormControl>
+                        <DatePicker
+                          date={field.value ? new Date(field.value) : undefined}
+                          onSelect={(date) =>
+                            field.onChange(
+                              new Date((date?.getTime() ?? 0) + 10800000)
+                                .toISOString()
+                                .split("T")[0]
+                            )
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* <FormField
+                  control={form.control}
+                  name="date"
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Activity Date</FormLabel>
                       <FormControl>
@@ -174,7 +198,7 @@ const ActivityForm = () => {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
 
                 {message && isError && <FormMessage>{message}</FormMessage>}
 
