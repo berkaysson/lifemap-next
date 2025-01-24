@@ -6,21 +6,33 @@ import {
   ThemeProvider as MuiThemeProvider,
   createTheme,
 } from "@mui/material";
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
+import { getInitialTheme } from "@/lib/utils";
 
 const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
+  const [initialTheme, setInitialTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    const theme = getInitialTheme();
+    setInitialTheme(theme);
+  }, []);
+
   const muiTheme = useMemo(
     () =>
       createTheme({
         palette: {
-          mode: "light",
+          mode: initialTheme,
         },
       }),
-    []
+    [initialTheme]
   );
 
   return (
-    <NextThemesProvider attribute="class" defaultTheme="system" enableSystem>
+    <NextThemesProvider
+      attribute="class"
+      defaultTheme={initialTheme}
+      enableSystem
+    >
       <MuiThemeColorModeProvider>
         <MuiThemeProvider theme={muiTheme}>
           <CssBaseline />

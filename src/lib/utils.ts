@@ -25,3 +25,13 @@ export function sortArrayOfObjectsByKey<T>(
 export function logService(service: string) {
   console.log(`Service: ${service}`);
 }
+
+export function getInitialTheme(): "light" | "dark" {
+  const theme = localStorage.getItem("theme");
+
+  if (theme === "dark" || theme === "light") {
+    return theme;
+  }
+
+  return "light";
+}
