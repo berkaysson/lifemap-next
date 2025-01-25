@@ -37,7 +37,7 @@ const ActivityList = () => {
 
   return (
     <div className="flex flex-col gap-2 m-2">
-      <div className="flex flex-row justify-between">
+      <div className="flex sm:flex-row justify-between flex-col-reverse gap-2">
         <SelectSort
           options={[
             { value: "date", label: "Date" },
@@ -58,7 +58,7 @@ const ActivityList = () => {
       {isError && <div>Error loading activities: {error.message}</div>}
 
       {viewMode === "grid" && (
-        <ul className="border rounded-sm">
+        <ul className="rounded-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {sortedActivities.map((activity) => (
             <ActivityListItem key={activity.id} activity={activity} />
           ))}

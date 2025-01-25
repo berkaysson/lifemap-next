@@ -15,6 +15,7 @@ import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
 import ActivityEditForm from "./AcitivityEditForm";
 import { Button } from "../ui/Buttons/button";
 import { Tooltip } from "@mui/material";
+import { Badge } from "../ui/badge";
 
 const ActivityTable = ({
   sortedActivities,
@@ -46,15 +47,19 @@ const ActivityTable = ({
             return (
               <TableRow key={activity.id}>
                 <TableCell>
-                  {activity.description ? (
-                    <Tooltip arrow title={activity.description}>
-                      <span>{activity.duration}</span>
-                    </Tooltip>
-                  ) : (
-                    activity.duration
-                  )}
+                  <span>
+                    {activity.description ? (
+                      <Tooltip arrow title={activity.description}>
+                        <span className="underline">{activity.duration}</span>
+                      </Tooltip>
+                    ) : (
+                      activity.duration
+                    )}
+                  </span>
                 </TableCell>
-                <TableCell>{activity.category?.name}</TableCell>
+                <TableCell>
+                  <Badge>{activity.category?.name}</Badge>
+                </TableCell>
                 <TableCell>
                   {formatDate(activity.date)} / {remained}{" "}
                   {expired ? "" : "remaining"}
