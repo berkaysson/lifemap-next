@@ -101,25 +101,6 @@ const ActivityForm = () => {
               >
                 <FormField
                   control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <Input
-                          disabled={isPending}
-                          {...field}
-                          placeholder="Describe the activity"
-                          type="text"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
                   name="duration"
                   render={({ field }) => (
                     <FormItem>
@@ -181,24 +162,24 @@ const ActivityForm = () => {
                   )}
                 />
 
-                {/* <FormField
+                <FormField
                   control={form.control}
-                  name="date"
+                  name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Activity Date</FormLabel>
+                      <FormLabel>Description (optional)</FormLabel>
                       <FormControl>
                         <Input
                           disabled={isPending}
                           {...field}
-                          type="date"
-                          required
+                          placeholder="Describe the activity"
+                          type="text"
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
-                /> */}
+                />
 
                 {message && isError && <FormMessage>{message}</FormMessage>}
 
