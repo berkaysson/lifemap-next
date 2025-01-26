@@ -1,12 +1,11 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Button } from "../ui/Buttons/button";
 import { Input } from "../ui/Forms/input";
 import { TodoSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useContext, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import {
   Form,
   FormControl,
@@ -58,7 +57,7 @@ const TodoForm = () => {
 
   return (
     <div className="border p-4 m-2 rounded-sm">
-      <h1>Create a Todo</h1>
+      <h1 className="text-2xl font-bold">Create a Todo</h1>
       <Form {...form}>
         <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-4">

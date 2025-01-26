@@ -23,7 +23,7 @@ export function LoadingButton({
       {isLoading ? (
         <>
           <Iconify icon="svg-spinners:3-dots-scale-middle" />
-          <span className="ml-2">{loadingText}</span>
+          {loadingText && <span className="ml-2">{loadingText}</span>}
         </>
       ) : (
         children

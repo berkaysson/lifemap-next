@@ -1,37 +1,42 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "../ui/Buttons/button";
 import { getRemainingTime, isExpired } from "@/lib/time";
 import IsCompleted from "../ui/Shared/IsCompleted";
 import ColorCircle from "../ui/Shared/ColorCircle";
 import TodoEditForm from "./TodoEditForm";
 import ButtonWithConfirmation from "../ui/Buttons/ButtonWithConfirmation";
-import ProjectSelect from "../ui/Shared/ProjectSelect";
 import {
-  TODO_QUERY_KEY,
   useDeleteTodo,
   useUpdateTodo,
   useArchiveTodo,
 } from "@/queries/todoQueries";
-import { useQueryClient } from "@tanstack/react-query";
 import {
   useFetchProjects,
-  useAddToDoToProject,
-  useRemoveToDoFromProject,
 } from "@/queries/projectQueries";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Badge } from "../ui/badge";
+import { Iconify } from "../ui/iconify";
+import { LoadingButton } from "../ui/Buttons/loading-button";
+import { Separator } from "../ui/separator";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion";
 
 const TodoListItem = ({ todo }) => {
-  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
-    null
-  );
-
   const { data: projects = [] } = useFetchProjects();
   const { mutateAsync: deleteTodo } = useDeleteTodo();
   const updateTodoMutation = useUpdateTodo();
-  const addToProjectMutation = useAddToDoToProject();
-  const removeFromProjectMutation = useRemoveToDoFromProject();
-  const queryClient = useQueryClient();
   const { mutateAsync: archiveTodo } = useArchiveTodo();
 
   const todoProject = projects.find((project) => project.id === todo.projectId);
@@ -47,109 +52,105 @@ const TodoListItem = ({ todo }) => {
     await updateTodoMutation.mutateAsync(updatedTodo);
   };
 
-  const handleAddToProject = async () => {
-    if (selectedProjectId && !todoProject) {
-      await addToProjectMutation.mutateAsync({
-        entityId: todo.id,
-        projectId: selectedProjectId,
-      });
-      queryClient.invalidateQueries({
-        queryKey: [TODO_QUERY_KEY, todo.userId],
-      });
-    }
-  };
-
-  const handleDeleteFromProject = async () => {
-    if (todoProject) {
-      await removeFromProjectMutation.mutateAsync({
-        entityId: todo.id,
-        projectId: todoProject.id,
-      });
-      queryClient.invalidateQueries({
-        queryKey: [TODO_QUERY_KEY, todo.userId],
-      });
-    }
-  };
-
   const handleArchive = async () => {
     await archiveTodo(todo.id);
   };
 
   return (
-    <li className="flex flex-col gap-2 p-4 border-b">
-      <div className="flex flex-col gap-2">
-        <div>
-          <span className="mr-2 text-xl flex gap-2">
-            <IsCompleted isCompleted={todo.completed} isExpired={expired} />
-            <ColorCircle colorCode={todo.colorCode || "darkblue"} />
-          </span>
-          <span>{todo.name}</span>
+    <Card className="w-full max-w-md">
+      <div className="flex justify-between p-1 pb-0">
+        <ColorCircle colorCode={todo.colorCode || "darkblue"} />
+        <Badge
+          variant="outline"
+          style={{ backgroundColor: todo.colorCode || "darkblue" }}
+          className="text-white"
+        >
+          {todoProject ? todoProject.name : "No Project"}
+        </Badge>
+      </div>
+
+      <CardHeader className="p-3 pt-1">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-md font-semibold flex items-center gap-1">
+            <span className="mr-2 text-xl flex gap-2">
+              <LoadingButton
+                isLoading={updateTodoMutation.isPending}
+                loadingText=""
+                variant={"outline"}
+                onClick={handleComplete}
+              >
+                <IsCompleted isCompleted={todo.completed} isExpired={expired} />
+              </LoadingButton>
+            </span>
+            {todo.name}
+          </CardTitle>
         </div>
-        <div>{todo.description}</div>
-        <span>{todo.endDate && todo.endDate.toISOString().slice(0, 10)}</span>
-        {!todo.completed && todo.endDate && (
-          <span>
-            {remained} {expired ? "expired" : "remaining"}
-          </span>
-        )}
-        <div className="flex flex-row gap-2">
-          {todoProject ? (
-            <div className="flex flex-row gap-2 items-center">
-              <span>{todoProject.name}</span>
-              <Button
-                variant={"outline"}
-                size={"sm"}
-                onClick={handleDeleteFromProject}
-                disabled={removeFromProjectMutation.isPending}
-              >
-                Remove
-              </Button>
-            </div>
-          ) : (
-            <>
-              <ProjectSelect
-                onSelect={(projectId) => setSelectedProjectId(projectId)}
+      </CardHeader>
+      <CardContent className="px-3">
+        <CardDescription>{todo.description}</CardDescription>
+        <div className="flex flex-col gap-2">
+          {todo.endDate && (
+            <div className="flex items-center text-sm text-muted-foreground">
+              <Iconify
+                icon="solar:calendar-date-bold"
+                width={20}
+                className="mr-2"
               />
-              <Button
-                disabled={
-                  selectedProjectId === null || addToProjectMutation.isPending
-                }
-                onClick={handleAddToProject}
-                size={"sm"}
-                variant={"outline"}
-              >
-                Add to Project
-              </Button>
-            </>
+              {todo.endDate.toISOString().slice(0, 10)}
+            </div>
+          )}
+          {!todo.completed && todo.endDate && (
+            <div className="flex items-center text-sm text-muted-foreground">
+              <Iconify
+                icon="solar:stopwatch-bold"
+                width={20}
+                className="mr-2"
+              />
+              <span>
+                {remained} {expired ? "expired" : "remaining"}
+              </span>
+            </div>
           )}
         </div>
-      </div>
-      <div className="flex flex-row gap-2">
-        <Button variant={"outline"} size={"sm"} onClick={handleComplete}>
-          {todo.completed ? "Uncomplete" : "Complete"}
-        </Button>
-        <TodoEditForm
-          initialValues={todo}
-          triggerButton={
-            <Button variant={"outline"} size={"sm"}>
-              Edit
-            </Button>
-          }
-        />
-        <ButtonWithConfirmation
-          variant="destructive"
-          size={"sm"}
-          buttonText={"Delete"}
-          onConfirm={handleDelete}
-        />
-        <ButtonWithConfirmation
-          variant="destructive"
-          size={"sm"}
-          buttonText={"Archive"}
-          onConfirm={handleArchive}
-        />
-      </div>
-    </li>
+      </CardContent>
+      <CardFooter className="px-3 pb-1">
+        <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value="actions">
+            <AccordionTrigger>Actions</AccordionTrigger>
+            <AccordionContent>
+              <div className="flex flex-wrap gap-2">
+                <TodoEditForm
+                  initialValues={todo}
+                  triggerButton={
+                    <Button variant="outline" size="sm">
+                      <Iconify
+                        icon="solar:pen-new-square-bold-duotone"
+                        width={16}
+                        className="mr-1"
+                      />
+                      Edit
+                    </Button>
+                  }
+                />
+                <Separator orientation="vertical" className="h-9" />
+                <ButtonWithConfirmation
+                  variant="destructive"
+                  size="sm"
+                  buttonText="Delete"
+                  onConfirm={handleDelete}
+                />
+                <ButtonWithConfirmation
+                  variant="destructive"
+                  size="sm"
+                  buttonText="Archive"
+                  onConfirm={handleArchive}
+                />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </CardFooter>
+    </Card>
   );
 };
 

@@ -55,6 +55,9 @@ const ActivityList = () => {
 
       {isLoading && <div>Loading activities...</div>}
       {isError && <div>Error loading activities: {error.message}</div>}
+      {sortedActivities.length === 0 && (
+        <div className="opacity-80 mt-2">No activities found.</div>
+      )}
 
       {viewMode === "grid" && (
         <ul className="rounded-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
