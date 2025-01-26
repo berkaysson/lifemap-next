@@ -138,12 +138,14 @@ const TodoListItem = ({ todo }) => {
                   size="sm"
                   buttonText="Delete"
                   onConfirm={handleDelete}
+                  icon="solar:trash-bin-trash-bold"
                 />
                 <ButtonWithConfirmation
                   variant="destructive"
                   size="sm"
                   buttonText="Archive"
                   onConfirm={handleArchive}
+                  icon="solar:archive-bold"
                 />
               </div>
             </AccordionContent>

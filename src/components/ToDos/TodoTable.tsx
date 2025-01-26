@@ -32,7 +32,7 @@ const TodoTable = ({ sortedTodos }: { sortedTodos: any[] }) => {
   const { mutateAsync: archiveTodo } = useArchiveTodo();
 
   const handleDelete = async (Todo: any) => {
-    await deleteTodo(Todo);
+    await deleteTodo(Todo.id);
   };
 
   const handleComplete = async (todo) => {
@@ -121,14 +121,16 @@ const TodoTable = ({ sortedTodos }: { sortedTodos: any[] }) => {
                     <ButtonWithConfirmation
                       variant="destructive"
                       size="sm"
-                      buttonText="Delete"
+                      buttonText=""
                       onConfirm={() => handleDelete(Todo)}
+                      icon="solar:trash-bin-trash-bold"
                     />
                     <ButtonWithConfirmation
                       variant="destructive"
                       size="sm"
-                      buttonText="Archive"
+                      buttonText=""
                       onConfirm={() => handleArchive(Todo)}
+                      icon="solar:archive-bold"
                     />
                   </div>
                 </TableCell>
