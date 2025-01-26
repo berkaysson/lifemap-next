@@ -16,6 +16,7 @@ import ActivityEditForm from "./AcitivityEditForm";
 import { Button } from "../ui/Buttons/button";
 import { Tooltip } from "@mui/material";
 import { Badge } from "../ui/badge";
+import { Iconify } from "../ui/iconify";
 
 const ActivityTable = ({
   sortedActivities,
@@ -70,15 +71,19 @@ const ActivityTable = ({
                       initialValues={activity}
                       triggerButton={
                         <Button variant="outline" size="sm">
-                          Edit
+                          <Iconify
+                            icon="solar:pen-new-square-outline"
+                            width={16}
+                          />
                         </Button>
                       }
                     />
                     <ButtonWithConfirmation
                       variant="destructive"
                       size="sm"
-                      buttonText="Delete"
+                      buttonText=""
                       onConfirm={() => handleDelete(activity)}
+                      icon="solar:trash-bin-trash-bold"
                     />
                   </div>
                 </TableCell>

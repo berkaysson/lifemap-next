@@ -53,6 +53,11 @@ const ActivityListItem = ({ activity }: { activity: ExtendedActivity }) => {
           initialValues={activity}
           triggerButton={
             <Button variant="outline" size="sm">
+              <Iconify
+                icon="solar:pen-new-square-bold-duotone"
+                width={16}
+                className="mr-1"
+              />
               Edit
             </Button>
           }
@@ -62,6 +67,7 @@ const ActivityListItem = ({ activity }: { activity: ExtendedActivity }) => {
           size="sm"
           buttonText="Delete"
           onConfirm={handleDelete}
+          icon="solar:trash-bin-trash-bold"
         />
       </CardFooter>
     </Card>
