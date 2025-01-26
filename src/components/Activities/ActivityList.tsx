@@ -8,7 +8,6 @@ import { Activity } from "@prisma/client";
 import { ExtendedActivity } from "@/types/Entitities";
 import { useFetchActivities } from "@/queries/activityQueries";
 import ActivityTable from "./ActivityTable";
-import { IconButton } from "@mui/material";
 import ListViewToggle from "../ui/Buttons/list-view-toggle";
 
 const ActivityList = () => {
