@@ -7,9 +7,9 @@ const CategoryPage = () => {
     <div>
       <DashboardHeader title="Category" />
 
-      <CategoryList />
-
       <CategoryForm />
+
+      <CategoryList />
     </div>
   );
 };

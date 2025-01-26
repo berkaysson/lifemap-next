@@ -1,11 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import CategoryListItem from "./CategoryListItem";
 import { Category } from "@prisma/client";
 import { sortArrayOfObjectsByKey } from "@/lib/utils";
 import SelectSort from "../ui/Shared/SelectSort";
 import { useFetchCategories } from "@/queries/categoryQueries";
+import CategoryTable from "./CategoryTable";
 
 const CategoryList = () => {
   const { data: categories, isLoading, isError, error } = useFetchCategories();
@@ -33,7 +33,7 @@ const CategoryList = () => {
   );
 
   return (
-    <div className="flex flex-col gap-2 m-2">
+    <div className="flex flex-col gap-2 m-2 mt-4">
       <SelectSort
         options={[
           { value: "name", label: "Name" },
@@ -43,11 +43,11 @@ const CategoryList = () => {
       />
       {isLoading && <div>Loading categories...</div>}
       {isError && <div>Error loading categories: {error.message}</div>}
-      <ul className="border rounded-sm">
-        {sortedCategories.map((category) => (
-          <CategoryListItem key={category.id} category={category} />
-        ))}
-      </ul>
+      {sortedCategories.length === 0 && (
+        <div className="opacity-80 mt-2">No categories found.</div>
+      )}
+
+      <CategoryTable sortedCategories={sortedCategories} />
     </div>
   );
 };
