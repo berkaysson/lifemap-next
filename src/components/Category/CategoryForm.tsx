@@ -16,8 +16,17 @@ import {
   FormMessage,
 } from "../ui/Forms/form";
 import { useCreateCategory } from "@/queries/categoryQueries";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../ui/collapsible";
+import { Button } from "../ui/Buttons/button";
+import { Iconify } from "../ui/iconify";
 
 const CategoryForm = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const { mutateAsync: createCategory } = useCreateCategory();
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
@@ -56,50 +65,63 @@ const CategoryForm = () => {
   };
 
   return (
-    <div className="border p-4 m-2 rounded-sm">
-      <h1>Create a Category</h1>
-      <Form {...form}>
-        <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="flex flex-col gap-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="Enter category name..."
-                      type="text"
-                    />
-                  </FormControl>
-                  {form.formState.errors.name && (
-                    <FormMessage>
-                      {form.formState.errors.name.message}
-                    </FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-          </div>
+    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="p-2 my-2">
+      <CollapsibleTrigger asChild>
+        <div className="flex items-center justify-between">
+          <Button variant="outline" className="w-full justify-between">
+            <h4 className="font-semibold">Create Category +</h4>
+            {isOpen ? (
+              <Iconify icon="solar:alt-arrow-up-bold" width={16} />
+            ) : (
+              <Iconify icon="solar:alt-arrow-down-bold" width={16} />
+            )}
+          </Button>
+        </div>
+      </CollapsibleTrigger>
+      <CollapsibleContent className="mt-4">
+        <Form {...form}>
+          <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="flex flex-col gap-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isPending}
+                        {...field}
+                        placeholder="Enter category name..."
+                        type="text"
+                      />
+                    </FormControl>
+                    {form.formState.errors.name && (
+                      <FormMessage>
+                        {form.formState.errors.name.message}
+                      </FormMessage>
+                    )}
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          {message && isError && <FormMessage>{message}</FormMessage>}
+            {message && isError && <FormMessage>{message}</FormMessage>}
 
-          <LoadingButton
-            disabled={isPending}
-            variant="default"
-            type="submit"
-            className="w-full"
-            isLoading={isLoading}
-            loadingText="Creating..."
-          >
-            Create
-          </LoadingButton>
-        </form>
-      </Form>
-    </div>
+            <LoadingButton
+              disabled={isPending}
+              variant="default"
+              type="submit"
+              className="w-full"
+              isLoading={isLoading}
+              loadingText="Creating..."
+            >
+              Create
+            </LoadingButton>
+          </form>
+        </Form>
+      </CollapsibleContent>
+    </Collapsible>
   );
 };
 
