@@ -33,14 +33,14 @@ const items = [
   {
     title: "Tasks",
     url: "/dashboard/task",
-    icon: "solar:diploma-verified-bold",
-    activeIcon: "solar:diploma-verified-bold-duotone",
+    icon: "solar:check-read-bold",
+    activeIcon: "solar:check-read-bold-duotone",
   },
   {
     title: "Habits",
     url: "/dashboard/habit",
-    icon: "solar:golf-bold",
-    activeIcon: "solar:golf-bold-duotone",
+    icon: "solar:repeat-one-minimalistic-bold",
+    activeIcon: "solar:repeat-one-minimalistic-bold-duotone",
   },
   {
     title: "Projects",

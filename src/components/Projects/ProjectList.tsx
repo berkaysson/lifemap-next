@@ -36,7 +36,7 @@ const ProjectList = () => {
         options={[{ value: "name", label: "Name" }]}
         onSelect={handleSort}
       />
-      <ul className="border rounded-sm">
+      <ul className="rounded-sm grid grid-cols-1 gap-4">
         {sortedProjects.map((project) => (
           <ProjectListItem key={project.id} project={project} />
         ))}

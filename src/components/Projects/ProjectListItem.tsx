@@ -1,22 +1,42 @@
 "use client";
 
-import { useDeleteProject, useRemoveToDoFromProject, useRemoveTaskFromProject, useRemoveHabitFromProject } from "@/queries/projectQueries";
+import {
+  useDeleteProject,
+  useRemoveToDoFromProject,
+  useRemoveTaskFromProject,
+  useRemoveHabitFromProject,
+} from "@/queries/projectQueries";
 import ButtonWithConfirmation from "../ui/Buttons/ButtonWithConfirmation";
 import { ExtendedProject } from "@/types/Entitities";
 import ProjectEditForm from "./ProjectEditForm";
 import { Button } from "../ui/Buttons/button";
-import { useFetchTodos } from "@/queries/todoQueries";
-import { useFetchTasks } from "@/queries/taskQueries";
-import { useFetchHabits } from "@/queries/habitQueries";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { useState } from "react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../ui/collapsible";
+import { Badge } from "../ui/badge";
+import { Iconify } from "../ui/iconify";
+import { LoadingButton } from "../ui/Buttons/loading-button";
 
 const ProjectListItem = ({ project }: { project: ExtendedProject }) => {
   const deleteProjectMutation = useDeleteProject();
-  const { data: todos } = useFetchTodos();
-  const { data: tasks } = useFetchTasks();
-  const { data: habits } = useFetchHabits();
   const removeToDoMutation = useRemoveToDoFromProject();
   const removeTaskMutation = useRemoveTaskFromProject();
   const removeHabitMutation = useRemoveHabitFromProject();
+
+  const [isToDoOpen, setIsToDoOpen] = useState(false);
+  const [isTaskOpen, setIsTaskOpen] = useState(false);
+  const [isHabitOpen, setIsHabitOpen] = useState(false);
 
   const handleDelete = async () => {
     await deleteProjectMutation.mutateAsync(project.id);
@@ -25,105 +45,173 @@ const ProjectListItem = ({ project }: { project: ExtendedProject }) => {
   const { todos: _, tasks: __, habits: ___, ...projectOnly } = project;
   const initialValues = { ...projectOnly };
 
-  const tasksOfProject = project.tasks;
-
-  const habitsOfProject = project.habits;
-
-  const todosOfProject = project.todos;
-
   return (
-    <li className="flex flex-col gap-2 p-4 border-b">
-      <div className="flex flex-row gap-2">
-        <span>{project.name}</span>
-        <span>{project.description}</span>
-      </div>
-      <div>
-        {todosOfProject.length > 0 && (
-          <div>
-            <h3>ToDos</h3>
-            <ul>
+    <Card className="w-full max-w-2xl mx-auto mb-6">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold">{project.name}</CardTitle>
+        <CardDescription>{project.description}</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <Collapsible open={isToDoOpen} onOpenChange={setIsToDoOpen}>
+          <CollapsibleTrigger asChild>
+            <Button variant="outline" className="w-full justify-between">
+              <span className="flex items-center">
+                <Iconify
+                  icon="solar:checklist-minimalistic-outline"
+                  width={16}
+                  className="mr-2"
+                />
+                ToDos
+              </span>
+              <Badge>{project.todos.length}</Badge>
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-2">
+            <ul className="space-y-2">
               {project.todos.map((todo) => (
-                <li key={todo.id} className="flex flex-row gap-2 items-center">
+                <li
+                  key={todo.id}
+                  className="flex items-center justify-between bg-muted p-2 rounded-md"
+                >
                   <span>{todo.name}</span>
-                  <Button
-                    variant={"outline"}
-                    size={"sm"}
-                    onClick={() => removeToDoMutation.mutate({ 
-                      entityId: todo.id, 
-                      projectId: project.id 
-                    })}
+                  <LoadingButton
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      removeToDoMutation.mutate({
+                        entityId: todo.id,
+                        projectId: project.id,
+                      })
+                    }
+                    isLoading={removeToDoMutation.isPending}
+                    loadingText="Removing"
                   >
+                    <Iconify
+                      icon="solar:remove-folder-bold"
+                      width={16}
+                      className="mr-1"
+                    />
                     Remove
-                  </Button>
+                  </LoadingButton>
                 </li>
               ))}
             </ul>
-          </div>
-        )}
+          </CollapsibleContent>
+        </Collapsible>
 
-        {tasksOfProject.length > 0 && (
-          <div>
-            <h3>Tasks</h3>
-            <ul>
+        <Collapsible open={isTaskOpen} onOpenChange={setIsTaskOpen}>
+          <CollapsibleTrigger asChild>
+            <Button variant="outline" className="w-full justify-between">
+              <span className="flex items-center">
+                <Iconify
+                  icon="solar:check-read-outline"
+                  width={16}
+                  className="mr-2"
+                />
+                Tasks
+              </span>
+              <Badge>{project.tasks.length}</Badge>
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-2">
+            <ul className="space-y-2">
               {project.tasks.map((task) => (
-                <li key={task.id} className="flex flex-row gap-2 items-center">
+                <li
+                  key={task.id}
+                  className="flex items-center justify-between bg-muted p-2 rounded-md"
+                >
                   <span>{task.name}</span>
-                  <Button
-                    variant={"outline"}
-                    size={"sm"}
-                    onClick={() => removeTaskMutation.mutate({ 
-                      entityId: task.id, 
-                      projectId: project.id 
-                    })}
+                  <LoadingButton
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      removeTaskMutation.mutate({
+                        entityId: task.id,
+                        projectId: project.id,
+                      })
+                    }
+                    isLoading={removeTaskMutation.isPending}
+                    loadingText="Removing"
                   >
+                    <Iconify
+                      icon="solar:remove-folder-bold"
+                      width={16}
+                      className="mr-1"
+                    />
                     Remove
-                  </Button>
+                  </LoadingButton>
                 </li>
               ))}
             </ul>
-          </div>
-        )}
+          </CollapsibleContent>
+        </Collapsible>
 
-        {habitsOfProject.length > 0 && (
-          <div>
-            <h3>Habits</h3>
-            <ul>
+        <Collapsible open={isHabitOpen} onOpenChange={setIsHabitOpen}>
+          <CollapsibleTrigger asChild>
+            <Button variant="outline" className="w-full justify-between">
+              <span className="flex items-center">
+                <Iconify icon="solar:repeat-bold" width={16} className="mr-2" />
+                Habits
+              </span>
+              <Badge>{project.habits.length}</Badge>
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-2">
+            <ul className="space-y-2">
               {project.habits.map((habit) => (
-                <li key={habit.id} className="flex flex-row gap-2 items-center">
+                <li
+                  key={habit.id}
+                  className="flex items-center justify-between bg-muted p-2 rounded-md"
+                >
                   <span>{habit.name}</span>
-                  <Button
-                    variant={"outline"}
-                    size={"sm"}
-                    onClick={() => removeHabitMutation.mutate({ 
-                      entityId: habit.id, 
-                      projectId: project.id 
-                    })}
+                  <LoadingButton
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      removeHabitMutation.mutate({
+                        entityId: habit.id,
+                        projectId: project.id,
+                      })
+                    }
+                    isLoading={removeHabitMutation.isPending}
+                    loadingText="Removing"
                   >
+                    <Iconify
+                      icon="solar:remove-folder-bold"
+                      width={16}
+                      className="mr-1"
+                    />
                     Remove
-                  </Button>
+                  </LoadingButton>
                 </li>
               ))}
             </ul>
-          </div>
-        )}
-      </div>
-      <div className="flex flex-row gap-2">
+          </CollapsibleContent>
+        </Collapsible>
+      </CardContent>
+      <CardFooter className="flex justify-between">
         <ButtonWithConfirmation
           variant="destructive"
-          size={"sm"}
-          buttonText={"Delete"}
+          size="sm"
+          buttonText="Delete"
+          icon="solar:trash-bin-trash-bold"
           onConfirm={handleDelete}
         />
         <ProjectEditForm
           initialValues={initialValues}
           triggerButton={
-            <Button variant={"outline"} size={"sm"}>
+            <Button variant="outline" size="sm">
+              <Iconify
+                icon="solar:pen-new-square-outline"
+                width={16}
+                className="mr-1"
+              />
               Edit
             </Button>
           }
         />
-      </div>
-    </li>
+      </CardFooter>
+    </Card>
   );
 };
 
