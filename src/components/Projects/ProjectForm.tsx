@@ -17,12 +17,21 @@ import {
 } from "../ui/Forms/form";
 import { useCreateProject } from "@/queries/projectQueries";
 import { LoadingButton } from "../ui/Buttons/loading-button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/Modals/dialog";
+import { Iconify } from "../ui/iconify";
 
 const ProjectForm = () => {
   const createProjectMutation = useCreateProject();
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const form = useForm<z.infer<typeof ProjectSchema>>({
     resolver: zodResolver(ProjectSchema),
@@ -52,11 +61,23 @@ const ProjectForm = () => {
   };
 
   return (
-    <div className="border p-4 m-2 rounded-sm">
-      <h1>Create a Project</h1>
-      <Form {...form}>
-        <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="flex flex-col gap-4">
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline">
+          <Iconify
+            icon="basil:plus-outline"
+            width={16}
+            className="mr-0 sm:mr-1"
+          />
+          <span className="sm:inline hidden">Create Project</span>
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Create a Project</DialogTitle>
+        </DialogHeader>
+        <Form {...form}>
+          <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
               name="name"
@@ -68,14 +89,9 @@ const ProjectForm = () => {
                       disabled={createProjectMutation.isPending}
                       {...field}
                       placeholder="My project..."
-                      type="text"
                     />
                   </FormControl>
-                  {form.formState.errors.name && (
-                    <FormMessage>
-                      {form.formState.errors.name.message}
-                    </FormMessage>
-                  )}
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -91,39 +107,33 @@ const ProjectForm = () => {
                       disabled={createProjectMutation.isPending}
                       {...field}
                       placeholder="My project to improve my skills..."
-                      type="text"
                     />
                   </FormControl>
-                  {form.formState.errors.description && (
-                    <FormMessage>
-                      {form.formState.errors.description.message}
-                    </FormMessage>
-                  )}
+                  <FormMessage />
                 </FormItem>
               )}
             />
-          </div>
 
-          {message && (
-            <FormMessage
-              className={isError ? "text-red-500" : "text-green-500"}
+            {message && (
+              <FormMessage
+                className={isError ? "text-destructive" : "text-primary"}
+              >
+                {message}
+              </FormMessage>
+            )}
+
+            <LoadingButton
+              isLoading={isLoading}
+              loadingText="Creating..."
+              type="submit"
+              className="w-full"
             >
-              {message}
-            </FormMessage>
-          )}
-
-          <LoadingButton
-            isLoading={isLoading}
-            loadingText="Creating..."
-            variant="default"
-            type="submit"
-            className="w-full"
-          >
-            Create
-          </LoadingButton>
-        </form>
-      </Form>
-    </div>
+              Create
+            </LoadingButton>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 };
 

@@ -5,11 +5,9 @@ import ProjectList from "@/components/Projects/ProjectList";
 const ProjectPage = () => {
   return (
     <div>
-      <DashboardHeader title="Project" />
+      <DashboardHeader title="Project" DialogComponent={<ProjectForm />} />
 
       <ProjectList />
-
-      <ProjectForm />
     </div>
   );
 };

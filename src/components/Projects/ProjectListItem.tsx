@@ -46,7 +46,7 @@ const ProjectListItem = ({ project }: { project: ExtendedProject }) => {
   const initialValues = { ...projectOnly };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto mb-6">
+    <Card className="w-full mx-auto mb-6">
       <CardHeader>
         <CardTitle className="text-2xl font-bold">{project.name}</CardTitle>
         <CardDescription>{project.description}</CardDescription>
