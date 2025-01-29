@@ -39,10 +39,17 @@ export const Iconify = forwardRef<HTMLElement, IconifyProps>(
           className={iconifyClasses.root.concat(
             className ? ` ${className}` : ""
           )}
-          sx={{ ...baseStyles, ...sx }}
+          sx={{
+            ...baseStyles,
+            ...sx,
+            "& svg": {
+              width: `${width}px !important`,
+              height: `${width}px !important`,
+            },
+          }}
           {...other}
         >
-          <Icon icon={icon} width={width} />
+          <Icon icon={icon} />
         </Box>
       </NoSsr>
     );
