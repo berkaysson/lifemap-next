@@ -72,7 +72,7 @@ const ArchivedTodoListItem = ({ todo }) => {
         </div>
       </CardContent>
 
-      <CardFooter className="px-3 pb-1">
+      <CardFooter className="flex items-center justify-end">
         <ButtonWithConfirmation
           variant="destructive"
           size="sm"
