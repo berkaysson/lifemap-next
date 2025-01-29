@@ -16,11 +16,7 @@ import {
   FormMessage,
 } from "../ui/Forms/form";
 import { useCreateCategory } from "@/queries/categoryQueries";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../ui/collapsible";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/Modals/dialog";
 import { Button } from "../ui/Buttons/button";
 import { Iconify } from "../ui/iconify";
 
@@ -65,20 +61,21 @@ const CategoryForm = () => {
   };
 
   return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="p-2 my-2">
-      <CollapsibleTrigger asChild>
-        <div className="flex items-center justify-between">
-          <Button variant="outline" className="w-full justify-between">
-            <h4 className="font-semibold">Create Category +</h4>
-            {isOpen ? (
-              <Iconify icon="solar:alt-arrow-up-bold" width={16} />
-            ) : (
-              <Iconify icon="solar:alt-arrow-down-bold" width={16} />
-            )}
-          </Button>
-        </div>
-      </CollapsibleTrigger>
-      <CollapsibleContent className="mt-4">
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline">
+          <Iconify
+            icon="basil:plus-outline"
+            width={16}
+            className="mr-0 sm:mr-1"
+          />
+          <span className="sm:inline hidden">Create Category</span>
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Create a Category</DialogTitle>
+        </DialogHeader>
         <Form {...form}>
           <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-4">
@@ -120,8 +117,8 @@ const CategoryForm = () => {
             </LoadingButton>
           </form>
         </Form>
-      </CollapsibleContent>
-    </Collapsible>
+      </DialogContent>
+    </Dialog>
   );
 };
 

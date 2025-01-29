@@ -5,9 +5,7 @@ import DashboardHeader from "@/layouts/sidebar/dashboard-header";
 const CategoryPage = () => {
   return (
     <div>
-      <DashboardHeader title="Category" />
-
-      <CategoryForm />
+      <DashboardHeader title="Category" DialogComponent={<CategoryForm />} />
 
       <CategoryList />
     </div>
