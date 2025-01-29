@@ -5,11 +5,9 @@ import DashboardHeader from "@/layouts/sidebar/dashboard-header";
 const TodoPage = () => {
   return (
     <div>
-      <DashboardHeader title="Todo" />
+      <DashboardHeader title="Todo" DialogComponent={<TodoForm />} />
 
       <TodoList />
-
-      <TodoForm />
     </div>
   );
 };

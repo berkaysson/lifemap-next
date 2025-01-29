@@ -16,8 +16,19 @@ import {
 } from "../ui/Forms/form";
 import { useCreateTodo } from "@/queries/todoQueries";
 import { LoadingButton } from "../ui/Buttons/loading-button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/Modals/dialog";
+import { Button } from "../ui/Buttons/button";
+import { Iconify } from "../ui/iconify";
 
 const TodoForm = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const { mutateAsync: createTodo } = useCreateTodo();
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
@@ -56,107 +67,120 @@ const TodoForm = () => {
   };
 
   return (
-    <div className="border p-4 m-2 rounded-sm">
-      <h1 className="text-2xl font-bold">Create a Todo</h1>
-      <Form {...form}>
-        <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="flex flex-col gap-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="Your todo"
-                      type="text"
-                    />
-                  </FormControl>
-                  {form.formState.errors.name && (
-                    <FormMessage>
-                      {form.formState.errors.name.message}
-                    </FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="Describe your todo"
-                      type="text"
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="endDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Due Date</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="Due Date"
-                      type="date"
-                    />
-                  </FormControl>
-                  {form.formState.errors.endDate && (
-                    <FormMessage>
-                      {form.formState.errors.endDate.message}
-                    </FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline">
+          <Iconify
+            icon="basil:plus-outline"
+            width={16}
+            className="mr-0 sm:mr-1"
+          />
+          <span className="sm:inline hidden">Create Todo</span>
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Create a Todo</DialogTitle>
+        </DialogHeader>
+        <Form {...form}>
+          <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="flex flex-col gap-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isPending}
+                        {...field}
+                        placeholder="Your todo"
+                        type="text"
+                      />
+                    </FormControl>
+                    {form.formState.errors.name && (
+                      <FormMessage>
+                        {form.formState.errors.name.message}
+                      </FormMessage>
+                    )}
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isPending}
+                        {...field}
+                        placeholder="Describe your todo"
+                        type="text"
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="endDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Due Date</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isPending}
+                        {...field}
+                        placeholder="Due Date"
+                        type="date"
+                      />
+                    </FormControl>
+                    {form.formState.errors.endDate && (
+                      <FormMessage>
+                        {form.formState.errors.endDate.message}
+                      </FormMessage>
+                    )}
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="colorCode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Pick a Color</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="w-20 rounded-full"
+                        disabled={isPending}
+                        {...field}
+                        type="color"
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
 
-            <FormField
-              control={form.control}
-              name="colorCode"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Pick a Color</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="w-20 rounded-full"
-                      disabled={isPending}
-                      {...field}
-                      type="color"
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
+            {message && isError && <FormMessage>{message}</FormMessage>}
 
-          {message && isError && <FormMessage>{message}</FormMessage>}
-
-          <LoadingButton
-            isLoading={isPending}
-            loadingText="Creating..."
-            disabled={isPending}
-            variant="default"
-            type="submit"
-            className="w-full"
-          >
-            Create
-          </LoadingButton>
-        </form>
-      </Form>
-    </div>
+            <LoadingButton
+              isLoading={isPending}
+              loadingText="Creating..."
+              disabled={isPending}
+              variant="default"
+              type="submit"
+              className="w-full"
+            >
+              Create
+            </LoadingButton>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 };
 
