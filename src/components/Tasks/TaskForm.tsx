@@ -19,8 +19,18 @@ import SelectBox from "../ui/Shared/SelectBox";
 import { useFetchCategories } from "@/queries/categoryQueries";
 import { useCreateTask } from "@/queries/taskQueries";
 import { LoadingButton } from "../ui/Buttons/loading-button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/Modals/dialog";
+import { Iconify } from "../ui/iconify";
 
 const TaskForm = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const { mutateAsync: createTask } = useCreateTask();
   const { data: categories } = useFetchCategories();
   const [isPending, startTransition] = useTransition();
@@ -63,178 +73,192 @@ const TaskForm = () => {
   };
 
   return (
-    <div className="border p-4 m-2 rounded-sm">
-      <h1>Create a Task</h1>
-      <Form {...form}>
-        <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="flex flex-col gap-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="Doing something..."
-                      type="text"
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline">
+          <Iconify
+            icon="basil:plus-outline"
+            width={16}
+            className="mr-0 sm:mr-1"
+          />
+          <span className="sm:inline hidden">Create Task</span>
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[500px]">
+        <DialogHeader>
+          <DialogTitle>Create a Task</DialogTitle>
+        </DialogHeader>
+        <Form {...form}>
+          <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="flex flex-col gap-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isPending}
+                        {...field}
+                        placeholder="Doing something..."
+                        type="text"
+                      />
+                    </FormControl>
+                    {form.formState.errors.name && (
+                      <FormMessage>
+                        {form.formState.errors.name.message}
+                      </FormMessage>
+                    )}
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-col gap-4">
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isPending}
+                        {...field}
+                        placeholder="Doing something until next month..."
+                        type="text"
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-col gap-4">
+              <FormField
+                control={form.control}
+                name="goalDuration"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Goal Duration (min)</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isPending}
+                        {...field}
+                        placeholder="Goal Duration in minutes"
+                        type="number"
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                      />
+                    </FormControl>
+                    {form.formState.errors.goalDuration && (
+                      <FormMessage>
+                        {form.formState.errors.goalDuration.message}
+                      </FormMessage>
+                    )}
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-col gap-4">
+              <FormField
+                control={form.control}
+                name="categoryId"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Select a Category</FormLabel>
+                    <SelectBox
+                      field={field}
+                      options={categories || []}
+                      form={form}
+                      optionKey={"id"}
+                      formKey={"categoryId"}
                     />
-                  </FormControl>
-                  {form.formState.errors.name && (
-                    <FormMessage>
-                      {form.formState.errors.name.message}
-                    </FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="flex flex-col gap-4">
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="Doing something until next month..."
-                      type="text"
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="flex flex-col gap-4">
-            <FormField
-              control={form.control}
-              name="goalDuration"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Goal Duration (min)</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="Goal Duration in minutes"
-                      type="number"
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  {form.formState.errors.goalDuration && (
-                    <FormMessage>
-                      {form.formState.errors.goalDuration.message}
-                    </FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="flex flex-col gap-4">
-            <FormField
-              control={form.control}
-              name="categoryId"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Select a Category</FormLabel>
-                  <SelectBox
-                    field={field}
-                    options={categories || []}
-                    form={form}
-                    optionKey={"id"}
-                    formKey={"categoryId"}
-                  />
-                  {form.formState.errors.categoryId && (
-                    <FormMessage>
-                      {form.formState.errors.categoryId.message}
-                    </FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="startDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Start Date</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="Date"
-                      type="date"
-                      required
-                    />
-                  </FormControl>
-                  {form.formState.errors.startDate && (
-                    <FormMessage>
-                      {form.formState.errors.startDate.message}
-                    </FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="endDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Due Date</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="Date"
-                      type="date"
-                      required
-                    />
-                  </FormControl>
-                  {form.formState.errors.endDate && (
-                    <FormMessage>
-                      {form.formState.errors.endDate.message}
-                    </FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="colorCode"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Pick a Color</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="w-20 rounded-full"
-                      disabled={isPending}
-                      {...field}
-                      type="color"
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
-          {message && isError && <FormMessage>{message}</FormMessage>}
-          <LoadingButton
-            disabled={isPending}
-            isLoading={isPending}
-            loadingText="Creating..."
-            variant="default"
-            type="submit"
-            className="w-full"
-          >
-            Create
-          </LoadingButton>
-        </form>
-      </Form>
-    </div>
+                    {form.formState.errors.categoryId && (
+                      <FormMessage>
+                        {form.formState.errors.categoryId.message}
+                      </FormMessage>
+                    )}
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="startDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Start Date</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isPending}
+                        {...field}
+                        placeholder="Date"
+                        type="date"
+                        required
+                      />
+                    </FormControl>
+                    {form.formState.errors.startDate && (
+                      <FormMessage>
+                        {form.formState.errors.startDate.message}
+                      </FormMessage>
+                    )}
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="endDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Due Date</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isPending}
+                        {...field}
+                        placeholder="Date"
+                        type="date"
+                        required
+                      />
+                    </FormControl>
+                    {form.formState.errors.endDate && (
+                      <FormMessage>
+                        {form.formState.errors.endDate.message}
+                      </FormMessage>
+                    )}
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="colorCode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Pick a Color</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="w-20 rounded-full"
+                        disabled={isPending}
+                        {...field}
+                        type="color"
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+            {message && isError && <FormMessage>{message}</FormMessage>}
+            <LoadingButton
+              disabled={isPending}
+              isLoading={isPending}
+              loadingText="Creating..."
+              variant="default"
+              type="submit"
+              className="w-full"
+            >
+              Create
+            </LoadingButton>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 };
 

@@ -9,8 +9,18 @@ import SelectSort from "../ui/Shared/SelectSort";
 import { ExtendedTask } from "@/types/Entitities";
 import { useFetchTasks, useFetchArchivedTasks } from "@/queries/taskQueries";
 import { Separator } from "../ui/separator";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../ui/collapsible";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { Button } from "../ui/Buttons/button";
+import { Badge } from "../ui/badge";
 
 const TaskList = () => {
+  const [isArcihivedOpen, setIsArcihivedOpen] = useState(false);
+
   const { data: tasks, isLoading, isError, error } = useFetchTasks();
   const {
     data: archivedTasks,
@@ -77,7 +87,10 @@ const TaskList = () => {
         />
         {isLoading && <div>Loading tasks...</div>}
         {isError && <div>Error loading tasks: {error.message}</div>}
-        <ul className="border rounded-sm mt-2">
+        {sortedTasks.length === 0 && (
+          <div className="opacity-80 mt-2">No tasks found.</div>
+        )}
+        <ul className="rounded-sm grid grid-cols-1 gap-4 mt-2">
           {sortedTasks.map((task) => (
             <TaskListItem key={task.id} task={task} />
           ))}
@@ -88,28 +101,56 @@ const TaskList = () => {
 
       {/* Archived Tasks Section */}
       <section>
-        <h2 className="text-2xl font-bold mb-2">Archived Tasks</h2>
-        <SelectSort
-          options={[
-            { value: "name", label: "Name" },
-            { value: "completed", label: "Completion" },
-            { value: "completedDuration", label: "Completed Activity" },
-            { value: "goalDuration", label: "Goal Activity" },
-            { value: "startDate", label: "Start Date" },
-            { value: "endDate", label: "Due Date" },
-            { value: "archivedAt", label: "Archive Date" },
-          ]}
-          onSelect={handleArchiveSort}
-        />
-        {isLoadingArchived && <div>Loading archived tasks...</div>}
-        {isErrorArchived && (
-          <div>Error loading archived tasks: {errorArchived.message}</div>
-        )}
-        <ul className="border rounded-sm mt-2">
-          {sortedArchivedTasks.map((task) => (
-            <ArchivedTaskListItem key={task.id} task={task} />
-          ))}
-        </ul>
+        <Collapsible
+          open={isArcihivedOpen}
+          onOpenChange={setIsArcihivedOpen}
+          className="w-full space-y-2"
+        >
+          <CollapsibleTrigger asChild>
+            <Button variant="outline" size="sm" className="w-full">
+              <span>Archived Tasks</span>
+              <Badge className="ml-2">{sortedArchivedTasks.length}</Badge>
+              {isArcihivedOpen ? (
+                <ChevronUp className="h-4 w-4" />
+              ) : (
+                <ChevronDown className="h-4 w-4" />
+              )}
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            {sortedArchivedTasks.length > 0 ? (
+              <>
+                <SelectSort
+                  options={[
+                    { value: "name", label: "Name" },
+                    { value: "completed", label: "Completion" },
+                    { value: "completedDuration", label: "Completed Activity" },
+                    { value: "goalDuration", label: "Goal Activity" },
+                    { value: "startDate", label: "Start Date" },
+                    { value: "endDate", label: "Due Date" },
+                    { value: "archivedAt", label: "Archive Date" },
+                  ]}
+                  onSelect={handleArchiveSort}
+                />
+                {isLoadingArchived && <div>Loading archived tasks...</div>}
+                {isErrorArchived && (
+                  <div>
+                    Error loading archived tasks: {errorArchived.message}
+                  </div>
+                )}
+                <ul className="rounded-sm grid grid-cols-1 gap-4 mt-2 sm:grid-cols-2 md:grid-cols-3">
+                  {sortedArchivedTasks.map((task) => (
+                    <ArchivedTaskListItem key={task.id} task={task} />
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                No archived tasks found.
+              </p>
+            )}
+          </CollapsibleContent>
+        </Collapsible>
       </section>
     </div>
   );

@@ -5,6 +5,13 @@ import IsCompleted from "../ui/Shared/IsCompleted";
 import ColorCircle from "../ui/Shared/ColorCircle";
 import ButtonWithConfirmation from "../ui/Buttons/ButtonWithConfirmation";
 import { useDeleteArchivedTask } from "@/queries/taskQueries";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+} from "../ui/card";
 
 const ArchivedTaskListItem = ({ task }) => {
   const expired = isExpired(task.endDate);
@@ -15,17 +22,20 @@ const ArchivedTaskListItem = ({ task }) => {
   };
 
   return (
-    <li className="flex flex-col gap-2 p-4 border-b">
-      <div className="flex">
-        <div className="flex flex-col gap-2">
-          <div>
-            <span className="mr-2 text-xl flex gap-2">
-              <IsCompleted isCompleted={task.completed} isExpired={expired} />
-              <ColorCircle colorCode={task.colorCode || "darkblue"} />
-            </span>
-            <span>{task.name}</span>
-          </div>
-          {task.description && <div>{task.description}</div>}
+    <Card className="w-full mb-1 shadow-md hover:shadow-lg transition-shadow duration-300">
+      <div className="flex gap-1 items-center p-1 pb-0">
+        <ColorCircle colorCode={task.colorCode || "darkblue"} />
+        <IsCompleted isCompleted={task.completed} isExpired={expired} />
+      </div>
+      <CardHeader>
+        <h3 className="text-lg font-semibold">{task.name}</h3>
+      </CardHeader>
+      <CardContent className="flex">
+        <div className="flex flex-col gap-1">
+          <CardDescription>
+            {task.description && <div>{task.description}</div>}
+          </CardDescription>
+
           <div className="text-sm text-muted-foreground">
             <div>Start: {task.startDate.toLocaleDateString()}</div>
             <div>Due: {task.endDate.toLocaleDateString()}</div>
@@ -41,14 +51,16 @@ const ArchivedTaskListItem = ({ task }) => {
             </div>
           )}
         </div>
+      </CardContent>
+      <CardFooter className="flex justify-end">
         <ButtonWithConfirmation
           buttonText="Delete"
           onConfirm={handleDelete}
           variant="destructive"
           size="sm"
         />
-      </div>
-    </li>
+      </CardFooter>
+    </Card>
   );
 };
 

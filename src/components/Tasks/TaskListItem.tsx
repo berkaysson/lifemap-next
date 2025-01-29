@@ -20,6 +20,16 @@ import {
 } from "@/queries/taskQueries";
 import { useQueryClient } from "@tanstack/react-query";
 import ProjectSelect from "../ui/Shared/ProjectSelect";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+} from "../ui/card";
+import { Badge } from "../ui/badge";
+import { Iconify } from "../ui/iconify";
+import { Progress } from "../ui/progress";
 
 const TaskListItem = ({ task }: { task: ExtendedTask }) => {
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
@@ -71,77 +81,83 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
     await archiveTask(task.id);
   };
 
+  const progressPercentage = (task.completedDuration / task.goalDuration) * 100;
+
   return (
-    <li className="flex flex-col gap-2 p-4 border-b">
-      <div className="flex flex-row gap-2">
-        <IsCompleted isCompleted={task.completed} isExpired={expired} />
-        <ColorCircle colorCode={task.colorCode || "darkblue"} />
-        <span>{task.name}</span>
-        <span>{task.description}</span>
-        <span>{category?.name}</span>
-      </div>
-      <div>
-        <div>
-          {task.completedDuration}/{task.goalDuration}
+    <Card className="w-full mb-4 shadow-md hover:shadow-lg transition-shadow duration-300">
+      <div className="flex justify-between p-1 pb-0">
+        <div className="flex gap-2 items-center">
+          <ColorCircle colorCode={task.colorCode || "darkblue"} />
+          <IsCompleted isCompleted={task.completed} isExpired={expired} />
         </div>
-        <span>
-          {formatDate(task.startDate)} - {formatDate(task.endDate)}
-        </span>
-        <div>
-          {expired ? "Expired" : "ends"} {remained}
-        </div>
-        <div className="flex flex-row gap-2">
-          {taskProject ? (
-            <div className="flex flex-row gap-2 items-center">
-              <span>{taskProject.name}</span>
-              <Button
-                variant={"outline"}
-                size={"sm"}
-                onClick={handleDeleteFromProject}
-              >
-                Remove
-              </Button>
-            </div>
-          ) : (
-            <>
-              <ProjectSelect
-                onSelect={(projectId) => setSelectedProjectId(projectId)}
-              />
-              <Button
-                disabled={selectedProjectId === null}
-                onClick={handleAddToProject}
-                size={"sm"}
-                variant={"outline"}
-              >
-                Add to Project
-              </Button>
-            </>
-          )}
+
+        <div className="flex gap-2">
+          <Badge>{category?.name}</Badge>
+          <Badge
+            variant="outline"
+            style={{ backgroundColor: task.colorCode || "darkblue" }}
+            className="text-white"
+          >
+            {taskProject ? taskProject.name : "No Project"}
+          </Badge>
         </div>
       </div>
-      <div className="flex flex-row gap-2">
+      <CardHeader className="pb-2">
+        <h3 className="text-lg font-semibold">{task.name}</h3>
+      </CardHeader>
+      <CardContent>
+        <CardDescription>{task.description}</CardDescription>
+        <div className="flex flex-row justify-between gap-4 mb-4">
+          <div className="flex items-center space-x-2">
+            <Iconify
+              icon="solar:calendar-date-bold"
+              width={20}
+              className="mr-2"
+            />
+            <span className="text-sm">
+              {formatDate(task.startDate)} - {formatDate(task.endDate)}
+            </span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Iconify icon="solar:stopwatch-bold" width={20} className="mr-2" />
+            <span className="text-sm">
+              {expired ? "Expired" : "Ends"} {remained}
+            </span>
+          </div>
+        </div>
+        <div className="space-y-2">
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-medium">Progress</span>
+            <span className="text-sm text-gray-600">
+              {task.completedDuration}/{task.goalDuration} minutes
+            </span>
+          </div>
+          <Progress value={progressPercentage} className="w-full" />
+        </div>
+      </CardContent>
+      <CardFooter className="flex justify-end space-x-2">
         <TaskEditForm
           initialValues={task}
           triggerButton={
-            <Button variant={"outline"} size={"sm"}>
+            <Button variant="outline" size="sm">
               Edit
             </Button>
           }
         />
         <ButtonWithConfirmation
           variant="destructive"
-          size={"sm"}
-          buttonText={"Delete"}
+          size="sm"
+          buttonText="Delete"
           onConfirm={handleDelete}
         />
         <ButtonWithConfirmation
           variant="destructive"
-          size={"sm"}
-          buttonText={"Archive"}
+          size="sm"
+          buttonText="Archive"
           onConfirm={handleArchive}
         />
-      </div>
-    </li>
+      </CardFooter>
+    </Card>
   );
 };
 

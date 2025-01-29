@@ -5,11 +5,9 @@ import TaskList from "@/components/Tasks/TaskList";
 const TaskPage = () => {
   return (
     <div>
-      <DashboardHeader title="Task" />
+      <DashboardHeader title="Task" DialogComponent={<TaskForm />} />
 
       <TaskList />
-
-      <TaskForm />
     </div>
   );
 };
