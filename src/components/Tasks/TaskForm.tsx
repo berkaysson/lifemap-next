@@ -75,10 +75,10 @@ const TaskForm = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">
+        <Button variant="ghost" size="sm">
           <Iconify
-            icon="basil:plus-outline"
-            width={16}
+            icon="solar:add-square-linear"
+            width={32}
             className="mr-0 sm:mr-1"
           />
           <span className="sm:inline hidden">Create Task</span>
