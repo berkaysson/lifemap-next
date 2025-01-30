@@ -12,8 +12,13 @@ const ProjectList = () => {
   const [sortedProjects, setSortedProjects] = useState(projects || []);
 
   useEffect(() => {
-    if (projects) {
-      setSortedProjects(projects);
+    if (projects && projects.length > 0) {
+      const sorted = sortArrayOfObjectsByKey<ExtendedProject>(
+        projects,
+        "name",
+        "desc"
+      );
+      setSortedProjects(sorted);
     }
   }, [projects]);
 
