@@ -35,14 +35,20 @@ const TaskList = () => {
   );
 
   useEffect(() => {
-    if (tasks) {
-      setSortedTasks(tasks);
+    if (tasks && tasks.length > 0) {
+      const sorted = sortArrayOfObjectsByKey<ExtendedTask>(
+        tasks,
+        "name",
+        "desc"
+      )
+      setSortedTasks(sorted);
     }
   }, [tasks]);
 
   useEffect(() => {
-    if (archivedTasks) {
-      setSortedArchivedTasks(archivedTasks);
+    if (archivedTasks && archivedTasks.length > 0) {
+      const sorted = sortArrayOfObjectsByKey(archivedTasks, "name", "desc");
+      setSortedArchivedTasks(sorted);
     }
   }, [archivedTasks]);
 

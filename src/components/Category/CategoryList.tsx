@@ -14,8 +14,13 @@ const CategoryList = () => {
   );
 
   useEffect(() => {
-    if (categories) {
-      setSortedCategories(categories);
+    if (categories && categories.length > 0) {
+      const sorted = sortArrayOfObjectsByKey<Category>(
+        categories,
+        "date",
+        "asc"
+      );
+      setSortedCategories(sorted);
     }
   }, [categories]);
 

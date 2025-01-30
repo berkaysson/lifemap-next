@@ -37,14 +37,16 @@ const TodoList = () => {
   );
 
   useEffect(() => {
-    if (todos) {
-      setSortedTodos(todos);
+    if (todos && todos.length > 0) {
+      const sorted = sortArrayOfObjectsByKey<ToDo>(todos, "name", "desc");
+      setSortedTodos(sorted);
     }
   }, [todos]);
 
   useEffect(() => {
-    if (archivedTodos) {
-      setSortedArchivedTodos(archivedTodos);
+    if (archivedTodos && archivedTodos.length > 0) {
+      const sorted = sortArrayOfObjectsByKey(archivedTodos, "name", "desc");
+      setSortedArchivedTodos(sorted);
     }
   }, [archivedTodos]);
 

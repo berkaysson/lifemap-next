@@ -27,14 +27,20 @@ const HabitList = () => {
   );
 
   useEffect(() => {
-    if (habits) {
-      setSortedHabits(habits);
+    if (habits && habits.length > 0) {
+      const sorted = sortArrayOfObjectsByKey<ExtendedHabit>(
+        habits,
+        "name",
+        "desc"
+      );
+      setSortedHabits(sorted);
     }
   }, [habits]);
 
   useEffect(() => {
-    if (archivedHabits) {
-      setSortedArchivedHabits(archivedHabits);
+    if (archivedHabits && archivedHabits.length > 0) {
+      const sorted = sortArrayOfObjectsByKey(archivedHabits, "name", "desc");
+      setSortedArchivedHabits(sorted);
     }
   }, [archivedHabits]);
 

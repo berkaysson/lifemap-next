@@ -16,8 +16,13 @@ const ActivityList = () => {
   const [sortedActivities, setSortedActivities] = useState(activities || []);
 
   useEffect(() => {
-    if (activities) {
-      setSortedActivities(activities);
+    if (activities && activities.length > 0) {
+      const sorted = sortArrayOfObjectsByKey<ExtendedActivity>(
+        activities,
+        "date",
+        "desc"
+      );
+      setSortedActivities(sorted);
     }
   }, [activities]);
 
