@@ -1,7 +1,10 @@
+import DashboardHeader from "@/layouts/sidebar/dashboard-header";
+
 const DashboardPage = () => {
   return (
     <div>
-      <p>Dashboard</p>
+      <DashboardHeader title="Dashboard" />
+      Dashboard
     </div>
   );
 };

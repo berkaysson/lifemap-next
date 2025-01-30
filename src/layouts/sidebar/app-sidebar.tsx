@@ -19,6 +19,12 @@ import { Iconify } from "@/components/ui/iconify";
 
 const items = [
   {
+    title: "Dashboard",
+    url: "/dashboard",
+    icon: "solar:home-angle-2-bold",
+    activeIcon: "solar:home-angle-2-bold-duotone",
+  },
+  {
     title: "Activities",
     url: "/dashboard/activity",
     icon: "solar:bolt-bold",
