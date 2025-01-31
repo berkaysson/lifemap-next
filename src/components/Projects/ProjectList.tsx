@@ -41,6 +41,12 @@ const ProjectList = () => {
         options={[{ value: "name", label: "Name" }]}
         onSelect={handleSort}
       />
+
+      {isLoading && <div>Loading projects...</div>}
+      {isError && <div>Error loading projects: {error.message}</div>}
+      {sortedProjects.length === 0 && !isLoading && (
+        <div className="opacity-80 mt-2">No projects found.</div>
+      )}
       <ul className="rounded-sm grid grid-cols-1 gap-4">
         {sortedProjects.map((project) => (
           <ProjectListItem key={project.id} project={project} />

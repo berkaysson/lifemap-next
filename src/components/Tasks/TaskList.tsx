@@ -93,7 +93,7 @@ const TaskList = () => {
         />
         {isLoading && <div>Loading tasks...</div>}
         {isError && <div>Error loading tasks: {error.message}</div>}
-        {sortedTasks.length === 0 && (
+        {sortedTasks.length === 0 && !isLoading && (
           <div className="opacity-80 mt-2">No tasks found.</div>
         )}
         <ul className="rounded-sm grid grid-cols-1 gap-4 mt-2">

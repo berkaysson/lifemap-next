@@ -48,7 +48,7 @@ const CategoryList = () => {
       />
       {isLoading && <div>Loading categories...</div>}
       {isError && <div>Error loading categories: {error.message}</div>}
-      {sortedCategories.length === 0 && (
+      {sortedCategories.length === 0 && !isLoading && (
         <div className="opacity-80 mt-2">No categories found.</div>
       )}
 

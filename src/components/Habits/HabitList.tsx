@@ -87,6 +87,10 @@ const HabitList = () => {
         />
         {isLoading && <div>Loading habits...</div>}
         {isError && <div>Error loading habits: {error.message}</div>}
+        {sortedHabits.length === 0 && !isLoading && (
+          <div className="opacity-80 mt-2">No habits found.</div>
+        )}
+        
         <ul className="border rounded-sm mt-2">
           {sortedHabits.map((habit) => (
             <HabitListItem key={habit.id} habit={habit} />

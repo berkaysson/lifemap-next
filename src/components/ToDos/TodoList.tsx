@@ -93,7 +93,7 @@ const TodoList = () => {
 
         {isLoading && <div>Loading todos...</div>}
         {isError && <div>Error loading todos: {error.message}</div>}
-        {sortedTodos.length === 0 && (
+        {sortedTodos.length === 0 && !isLoading && (
           <div className="opacity-80 mt-2">No todos found.</div>
         )}
 

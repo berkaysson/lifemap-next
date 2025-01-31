@@ -60,7 +60,7 @@ const ActivityList = () => {
 
       {isLoading && <div>Loading activities...</div>}
       {isError && <div>Error loading activities: {error.message}</div>}
-      {sortedActivities.length === 0 && (
+      {sortedActivities.length === 0 && !isLoading && (
         <div className="opacity-80 mt-2">No activities found.</div>
       )}
 
