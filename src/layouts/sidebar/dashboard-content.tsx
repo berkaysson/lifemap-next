@@ -49,6 +49,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({
         flexDirection: "column",
         pt: 2,
         pb: 2,
+        mb: 10,
         ...(disablePadding && {
           p: {
             xs: 0,
