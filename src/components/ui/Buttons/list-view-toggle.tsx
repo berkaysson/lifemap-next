@@ -9,14 +9,14 @@ const ListViewToggle = ({ onSelect, currentView }) => {
         onClick={() => onSelect("table")}
         color={currentView === "table" ? "info" : "default"}
       >
-        <Iconify icon="material-symbols:table" className="h-5 w-5" />
+        <Iconify icon="material-symbols:table-rows-narrow-rounded" className="h-5 w-5" />
       </IconButton>
       <IconButton
         onClick={() => onSelect("grid")}
         color={currentView === "grid" ? "info" : "default"}
       >
         <Iconify
-          icon="material-symbols:table-rows-narrow-rounded"
+          icon="si:grid-view-fill"
           className="h-5 w-5"
         />
       </IconButton>
