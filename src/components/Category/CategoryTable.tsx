@@ -15,7 +15,7 @@ import { Iconify } from "../ui/iconify";
 import { Category } from "@prisma/client";
 import { useDeleteCategory } from "@/queries/categoryQueries";
 import CategoryEditForm from "./CategoryEditForm";
-import { formatDate } from "@/lib/time";
+import { formatDateFriendly } from "@/lib/time";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { ScrollBar } from "../ui/scroll-area";
 
@@ -50,7 +50,7 @@ const CategoryTable = ({
                       <Badge>{category.name}</Badge>
                     </TableCell>
                     <TableCell className="sm:block hidden">
-                      {formatDate(category.date)}
+                      {formatDateFriendly(category.date)}
                     </TableCell>
                     <TableCell>
                       <div className="flex space-x-2">

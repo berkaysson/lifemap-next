@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import ButtonWithConfirmation from "@/components/ui/Buttons/ButtonWithConfirmation";
-import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
+import { formatDateFriendly, getRemainingTime, isExpired } from "@/lib/time";
 import { Button } from "../ui/Buttons/button";
 import { Tooltip } from "@mui/material";
 import { Badge } from "../ui/badge";
@@ -106,9 +106,13 @@ const TodoTable = ({ sortedTodos }: { sortedTodos: any[] }) => {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      {Todo.endDate && formatDate(Todo.endDate)} {remained}{" "}
-                      {(Todo.endDate && (expired ? "" : "remaining")) || ""}
-                      {!Todo.endDate && "-"}
+                      <div>
+                        {Todo.endDate && formatDateFriendly(Todo.endDate)}
+                      </div>
+                      <span>
+                        {remained}{" "}
+                        {(Todo.endDate && (expired ? "" : "remaining")) || ""}
+                      </span>
                     </TableCell>
                     <TableCell>
                       <div className="flex space-x-2">

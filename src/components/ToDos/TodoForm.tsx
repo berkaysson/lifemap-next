@@ -25,6 +25,7 @@ import {
 } from "../ui/Modals/dialog";
 import { Button } from "../ui/Buttons/button";
 import { Iconify } from "../ui/iconify";
+import { DatePicker } from "../ui/Forms/date-picker-field";
 
 const TodoForm = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -131,11 +132,15 @@ const TodoForm = () => {
                   <FormItem>
                     <FormLabel>Due Date</FormLabel>
                     <FormControl>
-                      <Input
-                        disabled={isPending}
-                        {...field}
-                        placeholder="Due Date"
-                        type="date"
+                      <DatePicker
+                        date={field.value ? new Date(field.value) : undefined}
+                        onSelect={(date) =>
+                          field.onChange(
+                            new Date((date?.getTime() ?? 0) + 10800000)
+                              .toISOString()
+                              .split("T")[0]
+                          )
+                        }
                       />
                     </FormControl>
                     {form.formState.errors.endDate && (

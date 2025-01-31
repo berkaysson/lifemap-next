@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "../ui/Buttons/button";
-import { getRemainingTime, isExpired } from "@/lib/time";
+import { formatDateFriendly, getRemainingTime, isExpired } from "@/lib/time";
 import IsCompleted from "../ui/Shared/IsCompleted";
 import ColorCircle from "../ui/Shared/ColorCircle";
 import TodoEditForm from "./TodoEditForm";
@@ -96,7 +96,7 @@ const TodoListItem = ({ todo }) => {
                 width={20}
                 className="mr-2"
               />
-              {todo.endDate.toISOString().slice(0, 10)}
+              {formatDateFriendly(todo.endDate)}
             </div>
           )}
           {!todo.completed && todo.endDate && (

@@ -1,7 +1,7 @@
 "use client";
 
-import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
-import { useContext, useState } from "react";
+import { formatDateFriendly, getRemainingTime, isExpired } from "@/lib/time";
+import { useState } from "react";
 import { Button } from "../ui/Buttons/button";
 import TaskEditForm from "./TaskEditForm";
 import IsCompleted from "../ui/Shared/IsCompleted";
@@ -19,7 +19,6 @@ import {
   useArchiveTask,
 } from "@/queries/taskQueries";
 import { useQueryClient } from "@tanstack/react-query";
-import ProjectSelect from "../ui/Shared/ProjectSelect";
 import {
   Card,
   CardContent,
@@ -112,10 +111,11 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
             <Iconify
               icon="solar:calendar-date-bold"
               width={20}
-              className="mr-2"
+              className="mr-1"
             />
             <span className="text-sm">
-              {formatDate(task.startDate)} - {formatDate(task.endDate)}
+              {formatDateFriendly(task.startDate)} -{" "}
+              {formatDateFriendly(task.endDate)}
             </span>
           </div>
           <div className="flex items-center space-x-2">

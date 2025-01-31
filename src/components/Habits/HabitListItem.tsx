@@ -1,7 +1,7 @@
 "use client";
 
-import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
-import { useContext, useState } from "react";
+import { formatDateFriendly, getRemainingTime, isExpired } from "@/lib/time";
+import { useState } from "react";
 import { Button } from "../ui/Buttons/button";
 import HabitEditForm from "./HabitEditForm";
 import IsCompleted from "../ui/Shared/IsCompleted";
@@ -21,7 +21,11 @@ import {
   useRemoveHabitFromProject,
 } from "@/queries/projectQueries";
 import { useQueryClient } from "@tanstack/react-query";
-import { HABIT_QUERY_KEY, useDeleteHabit, useArchiveHabit } from "@/queries/habitQueries";
+import {
+  HABIT_QUERY_KEY,
+  useDeleteHabit,
+  useArchiveHabit,
+} from "@/queries/habitQueries";
 import ProjectSelect from "../ui/Shared/ProjectSelect";
 
 const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
@@ -90,7 +94,8 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
       </div>
       <div>
         <span>
-          {formatDate(habit.startDate)} - {formatDate(habit.endDate)}
+          {formatDateFriendly(habit.startDate)} -{" "}
+          {formatDateFriendly(habit.endDate)}
         </span>
         <div>
           {expired ? "Expired" : "ends"} {remained}

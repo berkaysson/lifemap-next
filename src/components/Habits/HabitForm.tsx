@@ -21,12 +21,14 @@ import { Period } from "@prisma/client";
 import {
   calculateEndDateWithPeriod,
   formatDate,
+  formatDateFriendly,
   parseDate,
   removeOneDay,
 } from "@/lib/time";
 import { useFetchCategories } from "@/queries/categoryQueries";
 import { useCreateHabit } from "@/queries/habitQueries";
 import { LoadingButton } from "../ui/Buttons/loading-button";
+import { DatePicker } from "../ui/Forms/date-picker-field";
 
 const HabitForm = () => {
   const { mutateAsync: createHabit } = useCreateHabit();
@@ -201,12 +203,15 @@ const HabitForm = () => {
                 <FormItem>
                   <FormLabel>Starting Date</FormLabel>
                   <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="Starting Date"
-                      type="date"
-                      required
+                    <DatePicker
+                      date={field.value ? new Date(field.value) : undefined}
+                      onSelect={(date) =>
+                        field.onChange(
+                          new Date((date?.getTime() ?? 0) + 10800000)
+                            .toISOString()
+                            .split("T")[0]
+                        )
+                      }
                     />
                   </FormControl>
                   {form.formState.errors.startDate && (
@@ -249,7 +254,7 @@ const HabitForm = () => {
                   </span>
                   , until:{" "}
                   <span className="font-bold text-primary">
-                    {calculatedEndDate}
+                    {formatDateFriendly(new Date(calculatedEndDate))}
                   </span>
                 </p>
               </div>

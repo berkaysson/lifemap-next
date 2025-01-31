@@ -19,7 +19,6 @@ import { SquareActivity } from "lucide-react";
 import SelectBox from "../ui/Shared/SelectBox";
 import { useFetchCategories } from "@/queries/categoryQueries";
 import { useCreateActivity } from "@/queries/activityQueries";
-import ModalDialog from "../ui/Modals/ModalDialog";
 import { Button } from "../ui/Buttons/button";
 import {
   Drawer,

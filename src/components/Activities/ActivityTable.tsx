@@ -11,7 +11,7 @@ import {
 import type { ExtendedActivity } from "@/types/Entitities";
 import { useDeleteActivity } from "@/queries/activityQueries";
 import ButtonWithConfirmation from "@/components/ui/Buttons/ButtonWithConfirmation";
-import { formatDate, getRemainingTime, isExpired } from "@/lib/time";
+import { formatDateFriendly, getRemainingTime } from "@/lib/time";
 import ActivityEditForm from "./AcitivityEditForm";
 import { Button } from "../ui/Buttons/button";
 import { Tooltip } from "@mui/material";
@@ -45,7 +45,6 @@ const ActivityTable = ({
             </TableHeader>
             <TableBody>
               {sortedActivities.map((activity) => {
-                const expired = isExpired(activity.date);
                 const remained = getRemainingTime(activity.date);
 
                 return (
@@ -67,8 +66,7 @@ const ActivityTable = ({
                       <Badge>{activity.category?.name}</Badge>
                     </TableCell>
                     <TableCell>
-                      {formatDate(activity.date)} / {remained}{" "}
-                      {expired ? "" : "remaining"}
+                      {formatDateFriendly(activity.date)} / {remained}
                     </TableCell>
                     <TableCell>
                       <div className="flex space-x-2">

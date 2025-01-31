@@ -27,6 +27,7 @@ import {
   DialogTrigger,
 } from "../ui/Modals/dialog";
 import { Iconify } from "../ui/iconify";
+import { DatePicker } from "../ui/Forms/date-picker-field";
 
 const TaskForm = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -187,13 +188,18 @@ const TaskForm = () => {
                   <FormItem>
                     <FormLabel>Start Date</FormLabel>
                     <FormControl>
-                      <Input
-                        disabled={isPending}
-                        {...field}
-                        placeholder="Date"
-                        type="date"
-                        required
-                      />
+                      <FormControl>
+                        <DatePicker
+                          date={field.value ? new Date(field.value) : undefined}
+                          onSelect={(date) =>
+                            field.onChange(
+                              new Date((date?.getTime() ?? 0) + 10800000)
+                                .toISOString()
+                                .split("T")[0]
+                            )
+                          }
+                        />
+                      </FormControl>
                     </FormControl>
                     {form.formState.errors.startDate && (
                       <FormMessage>
@@ -210,13 +216,18 @@ const TaskForm = () => {
                   <FormItem>
                     <FormLabel>Due Date</FormLabel>
                     <FormControl>
-                      <Input
-                        disabled={isPending}
-                        {...field}
-                        placeholder="Date"
-                        type="date"
-                        required
-                      />
+                      <FormControl>
+                        <DatePicker
+                          date={field.value ? new Date(field.value) : undefined}
+                          onSelect={(date) =>
+                            field.onChange(
+                              new Date((date?.getTime() ?? 0) + 10800000)
+                                .toISOString()
+                                .split("T")[0]
+                            )
+                          }
+                        />
+                      </FormControl>
                     </FormControl>
                     {form.formState.errors.endDate && (
                       <FormMessage>

@@ -8,7 +8,9 @@ import {
   addHours,
   addWeeks,
   addMonths,
+  format,
 } from "date-fns";
+import { enUS } from "date-fns/locale";
 
 export const addOneDay = (date: Date) => {
   return addDays(date, 1);
@@ -25,7 +27,7 @@ export const isExpired = (date: Date) => {
 };
 
 export const formatDate = (date: Date) => {
-  const result = lightFormat(date, "dd-MM-yyyy");
+  const result = lightFormat(date, "MM-dd-yyyy");
   return result;
 };
 
@@ -40,11 +42,18 @@ export const getRemainingTime = (date: Date) => {
   return remaining;
 };
 
-export const checkIsStartDateBeforeEndDate = (startDate: Date, endDate: Date) => {
+export const checkIsStartDateBeforeEndDate = (
+  startDate: Date,
+  endDate: Date
+) => {
   return startDate < endDate;
 };
 
-export const calculateEndDateWithPeriod = (startDate: Date, period: Period, numberOfPeriods: number) => {
+export const calculateEndDateWithPeriod = (
+  startDate: Date,
+  period: Period,
+  numberOfPeriods: number
+) => {
   switch (period) {
     case Period.DAILY:
       return addDays(startDate, numberOfPeriods);
@@ -53,4 +62,11 @@ export const calculateEndDateWithPeriod = (startDate: Date, period: Period, numb
     case Period.MONTHLY:
       return addMonths(startDate, numberOfPeriods);
   }
-}
+};
+
+export const formatDateFriendly = (date: Date | string): string => {
+  const parsedDate = new Date(date);
+  const dayWithSuffix = format(parsedDate, "do");
+
+  return format(parsedDate, `MMMM '${dayWithSuffix},' yyyy`, { locale: enUS });
+};

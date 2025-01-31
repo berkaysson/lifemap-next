@@ -1,6 +1,6 @@
 "use client";
 
-import { formatDate } from "@/lib/time";
+import { formatDateFriendly } from "@/lib/time";
 import { useDeleteActivity } from "@/queries/activityQueries";
 import {
   Card,
@@ -45,7 +45,7 @@ const ActivityListItem = ({ activity }: { activity: ExtendedActivity }) => {
         </div>
         <div className="flex items-center space-x-2 mt-2 text-sm text-muted-foreground">
           <Iconify icon="solar:calendar-date-bold" width={20} />
-          <span>{formatDate(activity.date)}</span>
+          <span>{formatDateFriendly(activity.date)}</span>
         </div>
       </CardContent>
       <CardFooter className="flex justify-between">

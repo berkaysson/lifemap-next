@@ -1,4 +1,4 @@
-import { formatDate, isExpired } from "@/lib/time";
+import { formatDateFriendly, isExpired } from "@/lib/time";
 import { HabitProgress, Period } from "@prisma/client";
 import IsCompleted from "../ui/Shared/IsCompleted";
 
@@ -15,8 +15,8 @@ const HabitProgressesListItem = ({
     <li className="border rounded-sm p-2 space-y-1">
       <div>
         {period === Period.DAILY
-          ? formatDate(progress.startDate)
-          : `${formatDate(progress.startDate)} / ${formatDate(
+          ? formatDateFriendly(progress.startDate)
+          : `${formatDateFriendly(progress.startDate)} / ${formatDateFriendly(
               progress.endDate
             )}`}
       </div>
