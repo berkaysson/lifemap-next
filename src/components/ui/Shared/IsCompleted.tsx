@@ -1,4 +1,5 @@
 import { CircleCheckBig, CircleDashed, CircleSlash2 } from "lucide-react";
+import { Iconify } from "../iconify";
 
 const IsCompleted = ({
   isCompleted = false,
@@ -10,11 +11,24 @@ const IsCompleted = ({
   return (
     <span className="text-3xl">
       {isCompleted ? (
-        <CircleCheckBig className="text-green-500" />
+        // <CircleCheckBig className="text-green-500" />
+        <Iconify
+          icon="solar:check-circle-bold"
+          width={24}
+          className="text-green-500"
+        />
       ) : isExpired ? (
-        <CircleSlash2 className="text-red-500" />
+        <Iconify
+          icon="solar:slash-circle-bold"
+          width={24}
+          className="text-red-500"
+        />
       ) : (
-        <CircleDashed className="text-blue-500" />
+        <Iconify
+          icon="ph:circle-dashed-fill"
+          width={24}
+          className="text-blue-500"
+        />
       )}
     </span>
   );

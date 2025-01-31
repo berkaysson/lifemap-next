@@ -11,9 +11,7 @@ import {
   useUpdateTodo,
   useArchiveTodo,
 } from "@/queries/todoQueries";
-import {
-  useFetchProjects,
-} from "@/queries/projectQueries";
+import { useFetchProjects } from "@/queries/projectQueries";
 import {
   Card,
   CardContent,
@@ -77,6 +75,7 @@ const TodoListItem = ({ todo }) => {
                 isLoading={updateTodoMutation.isPending}
                 loadingText=""
                 variant={"outline"}
+                size={"icon"}
                 onClick={handleComplete}
               >
                 <IsCompleted isCompleted={todo.completed} isExpired={expired} />

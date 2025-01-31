@@ -74,6 +74,7 @@ const TodoTable = ({ sortedTodos }: { sortedTodos: any[] }) => {
                         isLoading={updateTodoMutation.isPending}
                         loadingText=""
                         variant={"outline"}
+                        size={"icon"}
                         onClick={() => handleComplete(Todo)}
                       >
                         <IsCompleted
