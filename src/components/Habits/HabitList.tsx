@@ -9,8 +9,18 @@ import { ExtendedHabit } from "@/types/Entitities";
 import { useFetchArchivedHabits, useFetchHabits } from "@/queries/habitQueries";
 import { Separator } from "../ui/separator";
 import ArchivedHabitListItem from "./ArchivedHabitListItem";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../ui/collapsible";
+import { Button } from "../ui/Buttons/button";
+import { Badge } from "../ui/badge";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 const HabitList = () => {
+  const [isArcihivedOpen, setIsArcihivedOpen] = useState(false);
+
   const { data: habits, isLoading, isError, error } = useFetchHabits();
   const {
     data: archivedHabits,
@@ -68,9 +78,9 @@ const HabitList = () => {
 
   return (
     <div className="flex flex-col gap-4 m-2">
-      {/* Active Habits Section */}
+      {/*  Habits Section */}
       <section>
-        <h2 className="text-2xl font-bold mb-2">Active Habits</h2>
+        <h2 className="text-2xl font-bold mb-2"> Habits</h2>
         <SelectSort
           options={[
             { value: "name", label: "Name" },
@@ -90,7 +100,7 @@ const HabitList = () => {
         {sortedHabits.length === 0 && !isLoading && (
           <div className="opacity-80 mt-2">No habits found.</div>
         )}
-        
+
         <ul className="border rounded-sm mt-2">
           {sortedHabits.map((habit) => (
             <HabitListItem key={habit.id} habit={habit} />
@@ -102,30 +112,58 @@ const HabitList = () => {
 
       {/* Archived Habits Section */}
       <section>
-        <h2 className="text-2xl font-bold mb-2">Archived Habits</h2>
-        <SelectSort
-          options={[
-            { value: "name", label: "Name" },
-            { value: "completed", label: "Completion" },
-            { value: "goalDurationPerPeriod", label: "Goal Activity" },
-            { value: "startDate", label: "Start Date" },
-            { value: "endDate", label: "Due Date" },
-            { value: "period", label: "Period" },
-            { value: "bestStreak", label: "Best Streak" },
-            { value: "currentStreak", label: "Final Streak" },
-            { value: "archivedAt", label: "Archive Date" },
-          ]}
-          onSelect={handleArchiveSort}
-        />
-        {isLoadingArchived && <div>Loading archived habits...</div>}
-        {isErrorArchived && (
-          <div>Error loading archived habits: {errorArchived.message}</div>
-        )}
-        <ul className="border rounded-sm mt-2">
-          {sortedArchivedHabits.map((habit) => (
-            <ArchivedHabitListItem key={habit.id} habit={habit} />
-          ))}
-        </ul>
+        <Collapsible
+          open={isArcihivedOpen}
+          onOpenChange={setIsArcihivedOpen}
+          className="w-full space-y-2"
+        >
+          <CollapsibleTrigger asChild>
+            <Button variant="outline" size="sm" className="w-full">
+              <span>Archived Habits</span>
+              <Badge className="ml-2">{sortedArchivedHabits.length}</Badge>
+              {isArcihivedOpen ? (
+                <ChevronUp className="h-4 w-4" />
+              ) : (
+                <ChevronDown className="h-4 w-4" />
+              )}
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            {sortedArchivedHabits.length > 0 ? (
+              <>
+                <SelectSort
+                  options={[
+                    { value: "name", label: "Name" },
+                    { value: "completed", label: "Completion" },
+                    { value: "goalDurationPerPeriod", label: "Goal Activity" },
+                    { value: "startDate", label: "Start Date" },
+                    { value: "endDate", label: "Due Date" },
+                    { value: "period", label: "Period" },
+                    { value: "bestStreak", label: "Best Streak" },
+                    { value: "currentStreak", label: "Final Streak" },
+                    { value: "archivedAt", label: "Archive Date" },
+                  ]}
+                  onSelect={handleArchiveSort}
+                />
+                {isLoadingArchived && <div>Loading archived habits...</div>}
+                {isErrorArchived && (
+                  <div>
+                    Error loading archived habits: {errorArchived.message}
+                  </div>
+                )}
+                <ul className="border rounded-sm mt-2">
+                  {sortedArchivedHabits.map((habit) => (
+                    <ArchivedHabitListItem key={habit.id} habit={habit} />
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                No archived habits found.
+              </p>
+            )}
+          </CollapsibleContent>
+        </Collapsible>
       </section>
     </div>
   );

@@ -5,11 +5,9 @@ import HabitList from "@/components/Habits/HabitList";
 const HabitPage = () => {
   return (
     <div>
-      <DashboardHeader title="Habit" />
+      <DashboardHeader title="Habit" DialogComponent={<HabitForm />} />
 
       <HabitList />
-
-      <HabitForm />
     </div>
   );
 };

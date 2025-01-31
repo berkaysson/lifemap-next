@@ -70,9 +70,9 @@ const TodoList = () => {
 
   return (
     <div className="flex flex-col gap-4 m-2">
-      {/* Active Todos Section */}
+      {/*  Todos Section */}
       <section>
-        <h2 className="text-2xl font-bold mb-2">Active Todos</h2>
+        <h2 className="text-2xl font-bold mb-2"> Todos</h2>
         <div className="flex sm:flex-row justify-between flex-col-reverse gap-2">
           <SelectSort
             options={[

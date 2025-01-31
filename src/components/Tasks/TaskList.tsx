@@ -76,9 +76,9 @@ const TaskList = () => {
 
   return (
     <div className="flex flex-col gap-4 m-2">
-      {/* Active Tasks Section */}
+      {/*  Tasks Section */}
       <section>
-        <h2 className="text-2xl font-bold mb-2">Active Tasks</h2>
+        <h2 className="text-2xl font-bold mb-2"> Tasks</h2>
         <SelectSort
           options={[
             { value: "name", label: "Name" },
