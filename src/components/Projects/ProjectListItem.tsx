@@ -48,7 +48,16 @@ const ProjectListItem = ({ project }: { project: ExtendedProject }) => {
   return (
     <Card className="w-full mx-auto mb-6">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold">{project.name}</CardTitle>
+        <CardTitle>
+          <Badge tooltipText="Project" className="text-lg">
+            <Iconify
+              icon="solar:folder-with-files-bold"
+              width={16}
+              className="mr-1"
+            />
+            {project.name}
+          </Badge>
+        </CardTitle>
         <CardDescription>{project.description}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

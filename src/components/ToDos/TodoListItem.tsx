@@ -62,7 +62,13 @@ const TodoListItem = ({ todo }) => {
           variant="outline"
           style={{ backgroundColor: todo.colorCode || "darkblue" }}
           className="text-white"
+          tooltipText="Project"
         >
+          <Iconify
+            icon="solar:folder-with-files-bold"
+            width={16}
+            className="mr-1"
+          />
           {todoProject ? todoProject.name : "No Project"}
         </Badge>
       </div>

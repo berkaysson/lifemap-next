@@ -84,19 +84,32 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
 
   return (
     <Card className="w-full mb-4 shadow-md hover:shadow-lg transition-shadow duration-300">
-      <div className="flex justify-between p-1 pb-0">
-        <div className="flex gap-2 items-center">
+      <div className="flex justify-between p-1 pb-0 items-start flex-col-reverse sm:flex-row">
+        <div className="flex gap-2">
           <ColorCircle colorCode={task.colorCode || "darkblue"} />
           <IsCompleted isCompleted={task.completed} isExpired={expired} />
         </div>
 
         <div className="flex gap-2">
-          <Badge>{category?.name}</Badge>
+          <Badge tooltipText="Category">
+            <Iconify
+              icon="solar:hashtag-square-linear"
+              width={16}
+              className="mr-1"
+            />
+            {category?.name}
+          </Badge>
           <Badge
+            tooltipText="Project"
             variant="outline"
             style={{ backgroundColor: task.colorCode || "darkblue" }}
             className="text-white"
           >
+            <Iconify
+              icon="solar:folder-with-files-bold"
+              width={16}
+              className="mr-1"
+            />
             {taskProject ? taskProject.name : "No Project"}
           </Badge>
         </div>

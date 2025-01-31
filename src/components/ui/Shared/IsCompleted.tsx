@@ -9,7 +9,7 @@ const IsCompleted = ({
   isExpired?: boolean;
 }) => {
   return (
-    <span className="text-3xl">
+    <span>
       {isCompleted ? (
         // <CircleCheckBig className="text-green-500" />
         <Iconify

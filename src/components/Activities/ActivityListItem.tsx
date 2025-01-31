@@ -26,7 +26,8 @@ const ActivityListItem = ({ activity }: { activity: ExtendedActivity }) => {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <Badge>
+        <Badge tooltipText="Category">
+          <Iconify icon="solar:hashtag-square-linear" width={16} className="mr-1" />
           <h5 className="font-semibold text-lg">{activity.category?.name}</h5>
         </Badge>
       </CardHeader>

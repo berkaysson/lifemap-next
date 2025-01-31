@@ -47,7 +47,14 @@ const CategoryTable = ({
                 return (
                   <TableRow key={category.id}>
                     <TableCell>
-                      <Badge>{category.name}</Badge>
+                      <Badge tooltipText="Category">
+                        <Iconify
+                          icon="solar:hashtag-square-linear"
+                          width={14}
+                          className="mr-1"
+                        />
+                        {category.name}
+                      </Badge>
                     </TableCell>
                     <TableCell className="sm:block hidden">
                       {formatDateFriendly(category.date)}

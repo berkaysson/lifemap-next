@@ -63,7 +63,14 @@ const ActivityTable = ({
                       </span>
                     </TableCell>
                     <TableCell>
-                      <Badge>{activity.category?.name}</Badge>
+                      <Badge tooltipText="Category">
+                        <Iconify
+                          icon="solar:hashtag-square-linear"
+                          width={14}
+                          className="mr-1"
+                        />
+                        {activity.category?.name}
+                      </Badge>
                     </TableCell>
                     <TableCell>
                       {formatDateFriendly(activity.date)} / {remained}
