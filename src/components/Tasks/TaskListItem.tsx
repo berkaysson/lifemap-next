@@ -84,13 +84,13 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
 
   return (
     <Card className="w-full mb-4 shadow-md hover:shadow-lg transition-shadow duration-300">
-      <div className="flex justify-between p-1 pb-0 items-start flex-col-reverse sm:flex-row">
-        <div className="flex gap-2">
+      <div className="flex justify-between p-1 pb-0 items-start sm:flex-row flex-col gap-1">
+        <div className="flex gap-1 sm:gap-2 sm:justify-start sm:w-auto w-full justify-between">
           <ColorCircle colorCode={task.colorCode || "darkblue"} />
           <IsCompleted isCompleted={task.completed} isExpired={expired} />
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-1 sm:gap-2">
           <Badge tooltipText="Category">
             <Iconify
               icon="solar:hashtag-square-linear"
@@ -114,13 +114,13 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
           </Badge>
         </div>
       </div>
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-1">
         <h3 className="text-lg font-semibold">{task.name}</h3>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-2 sm:p-3">
         <CardDescription>{task.description}</CardDescription>
-        <div className="flex flex-row justify-between gap-4 mb-4">
-          <div className="flex items-center space-x-2">
+        <div className="flex justify-between flex-col sm:flex-row gap-1 sm:gap-4 mb-4 mt-1">
+          <div className="flex items-center space-x-2 text-muted-foreground">
             <Iconify
               icon="solar:calendar-date-bold"
               width={20}
@@ -131,7 +131,7 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
               {formatDateFriendly(task.endDate)}
             </span>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 text-muted-foreground">
             <Iconify icon="solar:stopwatch-bold" width={20} className="mr-2" />
             <span className="text-sm">
               {expired ? "Expired" : "Ends"} {remained}
@@ -153,6 +153,11 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
           initialValues={task}
           triggerButton={
             <Button variant="outline" size="sm">
+              <Iconify
+                icon="solar:pen-new-square-bold-duotone"
+                width={16}
+                className="mr-1"
+              />
               Edit
             </Button>
           }
@@ -160,13 +165,15 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
         <ButtonWithConfirmation
           variant="destructive"
           size="sm"
-          buttonText="Delete"
+          buttonText=""
+          icon="solar:trash-bin-trash-bold"
           onConfirm={handleDelete}
         />
         <ButtonWithConfirmation
           variant="destructive"
           size="sm"
-          buttonText="Archive"
+          buttonText=""
+          icon="solar:archive-bold"
           onConfirm={handleArchive}
         />
       </CardFooter>

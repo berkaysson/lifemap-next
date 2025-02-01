@@ -58,6 +58,7 @@ const ArchivedTaskListItem = ({ task }) => {
           onConfirm={handleDelete}
           variant="destructive"
           size="sm"
+          icon="solar:trash-bin-trash-bold"
         />
       </CardFooter>
     </Card>

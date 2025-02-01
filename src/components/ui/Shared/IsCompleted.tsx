@@ -4,29 +4,30 @@ import { Iconify } from "../iconify";
 const IsCompleted = ({
   isCompleted = false,
   isExpired = false,
+  width = 24,
 }: {
   isCompleted?: boolean;
   isExpired?: boolean;
+  width?: number;
 }) => {
   return (
-    <span>
+    <span className="flex items-center justify-center">
       {isCompleted ? (
-        // <CircleCheckBig className="text-green-500" />
         <Iconify
           icon="solar:check-circle-bold"
-          width={24}
+          width={width}
           className="text-green-500"
         />
       ) : isExpired ? (
         <Iconify
           icon="solar:slash-circle-bold"
-          width={24}
+          width={width}
           className="text-red-500"
         />
       ) : (
         <Iconify
           icon="ph:circle-dashed-fill"
-          width={24}
+          width={width}
           className="text-blue-500"
         />
       )}
