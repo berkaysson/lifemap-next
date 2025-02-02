@@ -159,7 +159,7 @@ const ProjectListItem = ({ project }: { project: ExtendedProject }) => {
           <CollapsibleTrigger asChild>
             <Button variant="outline" className="w-full justify-between">
               <span className="flex items-center">
-                <Iconify icon="solar:repeat-bold" width={16} className="mr-2" />
+                <Iconify icon="ph:plant-light" width={16} className="mr-2" />
                 Habits
               </span>
               <Badge>{project.habits.length}</Badge>

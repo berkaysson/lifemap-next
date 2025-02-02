@@ -45,8 +45,8 @@ const items = [
   {
     title: "Habits",
     url: "/dashboard/habit",
-    icon: "solar:repeat-one-minimalistic-bold",
-    activeIcon: "solar:repeat-one-minimalistic-bold-duotone",
+    icon: "ph:plant-bold",
+    activeIcon: "ph:plant-duotone",
   },
   {
     title: "Projects",
