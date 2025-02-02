@@ -31,6 +31,7 @@ import {
   DrawerTrigger,
 } from "../ui/drawer";
 import { DatePicker } from "../ui/Forms/date-picker-field";
+import { Iconify } from "../ui/iconify";
 
 const ActivityForm = () => {
   const { mutateAsync: createActivity } = useCreateActivity();
@@ -80,10 +81,10 @@ const ActivityForm = () => {
             setMessage("");
             setIsError(false);
           }}
-          size="lg"
           className="fixed bottom-4 right-4"
         >
-          <SquareActivity className="mr-2 h-6 w-6" /> Create Activity
+          <Iconify icon="solar:bolt-circle-outline" width={32} />
+          <span className="hidden sm:inline">Create Activity</span>
         </Button>
       </DrawerTrigger>
       <DrawerContent>
