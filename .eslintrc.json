@@ -4,11 +4,16 @@
     "plugin:import/errors",
     "plugin:import/warnings"
   ],
-  "plugins": ["import"],
+  "plugins": ["import", "unused-imports"],
   "rules": {
     "import/named": "warn",
     "import/namespace": "warn",
     "import/no-unresolved": "error",
-    "import/no-unused-modules": [1]
+    "import/no-unused-modules": [1],
+    "unused-imports/no-unused-imports": "warn",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
+    ]
   }
 }

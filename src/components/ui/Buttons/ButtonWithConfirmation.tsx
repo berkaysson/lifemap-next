@@ -13,7 +13,6 @@ import {
   DialogTrigger,
 } from "../Modals/dialog";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { X } from "lucide-react";
 
 interface ButtonWithConfirmationProps {
   buttonText: string;

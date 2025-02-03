@@ -2,7 +2,6 @@
 
 import {
   calculateProgress,
-  updateHabitCompleted,
   validateHabitPeriodAndDate,
 } from "@/helpers/habit";
 import prisma from "@/lib/prisma";

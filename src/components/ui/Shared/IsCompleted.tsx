@@ -1,4 +1,3 @@
-import { CircleCheckBig, CircleDashed, CircleSlash2 } from "lucide-react";
 import { Iconify } from "../iconify";
 
 const IsCompleted = ({

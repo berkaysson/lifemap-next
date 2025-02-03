@@ -1,5 +1,5 @@
 import { UserRole } from "@prisma/client";
-import NextAuth, { DefaultSession } from "next-auth";
+import { DefaultSession } from "next-auth";
 
 /**
  * Extends the default NextAuth session user with a role property.

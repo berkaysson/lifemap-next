@@ -1,24 +1,14 @@
 "use client";
 
 import { formatDateFriendly, getRemainingTime, isExpired } from "@/lib/time";
-import { useState } from "react";
 import { Button } from "../ui/Buttons/button";
 import TaskEditForm from "./TaskEditForm";
 import IsCompleted from "../ui/Shared/IsCompleted";
 import ColorCircle from "../ui/Shared/ColorCircle";
 import ButtonWithConfirmation from "../ui/Buttons/ButtonWithConfirmation";
 import { ExtendedTask } from "@/types/Entitities";
-import {
-  useFetchProjects,
-  useAddTaskToProject,
-  useRemoveTaskFromProject,
-} from "@/queries/projectQueries";
-import {
-  TASK_QUERY_KEY,
-  useDeleteTask,
-  useArchiveTask,
-} from "@/queries/taskQueries";
-import { useQueryClient } from "@tanstack/react-query";
+import { useFetchProjects } from "@/queries/projectQueries";
+import { useDeleteTask, useArchiveTask } from "@/queries/taskQueries";
 import {
   Card,
   CardContent,
@@ -31,16 +21,9 @@ import { Iconify } from "../ui/iconify";
 import { Progress } from "../ui/progress";
 
 const TaskListItem = ({ task }: { task: ExtendedTask }) => {
-  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
-    null
-  );
-
   const { mutateAsync: deleteTask } = useDeleteTask();
   const { mutateAsync: archiveTask } = useArchiveTask();
-  const queryClient = useQueryClient();
   const { data: projects = [] } = useFetchProjects();
-  const addToProjectMutation = useAddTaskToProject();
-  const removeFromProjectMutation = useRemoveTaskFromProject();
 
   const taskProject = projects.find((project) => project.id === task.projectId);
 
@@ -50,30 +33,6 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
 
   const handleDelete = async () => {
     await deleteTask(task.id);
-  };
-
-  const handleAddToProject = async () => {
-    if (selectedProjectId && !taskProject) {
-      await addToProjectMutation.mutateAsync({
-        entityId: task.id,
-        projectId: selectedProjectId,
-      });
-      queryClient.invalidateQueries({
-        queryKey: [TASK_QUERY_KEY, task.userId],
-      });
-    }
-  };
-
-  const handleDeleteFromProject = async () => {
-    if (taskProject) {
-      await removeFromProjectMutation.mutateAsync({
-        entityId: task.id,
-        projectId: taskProject.id,
-      });
-      queryClient.invalidateQueries({
-        queryKey: [TASK_QUERY_KEY, task.userId],
-      });
-    }
   };
 
   const handleArchive = async () => {

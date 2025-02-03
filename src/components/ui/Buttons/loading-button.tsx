@@ -1,6 +1,6 @@
 "use client";
 
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import { Button, ButtonProps } from "./button";
 import { Iconify } from "../iconify";

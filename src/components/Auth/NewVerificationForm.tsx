@@ -27,6 +27,7 @@ const NewVerificationForm = () => {
         }
       })
       .catch((error) => {
+        console.error(error);
         setMessage("Something went wrong. Please try again later.");
       });
   }, [token]);

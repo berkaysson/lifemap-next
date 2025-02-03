@@ -1,10 +1,9 @@
 import { Task } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import ModalDialog from "../ui/Modals/ModalDialog";
 import { Label } from "../ui/Forms/label";
 import { Input } from "../ui/Forms/input";
 import { parseDate } from "@/lib/time";
-import { Button } from "../ui/Buttons/button";
 import ProjectSelect from "../ui/Shared/ProjectSelect";
 import { useUpdateTask } from "@/queries/taskQueries";
 import { LoadingButton } from "../ui/Buttons/loading-button";

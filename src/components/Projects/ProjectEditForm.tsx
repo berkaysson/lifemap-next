@@ -1,9 +1,8 @@
 import { Project } from "@prisma/client";
-import { useState } from "react";
+import { JSX, useState } from "react";
 import ModalDialog from "../ui/Modals/ModalDialog";
 import { Label } from "../ui/Forms/label";
 import { Input } from "../ui/Forms/input";
-import { Button } from "../ui/Buttons/button";
 import { useUpdateProject } from "@/queries/projectQueries";
 import { LoadingButton } from "../ui/Buttons/loading-button";
 
