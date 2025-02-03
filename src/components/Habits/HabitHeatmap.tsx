@@ -1,16 +1,10 @@
-import CalendarHeatmap from "react-calendar-heatmap";
-import "react-calendar-heatmap/dist/styles.css";
-import { useMemo, useEffect } from "react";
+import { useMemo } from "react";
+import HeatMap, { HeatMapValue } from "@uiw/react-heat-map";
 import { HabitProgress } from "@prisma/client";
-
-interface HeatmapValue {
-  date: Date;
-  count: number;
-  percentage: number;
-  completedDuration: number;
-  goalDuration: number;
-  colorCode: string;
-}
+import { Tooltip } from "react-tooltip";
+import { formatDateFriendly } from "@/lib/time";
+import { useTheme } from "next-themes";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 interface HabitHeatmapProps {
   habitProgresses: HabitProgress[];
@@ -18,123 +12,135 @@ interface HabitHeatmapProps {
 }
 
 const HabitHeatmap = ({ habitProgresses, colorCode }: HabitHeatmapProps) => {
+  const { theme } = useTheme();
+
   const heatmapData = useMemo(() => {
-    return habitProgresses.map(
-      (progress): HeatmapValue => ({
-        date: progress.startDate,
-        count: progress.completed ? 1 : 0,
-        percentage:
-          progress.goalDuration > 0
-            ? (progress.completedDuration / progress.goalDuration) * 100
-            : 0,
-        completedDuration: progress.completedDuration,
-        goalDuration: progress.goalDuration,
-        colorCode,
-      })
-    );
-  }, [habitProgresses, colorCode]);
+    return habitProgresses.map((progress) => ({
+      date: progress.startDate.toISOString().split("T")[0],
+      count: progress.completedDuration / progress.goalDuration,
+      completedDuration: progress.completedDuration,
+      goalDuration: progress.goalDuration,
+    }));
+  }, [habitProgresses]);
 
   const startDate = useMemo(() => {
-    if (habitProgresses.length === 0) return new Date();
-    return habitProgresses[0].startDate;
+    if (habitProgresses.length === 0)
+      return new Date().toISOString().split("T")[0];
+    return habitProgresses[0].startDate.toISOString().split("T")[0];
   }, [habitProgresses]);
 
   const endDate = useMemo(() => {
-    if (habitProgresses.length === 0) return new Date();
-    return habitProgresses[habitProgresses.length - 1].endDate;
+    if (habitProgresses.length === 0)
+      return new Date().toISOString().split("T")[0];
+    return habitProgresses[habitProgresses.length - 1].endDate
+      .toISOString()
+      .split("T")[0];
   }, [habitProgresses]);
 
-  const getColorClass = (value: any): string => {
-    if (!value || !(value as HeatmapValue)) return "color-empty";
-
-    const heatmapValue = value as HeatmapValue;
-    const completed = heatmapValue.completedDuration;
-    const goal = heatmapValue.goalDuration;
-    const baseColor = heatmapValue.colorCode || "#4ade80";
-
-    const opacity =
-      completed === 0
-        ? "10"
-        : completed >= goal
-        ? "100"
-        : completed >= goal * 0.8
-        ? "80"
-        : completed >= goal * 0.6
-        ? "60"
-        : completed >= goal * 0.3
-        ? "40"
-        : "20";
-
-    return `color-${baseColor.substring(1)}-${opacity}`;
+  const getColorScale = (baseColor: string) => {
+    return {
+      0: `${baseColor}15`, // Empty/incomplete
+      0.25: `${baseColor}30`, // 25% opacity
+      0.5: `${baseColor}50`, // 50% opacity
+      0.75: `${baseColor}60`, // 75% opacity
+      1: baseColor, // Full color
+      zeroGoal: theme === "dark" ? "#1C252E" : "#FFFFFF", // No goal duration or goalDuration is 0
+    };
   };
 
-  const colorStyles = useMemo(() => {
-    const baseColor = colorCode || "#4ade80";
-    const styleId = `heatmap-style-${baseColor.substring(1)}`;
-
-    const styleElement = document.createElement("style");
-    styleElement.id = styleId;
-
-    const cssRules = `
-      .react-calendar-heatmap .color-${baseColor.substring(1)}-100 { 
-        fill: ${baseColor} !important;
-        stroke: #000000;
-        stroke-width: 1px;
-      }
-      .react-calendar-heatmap .color-${baseColor.substring(
-        1
-      )}-80 { fill: ${baseColor}cc !important; }
-      .react-calendar-heatmap .color-${baseColor.substring(
-        1
-      )}-60 { fill: ${baseColor}99 !important; }
-      .react-calendar-heatmap .color-${baseColor.substring(
-        1
-      )}-40 { fill: ${baseColor}66 !important; }
-      .react-calendar-heatmap .color-${baseColor.substring(
-        1
-      )}-20 { fill: ${baseColor}33 !important; }
-      .react-calendar-heatmap .color-${baseColor.substring(
-        1
-      )}-10 { fill: ${baseColor}1a !important; }
-      .react-calendar-heatmap .color-empty { fill: #ebedf0 !important; }
-    `;
-
-    styleElement.textContent = cssRules;
-
-    const existingStyle = document.getElementById(styleId);
-    if (existingStyle) {
-      existingStyle.remove();
-    }
-
-    document.head.appendChild(styleElement);
-
-    return () => {
-      styleElement.remove();
-    };
-  }, [colorCode]);
-
-  useEffect(() => {
-    return () => {
-      colorStyles();
-    };
-  }, [colorStyles]);
-
+  const columnCount = useMemo(
+    () => Math.floor(heatmapData.length / 6 + 1),
+    [heatmapData]
+  );
+  const heatmapWidth = useMemo(
+    () => columnCount * (32 + 4) + 24,
+    [columnCount]
+  );
   return (
     <div className="w-full">
-      <CalendarHeatmap
-        startDate={startDate}
-        endDate={endDate}
-        values={heatmapData}
-        classForValue={getColorClass}
-        titleForValue={(value) => {
-          if (!value) return "No data";
-          return `${value.date.toLocaleDateString()}: ${value.percentage.toFixed(
-            0
-          )}% completed (${value.completedDuration}/${
-            value.goalDuration
-          } minutes)`;
-        }}
-      />
+      <ScrollArea
+        type="always"
+        className="w-full whitespace-nowrap rounded-md border"
+      >
+        <div
+          className="flex whitespace-nowrap"
+          style={{
+            width: heatmapWidth + "px",
+          }}
+        >
+          <HeatMap
+            value={heatmapData}
+            startDate={new Date(startDate)}
+            endDate={new Date(endDate)}
+            panelColors={getColorScale(colorCode)}
+            rectProps={{ rx: 4 }}
+            rectSize={32}
+            space={4}
+            height={350}
+            width="100%"
+            rectRender={(
+              props,
+              data: HeatMapValue & {
+                column: number;
+                row: number;
+                index: number;
+              }
+            ) => {
+              const customData = heatmapData.find(
+                (item) => item.date === data.date
+              ) || {
+                completedDuration: 0,
+                goalDuration: 0,
+                count: 0,
+              };
+
+              const ratio = customData.count || 0;
+              const colors = getColorScale(colorCode);
+              let color = colors[0];
+
+              if (customData.goalDuration === 0) {
+                color = colors.zeroGoal; // Change color if goalDuration is 0
+              } else if (ratio > 0.75) {
+                color = colors[1];
+              } else if (ratio > 0.5) {
+                color = colors[0.75];
+              } else if (ratio > 0.25) {
+                color = colors[0.5];
+              } else if (ratio > 0) {
+                color = colors[0.25];
+              }
+
+              return (
+                <g>
+                  <rect
+                    {...props}
+                    fill={color}
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content={`Date: ${formatDateFriendly(
+                      data.date
+                    )}
+      Completed: ${customData.completedDuration}/${customData.goalDuration}`}
+                  />
+                  {ratio >= 1 && (
+                    <text
+                      x={Number(props.x ?? 0) + Number(props.width ?? 0) / 2}
+                      y={Number(props.y ?? 0) + Number(props.height ?? 0) / 2}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      fontSize="10"
+                      fill="white"
+                    >
+                      ✓
+                    </text>
+                  )}
+                </g>
+              );
+            }}
+          />
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
+      <Tooltip id="my-tooltip" />
     </div>
   );
 };
