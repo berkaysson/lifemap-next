@@ -7,11 +7,6 @@ import HabitEditForm from "./HabitEditForm";
 import IsCompleted from "../ui/Shared/IsCompleted";
 import ColorCircle from "../ui/Shared/ColorCircle";
 import ButtonWithConfirmation from "../ui/Buttons/ButtonWithConfirmation";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../ui/collapsible";
 import { ChevronsUpDown } from "lucide-react";
 import HabitProgressesList from "./HabitProgressesList";
 import { ExtendedHabit } from "@/types/Entitities";
@@ -27,6 +22,12 @@ import {
   useArchiveHabit,
 } from "@/queries/habitQueries";
 import ProjectSelect from "../ui/Shared/ProjectSelect";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "../ui/accordion";
 
 const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
   const [isHabitProgressesCollapsed, setIsHabitProgressesCollapsed] =
@@ -156,27 +157,32 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
         <div>Current Streak: {habit.currentStreak} days</div>
       </div>
       <div>
-        <Collapsible
-          open={isHabitProgressesCollapsed}
-          onOpenChange={setIsHabitProgressesCollapsed}
-          className="w-full"
-        >
-          <div className="flex flex-col space-y-2 mt-2">
-            <CollapsibleTrigger asChild>
-              <Button variant="outline" size="sm">
+        <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value="habit-progresses">
+            <AccordionTrigger>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() =>
+                  setIsHabitProgressesCollapsed(!isHabitProgressesCollapsed)
+                }
+              >
                 <ChevronsUpDown className="h-4 w-4 mr-2" />
                 Habit Progresses
               </Button>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="space-y-2">
-              <HabitProgressesList
-                habitProgresses={habitProgresses}
-                categoryName={category?.name}
-                period={habit.period}
-              />
-            </CollapsibleContent>
-          </div>
-        </Collapsible>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="space-y-2 mt-2">
+                <HabitProgressesList
+                  habitProgresses={habitProgresses}
+                  categoryName={category?.name}
+                  period={habit.period}
+                  colorCode={habit.colorCode || "darkblue"}
+                />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
     </li>
   );

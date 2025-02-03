@@ -1,9 +1,8 @@
 import { Habit } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import ModalDialog from "../ui/Modals/ModalDialog";
 import { Label } from "../ui/Forms/label";
 import { Input } from "../ui/Forms/input";
-import { Button } from "../ui/Buttons/button";
 import ProjectSelect from "../ui/Shared/ProjectSelect";
 import { useUpdateHabit } from "@/queries/habitQueries";
 import { LoadingButton } from "../ui/Buttons/loading-button";
