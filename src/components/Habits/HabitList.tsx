@@ -101,7 +101,7 @@ const HabitList = () => {
           <div className="opacity-80 mt-2">No habits found.</div>
         )}
 
-        <ul className="border rounded-sm mt-2">
+        <ul className="rounded-sm grid grid-cols-1 gap-4 mt-2">
           {sortedHabits.map((habit) => (
             <HabitListItem key={habit.id} habit={habit} />
           ))}
@@ -151,7 +151,7 @@ const HabitList = () => {
                     Error loading archived habits: {errorArchived.message}
                   </div>
                 )}
-                <ul className="border rounded-sm mt-2">
+                <ul className="rounded-sm grid grid-cols-1 gap-4 mt-2 sm:grid-cols-2 md:grid-cols-3">
                   {sortedArchivedHabits.map((habit) => (
                     <ArchivedHabitListItem key={habit.id} habit={habit} />
                   ))}

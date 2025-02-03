@@ -5,6 +5,7 @@ import IsCompleted from "../ui/Shared/IsCompleted";
 import ColorCircle from "../ui/Shared/ColorCircle";
 import ButtonWithConfirmation from "../ui/Buttons/ButtonWithConfirmation";
 import { useDeleteArchivedHabit } from "@/queries/habitQueries";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "../ui/card";
 
 const ArchivedHabitListItem = ({ habit }) => {
   const expired = isExpired(habit.endDate);
@@ -15,25 +16,30 @@ const ArchivedHabitListItem = ({ habit }) => {
   };
 
   return (
-    <li className="flex flex-col gap-2 p-4 border-b">
-      <div className="flex">
-        <div className="flex flex-col gap-2">
-          <div>
-            <span className="mr-2 text-xl flex gap-2">
-              <IsCompleted isCompleted={habit.completed} isExpired={expired} />
-              <ColorCircle colorCode={habit.colorCode || "darkblue"} />
-            </span>
-            <span>{habit.name}</span>
-          </div>
-          {habit.description && <div>{habit.description}</div>}
+    <Card className="w-full mb-1 shadow-md hover:shadow-lg transition-shadow duration-300">
+      <div className="flex gap-1 items-center p-1 pb-0">
+        <ColorCircle colorCode={habit.colorCode || "darkblue"} />
+        <IsCompleted isCompleted={habit.completed} isExpired={expired} />
+      </div>
+      <CardHeader>
+        <h3 className="text-lg font-semibold">{habit.name}</h3>
+      </CardHeader>
+      <CardContent className="flex">
+        <div className="flex flex-col gap-1">
+          <CardDescription>
+            {habit.description && <div>{habit.description}</div>}
+          </CardDescription>
+
           <div className="text-sm text-muted-foreground">
             <div>Start: {habit.startDate.toLocaleDateString()}</div>
             <div>Due: {habit.endDate.toLocaleDateString()}</div>
             <div>Archived: {habit.archivedAt.toLocaleDateString()}</div>
+            <div>
+              Progress: {habit.completedDuration}/{habit.goalDuration}
+            </div>
+            <div>Category: {habit.categoryName}</div>
             <div>Period: {habit.period}</div>
             <div>Best Streak: {habit.bestStreak} days</div>
-            <div>Final Streak: {habit.currentStreak} days</div>
-            <div>Category: {habit.categoryName}</div>
           </div>
           {habit.project && (
             <div className="text-sm">
@@ -41,14 +47,17 @@ const ArchivedHabitListItem = ({ habit }) => {
             </div>
           )}
         </div>
+      </CardContent>
+      <CardFooter className="flex justify-end">
         <ButtonWithConfirmation
           buttonText="Delete"
           onConfirm={handleDelete}
           variant="destructive"
           size="sm"
+          icon="solar:trash-bin-trash-bold"
         />
-      </div>
-    </li>
+      </CardFooter>
+    </Card>
   );
 };
 
