@@ -2,7 +2,9 @@
 
 import { formatDateFriendly } from "@/lib/time";
 import type { HabitProgress } from "@prisma/client";
+import React from "react";
 import { Tooltip } from "react-tooltip";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 interface HabitLineHeatmapProps {
   period: "DAILY" | "WEEKLY" | "MONTHLY";
@@ -43,47 +45,87 @@ const HabitLineHeatmap = ({
   const blockWidth = period === "MONTHLY" ? 32 : 16; // px values
 
   return (
-    <div className="w-full max-w-3xl">
-      {/* Heatmap Blocks */}
-      <div className="grid grid-flow-col auto-cols-max gap-1 mt-1">
-        {progresses.map((item) => {
-          const level = getIntensityLevel(
-            item.completedDuration,
-            item.goalDuration
-          );
-          return (
-            <div
-              key={item.id}
-              style={{
-                backgroundColor: getBlockColor(level),
-                width: `${blockWidth}px`,
-              }}
-              className="h-24 rounded-sm cursor-pointer transition-colors duration-200"
-              title={`${item.startDate.toLocaleDateString()}: ${
-                item.completedDuration
-              }/${item.goalDuration} completed`}
-              data-tooltip-id="line-heatmap-tooltip"
-              data-tooltip-content={`${formatDateFriendly(item.startDate)}
+    <div className="w-full">
+      <ScrollArea
+        type="always"
+        className="w-full whitespace-nowrap rounded-md border"
+      >
+        <div className="flex flex-col p-4 whitespace-nowrap w-full relative">
+          <div className="relative">
+            {/* Month Labels Row */}
+            <div className="absolute left-0 flex gap-1 text-xs">
+              {progresses
+                .reduce(
+                  (acc: { month: string; position: number }[], item, index) => {
+                    const currentMonth = item.startDate.toLocaleString(
+                      "default",
+                      {
+                        month: "short",
+                      }
+                    );
+
+                    if (!acc.find(({ month }) => month === currentMonth)) {
+                      acc.push({ month: currentMonth, position: index });
+                    }
+
+                    return acc;
+                  },
+                  []
+                )
+                .map(({ month, position }) => (
+                  <div
+                    key={month}
+                    className="absolute"
+                    style={{ left: `${position * (blockWidth + 4)}px` }}
+                  >
+                    {month}
+                  </div>
+                ))}
+            </div>
+
+            {/* Heatmap Blocks */}
+            <div className="grid grid-flow-col auto-cols-max gap-1 mt-8">
+              {progresses.map((item) => {
+                const level = getIntensityLevel(
+                  item.completedDuration,
+                  item.goalDuration
+                );
+                return (
+                  <div
+                    key={item.id}
+                    style={{
+                      backgroundColor: getBlockColor(level),
+                      width: `${blockWidth}px`,
+                    }}
+                    className="h-24 rounded-sm cursor-pointer transition-colors duration-200"
+                    title={`${item.startDate.toLocaleDateString()}: ${
+                      item.completedDuration
+                    }/${item.goalDuration} completed`}
+                    data-tooltip-id="line-heatmap-tooltip"
+                    data-tooltip-content={`${formatDateFriendly(item.startDate)}
               - ${formatDateFriendly(item.endDate)}
                     ${item.completedDuration}/${item.goalDuration}`}
-            />
-          );
-        })}
-      </div>
+                  />
+                );
+              })}
+            </div>
+          </div>
 
-      {/* Color Scale Legend */}
-      <div className="flex items-center gap-2 text-xs text-muted-foreground mt-2">
-        <div className="flex">
-          {[0, 0.25, 0.5, 0.75, 1].map((level) => (
-            <div
-              key={level}
-              style={{ backgroundColor: getBlockColor(level) }}
-              className="w-3 h-3"
-            />
-          ))}
+          {/* Color Scale Legend */}
+          <div className="flex items-center gap-2 text-xs text-muted-foreground mt-2">
+            <div className="flex">
+              {[0, 0.25, 0.5, 0.75, 1].map((level) => (
+                <div
+                  key={level}
+                  style={{ backgroundColor: getBlockColor(level) }}
+                  className="w-3 h-3"
+                />
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
-
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
       <Tooltip id="line-heatmap-tooltip" />
     </div>
   );
