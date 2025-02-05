@@ -1,6 +1,6 @@
 import { HabitProgress, Period } from "@prisma/client";
-import HabitProgressesListItem from "./HabitProgressesListItem";
 import HabitHeatmap from "./HabitHeatmap";
+import HabitLineHeatmap from "./HabitLineHeatmap";
 
 const HabitProgressesList = ({
   habitProgresses,
@@ -19,15 +19,11 @@ const HabitProgressesList = ({
       {period === "DAILY" ? (
         <HabitHeatmap habitProgresses={habitProgresses} colorCode={colorCode} />
       ) : (
-        <ul className="flex flex-row gap-1 flex-wrap">
-          {habitProgresses.map((habitProgress) => (
-            <HabitProgressesListItem
-              key={habitProgress.id}
-              progress={habitProgress}
-              period={period}
-            />
-          ))}
-        </ul>
+        <HabitLineHeatmap
+          period={period}
+          progresses={habitProgresses}
+          colorCode={colorCode}
+        />
       )}
     </div>
   );
