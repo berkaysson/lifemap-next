@@ -1,5 +1,3 @@
-"use client";
-
 import { HomeHeader } from "@/components/Home/home-header";
 import { Button } from "@/components/ui/Buttons/button";
 import { MapPin, Compass, TrendingUp } from "lucide-react";

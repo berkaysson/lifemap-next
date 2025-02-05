@@ -1,5 +1,3 @@
-"use client";
-
 import ActivityForm from "@/components/Activities/ActivityForm";
 import { DashboardContent } from "@/layouts/sidebar/dashboard-content";
 
