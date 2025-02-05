@@ -1,5 +1,5 @@
 import { Activity } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import { Input } from "../ui/Forms/input";
 import { LoadingButton } from "../ui/Buttons/loading-button";
 import { Label } from "../ui/Forms/label";

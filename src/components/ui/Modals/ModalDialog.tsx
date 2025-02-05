@@ -8,6 +8,7 @@ import {
   DialogTrigger,
 } from "./dialog";
 import { Button } from "../Buttons/button";
+import { JSX } from "react";
 
 interface ModalDialogProps {
   triggerButton: JSX.Element;
