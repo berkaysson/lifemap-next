@@ -57,12 +57,9 @@ const HabitLineHeatmap = ({
               {progresses
                 .reduce(
                   (acc: { month: string; position: number }[], item, index) => {
-                    const currentMonth = item.startDate.toLocaleString(
-                      "default",
-                      {
-                        month: "short",
-                      }
-                    );
+                    const currentMonth = new Intl.DateTimeFormat("en-US", {
+                      month: "short",
+                    }).format(new Date(item.startDate));
 
                     if (!acc.find(({ month }) => month === currentMonth)) {
                       acc.push({ month: currentMonth, position: index });
