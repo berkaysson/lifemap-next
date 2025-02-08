@@ -71,12 +71,12 @@ const footerItems = [
     icon: "solar:settings-bold",
     activeIcon: "solar:settings-bold-duotone",
   },
-  {
-    title: "Profile",
-    url: "/dashboard/profile",
-    icon: "solar:user-rounded-bold",
-    activeIcon: "solar:user-rounded-bold-duotone",
-  },
+  // {
+  //   title: "Profile",
+  //   url: "/dashboard/profile",
+  //   icon: "solar:user-rounded-bold",
+  //   activeIcon: "solar:user-rounded-bold-duotone",
+  // },
 ];
 
 export function AppSidebar() {
