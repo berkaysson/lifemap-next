@@ -10,6 +10,12 @@ import { useMemo, useEffect, useState } from "react";
 import { getInitialTheme } from "@/lib/utils";
 
 const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const [initialTheme, setInitialTheme] = useState<"light" | "dark">("light");
 
   useEffect(() => {
@@ -17,15 +23,9 @@ const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     setInitialTheme(theme);
   }, []);
 
-  const muiTheme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode: initialTheme,
-        },
-      }),
-    [initialTheme]
-  );
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <NextThemesProvider
@@ -33,12 +33,7 @@ const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
       defaultTheme={initialTheme}
       enableSystem
     >
-      <MuiThemeColorModeProvider>
-        <MuiThemeProvider theme={muiTheme}>
-          <CssBaseline />
-          {children}
-        </MuiThemeProvider>
-      </MuiThemeColorModeProvider>
+      <MuiThemeColorModeProvider>{children}</MuiThemeColorModeProvider>
     </NextThemesProvider>
   );
 };
@@ -48,19 +43,24 @@ const MuiThemeColorModeProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
 
   const muiTheme = useMemo(
     () =>
       createTheme({
         palette: {
-          mode: theme === "dark" ? "dark" : "light",
+          mode: resolvedTheme === "dark" ? "dark" : "light",
         },
       }),
-    [theme]
+    [resolvedTheme]
   );
 
-  return <MuiThemeProvider theme={muiTheme}>{children}</MuiThemeProvider>;
+  return (
+    <MuiThemeProvider theme={muiTheme}>
+      <CssBaseline />
+      {children}
+    </MuiThemeProvider>
+  );
 };
 
 export default ThemeProvider;

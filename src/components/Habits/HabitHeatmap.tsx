@@ -76,6 +76,9 @@ const HabitHeatmap = ({ habitProgresses, colorCode }: HabitHeatmapProps) => {
             rectProps={{ rx: 4 }}
             rectSize={32}
             space={4}
+            style={{
+              color: theme === "dark" ? "#FFFFFF" : "#1C252E",
+            }}
             height={350}
             width="100%"
             rectRender={(

@@ -3,7 +3,7 @@
 import { useTheme } from "next-themes";
 import { IconButton } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Iconify } from "./iconify";
+import { Iconify } from "../iconify";
 
 const ThemeToggle = () => {
   const { theme, setTheme, systemTheme } = useTheme();

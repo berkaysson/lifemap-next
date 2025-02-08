@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "../../layouts/sidebar/sidebar";
-import ThemeToggle from "@/components/ui/theme-toggle";
+import ThemeToggle from "@/components/ui/Buttons/theme-toggle";
 
 const DashboardHeader = ({
   title,
