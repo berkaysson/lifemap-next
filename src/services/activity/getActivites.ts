@@ -3,7 +3,11 @@
 import prisma from "@/lib/prisma";
 import { logService } from "@/lib/utils";
 
-export const getActivities = async (userId: string) => {
+export const getActivities = async (
+  userId: string,
+  page: number = 1,
+  pageSize: number = 10
+) => {
   logService("getActivities");
   if (!userId) {
     return {
@@ -11,19 +15,26 @@ export const getActivities = async (userId: string) => {
       success: false,
     };
   }
+
   try {
-    const activities = await prisma.activity.findMany({
-      where: {
-        userId,
-      },
-      include: {
-        category: true,
-      },
-    });
+    const skip = (page - 1) * pageSize;
+
+    const [total, activities] = await Promise.all([
+      prisma.activity.count({ where: { userId } }),
+      prisma.activity.findMany({
+        where: { userId },
+        include: { category: true },
+        orderBy: { date: "desc" },
+        skip,
+        take: pageSize,
+      }),
+    ]);
+
     return {
       message: "Successfully fetched activities",
       success: true,
       activities,
+      total,
     };
   } catch (error) {
     return {

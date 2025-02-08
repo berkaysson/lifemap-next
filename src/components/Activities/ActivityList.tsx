@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import ActivityListItem from "./ActivityListItem";
 import SelectSort from "../ui/Shared/SelectSort";
 import { sortArrayOfObjectsByKey } from "@/lib/utils";
@@ -9,11 +9,31 @@ import { ExtendedActivity } from "@/types/Entitities";
 import { useFetchActivities } from "@/queries/activityQueries";
 import ActivityTable from "./ActivityTable";
 import ListViewToggle from "../ui/Buttons/list-view-toggle";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../ui/pagination";
+import { Separator } from "../ui/separator";
 
 const ActivityList = () => {
   const [viewMode, setViewMode] = useState<"table" | "grid">("table");
-  const { data: activities, isLoading, isError, error } = useFetchActivities();
-  const [sortedActivities, setSortedActivities] = useState(activities || []);
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
+
+  const { data, isLoading, isError, error } = useFetchActivities(
+    page,
+    pageSize
+  );
+
+  const activities = useMemo(() => data?.activities || [], [data?.activities]);
+  const total = data?.total || 0;
+  const totalPages = Math.ceil(total / pageSize);
+
+  const [sortedActivities, setSortedActivities] = useState(activities);
 
   useEffect(() => {
     if (activities && activities.length > 0) {
@@ -39,9 +59,12 @@ const ActivityList = () => {
     [activities]
   );
 
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
   return (
     <div className="flex flex-col gap-2 m-2">
-      <div className="flex sm:flex-row justify-between flex-col-reverse gap-2">
+      <div className="flex sm:flex-row justify-between flex-col-reverse gap-2 mb-2">
         <SelectSort
           options={[
             { value: "date", label: "Date" },
@@ -59,7 +82,9 @@ const ActivityList = () => {
       </div>
 
       {isLoading && <div>Loading activities...</div>}
-      {isError && <div>Error loading activities: {error.message}</div>}
+      {isError && (
+        <div>Error loading activities: {(error as Error).message}</div>
+      )}
       {sortedActivities.length === 0 && !isLoading && (
         <div className="opacity-80 mt-2">No activities found.</div>
       )}
@@ -75,6 +100,38 @@ const ActivityList = () => {
       {viewMode === "table" && (
         <ActivityTable sortedActivities={sortedActivities} />
       )}
+
+      <Separator className="my-2" />
+
+      {/* Pagination Controls */}
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={() => handlePageChange(Math.max(page - 1, 1))}
+              className={page === 1 ? "pointer-events-none opacity-50" : ""}
+            />
+          </PaginationItem>
+          {[...Array(totalPages)].map((_, index) => (
+            <PaginationItem key={index}>
+              <PaginationLink
+                onClick={() => handlePageChange(index + 1)}
+                isActive={page === index + 1}
+              >
+                {index + 1}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+          <PaginationItem>
+            <PaginationNext
+              onClick={() => handlePageChange(Math.min(page + 1, totalPages))}
+              className={
+                page === totalPages ? "pointer-events-none opacity-50" : ""
+              }
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 };

@@ -15,18 +15,18 @@ import { deleteActivity } from "@/services/activity/deleteActivity";
 
 export const ACTIVITY_QUERY_KEY = "activities";
 
-// 1. Fetch Activities Query
-export const useFetchActivities = () => {
+// 1. Fetch Activities Query with Pagination
+export const useFetchActivities = (page: number = 1, pageSize: number = 25) => {
   const { data: session } = useSession();
   const userId = session?.user?.id;
 
   return useQuery({
-    queryKey: [ACTIVITY_QUERY_KEY, userId],
+    queryKey: [ACTIVITY_QUERY_KEY, userId, page, pageSize],
     queryFn: async () => {
       validateSession(session);
-      const response = await getActivities(userId!);
+      const response = await getActivities(userId!, page, pageSize);
       if (!response.success) throw new Error(response.message);
-      return response.activities as ExtendedActivity[];
+      return response;
     },
     enabled: !!userId,
     staleTime: 1000 * 60 * 5,
