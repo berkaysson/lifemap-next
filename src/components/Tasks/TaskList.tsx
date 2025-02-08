@@ -78,7 +78,6 @@ const TaskList = () => {
     <div className="flex flex-col gap-4 m-2">
       {/*  Tasks Section */}
       <section>
-        <h2 className="text-2xl font-bold mb-2"> Tasks</h2>
         <SelectSort
           options={[
             { value: "name", label: "Name" },
@@ -96,7 +95,7 @@ const TaskList = () => {
         {sortedTasks.length === 0 && !isLoading && (
           <div className="opacity-80 mt-2">No tasks found.</div>
         )}
-        <ul className="rounded-sm grid grid-cols-1 gap-4 mt-2">
+        <ul className="rounded-sm grid grid-cols-1 gap-4 mt-4">
           {sortedTasks.map((task) => (
             <TaskListItem key={task.id} task={task} />
           ))}

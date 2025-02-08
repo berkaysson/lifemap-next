@@ -38,7 +38,7 @@ const CategoryList = () => {
   );
 
   return (
-    <div className="flex flex-col gap-2 m-2 mt-4">
+    <div className="flex flex-col gap-4 m-2 mt-4">
       <SelectSort
         options={[
           { value: "name", label: "Name" },

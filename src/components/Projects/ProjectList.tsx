@@ -36,7 +36,7 @@ const ProjectList = () => {
   );
 
   return (
-    <div className="flex flex-col gap-2 m-2">
+    <div className="flex flex-col gap-4 m-2">
       <SelectSort
         options={[{ value: "name", label: "Name" }]}
         onSelect={handleSort}
@@ -47,7 +47,7 @@ const ProjectList = () => {
       {sortedProjects.length === 0 && !isLoading && (
         <div className="opacity-80 mt-2">No projects found.</div>
       )}
-      <ul className="rounded-sm grid grid-cols-1 gap-4">
+      <ul className="rounded-sm grid grid-cols-1 gap-3">
         {sortedProjects.map((project) => (
           <ProjectListItem key={project.id} project={project} />
         ))}

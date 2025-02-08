@@ -80,7 +80,6 @@ const HabitList = () => {
     <div className="flex flex-col gap-4 m-2">
       {/*  Habits Section */}
       <section>
-        <h2 className="text-2xl font-bold mb-2"> Habits</h2>
         <SelectSort
           options={[
             { value: "name", label: "Name" },
@@ -101,7 +100,7 @@ const HabitList = () => {
           <div className="opacity-80 mt-2">No habits found.</div>
         )}
 
-        <ul className="rounded-sm grid grid-cols-1 gap-4 mt-2">
+        <ul className="rounded-sm grid grid-cols-1 gap-4 mt-4">
           {sortedHabits.map((habit) => (
             <HabitListItem key={habit.id} habit={habit} />
           ))}
