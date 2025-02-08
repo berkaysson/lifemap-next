@@ -12,11 +12,12 @@ import {
   FormMessage,
 } from "../ui/Forms/form";
 import { Input } from "../ui/Forms/input";
-import { Button } from "../ui/Buttons/button";
 import { useState, useTransition } from "react";
 import { RegisterSchema } from "@/schema";
 import CardWrapper from "./AuthCardWrapper";
 import { register } from "@/actions/register";
+import { Iconify } from "../ui/iconify";
+import { LoadingButton } from "../ui/Buttons/loading-button";
 
 const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -50,11 +51,13 @@ const RegisterForm = () => {
       headerLabel="Register"
       backButtonHref="/auth/login"
       backButtonLabel="Already have an account?"
-      showSocial={false}
     >
       <Form {...form}>
-        <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="flex flex-col gap-4">
+        <form
+          className="sm:space-y-6 space-y-4"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <div className="flex flex-col sm:gap-4 gap-2">
             <FormField
               control={form.control}
               name="email"
@@ -62,12 +65,20 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="john.doe@example.com"
-                      type="email"
-                    />
+                    <div className="relative">
+                      <Iconify
+                        width={16}
+                        icon="solar:letter-line-duotone"
+                        className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                      />
+                      <Input
+                        disabled={isPending}
+                        {...field}
+                        placeholder="john.doe@example.com"
+                        type="email"
+                        className="pl-10"
+                      />
+                    </div>
                   </FormControl>
                   {form.formState.errors.email && (
                     <FormMessage>
@@ -84,12 +95,20 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="********"
-                      type="password"
-                    />
+                    <div className="relative">
+                      <Iconify
+                        width={16}
+                        icon="solar:lock-keyhole-minimalistic-line-duotone"
+                        className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                      />
+                      <Input
+                        disabled={isPending}
+                        {...field}
+                        placeholder="********"
+                        type="password"
+                        className="pl-10"
+                      />
+                    </div>
                   </FormControl>
                   {form.formState.errors.password && (
                     <FormMessage>
@@ -106,12 +125,20 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="John"
-                      type="John Doe"
-                    />
+                    <div className="relative">
+                      <Iconify
+                        width={16}
+                        icon="solar:user-hand-up-line-duotone"
+                        className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                      />
+                      <Input
+                        disabled={isPending}
+                        {...field}
+                        placeholder="John"
+                        type="John Doe"
+                        className="pl-10"
+                      />
+                    </div>
                   </FormControl>
                   {form.formState.errors.name && (
                     <FormMessage className="mb-2">
@@ -124,15 +151,23 @@ const RegisterForm = () => {
           </div>
 
           {message && isError && <FormMessage>{message}</FormMessage>}
+          {message && !isError && (
+            <FormMessage className="text-green-500">{message}</FormMessage>
+          )}
 
-          <Button
-            disabled={isPending}
-            variant="default"
+          <LoadingButton
+            isLoading={isPending}
+            loadingText=""
             type="submit"
             className="w-full"
           >
             Register
-          </Button>
+            <Iconify
+              icon="solar:arrow-right-line-duotone"
+              width={20}
+              className="ml-1"
+            />
+          </LoadingButton>
         </form>
       </Form>
     </CardWrapper>

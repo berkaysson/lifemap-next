@@ -1,27 +1,32 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { reset } from "@/actions/reset";
 import { ResetSchema } from "@/schema";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/Forms/label";
 import { Input } from "@/components/ui/Forms/input";
-import { Button } from "@/components/ui/Buttons/button";
 import { Separator } from "@/components/ui/separator";
 import DashboardHeader from "@/layouts/sidebar/dashboard-header";
 import { Iconify } from "@/components/ui/iconify";
+import { LoadingButton } from "@/components/ui/Buttons/loading-button";
+import { useToast } from "@/components/ui/Misc/use-toast";
 export default function SettingsPage() {
   const [isPending, startTransition] = useTransition();
-  const [message, setMessage] = useState("");
   const { data: session, status } = useSession();
+  const { toast } = useToast();
 
   const onChangePasswordClick = () => {
     if (session?.user?.email) {
       const data = ResetSchema.parse({ email: session.user.email });
       startTransition(() => {
-        reset(data).then((data: any) => {
-          setMessage(data.message);
+        reset(data).then(() => {
+          toast({
+            title: "Password Reset Email Sent",
+            description: "Please check your email.",
+            duration: 3000,
+          });
         });
       });
     }
@@ -55,18 +60,18 @@ export default function SettingsPage() {
         </div>
         <Separator className="my-6" />
         <div className="flex flex-col items-start space-y-4">
-          <Button
+          <LoadingButton
             onClick={onChangePasswordClick}
             variant="default"
+            type="button"
+            isLoading={isPending}
+            loadingText="Sending Email..."
             disabled={isPending}
             className="w-full"
           >
             <Iconify icon="solar:restart-bold" className="mr-1" />
             Request Password Reset
-          </Button>
-          {message && (
-            <p className="text-sm text-muted-foreground">{message}</p>
-          )}
+          </LoadingButton>
         </div>
       </div>
     </div>

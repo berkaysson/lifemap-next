@@ -12,16 +12,19 @@ import {
   FormMessage,
 } from "../ui/Forms/form";
 import { Input } from "../ui/Forms/input";
-import { Button } from "../ui/Buttons/button";
 import { useState, useTransition } from "react";
 import { ResetSchema } from "@/schema";
 import CardWrapper from "./AuthCardWrapper";
 import { reset } from "@/actions/reset";
+import { Iconify } from "../ui/iconify";
+import { LoadingButton } from "../ui/Buttons/loading-button";
+import { useToast } from "../ui/Misc/use-toast";
 
 const ResetForm = () => {
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof ResetSchema>>({
     resolver: zodResolver(ResetSchema),
@@ -36,6 +39,11 @@ const ResetForm = () => {
         setMessage(response.message);
         if (response.success) {
           setIsError(false);
+          toast({
+            title: "Password Reset Email Sent.",
+            description: "Please check your email.",
+            variant: "default",
+          });
         } else {
           setIsError(true);
         }
@@ -59,12 +67,20 @@ const ResetForm = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="john.doe@example.com"
-                      type="email"
-                    />
+                    <div className="relative">
+                      <Iconify
+                        width={16}
+                        icon="solar:letter-line-duotone"
+                        className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                      />
+                      <Input
+                        disabled={isPending}
+                        {...field}
+                        placeholder="john.doe@example.com"
+                        type="email"
+                        className="pl-10"
+                      />
+                    </div>
                   </FormControl>
                 </FormItem>
               )}
@@ -73,14 +89,15 @@ const ResetForm = () => {
 
           {message && isError && <FormMessage>{message}</FormMessage>}
 
-          <Button
-            disabled={isPending}
+          <LoadingButton
+            isLoading={isPending}
+            loadingText="Sending Email..."
             variant="default"
             type="submit"
             className="w-full"
           >
             Reset Password
-          </Button>
+          </LoadingButton>
         </form>
       </Form>
     </CardWrapper>

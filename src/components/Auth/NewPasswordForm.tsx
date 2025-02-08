@@ -12,17 +12,21 @@ import {
   FormMessage,
 } from "../ui/Forms/form";
 import { Input } from "../ui/Forms/input";
-import { Button } from "../ui/Buttons/button";
 import { useState, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
 import { NewPasswordSchema } from "@/schema";
 import CardWrapper from "./AuthCardWrapper";
 import { newPassword } from "@/actions/new-password";
+import { Iconify } from "../ui/iconify";
+import { LoadingButton } from "../ui/Buttons/loading-button";
+import { useToast } from "../ui/Misc/use-toast";
+import { logout } from "@/actions/logout";
 
 const NewPasswordForm = () => {
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
+  const { toast } = useToast();
 
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -36,10 +40,16 @@ const NewPasswordForm = () => {
 
   const onSubmit = (data: z.infer<typeof NewPasswordSchema>) => {
     startTransition(() => {
-      newPassword(data, token).then((response: any) => {
+      newPassword(data, token).then(async (response: any) => {
         setMessage(response.message);
         if (response.success) {
           setIsError(false);
+          toast({
+            title: "Your password has been updated.",
+            description: "You can now login with your new password.",
+            variant: "default",
+          });
+          await logout();
         } else {
           setIsError(true);
         }
@@ -63,12 +73,20 @@ const NewPasswordForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="******"
-                      type="password"
-                    />
+                    <div className="relative">
+                      <Iconify
+                        icon="solar:lock-keyhole-minimalistic-line-duotone"
+                        className="mr-1 absolute top-1/2 -translate-y-1/2 left-3 text-muted-foreground"
+                        width={16}
+                      />
+                      <Input
+                        className="pl-10"
+                        disabled={isPending}
+                        {...field}
+                        placeholder="******"
+                        type="password"
+                      />
+                    </div>
                   </FormControl>
                   {form.formState.errors.password && (
                     <FormMessage>
@@ -82,14 +100,15 @@ const NewPasswordForm = () => {
 
           {message && isError && <FormMessage>{message}</FormMessage>}
 
-          <Button
-            disabled={isPending}
+          <LoadingButton
+            isLoading={isPending}
             variant="default"
             type="submit"
             className="w-full"
+            loadingText="Changing Password..."
           >
-            New Password
-          </Button>
+            Change Password
+          </LoadingButton>
         </form>
       </Form>
     </CardWrapper>
