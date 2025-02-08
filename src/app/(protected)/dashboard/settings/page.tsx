@@ -1,32 +1,23 @@
 "use client";
 
-import { logout } from "@/actions/logout";
-import { reset } from "@/actions/reset";
-import { Button } from "@/components/ui/Buttons/button";
-import DashboardHeader from "@/layouts/sidebar/dashboard-header";
-import { refreshPage } from "@/lib/utils";
-import { ResetSchema } from "@/schema";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-
-const SettingsPage = () => {
+import { reset } from "@/actions/reset";
+import { ResetSchema } from "@/schema";
+import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/Forms/label";
+import { Input } from "@/components/ui/Forms/input";
+import { Button } from "@/components/ui/Buttons/button";
+import { Separator } from "@/components/ui/separator";
+import DashboardHeader from "@/layouts/sidebar/dashboard-header";
+import { Iconify } from "@/components/ui/iconify";
+export default function SettingsPage() {
   const [isPending, startTransition] = useTransition();
-  const [isPreOn, setIsPreOn] = useState(false);
   const [message, setMessage] = useState("");
-  const router = useRouter();
   const { data: session, status } = useSession();
 
-  const onClick = () => {
-    logout().then(() => {
-      setIsPreOn(false);
-      router.push("/auth/login");
-      refreshPage();
-    });
-  };
-
   const onChangePasswordClick = () => {
-    if (session && session.user.email) {
+    if (session?.user?.email) {
       const data = ResetSchema.parse({ email: session.user.email });
       startTransition(() => {
         reset(data).then((data: any) => {
@@ -36,61 +27,48 @@ const SettingsPage = () => {
     }
   };
 
+  if (status !== "authenticated") {
+    return (
+      <Card className="w-full max-w-md mx-auto mt-8">
+        <CardContent className="pt-6">
+          <p className="text-center text-gray-700">
+            You are not authenticated.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <div>
       <DashboardHeader title="Settings" />
-
-      <div className="flex flex-col gap-2 m-2">
-        <h2 className="text-2xl font-semibold mb-4">User Settings</h2>
-        {status === "authenticated" ? (
-          <div className="mb-4">
-            <p className="text-gray-700">
-              <strong>Name:</strong> {session.user.name}
-            </p>
-            <p className="text-gray-700">
-              <strong>Email:</strong> {session.user.email}
-            </p>
-            <p className="text-gray-700">
-              <strong>Role:</strong> {session.user.role}
-            </p>
-
-            <Button
-              variant={"outline"}
-              size={"sm"}
-              onClick={() => setIsPreOn((prev) => !prev)}
-              className="w-full mt-4"
-            >
-              {isPreOn ? "Hide" : "Show"} JSON
-            </Button>
-            {isPreOn && (
-              <pre className="text-xs bg-gray-100 p-2 rounded m-4 overflow-x-auto">
-                {JSON.stringify(session, null, 2)}
-              </pre>
-            )}
+      <div className="w-full max-w-md mx-auto my-8 p-6">
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="name">Name</Label>
+            <Input id="name" value={session.user.name || ""} readOnly />
           </div>
-        ) : (
-          <p className="text-gray-700">You are not authenticated.</p>
-        )}
-        <div className="flex justify-between mt-8">
-          <div>
-            <Button
-              onClick={onChangePasswordClick}
-              variant="outline"
-              size={"sm"}
-              disabled={isPending}
-            >
-              Request Password Reset
-            </Button>
-            {message && <p className="p-2">{message}</p>}
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input id="email" value={session.user.email || ""} readOnly />
           </div>
-
-          <Button variant={"destructive"} size={"default"} onClick={onClick}>
-            Sign Out
+        </div>
+        <Separator className="my-6" />
+        <div className="flex flex-col items-start space-y-4">
+          <Button
+            onClick={onChangePasswordClick}
+            variant="default"
+            disabled={isPending}
+            className="w-full"
+          >
+            <Iconify icon="solar:restart-bold" className="mr-1" />
+            Request Password Reset
           </Button>
+          {message && (
+            <p className="text-sm text-muted-foreground">{message}</p>
+          )}
         </div>
       </div>
     </div>
   );
-};
-
-export default SettingsPage;
+}
