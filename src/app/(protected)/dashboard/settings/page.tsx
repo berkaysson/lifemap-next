@@ -16,7 +16,6 @@ const SettingsPage = () => {
   const [message, setMessage] = useState("");
   const router = useRouter();
   const { data: session, status } = useSession();
-  console.log("🚀 ~ file: page.tsx:8 ~ SettingsPage ~ data:", session);
 
   const onClick = () => {
     logout().then(() => {

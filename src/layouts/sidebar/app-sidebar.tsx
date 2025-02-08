@@ -15,9 +15,116 @@ import {
   SidebarMenuItem,
 } from "@/layouts/sidebar/sidebar";
 import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { usePathname, useRouter } from "next/navigation";
+import { cn, refreshPage } from "@/lib/utils";
 import { Iconify } from "@/components/ui/iconify";
+import { logout } from "@/actions/logout";
+import { useState } from "react";
+import { LoadingButton } from "@/components/ui/Buttons/loading-button";
+
+export function AppSidebar() {
+  const { data: session } = useSession();
+  const pathname = usePathname();
+  const router = useRouter();
+  const [isSigningOut, setIsSigningOut] = useState(false);
+
+  const isLinkActive = (url: string) => pathname === url;
+
+  const onSignOut = () => {
+    setIsSigningOut(true);
+    logout().then(() => {
+      router.push("/auth/login");
+      refreshPage();
+      setIsSigningOut(false);
+    });
+  };
+
+  return (
+    <Sidebar
+      variant="floating"
+      collapsible="icon"
+      className="group-data-[collapsible=icon]:w-[70px]"
+    >
+      <SidebarHeader className="p-4 group-data-[collapsible=icon]:p-1">
+        <Link href="/" className="flex items-center space-x-2">
+          <Image src="/logo.svg" alt="Logo" width={50} height={50} />
+          <span className="text-lg font-bold text-themeAlt dark:text-theme group-data-[collapsible=icon]:hidden">
+            lifemap
+          </span>
+        </Link>
+      </SidebarHeader>
+
+      <SidebarContent className="overflow-x-hidden">
+        <SidebarGroup>
+          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {items.map((item) => {
+                const isActive = isLinkActive(item.url);
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive}
+                      className={cn(
+                        isActive && "bg-primary text-primary-foreground",
+                        "transition-colors hover:bg-primary/90 hover:text-primary-foreground"
+                      )}
+                    >
+                      <Link href={item.url}>
+                        <Iconify
+                          icon={isActive ? item.activeIcon : item.icon}
+                        />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          {footerItems.map((item) => {
+            const isActive = isLinkActive(item.url);
+            return (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={isActive}
+                  className={cn(
+                    isActive && "bg-primary text-primary-foreground",
+                    "transition-colors hover:bg-primary/90 hover:text-primary-foreground w-full justify-start"
+                  )}
+                >
+                  <Link href={item.url}>
+                    <Iconify icon={isActive ? item.activeIcon : item.icon} />
+                    {item.title === "Profile" ? session?.user.name : item.title}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })}
+          <LoadingButton
+            isLoading={isSigningOut}
+            loadingText=""
+            onClick={onSignOut}
+            variant="outline"
+            size="sm"
+            className="sm:mt-4 mt-2"
+          >
+            <Iconify icon="solar:logout-2-bold" className="mr-1" width={20} />
+            <span className="group-data-[collapsible=icon]:hidden ">
+              Sign Out
+            </span>
+          </LoadingButton>
+        </SidebarMenu>
+      </SidebarFooter>
+    </Sidebar>
+  );
+}
 
 const items = [
   {
@@ -78,84 +185,3 @@ const footerItems = [
   //   activeIcon: "solar:user-rounded-bold-duotone",
   // },
 ];
-
-export function AppSidebar() {
-  const { data: session } = useSession();
-  const pathname = usePathname();
-
-  const isLinkActive = (url: string) => pathname === url;
-
-  return (
-    <Sidebar variant="floating" collapsible="icon" className="group-data-[collapsible=icon]:w-[70px]">
-      <SidebarHeader className="p-4 group-data-[collapsible=icon]:p-1">
-        <Link href="/" className="flex items-center space-x-2">
-          <Image
-            src="/logo.svg"
-            alt="Logo"
-            width={50}
-            height={50}
-          />
-          <span className="text-lg font-bold text-themeAlt dark:text-theme group-data-[collapsible=icon]:hidden">
-            lifemap
-          </span>
-        </Link>
-      </SidebarHeader>
-
-      <SidebarContent className="overflow-x-hidden">
-        <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => {
-                const isActive = isLinkActive(item.url);
-                return (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={isActive}
-                      className={cn(
-                        isActive && "bg-primary text-primary-foreground",
-                        "transition-colors hover:bg-primary/90 hover:text-primary-foreground"
-                      )}
-                    >
-                      <Link href={item.url}>
-                        <Iconify
-                          icon={isActive ? item.activeIcon : item.icon}
-                        />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          {footerItems.map((item) => {
-            const isActive = isLinkActive(item.url);
-            return (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  asChild
-                  isActive={isActive}
-                  className={cn(
-                    isActive && "bg-primary text-primary-foreground",
-                    "transition-colors hover:bg-primary/90 hover:text-primary-foreground w-full justify-start"
-                  )}
-                >
-                  <Link href={item.url}>
-                    <Iconify icon={isActive ? item.activeIcon : item.icon} />
-                    {item.title === "Profile" ? session?.user.name : item.title}
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            );
-          })}
-        </SidebarMenu>
-      </SidebarFooter>
-    </Sidebar>
-  );
-}
