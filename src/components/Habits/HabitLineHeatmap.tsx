@@ -5,6 +5,7 @@ import type { HabitProgress } from "@prisma/client";
 import React from "react";
 import { Tooltip } from "react-tooltip";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { cn } from "@/lib/utils";
 
 interface HabitLineHeatmapProps {
   period: "DAILY" | "WEEKLY" | "MONTHLY";
@@ -42,7 +43,7 @@ const HabitLineHeatmap = ({
   };
 
   // Define block width based on period
-  const blockWidth = period === "MONTHLY" ? 32 : 16; // px values
+  const blockWidth = period === "MONTHLY" ? 32 : 24; // px values
 
   return (
     <div className="w-full">
@@ -87,6 +88,7 @@ const HabitLineHeatmap = ({
                   item.completedDuration,
                   item.goalDuration
                 );
+                const isCompleted = item.completedDuration >= item.goalDuration;
                 return (
                   <div
                     key={item.id}
@@ -94,7 +96,7 @@ const HabitLineHeatmap = ({
                       backgroundColor: getBlockColor(level),
                       width: `${blockWidth}px`,
                     }}
-                    className="h-24 rounded-sm cursor-pointer transition-colors duration-200"
+                    className="h-24 rounded-sm cursor-pointer transition-colors duration-200 relative"
                     title={`${item.startDate.toLocaleDateString()}: ${
                       item.completedDuration
                     }/${item.goalDuration} completed`}
@@ -102,7 +104,27 @@ const HabitLineHeatmap = ({
                     data-tooltip-content={`${formatDateFriendly(item.startDate)}
               - ${formatDateFriendly(item.endDate)}
                     ${item.completedDuration}/${item.goalDuration}`}
-                  />
+                  >
+                    {isCompleted && (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className={cn(
+                          "text-white",
+                          period === "MONTHLY" ? "w-8 h-8" : "w-6 h-6"
+                        )}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    )}
+                  </div>
                 );
               })}
             </div>

@@ -130,7 +130,7 @@ const HabitHeatmap = ({ habitProgresses, colorCode }: HabitHeatmapProps) => {
                       y={Number(props.y ?? 0) + Number(props.height ?? 0) / 2}
                       textAnchor="middle"
                       dominantBaseline="middle"
-                      fontSize="10"
+                      fontSize="16"
                       fill="white"
                     >
                       ✓
