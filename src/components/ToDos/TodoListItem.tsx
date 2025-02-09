@@ -23,13 +23,6 @@ import {
 import { Badge } from "../ui/badge";
 import { Iconify } from "../ui/iconify";
 import { LoadingButton } from "../ui/Buttons/loading-button";
-import { Separator } from "../ui/separator";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "../ui/accordion";
 
 const TodoListItem = ({ todo }) => {
   const { data: projects = [] } = useFetchProjects();
@@ -55,7 +48,7 @@ const TodoListItem = ({ todo }) => {
   };
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full max-w-md h-full">
       <div className="flex justify-between p-1 pb-0">
         <ColorCircle colorCode={todo.colorCode || "darkblue"} />
         <Badge
@@ -118,44 +111,36 @@ const TodoListItem = ({ todo }) => {
           )}
         </div>
       </CardContent>
-      <CardFooter className="px-3 pb-1">
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="actions">
-            <AccordionTrigger>Actions</AccordionTrigger>
-            <AccordionContent>
-              <div className="flex flex-wrap gap-2">
-                <TodoEditForm
-                  initialValues={todo}
-                  triggerButton={
-                    <Button variant="outline" size="sm">
-                      <Iconify
-                        icon="solar:pen-new-square-bold-duotone"
-                        width={16}
-                        className="mr-1"
-                      />
-                      Edit
-                    </Button>
-                  }
+      <CardFooter className="px-3 pb-2">
+        <div className="flex flex-wrap gap-2">
+          <TodoEditForm
+            initialValues={todo}
+            triggerButton={
+              <Button variant="outline" size="sm">
+                <Iconify
+                  icon="solar:pen-new-square-bold-duotone"
+                  width={16}
+                  className="mr-1"
                 />
-                <Separator orientation="vertical" className="h-9" />
-                <ButtonWithConfirmation
-                  variant="destructive"
-                  size="sm"
-                  buttonText="Delete"
-                  onConfirm={handleDelete}
-                  icon="solar:trash-bin-trash-bold"
-                />
-                <ButtonWithConfirmation
-                  variant="destructive"
-                  size="sm"
-                  buttonText="Archive"
-                  onConfirm={handleArchive}
-                  icon="solar:archive-bold"
-                />
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+                Edit
+              </Button>
+            }
+          />
+          <ButtonWithConfirmation
+            variant="destructive"
+            size="sm"
+            buttonText=""
+            onConfirm={handleDelete}
+            icon="solar:trash-bin-trash-bold"
+          />
+          <ButtonWithConfirmation
+            variant="destructive"
+            size="sm"
+            buttonText=""
+            onConfirm={handleArchive}
+            icon="solar:archive-bold"
+          />
+        </div>
       </CardFooter>
     </Card>
   );
