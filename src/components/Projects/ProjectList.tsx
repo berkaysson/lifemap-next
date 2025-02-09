@@ -6,6 +6,7 @@ import { sortArrayOfObjectsByKey } from "@/lib/utils";
 import SelectSort from "../ui/Shared/SelectSort";
 import { ExtendedProject } from "@/types/Entitities";
 import { useFetchProjects } from "@/queries/projectQueries";
+import Loading from "@/app/(protected)/dashboard/project/loading";
 
 const ProjectList = () => {
   const { data: projects, isLoading, isError, error } = useFetchProjects();
@@ -35,6 +36,10 @@ const ProjectList = () => {
     [projects]
   );
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div className="flex flex-col gap-4 m-2">
       <SelectSort
@@ -42,7 +47,6 @@ const ProjectList = () => {
         onSelect={handleSort}
       />
 
-      {isLoading && <div>Loading projects...</div>}
       {isError && <div>Error loading projects: {error.message}</div>}
       {sortedProjects.length === 0 && !isLoading && (
         <div className="opacity-80 mt-2">No projects found.</div>

@@ -17,11 +17,12 @@ import {
 import { Button } from "../ui/Buttons/button";
 import { Badge } from "../ui/badge";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import Loading from "@/app/(protected)/dashboard/habit/loading";
 
 const HabitList = () => {
   const [isArcihivedOpen, setIsArcihivedOpen] = useState(false);
 
-  const { data: habits, isLoading, isError, error } = useFetchHabits();
+  const { data: habits, isLoading, isError } = useFetchHabits();
   const {
     data: archivedHabits,
     isLoading: isLoadingArchived,
@@ -76,6 +77,10 @@ const HabitList = () => {
     [archivedHabits]
   );
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div className="flex flex-col gap-4 m-2">
       {/*  Habits Section */}
@@ -94,8 +99,7 @@ const HabitList = () => {
           ]}
           onSelect={handleSort}
         />
-        {isLoading && <div>Loading habits...</div>}
-        {isError && <div>Error loading habits: {error.message}</div>}
+        {isError && <div>Error loading habits</div>}
         {sortedHabits.length === 0 && !isLoading && (
           <div className="opacity-80 mt-2">No habits found.</div>
         )}

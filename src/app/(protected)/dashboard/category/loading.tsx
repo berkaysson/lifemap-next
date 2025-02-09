@@ -1,8 +1,58 @@
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
 export default function Loading() {
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
-      <p className="ml-4 text-lg font-semibold">Loading...</p>
+    <div className="flex flex-col gap-2 m-2">
+      <div className="flex sm:flex-row justify-between flex-col-reverse gap-2 mb-2">
+        <Skeleton className="h-10 w-40" />
+        <Skeleton className="h-10 w-20" />
+      </div>
+
+      {/* Table View Skeleton */}
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>
+              <Skeleton className="h-4 w-20" />
+            </TableHead>
+            <TableHead>
+              <Skeleton className="h-4 w-20" />
+            </TableHead>
+            <TableHead>
+              <Skeleton className="h-4 w-20" />
+            </TableHead>
+            <TableHead>
+              <Skeleton className="h-4 w-20" />
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {[...Array(10)].map((_, index) => (
+            <TableRow key={index}>
+              <TableCell>
+                <Skeleton className="h-4 w-full" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-4 w-full" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-4 w-full" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-4 w-full" />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }

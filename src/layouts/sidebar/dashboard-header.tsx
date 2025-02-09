@@ -1,6 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "../../layouts/sidebar/sidebar";
 import ThemeToggle from "@/components/ui/Buttons/theme-toggle";
+import { memo } from "react";
 
 const DashboardHeader = ({
   title,
@@ -28,4 +29,4 @@ const DashboardHeader = ({
   );
 };
 
-export default DashboardHeader;
+export default memo(DashboardHeader);

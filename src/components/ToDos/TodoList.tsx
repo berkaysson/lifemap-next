@@ -18,6 +18,7 @@ import TodoTable from "./TodoTable";
 import { Button } from "../ui/Buttons/button";
 import { Badge } from "../ui/badge";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import Loading from "@/app/(protected)/dashboard/todo/loading";
 
 const TodoList = () => {
   const [isArcihivedOpen, setIsArcihivedOpen] = useState(false);
@@ -68,6 +69,10 @@ const TodoList = () => {
     [archivedTodos]
   );
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div className="flex flex-col gap-4 m-2">
       {/*  Todos Section */}
@@ -90,7 +95,6 @@ const TodoList = () => {
           </div>
         </div>
 
-        {isLoading && <div>Loading todos...</div>}
         {isError && <div>Error loading todos: {error.message}</div>}
         {sortedTodos.length === 0 && !isLoading && (
           <div className="opacity-80 mt-2">No todos found.</div>

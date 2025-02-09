@@ -17,6 +17,7 @@ import {
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "../ui/Buttons/button";
 import { Badge } from "../ui/badge";
+import Loading from "@/app/(protected)/dashboard/task/loading";
 
 const TaskList = () => {
   const [isArcihivedOpen, setIsArcihivedOpen] = useState(false);
@@ -40,7 +41,7 @@ const TaskList = () => {
         tasks,
         "name",
         "desc"
-      )
+      );
       setSortedTasks(sorted);
     }
   }, [tasks]);
@@ -74,6 +75,10 @@ const TaskList = () => {
     [archivedTasks]
   );
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div className="flex flex-col gap-4 m-2">
       {/*  Tasks Section */}
@@ -90,7 +95,7 @@ const TaskList = () => {
           ]}
           onSelect={handleSort}
         />
-        {isLoading && <div>Loading tasks...</div>}
+
         {isError && <div>Error loading tasks: {error.message}</div>}
         {sortedTasks.length === 0 && !isLoading && (
           <div className="opacity-80 mt-2">No tasks found.</div>

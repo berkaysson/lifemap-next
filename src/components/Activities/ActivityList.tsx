@@ -4,8 +4,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import ActivityListItem from "./ActivityListItem";
 import SelectSort from "../ui/Shared/SelectSort";
 import { sortArrayOfObjectsByKey } from "@/lib/utils";
-import { Activity } from "@prisma/client";
-import { ExtendedActivity } from "@/types/Entitities";
+import type { Activity } from "@prisma/client";
+import type { ExtendedActivity } from "@/types/Entitities";
 import { useFetchActivities } from "@/queries/activityQueries";
 import ActivityTable from "./ActivityTable";
 import ListViewToggle from "../ui/Buttons/list-view-toggle";
@@ -18,6 +18,7 @@ import {
   PaginationPrevious,
 } from "../ui/pagination";
 import { Separator } from "../ui/separator";
+import Loading from "@/app/(protected)/dashboard/activity/loading";
 
 const ActivityList = () => {
   const [viewMode, setViewMode] = useState<"table" | "grid">("table");
@@ -62,6 +63,11 @@ const ActivityList = () => {
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div className="flex flex-col gap-2 m-2">
       <div className="flex sm:flex-row justify-between flex-col-reverse gap-2 mb-2">
@@ -81,7 +87,6 @@ const ActivityList = () => {
         </div>
       </div>
 
-      {isLoading && <div>Loading activities...</div>}
       {isError && (
         <div>Error loading activities: {(error as Error).message}</div>
       )}
