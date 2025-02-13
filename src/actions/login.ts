@@ -7,6 +7,8 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { LoginSchema } from "@/schema";
 import { archiveOutdatedEntities } from "@/services/archivingService";
+import { generateVerificationToken } from "@/helpers/tokens";
+import { sendVerificationEmail } from "@/lib/mail";
 
 export const login = async (data: z.infer<typeof LoginSchema>) => {
   // Validate the login data
@@ -31,21 +33,19 @@ export const login = async (data: z.infer<typeof LoginSchema>) => {
   if (!isValidPassword) {
     return { message: "Invalid credentials!", success: false };
   }
-
-  // activate verification later
   // If the user hasn't verified their email, send a verification email and return a message
-  // if (!existingUser.emailVerified) {
-  //   const verificationToken = await generateVerificationToken(
-  //     existingUser.email
-  //   );
+  if (!existingUser.emailVerified) {
+    const verificationToken = await generateVerificationToken(
+      existingUser.email
+    );
 
-  //   await sendVerificationEmail(
-  //     verificationToken.email,
-  //     verificationToken.token
-  //   );
+    await sendVerificationEmail(
+      verificationToken.email,
+      verificationToken.token
+    );
 
-  //   return { message: "Confirmation email sent!", success: true };
-  // }
+    return { message: "Confirmation email sent!", success: true };
+  }
 
   try {
     // Attempt to sign in the user

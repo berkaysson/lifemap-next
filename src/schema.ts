@@ -22,7 +22,7 @@ export const LoginSchema = z.object({
 
 export const RegisterSchema = z.object({
   email: z.string().email().min(1, "Email is required"),
-  password: z.string().min(3, "Password too short"), // change here later to passwordSchema
+  password: passwordSchema,
   name: z.string().min(1, "Name is required"),
 });
 
@@ -31,7 +31,7 @@ export const ResetSchema = z.object({
 });
 
 export const NewPasswordSchema = z.object({
-  password: z.string().min(3, "Password too short"), // change here later to passwordSchema
+  password: passwordSchema,
 });
 
 export const TodoSchema = z.object({

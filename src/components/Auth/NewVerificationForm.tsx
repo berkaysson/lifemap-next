@@ -36,11 +36,6 @@ const NewVerificationForm = () => {
     onSubmit();
   }, [onSubmit]);
 
-  //   "There will be two message if confirming successful:
-  //   one is "Email verified!" second is "Token does not exist!".
-  //   Reason for this, in development react wokes the useEffect twice
-  //   and if email is confirmed in first one token will be deleted,
-  //   so in second it will give error because of token not exist anymore."
   return (
     <CardWrapper
       headerLabel="Confirm Email"
