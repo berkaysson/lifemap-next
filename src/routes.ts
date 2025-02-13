@@ -34,4 +34,4 @@ export const DEFAULT_LOGIN_REDIRECT = "/dashboard";
  * The main domain of the application.
  * @type {string}
  */
-export const MAIN_DOMAIN = "http://localhost:3000";
+export const MAIN_DOMAIN = "https://habivita.com";
