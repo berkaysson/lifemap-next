@@ -3,7 +3,7 @@ import { Resend } from "resend";
 
 // Initialize Resend with API key from environment variables
 const resend = new Resend(process.env.RESEND_API_KEY);
-const fromEmail = "thehabivita@gmail.com";
+const fromEmail = "habivita.com";
 
 // Send verification email
 export const sendVerificationEmail = async (email: string, token: string) => {
