@@ -13,7 +13,7 @@ import {
 } from "../ui/Forms/form";
 import { Input } from "../ui/Forms/input";
 import { useState, useTransition } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { NewPasswordSchema } from "@/schema";
 import CardWrapper from "./AuthCardWrapper";
 import { newPassword } from "@/actions/new-password";
@@ -27,6 +27,7 @@ const NewPasswordForm = () => {
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
 
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -46,10 +47,14 @@ const NewPasswordForm = () => {
           setIsError(false);
           toast({
             title: "Your password has been updated.",
-            description: "You can now login with your new password.",
+            description: "You will be redirected to login in 3 seconds...",
             variant: "default",
           });
           await logout();
+          form.reset();
+          setTimeout(() => {
+            router.push("/auth/login");
+          }, 3000);
         } else {
           setIsError(true);
         }

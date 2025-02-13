@@ -5,7 +5,6 @@ import { useCallback, useEffect, useState } from "react";
 import CardWrapper from "./AuthCardWrapper";
 import { newVerification } from "@/actions/new-verification";
 import { CheckCircle, XCircle, Loader2 } from "lucide-react";
-import { Button } from "../ui/Buttons/button";
 
 const NewVerificationForm = () => {
   const [message, setMessage] = useState("");
