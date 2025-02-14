@@ -36,7 +36,7 @@ const ArchivedTaskListItem = ({ task }) => {
             {task.description && <div>{task.description}</div>}
           </CardDescription>
 
-          <div className="text-sm text-muted-foreground">
+          <div className="text-sm text-shade">
             <div>Start: {task.startDate.toLocaleDateString()}</div>
             <div>Due: {task.endDate.toLocaleDateString()}</div>
             <div>Archived: {task.archivedAt.toLocaleDateString()}</div>

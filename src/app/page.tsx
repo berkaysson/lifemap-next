@@ -15,7 +15,7 @@ export default function Home() {
                 Map Your Life&apos;s Journey
               </h1>
               <p className="mt-3 max-w-md mx-auto text-xl sm:text-2xl md:mt-5 md:max-w-3xl">
-                Visualize, plan, and achieve your life goals with LifeMap
+                Visualize, plan, and achieve your life goals with habivita
               </p>
               <div className="mt-10 flex justify-center">
                 <Button size="lg" className="mr-4">
@@ -33,7 +33,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-                Why Choose LifeMap?
+                Why Choose habivita?
               </h2>
               <p className="mt-4 text-xl text-gray-600">
                 Empower your journey with our innovative features
@@ -88,7 +88,7 @@ export default function Home() {
               </h2>
               <p className="mt-4 text-xl text-gray-600">
                 Join thousands of users who have transformed their lives with
-                LifeMap
+                habivita
               </p>
               <div className="mt-10">
                 <Button size="lg">Sign Up Now</Button>
@@ -101,7 +101,7 @@ export default function Home() {
       <footer className="bg-gray-800 text-white py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
-            <div className="text-sm">© 2023 LifeMap. All rights reserved.</div>
+            <div className="text-sm">© 2023 habivita. All rights reserved.</div>
             <div className="flex space-x-6">
               <Link href="/privacy" className="hover:text-gray-300">
                 Privacy Policy

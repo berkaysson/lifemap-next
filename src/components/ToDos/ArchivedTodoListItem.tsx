@@ -44,7 +44,7 @@ const ArchivedTodoListItem = ({ todo }) => {
         <CardDescription>{todo.description}</CardDescription>
         <div className="flex flex-col gap-2">
           {todo.endDate && (
-            <div className="flex items-center text-sm text-muted-foreground">
+            <div className="flex items-center text-sm text-shade">
               <Iconify
                 icon="solar:calendar-date-bold"
                 width={20}
@@ -54,7 +54,7 @@ const ArchivedTodoListItem = ({ todo }) => {
             </div>
           )}
           {todo.startDate && (
-            <div className="flex items-center text-sm text-muted-foreground">
+            <div className="flex items-center text-sm text-shade">
               <Iconify
                 icon="solar:calendar-date-bold"
                 width={20}
@@ -64,7 +64,7 @@ const ArchivedTodoListItem = ({ todo }) => {
             </div>
           )}
           {todo.archivedAt && (
-            <div className="flex items-center text-sm text-muted-foreground">
+            <div className="flex items-center text-sm text-shade">
               <Iconify icon="solar:archive-bold" width={20} className="mr-2" />
               Archived: {todo.archivedAt.toISOString().slice(0, 10)}
             </div>

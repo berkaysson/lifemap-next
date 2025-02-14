@@ -88,7 +88,7 @@ const TodoListItem = ({ todo }) => {
         <CardDescription>{todo.description}</CardDescription>
         <div className="flex flex-col gap-2">
           {todo.endDate && (
-            <div className="flex items-center text-sm text-muted-foreground">
+            <div className="flex items-center text-sm text-shade">
               <Iconify
                 icon="solar:calendar-date-bold"
                 width={20}
@@ -98,7 +98,7 @@ const TodoListItem = ({ todo }) => {
             </div>
           )}
           {!todo.completed && todo.endDate && (
-            <div className="flex items-center text-sm text-muted-foreground">
+            <div className="flex items-center text-sm text-shade">
               <Iconify
                 icon="solar:stopwatch-bold"
                 width={20}

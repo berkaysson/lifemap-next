@@ -155,7 +155,7 @@ const TaskList = () => {
                 </ul>
               </>
             ) : (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-shade">
                 No archived tasks found.
               </p>
             )}

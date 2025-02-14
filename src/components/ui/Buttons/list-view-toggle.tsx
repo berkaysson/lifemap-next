@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { IconButton, Stack } from "@mui/material";
 import { Iconify } from "../iconify";
-import { useTheme } from "next-themes";
 
 const ListViewToggle = ({ onSelect, currentView }) => {
-  const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -15,14 +13,11 @@ const ListViewToggle = ({ onSelect, currentView }) => {
     return null;
   }
 
-  const activeColor = resolvedTheme === "dark" ? "primary" : "info";
-  const inactiveColor = "default";
-
   return (
     <Stack direction="row" spacing={1} alignItems="center">
       <IconButton
         onClick={() => onSelect("table")}
-        color={currentView === "table" ? activeColor : inactiveColor}
+        color={currentView === "table" ? "secondary" : "default"}
         sx={{
           "&.MuiIconButton-root": {
             transition: "all 0.2s ease-in-out",
@@ -36,7 +31,7 @@ const ListViewToggle = ({ onSelect, currentView }) => {
       </IconButton>
       <IconButton
         onClick={() => onSelect("grid")}
-        color={currentView === "grid" ? activeColor : inactiveColor}
+        color={currentView === "grid" ? "secondary" : "default"}
         sx={{
           "&.MuiIconButton-root": {
             transition: "all 0.2s ease-in-out",

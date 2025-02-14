@@ -31,7 +31,10 @@ const SelectBox = ({ field, options, form, optionKey, formKey }) => {
           <Button
             variant="outline"
             role="combobox"
-            className={cn("w-[200px] justify-between", !field.value && "")}
+            className={cn(
+              "w-[200px] bg-background justify-between",
+              !field.value && ""
+            )}
           >
             {field.value
               ? options.find((option) => option[optionKey] === field.value)

@@ -35,3 +35,12 @@ export function getInitialTheme(): "light" | "dark" {
 
   return "light";
 }
+
+export const getCSSVariable = (variableName: string) => {
+  if (typeof window !== "undefined") {
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue(variableName)
+      .trim();
+  }
+  return "#000";
+};

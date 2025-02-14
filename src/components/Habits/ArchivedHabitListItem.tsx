@@ -30,7 +30,7 @@ const ArchivedHabitListItem = ({ habit }) => {
             {habit.description && <div>{habit.description}</div>}
           </CardDescription>
 
-          <div className="text-sm text-muted-foreground">
+          <div className="text-sm text-shade">
             <div>Start: {habit.startDate.toLocaleDateString()}</div>
             <div>Due: {habit.endDate.toLocaleDateString()}</div>
             <div>Archived: {habit.archivedAt.toLocaleDateString()}</div>

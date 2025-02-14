@@ -161,7 +161,7 @@ const HabitList = () => {
                 </ul>
               </>
             ) : (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-shade">
                 No archived habits found.
               </p>
             )}

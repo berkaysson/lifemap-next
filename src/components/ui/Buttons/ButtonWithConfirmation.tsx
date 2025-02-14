@@ -53,8 +53,8 @@ const ButtonWithConfirmation = ({
           <DialogDescription>{confirmationDescription}</DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex gap-6">
-          <Button variant="ghost">
-            <DialogPrimitive.Close className="rounded-sm ">
+          <Button variant="ghost" asChild>
+            <DialogPrimitive.Close className="rounded-sm">
               <span>Cancel</span>
             </DialogPrimitive.Close>
           </Button>

@@ -16,7 +16,7 @@ const DashboardHeader = ({
       <div className="flex items-center gap-2">
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="h-6" />
-        <h2 className="text-lg font-semibold">{title}</h2>
+        <h2 className="text-lg font-semibold text-fore">{title}</h2>
       </div>
 
       {/* Right Section */}

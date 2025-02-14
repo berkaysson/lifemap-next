@@ -22,9 +22,9 @@ const ThemeToggle = () => {
   return (
     <IconButton onClick={toggleTheme}>
       {currentTheme === "light" ? (
-        <Iconify icon="solar:moon-stars-bold" sx={{ color: "black" }} />
+        <Iconify icon="solar:moon-stars-bold" className="text-fore" />
       ) : (
-        <Iconify icon="solar:sun-bold" sx={{ color: "white" }} />
+        <Iconify icon="solar:sun-bold" className="text-fore" />
       )}
     </IconButton>
   );

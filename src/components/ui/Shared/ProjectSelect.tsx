@@ -45,11 +45,15 @@ const ProjectSelect: React.FC<ProjectSelectProps> = ({
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder={selectedProjectName} />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-background brightness-110">
             <SelectGroup>
-              <SelectLabel>Projects</SelectLabel>
+              <SelectLabel className="text-shade">Projects</SelectLabel>
               {projects.map((project) => (
-                <SelectItem key={project.id} value={project.id}>
+                <SelectItem
+                  key={project.id}
+                  value={project.id}
+                  className="hover:bg-background hover:brightness-90"
+                >
                   {project.name}
                 </SelectItem>
               ))}

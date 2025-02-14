@@ -9,7 +9,7 @@ const Socials = () => {
 
     return (
       <div>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-shade">
           or continue with these social providers
         </p>
         <div className="flex gap-4 mt-2">

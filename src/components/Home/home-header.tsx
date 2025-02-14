@@ -8,7 +8,7 @@ export function HomeHeader() {
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center">
             <Link href="/" className="font-bold text-xl text-primary">
-              LifeMap
+              habivita
             </Link>
           </div>
           <nav className="hidden md:flex space-x-8">

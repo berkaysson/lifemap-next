@@ -42,7 +42,7 @@ const SelectSort: React.FC<SortSelectProps> = ({ options, onSelect }) => {
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Select a Sort Option" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="opacity-100 bg-background">
           <SelectGroup>
             <SelectLabel>Sort by</SelectLabel>
             {options.map((option) => (
@@ -57,12 +57,12 @@ const SelectSort: React.FC<SortSelectProps> = ({ options, onSelect }) => {
         {direction === "asc" ? (
           <Iconify
             icon="solar:sort-from-bottom-to-top-bold"
-            className="dark:text-white text-black"
+            className="text-fore"
           />
         ) : (
           <Iconify
             icon="solar:sort-from-top-to-bottom-bold"
-            className="dark:text-white text-black"
+            className="text-fore"
           />
         )}
       </IconButton>

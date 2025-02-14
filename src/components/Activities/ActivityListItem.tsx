@@ -32,7 +32,7 @@ const ActivityListItem = ({ activity }: { activity: ExtendedActivity }) => {
         </Badge>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center space-x-2 text-sm text-muted-foreground mt-1">
+        <div className="flex items-center space-x-2 text-sm text-shade mt-1">
           <Iconify icon="solar:stopwatch-bold" width={20} />
           <span>
             {activity.description ? (
@@ -44,7 +44,7 @@ const ActivityListItem = ({ activity }: { activity: ExtendedActivity }) => {
             )}
           </span>
         </div>
-        <div className="flex items-center space-x-2 mt-2 text-sm text-muted-foreground">
+        <div className="flex items-center space-x-2 mt-2 text-sm text-shade">
           <Iconify icon="solar:calendar-date-bold" width={20} />
           <span>{formatDateFriendly(activity.date)}</span>
         </div>

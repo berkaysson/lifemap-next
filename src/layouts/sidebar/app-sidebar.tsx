@@ -48,8 +48,8 @@ export function AppSidebar() {
       <SidebarHeader className="p-4 group-data-[collapsible=icon]:p-1">
         <Link href="/" className="flex items-center space-x-2">
           <Image src="/logo.svg" alt="Logo" width={50} height={50} />
-          <span className="text-lg font-bold text-themeAlt dark:text-theme group-data-[collapsible=icon]:hidden">
-            lifemap
+          <span className="text-lg font-bold text-fore group-data-[collapsible=icon]:hidden">
+            habivita
           </span>
         </Link>
       </SidebarHeader>
@@ -67,8 +67,8 @@ export function AppSidebar() {
                       asChild
                       isActive={isActive}
                       className={cn(
-                        isActive && "bg-primary text-primary-foreground",
-                        "transition-colors hover:bg-primary/90 hover:text-primary-foreground"
+                        isActive && "text-fore",
+                        "transition-colors hover:bg-secondary"
                       )}
                     >
                       <Link href={item.url}>
@@ -95,8 +95,8 @@ export function AppSidebar() {
                   asChild
                   isActive={isActive}
                   className={cn(
-                    isActive && "bg-primary text-primary-foreground",
-                    "transition-colors hover:bg-primary/90 hover:text-primary-foreground w-full justify-start"
+                    isActive && "text-fore",
+                    "transition-colors hover:bg-secondary"
                   )}
                 >
                   <Link href={item.url}>

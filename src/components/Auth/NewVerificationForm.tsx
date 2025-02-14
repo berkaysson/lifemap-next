@@ -55,7 +55,7 @@ const NewVerificationForm = () => {
         {isLoading && (
           <div className="flex flex-col items-center space-y-2">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-shade">
               Verifying your email...
             </p>
           </div>

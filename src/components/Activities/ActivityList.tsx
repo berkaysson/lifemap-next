@@ -88,10 +88,10 @@ const ActivityList = () => {
       </div>
 
       {isError && (
-        <div>Error loading activities: {(error as Error).message}</div>
+        <div className="opacity-80 mt-2 text-error">Error loading activities: {(error as Error).message}</div>
       )}
       {sortedActivities.length === 0 && !isLoading && (
-        <div className="opacity-80 mt-2">No activities found.</div>
+        <div className="opacity-80 mt-2 text-shade">No activities found.</div>
       )}
 
       {viewMode === "grid" && (

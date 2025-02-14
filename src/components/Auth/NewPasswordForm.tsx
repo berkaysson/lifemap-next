@@ -81,7 +81,7 @@ const NewPasswordForm = () => {
                     <div className="relative">
                       <Iconify
                         icon="solar:lock-keyhole-minimalistic-line-duotone"
-                        className="mr-1 absolute top-1/2 -translate-y-1/2 left-3 text-muted-foreground"
+                        className="mr-1 absolute top-1/2 -translate-y-1/2 left-3 text-shade"
                         width={16}
                       />
                       <Input

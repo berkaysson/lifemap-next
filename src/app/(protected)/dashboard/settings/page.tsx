@@ -51,11 +51,21 @@ export default function SettingsPage() {
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
-            <Input id="name" value={session.user.name || ""} readOnly />
+            <Input
+              className="opacity-80"
+              id="name"
+              value={session.user.name || ""}
+              readOnly
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" value={session.user.email || ""} readOnly />
+            <Input
+              className="opacity-80"
+              id="email"
+              value={session.user.email || ""}
+              readOnly
+            />
           </div>
         </div>
         <Separator className="my-6" />

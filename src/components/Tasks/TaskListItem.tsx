@@ -79,7 +79,7 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
       <CardContent className="p-2 sm:p-3">
         <CardDescription>{task.description}</CardDescription>
         <div className="flex justify-between flex-col sm:flex-row gap-1 sm:gap-4 mb-4 mt-1">
-          <div className="flex items-center space-x-2 text-muted-foreground">
+          <div className="flex items-center space-x-2 text-shade">
             <Iconify
               icon="solar:calendar-date-bold"
               width={20}
@@ -90,7 +90,7 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
               {formatDateFriendly(task.endDate)}
             </span>
           </div>
-          <div className="flex items-center space-x-2 text-muted-foreground">
+          <div className="flex items-center space-x-2 text-shade">
             <Iconify icon="solar:stopwatch-bold" width={20} className="mr-2" />
             <span className="text-sm">
               {expired ? "Expired" : "Ends"} {remained}

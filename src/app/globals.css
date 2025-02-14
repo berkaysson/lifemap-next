@@ -106,6 +106,17 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* THEME PALETTE */
+    --color-primary: #8f2cff;
+    --color-secondary: #abc4ff;
+    --color-back: #edf4f8;
+    --color-fore: #190327;
+    --color-success: #80c423;
+    --color-warning: #f7b801;
+    --color-error: #d1105a;
+    --color-info: #4895ef;
+    --color-shade: #767f9c;
   }
 
   .dark {
@@ -117,5 +128,11 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* THEME PALETTE*/
+    --color-primary: #c8a6ff;
+    --color-secondary: #5b8cffc9;
+    --color-back: #190327;
+    --color-fore: #edf4f8;
   }
 }

@@ -263,7 +263,7 @@ const HabitForm = () => {
                 )}
               />
               {calculatedEndDate ? (
-                <div className="text-sm text-muted-foreground mb-2">
+                <div className="text-sm text-shade mb-2">
                   <p>
                     You will need to complete this habit for{" "}
                     <span className="font-bold text-primary">

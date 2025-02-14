@@ -15,19 +15,19 @@ const IsCompleted = ({
         <Iconify
           icon="solar:check-circle-bold"
           width={width}
-          className="text-green-500"
+          className="text-success"
         />
       ) : isExpired ? (
         <Iconify
           icon="solar:slash-circle-bold"
           width={width}
-          className="text-red-500"
+          className="text-error"
         />
       ) : (
         <Iconify
           icon="ph:circle-dashed-fill"
           width={width}
-          className="text-blue-500"
+          className="text-info"
         />
       )}
     </span>

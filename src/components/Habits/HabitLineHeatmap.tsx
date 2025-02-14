@@ -131,7 +131,7 @@ const HabitLineHeatmap = ({
           </div>
 
           {/* Color Scale Legend */}
-          <div className="flex items-center gap-2 text-xs text-muted-foreground mt-2">
+          <div className="flex items-center gap-2 text-xs text-shade mt-2">
             <div className="flex">
               {[0, 0.25, 0.5, 0.75, 1].map((level) => (
                 <div

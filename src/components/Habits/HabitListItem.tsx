@@ -85,7 +85,7 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
       <CardContent className="p-2 sm:p-3">
         <CardDescription>{habit.description}</CardDescription>
         <div className="flex justify-between flex-col sm:flex-row gap-1 sm:gap-4 mb-1 mt-1">
-          <div className="flex items-center space-x-2 text-muted-foreground">
+          <div className="flex items-center space-x-2 text-shade">
             <Iconify
               icon="solar:calendar-date-bold"
               width={20}
@@ -96,14 +96,14 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
               {formatDateFriendly(habit.endDate)}
             </span>
           </div>
-          <div className="flex items-center space-x-2 text-muted-foreground">
+          <div className="flex items-center space-x-2 text-shade">
             <Iconify icon="solar:stopwatch-bold" width={20} className="mr-2" />
             <span className="text-sm">
               {expired ? "Expired" : "Ends"} {remained}
             </span>
           </div>
         </div>
-        <div className="flex items-center space-x-2 text-muted-foreground mb-3">
+        <div className="flex items-center space-x-2 text-shade mb-3">
           <Iconify icon="solar:fire-bold" width={20} className="mr-2" />
           <span className="text-sm">Best Streak: {habit.bestStreak} days</span>
         </div>

@@ -13,8 +13,8 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: "LifeMap Next",
-  description: "LifeMap Next",
+  title: "habivita",
+  description: "habivita",
 };
 
 export default async function RootLayout({
