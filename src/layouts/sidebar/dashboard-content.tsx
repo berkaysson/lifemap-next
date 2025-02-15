@@ -61,7 +61,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({
       }}
       {...other}
     >
-      <Card className="min-h-[50vh]">{children}</Card>
+      <Card className="min-h-[50vh] bg-back">{children}</Card>
     </Container>
   );
 };
