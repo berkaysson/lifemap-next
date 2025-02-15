@@ -6,17 +6,11 @@ import { Footer } from "@/components/Home/footer";
 import { HeroContent } from "@/components/Home/hero-content";
 import { HomeHeader } from "@/components/Home/home-header";
 
-interface HomeProps {
-  badge?: string;
-  title1?: string;
-  title2?: string;
-}
+const HomePage = () => {
+  const badge = "Habivita";
+  const title1 = "Your Personal";
+  const title2 = "Journey Companion";
 
-function HomePage({
-  badge = "Habivita",
-  title1 = "Your Personal",
-  title2 = "Journey Companion",
-}: HomeProps) {
   return (
     <div className="relative min-h-screen w-full flex flex-col overflow-hidden bg-[#030303]">
       <HomeHeader />
@@ -77,6 +71,6 @@ function HomePage({
       <Footer />
     </div>
   );
-}
+};
 
 export default HomePage;
