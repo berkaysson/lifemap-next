@@ -1,118 +1,82 @@
+"use client";
+
+import { ElegantShape } from "@/components/Home/elegant-shape";
+import { FeaturesSection } from "@/components/Home/features-section";
+import { Footer } from "@/components/Home/footer";
+import { HeroContent } from "@/components/Home/hero-content";
 import { HomeHeader } from "@/components/Home/home-header";
-import { Button } from "@/components/ui/Buttons/button";
-import { MapPin, Compass, TrendingUp } from "lucide-react";
-import Link from "next/link";
 
-export default function Home() {
+interface HomeProps {
+  badge?: string;
+  title1?: string;
+  title2?: string;
+}
+
+function HomePage({
+  badge = "Habivita",
+  title1 = "Your Personal",
+  title2 = "Journey Companion",
+}: HomeProps) {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="relative min-h-screen w-full flex flex-col overflow-hidden bg-[#030303]">
       <HomeHeader />
-      <main className="flex-grow">
-        <section className="bg-gradient-to-r from-primary to-primary-foreground text-white py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h1 className="text-4xl font-extrabold sm:text-5xl md:text-6xl">
-                Map Your Life&apos;s Journey
-              </h1>
-              <p className="mt-3 max-w-md mx-auto text-xl sm:text-2xl md:mt-5 md:max-w-3xl">
-                Visualize, plan, and achieve your life goals with habivita
-              </p>
-              <div className="mt-10 flex justify-center">
-                <Button size="lg" className="mr-4">
-                  Get Started
-                </Button>
-                <Button size="lg">
-                  Learn More
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
 
-        <section className="py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-                Why Choose habivita?
-              </h2>
-              <p className="mt-4 text-xl text-gray-600">
-                Empower your journey with our innovative features
-              </p>
-            </div>
+      {/* Hero Content */}
+      <div className="flex-grow flex items-center justify-center py-12 sm:py-16 md:py-24">
+        <div className="absolute inset-0 bg-gradient-to-br from-teal-500/[0.05] via-transparent to-purple-500/[0.05] blur-3xl" />
 
-            <div className="mt-20 grid grid-cols-1 gap-8 md:grid-cols-3">
-              <div className="flex flex-col items-center">
-                <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary text-white">
-                  <MapPin className="h-8 w-8" />
-                </div>
-                <h3 className="mt-6 text-xl font-medium text-gray-900">
-                  Visual Goal Mapping
-                </h3>
-                <p className="mt-2 text-base text-gray-600 text-center">
-                  Create interactive maps of your life goals and aspirations
-                </p>
-              </div>
-
-              <div className="flex flex-col items-center">
-                <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary text-white">
-                  <Compass className="h-8 w-8" />
-                </div>
-                <h3 className="mt-6 text-xl font-medium text-gray-900">
-                  Guided Planning
-                </h3>
-                <p className="mt-2 text-base text-gray-600 text-center">
-                  Get personalized advice and strategies to achieve your goals
-                </p>
-              </div>
-
-              <div className="flex flex-col items-center">
-                <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary text-white">
-                  <TrendingUp className="h-8 w-8" />
-                </div>
-                <h3 className="mt-6 text-xl font-medium text-gray-900">
-                  Progress Tracking
-                </h3>
-                <p className="mt-2 text-base text-gray-600 text-center">
-                  Monitor your achievements and adjust your path in real-time
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-gray-50 py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-                Ready to Start Your Journey?
-              </h2>
-              <p className="mt-4 text-xl text-gray-600">
-                Join thousands of users who have transformed their lives with
-                habivita
-              </p>
-              <div className="mt-10">
-                <Button size="lg">Sign Up Now</Button>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <footer className="bg-gray-800 text-white py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center">
-            <div className="text-sm">© 2023 habivita. All rights reserved.</div>
-            <div className="flex space-x-6">
-              <Link href="/privacy" className="hover:text-gray-300">
-                Privacy Policy
-              </Link>
-              <Link href="/terms" className="hover:text-gray-300">
-                Terms of Service
-              </Link>
-            </div>
-          </div>
+        <div className="absolute inset-0 overflow-hidden">
+          <ElegantShape
+            delay={0.3}
+            width={600}
+            height={140}
+            rotate={12}
+            gradient="from-teal-500/[0.15]"
+            className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]"
+          />
+          <ElegantShape
+            delay={0.5}
+            width={500}
+            height={120}
+            rotate={-15}
+            gradient="from-purple-500/[0.15]"
+            className="right-[-5%] md:right-[0%] top-[70%] md:top-[75%]"
+          />
+          <ElegantShape
+            delay={0.4}
+            width={300}
+            height={80}
+            rotate={-8}
+            gradient="from-emerald-500/[0.15]"
+            className="left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%]"
+          />
+          <ElegantShape
+            delay={0.6}
+            width={200}
+            height={60}
+            rotate={20}
+            gradient="from-indigo-500/[0.15]"
+            className="right-[15%] md:right-[20%] top-[10%] md:top-[15%]"
+          />
+          <ElegantShape
+            delay={0.7}
+            width={150}
+            height={40}
+            rotate={-25}
+            gradient="from-blue-500/[0.15]"
+            className="left-[20%] md:left-[25%] top-[5%] md:top-[10%]"
+          />
         </div>
-      </footer>
+
+        <HeroContent badge={badge} title1={title1} title2={title2} />
+
+        <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303]/80 pointer-events-none" />
+      </div>
+
+      <FeaturesSection />
+      <Footer />
     </div>
   );
 }
+
+export default HomePage;
