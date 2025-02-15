@@ -47,7 +47,7 @@ export function HeroContent({ badge, title1, title2 }: HeroContentProps) {
             width={16}
             height={16}
           />
-          <span className="text-xs sm:text-sm text-white/60 tracking-wide">
+          <span className="text-xs sm:text-sm text-secondary tracking-wide">
             {badge}
           </span>
         </motion.div>
@@ -59,13 +59,13 @@ export function HeroContent({ badge, title1, title2 }: HeroContentProps) {
           animate="visible"
         >
           <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6 md:mb-8 tracking-tight">
-            <span className="bg-clip-text text-transparent bg-gradient-to-b from-white to-white/80">
+            <span className="bg-clip-text text-transparent bg-gradient-to-b from-secondary to-white/80">
               {title1}
             </span>
             <br />
             <span
               className={cn(
-                "bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-white/90 to-purple-300 ",
+                "bg-clip-text text-transparent bg-gradient-to-r from-primary via-white/90 to-secondary ",
                 poppins.className
               )}
             >
@@ -80,7 +80,7 @@ export function HeroContent({ badge, title1, title2 }: HeroContentProps) {
           initial="hidden"
           animate="visible"
         >
-          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/40 mb-8 leading-relaxed font-light tracking-wide max-w-2xl mx-auto px-2 sm:px-4">
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-secondary mb-8 leading-relaxed font-light tracking-wide max-w-2xl mx-auto px-2 sm:px-4">
             Empower your aspirations, foster productivity, and cultivate
             meaningful habits. Navigate life&apos;s complexities and journey towards
             success and fulfillment.

@@ -12,12 +12,12 @@ const HomePage = () => {
   const title2 = "Journey Companion";
 
   return (
-    <div className="relative min-h-screen w-full flex flex-col overflow-hidden bg-[#030303]">
+    <div className="relative min-h-screen w-full flex flex-col overflow-hidden bg-[#0a0518]">
       <HomeHeader />
 
       {/* Hero Content */}
-      <div className="flex-grow flex items-center justify-center py-12 sm:py-16 md:py-24">
-        <div className="absolute inset-0 bg-gradient-to-br from-teal-500/[0.05] via-transparent to-purple-500/[0.05] blur-3xl" />
+      <div className="flex-grow flex items-center justify-center py-12 sm:py-16 md:py-24 border-b-4 border-white/10">
+        <div className="absolute inset-0 bg-gradient-to-tl from-primary via-transparent to-secondary blur-3xl opacity-80" />
 
         <div className="absolute inset-0 overflow-hidden">
           <ElegantShape
@@ -54,7 +54,7 @@ const HomePage = () => {
           />
           <ElegantShape
             delay={0.7}
-            width={150}
+            width={220}
             height={40}
             rotate={-25}
             gradient="from-blue-500/[0.15]"
@@ -64,7 +64,7 @@ const HomePage = () => {
 
         <HeroContent badge={badge} title1={title1} title2={title2} />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303]/80 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-[#0e0525c2] pointer-events-none" />
       </div>
 
       <FeaturesSection />
