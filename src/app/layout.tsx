@@ -15,6 +15,18 @@ const fontSans = FontSans({
 export const metadata: Metadata = {
   title: "habivita",
   description: "habivita",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any", type: "image/x-icon" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+    other: [
+      { rel: "manifest", url: "/site.webmanifest" },
+      { rel: "mask-icon", url: "/logo.svg", color: "#5bbad5" },
+    ],
+  },
 };
 
 export default async function RootLayout({
