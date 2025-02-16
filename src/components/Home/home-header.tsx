@@ -29,7 +29,7 @@ export function HomeHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="relative z-20 w-full py-4 px-4 sm:px-6 text-fore">
+    <nav className="relative z-20 w-full py-4 px-0 sm:px-6 text-fore">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/" className="flex items-center space-x-2">
           <Image src="/logo.svg" alt="Habivita" width={28} height={28} />
@@ -39,8 +39,7 @@ export function HomeHeader() {
         </Link>
         <div className="hidden md:flex space-x-6 items-center text-back dark:text-fore">
           <NavLink href="/about">About Us</NavLink>
-          <NavLink href="/contact">Contact</NavLink>
-          <NavLink href="/login">Sign In</NavLink>
+          <NavLink href="/auth/login">Sign In</NavLink>
           <ThemeToggle />
         </div>
 
@@ -57,8 +56,7 @@ export function HomeHeader() {
         <div className="md:hidden absolute top-full left-0 right-0 bg-back border-t border-shade py-4">
           <div className="container mx-auto flex flex-col space-y-4 px-4">
             <NavLink href="/about">About Us</NavLink>
-            <NavLink href="/contact">Contact</NavLink>
-            <NavLink href="/signin">Sign In</NavLink>
+            <NavLink href="/auth/login">Sign In</NavLink>
             <span>
               <ThemeToggle />
             </span>

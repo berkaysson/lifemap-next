@@ -1,23 +1,5 @@
 import type React from "react";
 import Image from "next/image";
-import Link from "next/link";
-
-function NavLink({
-  href,
-  children,
-}: {
-  href: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <Link
-      href={href}
-      className="text-fore hover:opacity-80 transition-colors"
-    >
-      {children}
-    </Link>
-  );
-}
 
 export function Footer() {
   return (
@@ -33,11 +15,6 @@ export function Footer() {
               className="mr-2"
             />
             <span className="text-secondary font-semibold">Habivita</span>
-          </div>
-          <div className="flex flex-wrap justify-center sm:justify-end space-x-4 sm:space-x-6">
-            <NavLink href="/privacy">Privacy Policy</NavLink>
-            <NavLink href="/terms">Terms of Service</NavLink>
-            <NavLink href="/contact">Contact Us</NavLink>
           </div>
           <div className="text-shade text-xs sm:text-sm">
             © {new Date().getFullYear()} Habivita. All rights reserved.

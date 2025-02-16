@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Poppins } from "next/font/google";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import TryItNowButton from "./try-it-button";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -85,6 +86,15 @@ export function HeroContent({ badge, title1, title2 }: HeroContentProps) {
             meaningful habits. Navigate life&apos;s complexities and journey towards
             success and fulfillment.
           </p>
+        </motion.div>
+
+        <motion.div
+          custom={3}
+          variants={fadeUpVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <TryItNowButton href="/auth/register" />
         </motion.div>
       </div>
     </div>
