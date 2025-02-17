@@ -30,7 +30,7 @@ export function FeaturesSection() {
     <section className="relative z-10 py-16 sm:py-20 md:py-24 bg-back">
       <div className="absolute inset-0 bg-gradient-to-t from-back via-transparent to-[#13053860] dark:to-[#1c0f3b88] pointer-events-none" />
       <div className="container mx-auto px-4 sm:px-6 md:px-8">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-fore mb-8 sm:mb-12 md:mb-16">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-primary mb-8 sm:mb-12 md:mb-16">
           Key Features
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
