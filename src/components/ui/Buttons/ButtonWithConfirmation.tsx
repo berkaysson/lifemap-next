@@ -22,6 +22,7 @@ interface ButtonWithConfirmationProps {
   icon?: string;
   confirmationTitle?: string;
   confirmationDescription?: string;
+  disabled?: boolean;
 }
 
 const ButtonWithConfirmation = ({
@@ -32,11 +33,12 @@ const ButtonWithConfirmation = ({
   icon,
   confirmationTitle = "Are you sure?",
   confirmationDescription = "This action cannot be undone.",
+  disabled = false,
 }: ButtonWithConfirmationProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={variant} size={size}>
+        <Button variant={variant} size={size} disabled={disabled}>
           {icon && (
             <Iconify
               icon={icon}

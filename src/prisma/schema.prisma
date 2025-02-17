@@ -82,16 +82,16 @@ model PasswordResetToken {
 }
 
 model ToDo {
-    id          String   @id @default(cuid())
+    id          String    @id @default(cuid())
     name        String
     description String?
     colorCode   String?
-    completed   Boolean  @default(false)
+    completed   Boolean   @default(false)
     startDate   DateTime
     endDate     DateTime?
     userId      String
-    user        User     @relation(fields: [userId], references: [id])
-    Project     Project? @relation(fields: [projectId], references: [id])
+    user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    Project     Project?  @relation(fields: [projectId], references: [id])
     projectId   String?
 
     @@index([userId])
@@ -105,7 +105,7 @@ model Category {
     tasks      Task[]
     habits     Habit[]
     userId     String
-    user       User       @relation(fields: [userId], references: [id])
+    user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@index([userId])
 }
@@ -117,7 +117,7 @@ model Activity {
     categoryId  String
     category    Category @relation(fields: [categoryId], references: [id])
     userId      String
-    user        User     @relation(fields: [userId], references: [id])
+    user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     date        DateTime
 
     @@index([userId])
@@ -136,7 +136,7 @@ model Task {
     categoryId        String
     category          Category @relation(fields: [categoryId], references: [id])
     userId            String
-    user              User     @relation(fields: [userId], references: [id])
+    user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     Project           Project? @relation(fields: [projectId], references: [id])
     projectId         String?
 
@@ -159,7 +159,7 @@ model Habit {
     categoryId            String
     category              Category        @relation(fields: [categoryId], references: [id])
     userId                String
-    user                  User            @relation(fields: [userId], references: [id])
+    user                  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
     Project               Project?        @relation(fields: [projectId], references: [id])
     projectId             String?
     progress              HabitProgress[]
@@ -178,7 +178,7 @@ model HabitProgress {
     completedDuration Int      @default(0)
     completed         Boolean  @default(false)
     habitId           String
-    habit             Habit    @relation(fields: [habitId], references: [id])
+    habit             Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
 }
 
 model Project {
@@ -188,7 +188,7 @@ model Project {
     tasks          Task[]
     todos          ToDo[]
     userId         String
-    user           User            @relation(fields: [userId], references: [id])
+    user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
     habits         Habit[]
     archivedTodos  ArchivedToDo[]
     archivedTasks  ArchivedTask[]
@@ -198,7 +198,7 @@ model Project {
 }
 
 model ArchivedToDo {
-    id          String   @id @default(cuid())
+    id          String    @id @default(cuid())
     name        String
     description String?
     colorCode   String?
@@ -206,7 +206,7 @@ model ArchivedToDo {
     startDate   DateTime
     endDate     DateTime?
     userId      String
-    project     Project? @relation(fields: [projectId], references: [id])
+    project     Project?  @relation(fields: [projectId], references: [id])
     projectId   String?
 
     archivedAt DateTime @default(now())

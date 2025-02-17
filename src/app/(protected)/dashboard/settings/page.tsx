@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useTransition } from "react";
+import { useTransition, useState } from "react";
 import { reset } from "@/actions/reset";
 import { ResetSchema } from "@/schema";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,10 +12,17 @@ import DashboardHeader from "@/layouts/sidebar/dashboard-header";
 import { Iconify } from "@/components/ui/iconify";
 import { LoadingButton } from "@/components/ui/Buttons/loading-button";
 import { useToast } from "@/components/ui/Misc/use-toast";
+import ButtonWithConfirmation from "@/components/ui/Buttons/ButtonWithConfirmation";
+import { useRouter } from "next/navigation";
+import { deleteAccount } from "@/actions/delete-account";
+
 export default function SettingsPage() {
   const [isPending, startTransition] = useTransition();
   const { data: session, status } = useSession();
   const { toast } = useToast();
+  const [deleteConfirmation, setDeleteConfirmation] = useState("");
+  const [isDeletePending, startDeleteTransition] = useTransition();
+  const router = useRouter();
 
   const onChangePasswordClick = () => {
     if (session?.user?.email) {
@@ -30,6 +37,23 @@ export default function SettingsPage() {
         });
       });
     }
+  };
+
+  const onDeleteAccount = () => {
+    startDeleteTransition(async () => {
+      try {
+        const result = await deleteAccount();
+        toast({
+          title: "Account Deleted",
+          description: result.message,
+          duration: 3000,
+        });
+        router.push("/");
+        window.location.reload();
+      } catch (error) {
+        console.error("Error while deleting account:", error);
+      }
+    });
   };
 
   if (status !== "authenticated") {
@@ -69,7 +93,7 @@ export default function SettingsPage() {
           </div>
         </div>
         <Separator className="my-6" />
-        <div className="flex flex-col items-start space-y-4">
+        <div className="flex flex-col items-start">
           <LoadingButton
             onClick={onChangePasswordClick}
             variant="default"
@@ -82,6 +106,31 @@ export default function SettingsPage() {
             <Iconify icon="solar:restart-bold" className="mr-1" />
             Request Password Reset
           </LoadingButton>
+          <Separator className="my-6" />
+          <div className="w-full space-y-4 mt-2">
+            <div className="space-y-2">
+              <Label htmlFor="delete-confirmation">
+                Type &quot;delete&quot; to confirm account deletion
+              </Label>
+              <Input
+                id="delete-confirmation"
+                value={deleteConfirmation}
+                onChange={(e) => setDeleteConfirmation(e.target.value)}
+                placeholder="Type 'delete' to confirm"
+              />
+            </div>
+            <ButtonWithConfirmation
+              buttonText="Delete Account"
+              onConfirm={onDeleteAccount}
+              variant="destructive"
+              icon="solar:trash-bin-trash-bold"
+              confirmationTitle="Are you sure you want to delete your account?"
+              confirmationDescription="This will permanently remove your account and all associated data. This action cannot be undone."
+              disabled={
+                deleteConfirmation.toLowerCase() !== "delete" || isDeletePending
+              }
+            />
+          </div>
         </div>
       </div>
     </div>
