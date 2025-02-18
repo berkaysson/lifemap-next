@@ -68,13 +68,13 @@ const DashboardPage = () => {
 
       <div className="py-4 sm:py-6 px-2 sm:px-3">
         {/* Summary Section */}
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-lg p-6 mb-6 sm:mb-8 text-white text-center sm:text-left">
+        <div className="bg-gradient-to-r from-primary to-secondary rounded-lg shadow-lg p-6 mb-6 sm:mb-8 text-white text-center sm:text-left">
           <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">
             Welcome back, User!
           </h2>
-          <p className="text-sm sm:text-base mb-2">
+          {/* <p className="text-sm sm:text-base mb-2">
             You have 3 tasks due today and 2 habits to maintain.
-          </p>
+          </p> */}
           <Button variant="secondary" className="mt-2 w-full sm:w-auto">
             View Summary
           </Button>
@@ -120,9 +120,9 @@ const DashboardPage = () => {
                   {item.description}
                 </CardDescription>
                 <div className="flex flex-col sm:flex-row sm:justify-between items-center space-y-2 sm:space-y-0">
-                  <span className="text-xs sm:text-sm font-medium text-gray-500">
+                  {/* <span className="text-xs sm:text-sm font-medium text-gray-500">
                     {item.count} items
-                  </span>
+                  </span> */}
                   <Button
                     asChild
                     size="sm"

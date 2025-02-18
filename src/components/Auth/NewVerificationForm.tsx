@@ -58,6 +58,9 @@ const NewVerificationForm = () => {
             <p className="text-sm text-shade">
               Verifying your email...
             </p>
+            <p className="text-sm text-shade">
+              We are setting up your account...
+            </p>
           </div>
         )}
 
