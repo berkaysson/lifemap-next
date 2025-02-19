@@ -13,6 +13,7 @@ import {
   DialogTrigger,
 } from "../Modals/dialog";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { LoadingButton } from "./loading-button";
 
 interface ButtonWithConfirmationProps {
   buttonText: string;
@@ -35,8 +36,23 @@ const ButtonWithConfirmation = ({
   confirmationDescription = "This action cannot be undone.",
   disabled = false,
 }: ButtonWithConfirmationProps) => {
+  const [open, setOpen] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const handleConfirm = async () => {
+    try {
+      setIsLoading(true);
+      await onConfirm();
+      setOpen(false);
+    } catch (error) {
+      console.error("Error during confirmation:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant={variant} size={size} disabled={disabled}>
           {icon && (
@@ -61,9 +77,14 @@ const ButtonWithConfirmation = ({
             </DialogPrimitive.Close>
           </Button>
 
-          <Button variant={variant} onClick={onConfirm}>
+          <LoadingButton
+            variant={variant}
+            onClick={handleConfirm}
+            isLoading={isLoading}
+            loadingText="Confirming"
+          >
             Confirm
-          </Button>
+          </LoadingButton>
         </DialogFooter>
       </DialogContent>
     </Dialog>
