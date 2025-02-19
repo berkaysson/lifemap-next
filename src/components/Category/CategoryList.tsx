@@ -27,7 +27,7 @@ const CategoryList = () => {
 
   const handleSort = useCallback(
     (sortBy: keyof Category, direction: "asc" | "desc") => {
-      if (!categories) return;
+      if (!categories || categories.length === 0) return;
       const sorted = sortArrayOfObjectsByKey<Category>(
         categories,
         sortBy,

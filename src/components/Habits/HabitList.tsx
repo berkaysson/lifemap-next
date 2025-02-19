@@ -57,7 +57,7 @@ const HabitList = () => {
 
   const handleSort = useCallback(
     (sortBy: keyof Habit, direction: "asc" | "desc") => {
-      if (!habits) return;
+      if (!habits || habits.length === 0) return;
       const sorted = sortArrayOfObjectsByKey<ExtendedHabit>(
         habits,
         sortBy,
@@ -70,7 +70,7 @@ const HabitList = () => {
 
   const handleArchiveSort = useCallback(
     (sortBy: keyof Habit, direction: "asc" | "desc") => {
-      if (!archivedHabits) return;
+      if (!archivedHabits || archivedHabits.length === 0) return;
       const sorted = sortArrayOfObjectsByKey(archivedHabits, sortBy, direction);
       setSortedArchivedHabits(sorted);
     },

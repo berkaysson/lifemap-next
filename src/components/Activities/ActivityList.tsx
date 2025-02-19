@@ -49,7 +49,7 @@ const ActivityList = () => {
 
   const handleSort = useCallback(
     (sortBy: keyof Activity, direction: "asc" | "desc") => {
-      if (!activities) return;
+      if (!activities || activities.length === 0) return;
       const sorted = sortArrayOfObjectsByKey<ExtendedActivity>(
         activities,
         sortBy,

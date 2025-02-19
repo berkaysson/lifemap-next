@@ -53,7 +53,7 @@ const TodoList = () => {
 
   const handleSort = useCallback(
     (sortBy: keyof ToDo, direction: "asc" | "desc") => {
-      if (!todos) return;
+      if (!todos || !todos.length) return;
       const sorted = sortArrayOfObjectsByKey<ToDo>(todos, sortBy, direction);
       setSortedTodos(sorted);
     },
@@ -62,7 +62,7 @@ const TodoList = () => {
 
   const handleArchiveSort = useCallback(
     (sortBy: keyof ToDo, direction: "asc" | "desc") => {
-      if (!archivedTodos) return;
+      if (!archivedTodos || !archivedTodos.length) return;
       const sorted = sortArrayOfObjectsByKey(archivedTodos, sortBy, direction);
       setSortedArchivedTodos(sorted);
     },

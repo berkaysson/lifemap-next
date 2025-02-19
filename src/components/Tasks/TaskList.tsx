@@ -55,7 +55,7 @@ const TaskList = () => {
 
   const handleSort = useCallback(
     (sortBy: keyof Task, direction: "asc" | "desc") => {
-      if (!tasks) return;
+      if (!tasks || tasks.length === 0) return;
       const sorted = sortArrayOfObjectsByKey<ExtendedTask>(
         tasks,
         sortBy,
@@ -68,7 +68,7 @@ const TaskList = () => {
 
   const handleArchiveSort = useCallback(
     (sortBy: keyof Task, direction: "asc" | "desc") => {
-      if (!archivedTasks) return;
+      if (!archivedTasks || archivedTasks.length === 0) return;
       const sorted = sortArrayOfObjectsByKey(archivedTasks, sortBy, direction);
       setSortedArchivedTasks(sorted);
     },

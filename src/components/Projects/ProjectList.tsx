@@ -25,7 +25,7 @@ const ProjectList = () => {
 
   const handleSort = useCallback(
     (sortBy: keyof ExtendedProject, direction: "asc" | "desc") => {
-      if (!projects) return;
+      if (!projects || projects.length === 0) return;
       const sorted = sortArrayOfObjectsByKey<ExtendedProject>(
         projects,
         sortBy,
