@@ -68,7 +68,7 @@ export const useCreateProject = () => {
       toast({
         title: "Project Not Created",
         description:
-          error.message || "An error occurred while creating the project.",
+           "An error occurred while creating the project.",
         duration: 3000,
         variant: "destructive",
       });
@@ -129,7 +129,7 @@ export const useUpdateProject = () => {
       toast({
         title: "Project Not Updated",
         description:
-          error.message || "An error occurred while updating the project.",
+           "An error occurred while updating the project.",
         duration: 3000,
         variant: "destructive",
       });
@@ -186,7 +186,7 @@ export const useDeleteProject = () => {
       toast({
         title: "Project Not Deleted",
         description:
-          error.message || "An error occurred while deleting the project.",
+           "An error occurred while deleting the project.",
         duration: 3000,
         variant: "destructive",
       });
@@ -239,7 +239,7 @@ const createEntityMutation = ({
         toast({
           title: `Failed to ${action} ${entityType}`,
           description:
-            error.message ||
+            
             `An error occurred while ${actionText} ${entityType} ${
               action === "add" ? "to" : "from"
             } project.`,

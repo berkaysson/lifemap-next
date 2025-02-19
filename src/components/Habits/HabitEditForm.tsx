@@ -38,7 +38,7 @@ const HabitEditForm = ({
         setError(response.message);
       }
     } catch (error: any) {
-      setError(error.message || "An error occurred while updating the habit.");
+      setError( "An error occurred while updating the habit.");
     } finally {
       setIsLoading(false);
     }

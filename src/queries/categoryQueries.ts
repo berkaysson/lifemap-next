@@ -58,7 +58,7 @@ export const useCreateCategory = () => {
       toast({
         title: "Category Not Created",
         description:
-          error.message || "An error occurred while creating the category.",
+           "An error occurred while creating the category.",
         duration: 3000,
         variant: "destructive",
       });
@@ -118,7 +118,7 @@ export const useUpdateCategory = () => {
       toast({
         title: "Category Not Updated",
         description:
-          error.message || "An error occurred while updating the category.",
+           "An error occurred while updating the category.",
         duration: 3000,
         variant: "destructive",
       });
@@ -176,7 +176,7 @@ export const useDeleteCategory = () => {
       toast({
         title: "Category Not Deleted",
         description:
-          error.message || "An error occurred while deleting the category.",
+           "An error occurred while deleting the category.",
         duration: 3000,
         variant: "destructive",
       });

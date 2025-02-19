@@ -29,7 +29,7 @@ const ProjectEditForm = ({
       await updateProjectMutation.mutateAsync(newProject);
       setIsOpen(false);
     } catch (error: any) {
-      setError(error.message || "Failed to update project");
+      setError( "Failed to update project");
     } finally {
       setIsLoading(false);
     }

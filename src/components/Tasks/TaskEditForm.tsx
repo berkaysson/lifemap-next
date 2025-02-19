@@ -36,7 +36,7 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
         setError(response.message);
       }
     } catch (error: any) {
-      setError(error.message || "An error occurred while updating the task.");
+      setError( "An error occurred while updating the task.");
     } finally {
       setIsLoading(false);
     }

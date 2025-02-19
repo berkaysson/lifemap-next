@@ -67,7 +67,7 @@ const TaskForm = () => {
           }
         }
       } catch (error: any) {
-        setMessage(error.message || "An error occurred");
+        setMessage( "An error occurred");
         setIsError(true);
       }
     });

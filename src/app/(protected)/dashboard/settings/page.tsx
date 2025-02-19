@@ -42,10 +42,10 @@ export default function SettingsPage() {
   const onDeleteAccount = () => {
     startDeleteTransition(async () => {
       try {
-        const result = await deleteAccount();
+        await deleteAccount();
         toast({
           title: "Account Deleted",
-          description: result.message,
+          description: "You have successfully deleted your account.",
           duration: 3000,
         });
         router.push("/");

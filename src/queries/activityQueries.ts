@@ -62,7 +62,7 @@ export const useCreateActivity = () => {
       toast({
         title: "Activity Not Created",
         description:
-          error.message || "An error occurred while creating the activity.",
+          "An error occurred while creating the activity.",
         duration: 3000,
         variant: "destructive",
       });
@@ -126,7 +126,7 @@ export const useUpdateActivity = () => {
       toast({
         title: "Activity Not Updated",
         description:
-          error.message || "An error occurred while updating the activity.",
+           "An error occurred while updating the activity.",
         duration: 3000,
         variant: "destructive",
       });
@@ -186,7 +186,7 @@ export const useDeleteActivity = () => {
       toast({
         title: "Activity Not Deleted",
         description:
-          error.message || "An error occurred while deleting the activity.",
+           "An error occurred while deleting the activity.",
         duration: 3000,
         variant: "destructive",
       });

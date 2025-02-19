@@ -63,7 +63,7 @@ export const useCreateTask = () => {
       toast({
         title: "Task Not Created",
         description:
-          error.message || "An error occurred while creating the task.",
+           "An error occurred while creating the task.",
         duration: 3000,
         variant: "destructive",
       });
@@ -118,7 +118,7 @@ export const useUpdateTask = () => {
       toast({
         title: "Task Not Updated",
         description:
-          error.message || "An error occurred while updating the task.",
+           "An error occurred while updating the task.",
         duration: 3000,
         variant: "destructive",
       });
@@ -171,7 +171,7 @@ export const useDeleteTask = () => {
       toast({
         title: "Task Not Deleted",
         description:
-          error.message || "An error occurred while deleting the task.",
+           "An error occurred while deleting the task.",
         duration: 3000,
         variant: "destructive",
       });
@@ -225,7 +225,7 @@ export const useArchiveTask = () => {
       toast({
         title: "Task Not Archived",
         description:
-          error.message || "An error occurred while archiving the task.",
+           "An error occurred while archiving the task.",
         duration: 3000,
         variant: "destructive",
       });
@@ -277,7 +277,7 @@ export const useDeleteArchivedTask = () => {
       toast({
         title: "Archived Task Not Deleted",
         description:
-          error.message ||
+          
           "An error occurred while deleting the archived task.",
         duration: 3000,
         variant: "destructive",

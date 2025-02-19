@@ -62,7 +62,7 @@ export const useCreateTodo = () => {
       toast({
         title: "Todo Not Created",
         description:
-          error.message || "An error occurred while creating the todo.",
+           "An error occurred while creating the todo.",
         duration: 3000,
         variant: "destructive",
       });
@@ -117,7 +117,7 @@ export const useUpdateTodo = () => {
       toast({
         title: "Todo Not Updated",
         description:
-          error.message || "An error occurred while updating the todo.",
+           "An error occurred while updating the todo.",
         duration: 3000,
         variant: "destructive",
       });
@@ -170,7 +170,7 @@ export const useDeleteTodo = () => {
       toast({
         title: "Todo Not Deleted",
         description:
-          error.message || "An error occurred while deleting the todo.",
+           "An error occurred while deleting the todo.",
         duration: 3000,
         variant: "destructive",
       });
@@ -225,7 +225,7 @@ export const useArchiveTodo = () => {
       toast({
         title: "Todo Not Archived",
         description:
-          error.message || "An error occurred while archiving the todo.",
+           "An error occurred while archiving the todo.",
         duration: 3000,
         variant: "destructive",
       });
@@ -277,7 +277,7 @@ export const useDeleteArchivedTodo = () => {
       toast({
         title: "Archived Todo Not Deleted",
         description:
-          error.message ||
+          
           "An error occurred while deleting the archived todo.",
         duration: 3000,
         variant: "destructive",

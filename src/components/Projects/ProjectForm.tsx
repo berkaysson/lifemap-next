@@ -54,7 +54,7 @@ const ProjectForm = () => {
       }
     } catch (error: any) {
       setIsError(true);
-      setMessage(error.message || "Failed to create project");
+      setMessage( "Failed to create project");
     } finally {
       setIsLoading(false);
     }

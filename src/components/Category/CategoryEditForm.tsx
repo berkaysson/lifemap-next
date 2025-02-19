@@ -36,7 +36,7 @@ const CategoryEditForm = ({
       }
     } catch (error: any) {
       setError(
-        error.message || "An error occurred while updating the category."
+         "An error occurred while updating the category."
       );
     }
     setIsLoading(false);

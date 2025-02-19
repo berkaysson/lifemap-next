@@ -60,7 +60,7 @@ export const useCreateHabit = () => {
       toast({
         title: "Habit Not Created",
         description:
-          error.message || "An error occurred while creating the habit.",
+           "An error occurred while creating the habit.",
         duration: 3000,
         variant: "destructive",
       });
@@ -120,7 +120,7 @@ export const useUpdateHabit = () => {
       toast({
         title: "Habit Not Updated",
         description:
-          error.message || "An error occurred while updating the habit.",
+           "An error occurred while updating the habit.",
         duration: 3000,
         variant: "destructive",
       });
@@ -176,7 +176,7 @@ export const useDeleteHabit = () => {
       toast({
         title: "Habit Not Deleted",
         description:
-          error.message || "An error occurred while deleting the habit.",
+           "An error occurred while deleting the habit.",
         duration: 3000,
         variant: "destructive",
       });
@@ -233,7 +233,7 @@ export const useArchiveHabit = () => {
       toast({
         title: "Habit Not Archived",
         description:
-          error.message || "An error occurred while archiving the habit.",
+           "An error occurred while archiving the habit.",
         duration: 3000,
         variant: "destructive",
       });
@@ -285,7 +285,7 @@ export const useDeleteArchivedHabit = () => {
       toast({
         title: "Archived Habit Not Deleted",
         description:
-          error.message ||
+          
           "An error occurred while deleting the archived habit.",
         duration: 3000,
         variant: "destructive",
