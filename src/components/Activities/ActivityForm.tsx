@@ -66,7 +66,7 @@ const ActivityForm = () => {
           }
         }
       } catch (error: any) {
-        setMessage( "An error occurred");
+        setMessage("An error occurred");
         setIsError(true);
       }
     });
@@ -108,10 +108,12 @@ const ActivityForm = () => {
                         <Input
                           disabled={isPending}
                           {...field}
+                          value={field.value === 0 ? "" : field.value}
                           placeholder="Your activity duration in minutes"
-                          onChange={(e) =>
-                            field.onChange(Number(e.target.value))
-                          }
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            field.onChange(value === "" ? 0 : Number(value));
+                          }}
                           type="number"
                         />
                       </FormControl>

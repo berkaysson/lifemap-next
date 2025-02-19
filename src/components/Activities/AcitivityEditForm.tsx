@@ -26,6 +26,10 @@ const ActivityEditForm = ({
   const { mutateAsync: updateActivity } = useUpdateActivity();
 
   const handleSubmit = async () => {
+    if (newDuration === 0) {
+      setError("Duration must be greater than 0");
+      return;
+    };
     setError(null);
     setIsLoading(true);
     const newActivity = {
@@ -71,9 +75,9 @@ const ActivityEditForm = ({
         <Label>Duration in minutes</Label>
         <Input
           type="number"
-          value={newDuration}
+          value={newDuration === 0 ? "" : newDuration}
           onChange={(e) => {
-            setNewDuration(Number(e.target.value));
+            setNewDuration(e.target.value === "" ? 0 : Number(e.target.value));
           }}
           min={1}
           placeholder="Your activity duration in minutes"

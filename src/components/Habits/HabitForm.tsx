@@ -29,7 +29,13 @@ import { useFetchCategories } from "@/queries/categoryQueries";
 import { useCreateHabit } from "@/queries/habitQueries";
 import { LoadingButton } from "../ui/Buttons/loading-button";
 import { DatePicker } from "../ui/Forms/date-picker-field";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/Modals/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/Modals/dialog";
 import { Iconify } from "../ui/iconify";
 
 const HabitForm = () => {
@@ -74,7 +80,7 @@ const HabitForm = () => {
           }
         }
       } catch (error: any) {
-        setMessage( "An error occurred");
+        setMessage("An error occurred");
         setIsError(true);
       }
     });
@@ -249,9 +255,13 @@ const HabitForm = () => {
                       <Input
                         disabled={isPending}
                         {...field}
+                        value={field.value === 0 ? "" : field.value}
                         placeholder="10"
                         type="number"
-                        onChange={(e) => field.onChange(Number(e.target.value))}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          field.onChange(value === "" ? 0 : Number(value));
+                        }}
                       />
                     </FormControl>
                     {form.formState.errors.numberOfPeriods && (
@@ -286,9 +296,13 @@ const HabitForm = () => {
                       <Input
                         disabled={isPending}
                         {...field}
+                        value={field.value === 0 ? "" : field.value}
                         placeholder="Goal Duration per Period in minutes"
                         type="number"
-                        onChange={(e) => field.onChange(Number(e.target.value))}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          field.onChange(value === "" ? 0 : Number(value));
+                        }}
                       />
                     </FormControl>
                     {form.formState.errors.goalDurationPerPeriod && (

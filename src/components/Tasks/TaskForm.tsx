@@ -67,7 +67,7 @@ const TaskForm = () => {
           }
         }
       } catch (error: any) {
-        setMessage( "An error occurred");
+        setMessage("An error occurred");
         setIsError(true);
       }
     });
@@ -145,9 +145,13 @@ const TaskForm = () => {
                       <Input
                         disabled={isPending}
                         {...field}
+                        value={field.value === 0 ? "" : field.value}
                         placeholder="Goal Duration in minutes"
                         type="number"
-                        onChange={(e) => field.onChange(Number(e.target.value))}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          field.onChange(value === "" ? 0 : Number(value));
+                        }}
                       />
                     </FormControl>
                     {form.formState.errors.goalDuration && (
