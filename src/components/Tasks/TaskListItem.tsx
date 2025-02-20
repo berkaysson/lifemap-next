@@ -49,7 +49,7 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
           <IsCompleted isCompleted={task.completed} isExpired={expired} />
         </div>
 
-        <div className="flex gap-1 sm:gap-2">
+        <div className="flex gap-1 sm:gap-2 flex-wrap">
           <Badge tooltipText="Category">
             <Iconify
               icon="solar:hashtag-square-linear"

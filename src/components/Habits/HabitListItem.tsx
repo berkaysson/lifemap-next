@@ -54,7 +54,7 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
           <IsCompleted isCompleted={habit.completed} isExpired={expired} />
         </div>
 
-        <div className="flex gap-1 sm:gap-2">
+        <div className="flex gap-1 sm:gap-2 flex-wrap">
           <Badge tooltipText="Category">
             <Iconify
               icon="solar:hashtag-square-linear"
