@@ -36,11 +36,13 @@ const SelectBox = ({ field, options, form, optionKey, formKey }) => {
               !field.value && ""
             )}
           >
-            {field.value
-              ? options.find((option) => option[optionKey] === field.value)
-                  ?.name
-              : "Select"}
-            <Search className="ml-2 h-4 w-4 shrink-0" />
+            <span className="truncate">
+              {field.value
+                ? options.find((option) => option[optionKey] === field.value)
+                    ?.name
+                : "Select"}
+            </span>
+            <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </FormControl>
       </PopoverTrigger>
@@ -59,10 +61,11 @@ const SelectBox = ({ field, options, form, optionKey, formKey }) => {
                     form.setValue(formKey, option[optionKey]);
                   }}
                 >
-                  {option.name}
+                  <span className="truncate">{option.name}</span>
+
                   <CheckIcon
                     className={cn(
-                      "ml-auto h-4 w-4",
+                      "ml-auto h-4 w-4 min-w-3",
                       option[optionKey] === field.value
                         ? "opacity-100"
                         : "opacity-0"
