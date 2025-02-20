@@ -3,7 +3,6 @@
 import { formatDateFriendly, getRemainingTime, isExpired } from "@/lib/time";
 import { useState } from "react";
 import { Button } from "../ui/Buttons/button";
-import HabitEditForm from "./HabitEditForm";
 import IsCompleted from "../ui/Shared/IsCompleted";
 import ColorCircle from "../ui/Shared/ColorCircle";
 import ButtonWithConfirmation from "../ui/Buttons/ButtonWithConfirmation";
@@ -108,7 +107,7 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
           <span className="text-sm">Best Streak: {habit.bestStreak} days</span>
         </div>
         <div className="flex justify-end space-x-2">
-          <HabitEditForm
+          {/* <HabitEditForm
             initialValues={habit}
             triggerButton={
               <Button variant={"outline"} size={"sm"}>
@@ -120,7 +119,7 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
                 Edit
               </Button>
             }
-          />
+          /> */}
           <ButtonWithConfirmation
             variant="destructive"
             size={"sm"}
