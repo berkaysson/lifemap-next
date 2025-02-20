@@ -3,10 +3,10 @@ import { JSX, useEffect, useState } from "react";
 import ModalDialog from "../ui/Modals/ModalDialog";
 import { Label } from "../ui/Forms/label";
 import { Input } from "../ui/Forms/input";
-import { parseDate } from "@/lib/time";
 import ProjectSelect from "../ui/Shared/ProjectSelect";
 import { useUpdateTask } from "@/queries/taskQueries";
 import { LoadingButton } from "../ui/Buttons/loading-button";
+import { DatePicker } from "../ui/Forms/date-picker-field";
 
 interface TaskEditFormProps {
   initialValues: Task;
@@ -36,7 +36,7 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
         setError(response.message);
       }
     } catch (error: any) {
-      setError( "An error occurred while updating the task.");
+      setError("An error occurred while updating the task.");
     } finally {
       setIsLoading(false);
     }
@@ -45,6 +45,16 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
   const handleFieldChange = (value: any, field: keyof Task) => {
     if (initialValues[field] === value) return;
     setNewTask({ ...newTask, [field]: value });
+  };
+
+  const handleStartDateChange = (date: Date | undefined) => {
+    if (initialValues.startDate === date) return;
+    setNewTask({ ...newTask, startDate: date });
+  };
+
+  const handleEndDateChange = (date: Date | undefined) => {
+    if (initialValues.endDate === date) return;
+    setNewTask({ ...newTask, endDate: date });
   };
 
   useEffect(() => {
@@ -94,21 +104,27 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
         />
 
         <Label>Start Date</Label>
-        <Input
-          type="date"
-          defaultValue={initialValues.startDate.toISOString().slice(0, 10)}
-          onChange={(e) =>
-            handleFieldChange(parseDate(e.target.value), "startDate")
+        <DatePicker
+          date={
+            newTask.startDate
+              ? new Date(newTask.startDate)
+              : initialValues.startDate
+              ? new Date(initialValues.startDate)
+              : undefined
           }
+          onSelect={handleStartDateChange}
         />
 
         <Label>Due Date</Label>
-        <Input
-          type="date"
-          defaultValue={initialValues.endDate.toISOString().slice(0, 10)}
-          onChange={(e) =>
-            handleFieldChange(parseDate(e.target.value), "endDate")
+        <DatePicker
+          date={
+            newTask.endDate
+              ? new Date(newTask.endDate)
+              : initialValues.endDate
+              ? new Date(initialValues.endDate)
+              : undefined
           }
+          onSelect={handleEndDateChange}
         />
 
         <Label>Project</Label>
