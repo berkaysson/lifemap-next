@@ -15,7 +15,6 @@ import {
 } from "../ui/Forms/form";
 import { Input } from "../ui/Forms/input";
 import { Button } from "../ui/Buttons/button";
-import SelectBox from "../ui/Shared/SelectBox";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Period } from "@prisma/client";
 import {
@@ -25,7 +24,6 @@ import {
   parseDate,
   removeOneDay,
 } from "@/lib/time";
-import { useFetchCategories } from "@/queries/categoryQueries";
 import { useCreateHabit } from "@/queries/habitQueries";
 import { LoadingButton } from "../ui/Buttons/loading-button";
 import { DatePicker } from "../ui/Forms/date-picker-field";
@@ -37,12 +35,12 @@ import {
   DialogTrigger,
 } from "../ui/Modals/dialog";
 import { Iconify } from "../ui/iconify";
+import CategorySelectCreate from "../Category/CategorySelectCreate";
 
 const HabitForm = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { mutateAsync: createHabit } = useCreateHabit();
-  const { data: categories } = useFetchCategories();
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
@@ -325,13 +323,7 @@ const HabitForm = () => {
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Select a Category</FormLabel>
-                    <SelectBox
-                      field={field}
-                      options={categories || []}
-                      form={form}
-                      optionKey={"id"}
-                      formKey={"categoryId"}
-                    />
+                    <CategorySelectCreate field={field} form={form} />
                     {form.formState.errors.categoryId && (
                       <FormMessage>
                         {form.formState.errors.categoryId.message}

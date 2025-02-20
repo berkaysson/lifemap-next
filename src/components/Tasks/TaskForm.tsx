@@ -15,8 +15,6 @@ import {
 } from "../ui/Forms/form";
 import { Input } from "../ui/Forms/input";
 import { Button } from "../ui/Buttons/button";
-import SelectBox from "../ui/Shared/SelectBox";
-import { useFetchCategories } from "@/queries/categoryQueries";
 import { useCreateTask } from "@/queries/taskQueries";
 import { LoadingButton } from "../ui/Buttons/loading-button";
 import {
@@ -28,12 +26,12 @@ import {
 } from "../ui/Modals/dialog";
 import { Iconify } from "../ui/iconify";
 import { DatePicker } from "../ui/Forms/date-picker-field";
+import CategorySelectCreate from "../Category/CategorySelectCreate";
 
 const TaskForm = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { mutateAsync: createTask } = useCreateTask();
-  const { data: categories } = useFetchCategories();
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
@@ -173,13 +171,7 @@ const TaskForm = () => {
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Select a Category</FormLabel>
-                    <SelectBox
-                      field={field}
-                      options={categories || []}
-                      form={form}
-                      optionKey={"id"}
-                      formKey={"categoryId"}
-                    />
+                    <CategorySelectCreate field={field} form={form} />
                     {form.formState.errors.categoryId && (
                       <FormMessage>
                         {form.formState.errors.categoryId.message}

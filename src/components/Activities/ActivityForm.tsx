@@ -15,8 +15,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ActivitySchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import SelectBox from "../ui/Shared/SelectBox";
-import { useFetchCategories } from "@/queries/categoryQueries";
 import { useCreateActivity } from "@/queries/activityQueries";
 import { Button } from "../ui/Buttons/button";
 import {
@@ -31,10 +29,10 @@ import {
 } from "../ui/drawer";
 import { DatePicker } from "../ui/Forms/date-picker-field";
 import { Iconify } from "../ui/iconify";
+import CategorySelectCreate from "../Category/CategorySelectCreate";
 
 const ActivityForm = () => {
   const { mutateAsync: createActivity } = useCreateActivity();
-  const { data: categories } = useFetchCategories();
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
@@ -129,13 +127,7 @@ const ActivityForm = () => {
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
                       <FormLabel>Select a Category</FormLabel>
-                      <SelectBox
-                        field={field}
-                        options={categories || []}
-                        form={form}
-                        optionKey="id"
-                        formKey="categoryId"
-                      />
+                      <CategorySelectCreate field={field} form={form} />
                       <FormMessage />
                     </FormItem>
                   )}
