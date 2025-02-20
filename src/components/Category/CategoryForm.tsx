@@ -97,6 +97,7 @@ const CategoryForm = () => {
                         {...field}
                         placeholder="Enter category name..."
                         type="text"
+                        maxLength={50}
                       />
                     </FormControl>
                     {form.formState.errors.name && (

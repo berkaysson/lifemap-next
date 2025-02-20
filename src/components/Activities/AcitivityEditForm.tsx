@@ -69,6 +69,7 @@ const ActivityEditForm = ({
             setNewDescription(e.target.value);
           }}
           min={""}
+          maxLength={70}
           placeholder="Describe the activity"
         />
 
@@ -80,6 +81,7 @@ const ActivityEditForm = ({
             setNewDuration(e.target.value === "" ? 0 : Number(e.target.value));
           }}
           min={1}
+          max={5000}
           placeholder="Your activity duration in minutes"
         />
 

@@ -64,6 +64,7 @@ const CategoryEditForm = ({
           }}
           min={1}
           placeholder="Learning to code"
+          maxLength={50}
         />
         {error && <p className="text-red-500">{error}</p>}
 

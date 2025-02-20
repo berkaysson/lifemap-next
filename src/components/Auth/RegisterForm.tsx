@@ -77,6 +77,7 @@ const RegisterForm = () => {
                         placeholder="john.doe@example.com"
                         type="email"
                         className="pl-10"
+                        max={255}
                       />
                     </div>
                   </FormControl>
@@ -107,6 +108,7 @@ const RegisterForm = () => {
                         placeholder="********"
                         type="password"
                         className="pl-10"
+                        max={255}
                       />
                     </div>
                   </FormControl>

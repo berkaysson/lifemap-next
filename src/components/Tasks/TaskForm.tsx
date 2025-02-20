@@ -104,6 +104,7 @@ const TaskForm = () => {
                         {...field}
                         placeholder="Doing something..."
                         type="text"
+                        maxLength={50}
                       />
                     </FormControl>
                     {form.formState.errors.name && (
@@ -128,6 +129,7 @@ const TaskForm = () => {
                         {...field}
                         placeholder="Doing something until next month..."
                         type="text"
+                        maxLength={70}
                       />
                     </FormControl>
                   </FormItem>
@@ -148,6 +150,7 @@ const TaskForm = () => {
                         value={field.value === 0 ? "" : field.value}
                         placeholder="Goal Duration in minutes"
                         type="number"
+                        max={15000}
                         onChange={(e) => {
                           const value = e.target.value;
                           field.onChange(value === "" ? 0 : Number(value));

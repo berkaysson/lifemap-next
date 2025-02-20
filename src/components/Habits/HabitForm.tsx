@@ -150,6 +150,7 @@ const HabitForm = () => {
                         {...field}
                         placeholder="Doing something..."
                         type="text"
+                        maxLength={50}
                       />
                     </FormControl>
                     {form.formState.errors.name && (
@@ -174,6 +175,7 @@ const HabitForm = () => {
                         {...field}
                         placeholder="Doing something each day for 21 days..."
                         type="text"
+                        maxLength={70}
                       />
                     </FormControl>
                   </FormItem>
@@ -257,6 +259,7 @@ const HabitForm = () => {
                         {...field}
                         value={field.value === 0 ? "" : field.value}
                         placeholder="10"
+                        max={91}
                         type="number"
                         onChange={(e) => {
                           const value = e.target.value;
@@ -299,6 +302,7 @@ const HabitForm = () => {
                         value={field.value === 0 ? "" : field.value}
                         placeholder="Goal Duration per Period in minutes"
                         type="number"
+                        max={5000}
                         onChange={(e) => {
                           const value = e.target.value;
                           field.onChange(value === "" ? 0 : Number(value));

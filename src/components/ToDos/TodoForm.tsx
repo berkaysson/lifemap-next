@@ -94,6 +94,7 @@ const TodoForm = () => {
                     <FormLabel>Name</FormLabel>
                     <FormControl>
                       <Input
+                        maxLength={50}
                         disabled={isPending}
                         {...field}
                         placeholder="Your todo"
@@ -118,6 +119,7 @@ const TodoForm = () => {
                       <Input
                         disabled={isPending}
                         {...field}
+                        maxLength={70}
                         placeholder="Describe your todo"
                         type="text"
                       />

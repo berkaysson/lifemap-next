@@ -57,6 +57,7 @@ const ProjectEditForm = ({
           defaultValue={initialValues.name}
           onChange={(e) => handleFieldChange(e.target.value, "name")}
           min={3}
+          maxLength={50}
           placeholder="My project..."
           disabled={updateProjectMutation.isPending}
         />
@@ -67,6 +68,7 @@ const ProjectEditForm = ({
           defaultValue={initialValues.description || ""}
           onChange={(e) => handleFieldChange(e.target.value, "description")}
           min={3}
+          maxLength={70}
           placeholder="My project is a great project..."
           disabled={updateProjectMutation.isPending}
         />

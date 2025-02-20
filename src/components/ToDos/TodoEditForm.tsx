@@ -73,6 +73,7 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
             setNewName(e.target.value);
           }}
           min={1}
+          maxLength={50}
           placeholder="Do laundry"
         />
         <Label>Description</Label>
@@ -83,6 +84,7 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
             setNewDescription(e.target.value);
           }}
           min={1}
+          maxLength={70}
           placeholder="Describe the ToDo"
         />
 

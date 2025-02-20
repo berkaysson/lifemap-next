@@ -67,6 +67,7 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
           defaultValue={initialValues.name}
           onChange={(e) => handleFieldChange(e.target.value, "name")}
           min={3}
+          maxLength={50}
           placeholder="Doing something"
         />
 
@@ -76,6 +77,7 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
           defaultValue={initialValues.description || ""}
           onChange={(e) => handleFieldChange(e.target.value, "description")}
           min={3}
+          maxLength={70}
           placeholder="Doing something until next month..."
         />
 
@@ -87,6 +89,7 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
             handleFieldChange(Number(e.target.value), "goalDuration")
           }
           min={1}
+          max={12000}
           placeholder="Goal Duration in minutes"
         />
 

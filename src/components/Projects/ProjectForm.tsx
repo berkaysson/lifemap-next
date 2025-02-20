@@ -86,6 +86,7 @@ const ProjectForm = () => {
                   <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
+                      maxLength={50}
                       disabled={createProjectMutation.isPending}
                       {...field}
                       placeholder="My project..."
@@ -104,6 +105,7 @@ const ProjectForm = () => {
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Input
+                      maxLength={70}
                       disabled={createProjectMutation.isPending}
                       {...field}
                       placeholder="My project to improve my skills..."

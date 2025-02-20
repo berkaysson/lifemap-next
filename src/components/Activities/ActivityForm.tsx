@@ -115,6 +115,7 @@ const ActivityForm = () => {
                             field.onChange(value === "" ? 0 : Number(value));
                           }}
                           type="number"
+                          max={5000}
                         />
                       </FormControl>
                       <FormMessage />
@@ -175,6 +176,7 @@ const ActivityForm = () => {
                           {...field}
                           placeholder="Describe the activity"
                           type="text"
+                          maxLength={70}
                         />
                       </FormControl>
                       <FormMessage />

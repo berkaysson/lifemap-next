@@ -69,6 +69,7 @@ const HabitEditForm = ({
           defaultValue={initialValues.name}
           onChange={(e) => handleFieldChange(e.target.value, "name")}
           min={3}
+          maxLength={50}
           placeholder="Doing something"
         />
 

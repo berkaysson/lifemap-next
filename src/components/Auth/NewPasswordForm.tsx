@@ -90,6 +90,7 @@ const NewPasswordForm = () => {
                         {...field}
                         placeholder="******"
                         type="password"
+                        max={255}
                       />
                     </div>
                   </FormControl>
