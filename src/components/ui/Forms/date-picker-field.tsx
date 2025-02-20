@@ -17,6 +17,14 @@ interface DatePickerProps {
 }
 
 export function DatePicker({ date, onSelect }: DatePickerProps) {
+  const handleSelect = (selectedDate: Date | undefined) => {
+    if (selectedDate?.getTime() === date?.getTime() || !selectedDate) {
+      onSelect(date);
+    } else {
+      onSelect(selectedDate);
+    }
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -35,7 +43,7 @@ export function DatePicker({ date, onSelect }: DatePickerProps) {
         <Calendar
           mode="single"
           selected={date}
-          onSelect={onSelect}
+          onSelect={handleSelect}
           initialFocus
         />
       </PopoverContent>
