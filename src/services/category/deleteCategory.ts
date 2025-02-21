@@ -17,7 +17,7 @@ export const deleteCategory = async (id: string) => {
 
   if (!canBeDeleted) {
     return {
-      message: "Category cannot be deleted, it is used",
+      message: "Activity Type cannot be deleted, it is used",
       success: false,
     };
   }
@@ -29,12 +29,12 @@ export const deleteCategory = async (id: string) => {
       },
     });
     return {
-      message: "Successfully deleted category",
+      message: "Successfully deleted Activity Type",
       success: true,
     };
   } catch (error) {
     return {
-      message: `Failed to delete category: ${error}`,
+      message: `Failed to delete Activity Type: ${error}`,
       success: false,
     };
   }

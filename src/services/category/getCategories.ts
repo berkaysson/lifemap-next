@@ -18,13 +18,13 @@ export const getCategories = async (userId: string) => {
       },
     });
     return {
-      message: "Successfully fetched categories",
+      message: "Successfully fetched Activity Types",
       success: true,
       categories,
     };
   } catch (error) {
     return {
-      message: `Failed to fetch categories: ${error}`,
+      message: `Failed to fetch Activity Types: ${error}`,
       success: false,
     };
   }

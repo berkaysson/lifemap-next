@@ -56,7 +56,7 @@ export const CategorySchema = z.object({
 export const ActivitySchema = z.object({
   description: z.string().optional(),
   duration: z.number().min(1, "Duration is required"),
-  categoryId: z.string().min(1, "Category is required"),
+  categoryId: z.string().min(1, "Activity Type is required"),
   date: z.string().date().min(1, "Date is required"),
 });
 
@@ -74,7 +74,7 @@ export const TaskSchema = z
       ),
     colorCode: z.string().optional(),
     goalDuration: z.number().min(1, "Goal duration is required"),
-    categoryId: z.string().min(1, "Category is required"),
+    categoryId: z.string().min(1, "Activity Type is required"),
   })
   .refine((data) => new Date(data.startDate) < new Date(data.endDate), {
     message: "Start date must be before end date",
@@ -102,7 +102,7 @@ export const HabitSchema = z.object({
     .int()
     .positive()
     .min(1, "Goal duration is required"),
-  categoryId: z.string().min(1, "Category is required"),
+  categoryId: z.string().min(1, "Activity Type is required"),
   projectId: z.string().optional(),
 });
 

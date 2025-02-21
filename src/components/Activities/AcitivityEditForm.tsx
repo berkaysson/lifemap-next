@@ -56,7 +56,7 @@ const ActivityEditForm = ({
     <ModalDialog
       triggerButton={triggerButton}
       title="Edit your acitivity"
-      description="If you want to edit category or date of activity you should create new activity."
+      description="If you want to edit Activity Type or date of activity you should create new activity."
       isOpen={isOpen}
       setIsOpen={setIsOpen}
     >

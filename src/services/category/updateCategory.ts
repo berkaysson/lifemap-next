@@ -21,7 +21,7 @@ export const updateCategory = async (data: Category) => {
 
   if (isCategoryExist) {
     return {
-      message: "Category already exists",
+      message: "Activity Type already exists",
       success: false,
     };
   }
@@ -34,12 +34,12 @@ export const updateCategory = async (data: Category) => {
       data: data,
     });
     return {
-      message: "Successfully updated category",
+      message: "Successfully updated Activity Type",
       success: true,
     };
   } catch (error) {
     return {
-      message: `Failed to update category: ${error}`,
+      message: `Failed to update Activity Type: ${error}`,
       success: false,
     };
   }

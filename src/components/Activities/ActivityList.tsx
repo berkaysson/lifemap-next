@@ -75,7 +75,7 @@ const ActivityList = () => {
           options={[
             { value: "date", label: "Date" },
             { value: "duration", label: "Duration" },
-            { value: "categoryId", label: "Category" },
+            { value: "categoryId", label: "Activity Type" },
           ]}
           onSelect={handleSort}
         />

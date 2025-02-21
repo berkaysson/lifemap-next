@@ -42,7 +42,7 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
       }
     } catch (error: any) {
       setError(
-         "An error occurred while updating the category."
+         "An error occurred while updating the Activity Type."
       );
     } finally {
       setIsLoading(false);

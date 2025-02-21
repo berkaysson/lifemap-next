@@ -36,28 +36,33 @@ export function FeaturesSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           <FeatureCard
             icon="solar:bolt-bold-duotone"
-            title="Activity Logging"
-            description="Log your activities, track duration, and gain insights for goal setting."
+            title="Activity Tracker"
+            description="Log time spent on various activities to analyze trends and improve productivity."
           />
           <FeatureCard
             icon="solar:checklist-minimalistic-bold-duotone"
-            title="To-Do Management"
-            description="Create and manage one-time actions or reminders with simple completion tracking."
+            title="Quick To-Dos"
+            description="Create simple to-dos for one-time actions and check them off when done."
           />
           <FeatureCard
             icon="solar:check-read-bold-duotone"
             title="Tasks"
-            description="Set specific objectives with deadlines and track progress through activity logging."
+            description="Set goals with deadlines and track progress automatically based on logged activity."
           />
           <FeatureCard
             icon="ph:plant-duotone"
-            title="Habits"
-            description="Foster positive habits with recurring activities and guided behavior changes."
+            title="Habit Builder"
+            description=" Establish and maintain positive habits with guided tracking and habit streaks based on logged activity.."
           />
           <FeatureCard
             icon="solar:folder-with-files-bold-duotone"
-            title="Project Management"
-            description="Organize related tasks and to-dos effectively with project-based structuring."
+            title="Project Organizer"
+            description="Organize related tasks, habits, and to-dos effectively with project-based structuring for better organization and goal-setting."
+          />
+          <FeatureCard
+            icon="solar:stars-line-duotone"
+            title="And More!"
+            description="We're constantly working on new features to enhance your productivity experience. Stay tuned!"
           />
         </div>
       </div>

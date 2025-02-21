@@ -40,7 +40,7 @@ export const createHabit = async (
 
   if (!isCategoryExist) {
     return {
-      message: "Category does not exist",
+      message: "Activity Type does not exist",
       success: false,
     };
   }

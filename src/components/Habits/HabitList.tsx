@@ -92,7 +92,7 @@ const HabitList = () => {
             { value: "goalDurationPerPeriod", label: "Goal Activity" },
             { value: "startDate", label: "Start Date" },
             { value: "endDate", label: "Due Date" },
-            { value: "category", label: "Category" },
+            { value: "category", label: "Activity Type" },
             { value: "period", label: "Period" },
             { value: "currentStreak", label: "Current Streak" },
             { value: "bestStreak", label: "Longest Streak" },

@@ -75,12 +75,12 @@ const CategoryForm = () => {
             width={32}
             className="mr-0 sm:mr-1"
           />
-          <span className="sm:inline hidden">Create Category</span>
+          <span className="sm:inline hidden">Create Activity Type</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create a Category</DialogTitle>
+          <DialogTitle>Create a Activity Type</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
@@ -95,7 +95,7 @@ const CategoryForm = () => {
                       <Input
                         disabled={isPending}
                         {...field}
-                        placeholder="Enter category name..."
+                        placeholder="Enter Activity Type name..."
                         type="text"
                         maxLength={50}
                       />

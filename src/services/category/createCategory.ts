@@ -25,7 +25,7 @@ export const createCategory = async (
 
   if (isCategoryExist) {
     return {
-      message: "Category already exists",
+      message: "Activity Type already exists",
       success: false,
     };
   }
@@ -42,12 +42,12 @@ export const createCategory = async (
     });
 
     return {
-      message: "Successfully created category",
+      message: "Successfully created Activity Type",
       success: true,
     };
   } catch (error) {
     return {
-      message: `Failed to create category: ${error}`,
+      message: `Failed to create Activity Type: ${error}`,
       success: false,
     };
   }

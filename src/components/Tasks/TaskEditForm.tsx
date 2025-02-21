@@ -66,7 +66,7 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
     <ModalDialog
       triggerButton={triggerButton}
       title="Edit task"
-      description="If you want to edit category of task you should create new task."
+      description="If you want to edit Activity Type of task you should create new task."
       isOpen={isOpen}
       setIsOpen={setIsOpen}
     >

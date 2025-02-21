@@ -46,8 +46,8 @@ export const useCreateCategory = () => {
     },
     onSuccess: () => {
       toast({
-        title: "Category Created",
-        description: "Category created successfully",
+        title: "Activity Type Created",
+        description: "Activity Type created successfully",
         duration: 3000,
       });
       queryClient.invalidateQueries({
@@ -56,9 +56,9 @@ export const useCreateCategory = () => {
     },
     onError: (error: any) => {
       toast({
-        title: "Category Not Created",
+        title: "Activity Type Not Created",
         description:
-           "An error occurred while creating the category.",
+           "An error occurred while creating the Activity Type.",
         duration: 3000,
         variant: "destructive",
       });
@@ -104,8 +104,8 @@ export const useUpdateCategory = () => {
     },
     onSuccess: () => {
       toast({
-        title: "Category Updated",
-        description: "Category updated successfully",
+        title: "Activity Type Updated",
+        description: "Activity Type updated successfully",
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: [CATEGORY_QUERY_KEY, userId] });
@@ -116,9 +116,9 @@ export const useUpdateCategory = () => {
         context?.previousCategories
       );
       toast({
-        title: "Category Not Updated",
+        title: "Activity Type Not Updated",
         description:
-           "An error occurred while updating the category.",
+           "An error occurred while updating the Activity Type.",
         duration: 3000,
         variant: "destructive",
       });
@@ -162,8 +162,8 @@ export const useDeleteCategory = () => {
     },
     onSuccess: () => {
       toast({
-        title: "Category Deleted",
-        description: "Category deleted successfully",
+        title: "Activity Type Deleted",
+        description: "Activity Type deleted successfully",
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: [CATEGORY_QUERY_KEY, userId] });
@@ -174,9 +174,9 @@ export const useDeleteCategory = () => {
         context?.previousCategories
       );
       toast({
-        title: "Category Not Deleted",
+        title: "Activity Type Not Deleted",
         description:
-           "An error occurred while deleting the category.",
+           "An error occurred while deleting the Activity Type.",
         duration: 3000,
         variant: "destructive",
       });

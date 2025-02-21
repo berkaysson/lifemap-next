@@ -20,11 +20,11 @@ const items = [
     count: 12,
   },
   {
-    title: "Categories",
+    title: "Activity Types",
     url: "/dashboard/category",
     icon: "solar:hashtag-square-bold",
     activeIcon: "solar:hashtag-square-bold-duotone",
-    description: "Organize your activities into categories",
+    description: "Organize your activities into Activity Types",
     count: 8,
   },
   {

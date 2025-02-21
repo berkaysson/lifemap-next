@@ -36,7 +36,7 @@ const CategoryEditForm = ({
       }
     } catch (error: any) {
       setError(
-         "An error occurred while updating the category."
+         "An error occurred while updating the activity type."
       );
     }
     setIsLoading(false);
@@ -50,7 +50,7 @@ const CategoryEditForm = ({
   return (
     <ModalDialog
       triggerButton={triggerButton}
-      title="Edit category"
+      title="Edit activity type"
       isOpen={isOpen}
       setIsOpen={setIsOpen}
     >

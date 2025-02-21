@@ -58,7 +58,7 @@ const HabitEditForm = ({
     <ModalDialog
       triggerButton={triggerButton}
       title="Edit habit"
-      description="If you want to edit category of habit you should create new habit."
+      description="If you want to edit Activity Type of habit you should create new habit."
       isOpen={isOpen}
       setIsOpen={setIsOpen}
     >

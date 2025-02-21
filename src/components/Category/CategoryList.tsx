@@ -53,9 +53,9 @@ const CategoryList = () => {
         onSelect={handleSort}
       />
 
-      {isError && <div>Error loading categories: {error.message}</div>}
+      {isError && <div>Error loading Activity Type: {error.message}</div>}
       {sortedCategories.length === 0 && !isLoading && (
-        <div className="opacity-80 mt-2">No categories found.</div>
+        <div className="opacity-80 mt-2">No Activity Type found.</div>
       )}
 
       <CategoryTable sortedCategories={sortedCategories} />

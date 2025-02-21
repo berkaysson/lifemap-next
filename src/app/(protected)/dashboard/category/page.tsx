@@ -8,7 +8,7 @@ const CategoryForm = lazy(() => import("@/components/Category/CategoryForm"));
 const CategoryPage = () => {
   return (
     <div>
-      <DashboardHeader title="Category" DialogComponent={<CategoryForm />} />
+      <DashboardHeader title="Activity Type" DialogComponent={<CategoryForm />} />
       <Suspense fallback={<Loading />}>
         <CategoryList />
       </Suspense>

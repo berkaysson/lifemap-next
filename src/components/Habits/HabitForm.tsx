@@ -322,7 +322,7 @@ const HabitForm = () => {
                 name="categoryId"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Select a Category</FormLabel>
+                    <FormLabel>Select a Activity Type</FormLabel>
                     <CategorySelectCreate field={field} form={form} />
                     {form.formState.errors.categoryId && (
                       <FormMessage>

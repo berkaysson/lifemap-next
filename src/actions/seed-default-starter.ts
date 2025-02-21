@@ -41,12 +41,12 @@ const seedDefaultCategories = async (userId: string) => {
     );
 
     return {
-      message: "Successfully seeded default categories",
+      message: "Successfully seeded default Activity Types",
       success: true,
     };
   } catch (error) {
     return {
-      message: `Failed to seed default categories: ${error}`,
+      message: `Failed to seed default Activity Types: ${error}`,
       success: false,
     };
   }
@@ -58,7 +58,7 @@ const seedDefaultTodos = async (userId: string) => {
       {
         name: "Set up your first habit",
         description:
-          "Create a daily, weekly, or monthly habit to track in any category.",
+          "Create a daily, weekly, or monthly habit to track in any Activity Type.",
       },
       {
         name: "Add a task with duration",
@@ -111,7 +111,7 @@ const seedDefaultTasks = async (userId: string) => {
 
     if (!bookCategory) {
       return {
-        message: "Default category not found",
+        message: "Default Activity Type not found",
         success: false,
       };
     }
@@ -158,7 +158,7 @@ const seedDefaultHabits = async (userId: string) => {
 
     if (!walkingCategory) {
       return {
-        message: "Default walking category not found",
+        message: "Default walking Activity Type not found",
         success: false,
       };
     }

@@ -43,7 +43,7 @@ const ArchivedTaskListItem = ({ task }) => {
             <div>
               Progress: {task.completedDuration}/{task.goalDuration}
             </div>
-            <div>Category: {task.categoryName}</div>
+            <div>Activity Type: {task.categoryName}</div>
           </div>
           {task.project && (
             <div className="text-sm">

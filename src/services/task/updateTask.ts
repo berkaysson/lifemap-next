@@ -26,7 +26,7 @@ export const updateTask = async (taskId: string, data: Partial<Task>) => {
 
   if (data.categoryId) {
     return {
-      message: "Category cannot be changed, create a new task",
+      message: "Activity Type cannot be changed, create a new task",
       success: false,
     };
   }

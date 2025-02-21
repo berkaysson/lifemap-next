@@ -140,6 +140,12 @@ const items = [
     activeIcon: "solar:bolt-bold-duotone",
   },
   {
+    title: "Activity Types",
+    url: "/dashboard/category",
+    icon: "solar:hashtag-square-bold",
+    activeIcon: "solar:hashtag-square-bold-duotone",
+  },
+  {
     title: "ToDos",
     url: "/dashboard/todo",
     icon: "solar:checklist-minimalistic-bold",
@@ -162,12 +168,6 @@ const items = [
     url: "/dashboard/project",
     icon: "solar:folder-with-files-bold",
     activeIcon: "solar:folder-with-files-bold-duotone",
-  },
-  {
-    title: "Categories",
-    url: "/dashboard/category",
-    icon: "solar:hashtag-square-bold",
-    activeIcon: "solar:hashtag-square-bold-duotone",
   },
 ];
 

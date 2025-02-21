@@ -37,7 +37,7 @@ const ArchivedHabitListItem = ({ habit }) => {
             <div>
               Progress: {habit.completedDuration}/{habit.goalDuration}
             </div>
-            <div>Category: {habit.categoryName}</div>
+            <div>Activity Type: {habit.categoryName}</div>
             <div>Period: {habit.period}</div>
             <div>Best Streak: {habit.bestStreak} days</div>
           </div>

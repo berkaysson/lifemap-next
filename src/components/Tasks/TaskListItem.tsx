@@ -50,7 +50,7 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
         </div>
 
         <div className="flex gap-1 sm:gap-2 flex-wrap">
-          <Badge tooltipText="Category">
+          <Badge tooltipText="Activity Type">
             <Iconify
               icon="solar:hashtag-square-linear"
               width={16}

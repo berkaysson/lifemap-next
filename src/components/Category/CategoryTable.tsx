@@ -47,7 +47,7 @@ const CategoryTable = ({
                 return (
                   <TableRow key={category.id}>
                     <TableCell>
-                      <Badge tooltipText="Category">
+                      <Badge tooltipText="Activity Type">
                         <Iconify
                           icon="solar:hashtag-square-linear"
                           width={14}

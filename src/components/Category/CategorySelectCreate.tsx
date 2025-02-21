@@ -42,7 +42,7 @@ const CategorySelectCreate = ({ field, form }) => {
     try {
       await createCategory({ name: newCategoryName });
     } catch (error) {
-      console.error("Failed to create category:", error);
+      console.error("Failed to create Activity Type:", error);
     }
     setIsLoading(false);
     setIsCreating(false);
@@ -95,7 +95,7 @@ const CategorySelectCreate = ({ field, form }) => {
                   <Input
                     value={newCategoryName}
                     onChange={(e) => setNewCategoryName(e.target.value)}
-                    placeholder="New category name"
+                    placeholder="New Activity Type name"
                     className="mb-2"
                     min={3}
                     max={30}
@@ -107,7 +107,7 @@ const CategorySelectCreate = ({ field, form }) => {
                     loadingText=""
                     size={"sm"}
                   >
-                    Create Category
+                    Create Activity Type
                   </LoadingButton>
                 </div>
               ) : (

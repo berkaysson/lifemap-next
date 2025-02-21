@@ -45,7 +45,7 @@ export const createTask = async (
     });
 
     if (!categoryWithActivities) {
-      return { message: "Category does not exist", success: false };
+      return { message: "Activity Type does not exist", success: false };
     }
 
     const completedDuration = categoryWithActivities.activities.reduce(

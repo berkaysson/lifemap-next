@@ -38,7 +38,7 @@ const ActivityTable = ({
             <TableHeader>
               <TableRow>
                 <TableHead>Duration</TableHead>
-                <TableHead>Category</TableHead>
+                <TableHead>Activity Type</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
@@ -63,7 +63,7 @@ const ActivityTable = ({
                       </span>
                     </TableCell>
                     <TableCell>
-                      <Badge tooltipText="Category">
+                      <Badge tooltipText="Activity Type">
                         <Iconify
                           icon="solar:hashtag-square-linear"
                           width={14}
