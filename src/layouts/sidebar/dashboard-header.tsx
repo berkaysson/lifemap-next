@@ -1,7 +1,8 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "../../layouts/sidebar/sidebar";
 import ThemeToggle from "@/components/ui/Buttons/theme-toggle";
-import { memo } from "react";
+import { memo, Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const DashboardHeader = ({
   title,
@@ -21,7 +22,11 @@ const DashboardHeader = ({
 
       {/* Right Section */}
       <div className="ml-auto flex items-center gap-2">
-        {DialogComponent && DialogComponent}
+        {DialogComponent && (
+          <Suspense fallback={<Skeleton className="h-9 w-9" />}>
+            {DialogComponent}
+          </Suspense>
+        )}
         <Separator orientation="vertical" className="h-6" />
         <ThemeToggle />
       </div>

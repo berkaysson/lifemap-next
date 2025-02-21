@@ -1,8 +1,9 @@
 import DashboardHeader from "@/layouts/sidebar/dashboard-header";
-import ProjectForm from "@/components/Projects/ProjectForm";
 import ProjectList from "@/components/Projects/ProjectList";
 import Loading from "./loading";
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
+
+const ProjectForm = lazy(() => import("@/components/Projects/ProjectForm"));
 
 const ProjectPage = () => {
   return (

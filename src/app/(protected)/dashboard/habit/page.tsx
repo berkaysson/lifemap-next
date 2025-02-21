@@ -1,8 +1,9 @@
 import DashboardHeader from "@/layouts/sidebar/dashboard-header";
-import HabitForm from "@/components/Habits/HabitForm";
 import HabitList from "@/components/Habits/HabitList";
 import Loading from "./loading";
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
+
+const HabitForm = lazy(() => import("@/components/Habits/HabitForm"));
 
 const HabitPage = () => {
   return (

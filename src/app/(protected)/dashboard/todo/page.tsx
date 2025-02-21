@@ -1,14 +1,14 @@
-import TodoForm from "@/components/ToDos/TodoForm";
-import TodoList from "@/components/ToDos/TodoList";
 import DashboardHeader from "@/layouts/sidebar/dashboard-header";
-import { Suspense } from "react";
+import TodoList from "@/components/ToDos/TodoList";
+import { Suspense, lazy } from "react";
 import Loading from "./loading";
+
+const TodoForm = lazy(() => import("@/components/ToDos/TodoForm"));
 
 const TodoPage = () => {
   return (
     <div>
       <DashboardHeader title="Todo" DialogComponent={<TodoForm />} />
-
       <Suspense fallback={<Loading />}>
         <TodoList />
       </Suspense>
