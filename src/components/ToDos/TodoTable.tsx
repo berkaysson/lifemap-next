@@ -96,21 +96,23 @@ const TodoTable = ({ sortedTodos }: { sortedTodos: any[] }) => {
                       </span>
                     </TableCell>
                     <TableCell>
-                      <Badge
-                        tooltipText="Project"
-                        variant="outline"
-                        style={{
-                          backgroundColor: Todo.colorCode || "darkblue",
-                        }}
-                        className="text-white whitespace-nowrap"
-                      >
-                        <Iconify
-                          icon="solar:folder-with-files-bold"
-                          width={14}
-                          className="mr-1"
-                        />
-                        {todoProject ? todoProject.name : "No Project"}
-                      </Badge>
+                      {todoProject && (
+                        <Badge
+                          tooltipText="Project"
+                          variant="outline"
+                          style={{
+                            backgroundColor: Todo.colorCode || "darkblue",
+                          }}
+                          className="text-white whitespace-nowrap"
+                        >
+                          <Iconify
+                            icon="solar:folder-with-files-bold"
+                            width={14}
+                            className="mr-1"
+                          />
+                          {todoProject.name}
+                        </Badge>
+                      )}
                     </TableCell>
                     <TableCell>
                       <div>

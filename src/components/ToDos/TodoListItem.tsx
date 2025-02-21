@@ -51,19 +51,21 @@ const TodoListItem = ({ todo }) => {
     <Card className="w-full max-w-md h-full">
       <div className="flex justify-between p-1 pb-0">
         <ColorCircle colorCode={todo.colorCode || "darkblue"} />
-        <Badge
-          variant="outline"
-          style={{ backgroundColor: todo.colorCode || "darkblue" }}
-          className="text-white"
-          tooltipText="Project"
-        >
-          <Iconify
-            icon="solar:folder-with-files-bold"
-            width={16}
-            className="mr-1"
-          />
-          {todoProject ? todoProject.name : "No Project"}
-        </Badge>
+        {todoProject && (
+          <Badge
+            variant="outline"
+            style={{ backgroundColor: todo.colorCode || "darkblue" }}
+            className="text-white"
+            tooltipText="Project"
+          >
+            <Iconify
+              icon="solar:folder-with-files-bold"
+              width={16}
+              className="mr-1"
+            />
+            {todoProject.name}
+          </Badge>
+        )}
       </div>
 
       <CardHeader className="p-3 pt-1">

@@ -41,9 +41,7 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
         setError(response.message);
       }
     } catch (error: any) {
-      setError(
-         "An error occurred while updating the Activity Type."
-      );
+      setError("An error occurred while updating the Activity Type.");
     } finally {
       setIsLoading(false);
     }
@@ -53,7 +51,7 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
     setNewName(initialValues.name);
     setNewDescription(initialValues.description);
     setError(null);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
   return (
@@ -89,7 +87,11 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
         />
 
         <Label>Project</Label>
-        <ProjectSelect defaultValue={projectId || ""} onSelect={setProjectId} />
+        <ProjectSelect
+          value={projectId || ""}
+          defaultValue={projectId || ""}
+          onSelect={setProjectId}
+        />
 
         {error && <p className="text-red-500">{error}</p>}
 

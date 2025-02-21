@@ -63,19 +63,21 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
             />
             {category?.name}
           </Badge>
-          <Badge
-            tooltipText="Project"
-            variant="outline"
-            style={{ backgroundColor: habit.colorCode || "darkblue" }}
-            className="text-white"
-          >
-            <Iconify
-              icon="solar:folder-with-files-bold"
-              width={16}
-              className="mr-1"
-            />
-            {habitProject ? habitProject.name : "No Project"}
-          </Badge>
+          {habitProject && (
+            <Badge
+              tooltipText="Project"
+              variant="outline"
+              style={{ backgroundColor: habit.colorCode || "darkblue" }}
+              className="text-white"
+            >
+              <Iconify
+                icon="solar:folder-with-files-bold"
+                width={16}
+                className="mr-1"
+              />
+              {habitProject.name}
+            </Badge>
+          )}
         </div>
       </div>
       <CardHeader className="pb-1">

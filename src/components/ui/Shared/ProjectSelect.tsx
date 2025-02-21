@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -9,28 +9,25 @@ import {
   SelectValue,
 } from "../select";
 import { useFetchProjects } from "@/queries/projectQueries";
+import { X } from "lucide-react";
+import { Button } from "../Buttons/button";
 
 interface ProjectSelectProps {
-  onSelect: (projectId: string) => void;
+  onSelect: (value: string | null) => void;
   defaultValue?: string;
+  value?: string;
 }
 
 const ProjectSelect: React.FC<ProjectSelectProps> = ({
   onSelect,
   defaultValue,
+  value,
 }) => {
   const { data: projects = [] } = useFetchProjects();
-  const [selectedProjectId, setSelectedProjectId] = useState("");
-
-  const handleProjectChange = (projectId: string) => {
-    setSelectedProjectId(projectId);
-    onSelect(projectId);
-  };
 
   useEffect(() => {
     if (defaultValue) {
-      setSelectedProjectId(defaultValue);
-      onSelect(defaultValue);
+      onSelect(defaultValue || null);
     }
   }, [defaultValue, onSelect]);
 
@@ -41,25 +38,44 @@ const ProjectSelect: React.FC<ProjectSelectProps> = ({
   return (
     <div className="flex flex-col gap-2">
       {projects.length > 0 ? (
-        <Select onValueChange={handleProjectChange}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder={selectedProjectName} />
-          </SelectTrigger>
-          <SelectContent className="bg-background brightness-110">
-            <SelectGroup>
-              <SelectLabel className="text-shade">Projects</SelectLabel>
-              {projects.map((project) => (
-                <SelectItem
-                  key={project.id}
-                  value={project.id}
-                  className="hover:bg-background hover:brightness-90"
-                >
-                  {project.name}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <div className="flex items-center gap-1">
+          <Select
+            value={value || ""}
+            onValueChange={(val) => onSelect(val || null)}
+            defaultValue={defaultValue}
+          >
+            <SelectTrigger className="w-[200px] relative">
+              <SelectValue placeholder={selectedProjectName} />
+            </SelectTrigger>
+            <SelectContent className="bg-background brightness-110">
+              <SelectGroup>
+                <SelectLabel className="text-shade">Projects</SelectLabel>
+                {projects.map((project) => (
+                  <SelectItem
+                    key={project.id}
+                    value={project.id}
+                    className="hover:bg-background hover:brightness-90"
+                  >
+                    {project.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          {value && (
+            <Button
+              variant="default"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelect(null);
+              }}
+              className="p-0 h-4 w-4 hover:w-5 hover:h-5"
+            >
+              <X className="h-3 w-3" />
+            </Button>
+          )}
+        </div>
       ) : (
         <p>No projects found</p>
       )}

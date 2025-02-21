@@ -58,19 +58,21 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
             />
             {category?.name}
           </Badge>
-          <Badge
-            tooltipText="Project"
-            variant="outline"
-            style={{ backgroundColor: task.colorCode || "darkblue" }}
-            className="text-white"
-          >
-            <Iconify
-              icon="solar:folder-with-files-bold"
-              width={16}
-              className="mr-1"
-            />
-            {taskProject ? taskProject.name : "No Project"}
-          </Badge>
+          {taskProject && (
+            <Badge
+              tooltipText="Project"
+              variant="outline"
+              style={{ backgroundColor: task.colorCode || "darkblue" }}
+              className="text-white"
+            >
+              <Iconify
+                icon="solar:folder-with-files-bold"
+                width={16}
+                className="mr-1"
+              />
+              {taskProject.name}
+            </Badge>
+          )}
         </div>
       </div>
       <CardHeader className="pb-1">

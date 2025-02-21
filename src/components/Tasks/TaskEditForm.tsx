@@ -18,6 +18,7 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [newTask, setNewTask] = useState<Partial<Task>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [projectId, setProjectId] = useState(initialValues.projectId);
 
   const { mutateAsync: updateTask } = useUpdateTask();
 
@@ -28,7 +29,7 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
     try {
       const response = await updateTask({
         id: initialValues.id,
-        data: newTask,
+        data: { ...newTask, projectId },
       });
       if (response.success) {
         setIsOpen(false);
@@ -129,8 +130,9 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
 
         <Label>Project</Label>
         <ProjectSelect
-          defaultValue={initialValues.projectId || ""}
-          onSelect={(projectId) => handleFieldChange(projectId, "projectId")}
+          defaultValue={projectId || ""}
+          value={projectId || ""}
+          onSelect={setProjectId}
         />
 
         {error && <p className="text-red-500">{error}</p>}
