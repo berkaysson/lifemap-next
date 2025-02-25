@@ -6,6 +6,7 @@ import React from "react";
 import { Tooltip } from "react-tooltip";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
 
 interface HabitLineHeatmapProps {
   period: "DAILY" | "WEEKLY" | "MONTHLY";
@@ -18,6 +19,8 @@ const HabitLineHeatmap = ({
   progresses,
   colorCode,
 }: HabitLineHeatmapProps) => {
+  const { theme } = useTheme();
+
   const getIntensityLevel = (
     completedDuration: number,
     goalDuration: number
@@ -89,12 +92,22 @@ const HabitLineHeatmap = ({
                   item.goalDuration
                 );
                 const isCompleted = item.completedDuration >= item.goalDuration;
+                const today = new Date();
+                const isCurrentPeriod =
+                  new Date(today.setHours(0, 0, 0, 0)) >=
+                    new Date(item.startDate.setHours(0, 0, 0, 0)) &&
+                  new Date(today.setHours(0, 0, 0, 0)) <=
+                    new Date(item.endDate.setHours(0, 0, 0, 0));
+
                 return (
                   <div
                     key={item.id}
                     style={{
                       backgroundColor: getBlockColor(level),
                       width: `${blockWidth}px`,
+                      border: isCurrentPeriod
+                        ? `1px solid ${theme === "dark" ? "#fff" : "#000"}`
+                        : "none",
                     }}
                     className="h-24 rounded-sm cursor-pointer transition-colors duration-200 relative"
                     title={`${item.startDate.toLocaleDateString()}: ${

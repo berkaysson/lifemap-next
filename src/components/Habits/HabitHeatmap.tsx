@@ -101,8 +101,15 @@ const HabitHeatmap = ({ habitProgresses, colorCode }: HabitHeatmapProps) => {
               const colors = getColorScale(colorCode);
               let color = colors[0];
 
+              const today = new Date();
+              const cellDate = new Date(data.date);
+              const isToday =
+                today.getFullYear() === cellDate.getFullYear() &&
+                today.getMonth() === cellDate.getMonth() &&
+                today.getDate() === cellDate.getDate();
+
               if (customData.goalDuration === 0) {
-                color = colors.zeroGoal; // Change color if goalDuration is 0
+                color = colors.zeroGoal;
               } else if (ratio > 0.75) {
                 color = colors[1];
               } else if (ratio > 0.5) {
@@ -123,6 +130,10 @@ const HabitHeatmap = ({ habitProgresses, colorCode }: HabitHeatmapProps) => {
                       data.date
                     )}
       Completed: ${customData.completedDuration}/${customData.goalDuration}`}
+                    stroke={
+                      isToday ? (theme === "dark" ? "white" : "black") : "none"
+                    }
+                    strokeWidth={isToday ? 1 : 0}
                   />
                   {ratio >= 1 && (
                     <text
