@@ -106,7 +106,7 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
         </div>
         <div className="flex items-center space-x-2 text-shade mb-3">
           <Iconify icon="solar:fire-bold" width={20} className="mr-2" />
-          <span className="text-sm">Best Streak: {habit.bestStreak} days</span>
+          <span className="text-sm">Best Streak: {habit.bestStreak}</span>
         </div>
         <div className="flex justify-end space-x-2">
           {/* <HabitEditForm
@@ -151,7 +151,7 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
                 }
               >
                 <ChevronsUpDown className="h-4 w-4 mr-2" />
-                Habit Progresses
+                Habit Steps
               </Button>
             </AccordionTrigger>
             <AccordionContent>
