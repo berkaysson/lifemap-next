@@ -103,13 +103,13 @@ const HabitLineHeatmap = ({
                   <div
                     key={item.id}
                     style={{
-                      backgroundColor: getBlockColor(level),
                       width: `${blockWidth}px`,
                       border: isCurrentPeriod
                         ? `1px solid ${theme === "dark" ? "#fff" : "#000"}`
                         : "none",
+                      backgroundColor: getBlockColor(level),
                     }}
-                    className="h-24 rounded-sm cursor-pointer transition-colors duration-200 relative"
+                    className="h-24 rounded-sm cursor-pointer transition-colors duration-200 relative active:!bg-secondary"
                     title={`${item.startDate.toLocaleDateString()}: ${
                       item.completedDuration
                     }/${item.goalDuration} completed`}

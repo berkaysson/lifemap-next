@@ -63,7 +63,7 @@ const HabitHeatmap = ({ habitProgresses, colorCode }: HabitHeatmapProps) => {
         className="w-full whitespace-nowrap rounded-md border"
       >
         <div
-          className="flex whitespace-nowrap"
+          className="flex whitespace-nowrap [&_svg.w-heatmap_rect:active]:!fill-secondary"
           style={{
             width: heatmapWidth + "px",
           }}
@@ -96,7 +96,6 @@ const HabitHeatmap = ({ habitProgresses, colorCode }: HabitHeatmapProps) => {
                 goalDuration: 0,
                 count: 0,
               };
-
               const ratio = customData.count || 0;
               const colors = getColorScale(colorCode);
               let color = colors[0];
