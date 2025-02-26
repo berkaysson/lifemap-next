@@ -4,18 +4,15 @@ import HabitLineHeatmap from "./HabitLineHeatmap";
 
 const HabitProgressesList = ({
   habitProgresses,
-  categoryName,
   period,
   colorCode,
 }: {
   habitProgresses: HabitProgress[];
-  categoryName: string;
   period: Period;
   colorCode: string;
 }) => {
   return (
-    <div className="space-y-2 p-2">
-      <h2 className="font-bold">{categoryName}</h2>
+    <div className="space-y-2 p-1">
       {period === "DAILY" ? (
         <HabitHeatmap habitProgresses={habitProgresses} colorCode={colorCode} />
       ) : (
