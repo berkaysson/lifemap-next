@@ -70,3 +70,12 @@ export const formatDateFriendly = (date: Date | string): string => {
 
   return format(parsedDate, `MMMM '${dayWithSuffix},' yyyy`, { locale: enUS });
 };
+
+export function isToday(date: Date): boolean {
+  const today = new Date();
+  return (
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
+  );
+}

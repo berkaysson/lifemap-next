@@ -9,6 +9,9 @@ import {
 } from "@/components/ui/card";
 import DashboardHeader from "@/layouts/sidebar/dashboard-header";
 import { Button } from "@/components/ui/Buttons/button";
+import RecentTodos from "@/components/Dashboard/RecentTodos";
+import RecentTasks from "@/components/Dashboard/RecentTasks";
+import RecentHabits from "@/components/Dashboard/RecentHabits";
 
 const items = [
   {
@@ -75,19 +78,22 @@ const DashboardPage = () => {
           {/* <p className="text-sm sm:text-base mb-2">
             You have 3 tasks due today and 2 habits to maintain.
           </p> */}
-          <Button variant="secondary" className="mt-2 w-full sm:w-auto">
+          {/* <Button variant="secondary" className="mt-2 w-full sm:w-auto">
             View Summary
-          </Button>
+          </Button> */}
         </div>
 
         {/* Quick Actions */}
-        <div className="mb-6 sm:mb-8">
+        {/* <div className="mb-6 sm:mb-8">
           <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">
             Quick Actions
           </h3>
           <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0">
-            <Button variant="outline" className="w-full sm:w-auto">
-              <Icon icon="solar:add-circle-bold" className="mr-2" /> New Task
+            <Button variant="outline" className="w-full sm:w-auto" asChild>
+              <Link href="/dashboard/project">
+                <Icon icon="solar:add-circle-bold" className="mr-2" /> New
+                Project
+              </Link>
             </Button>
             <Button variant="outline" className="w-full sm:w-auto">
               <Icon icon="solar:calendar-add-bold" className="mr-2" /> Schedule
@@ -97,7 +103,7 @@ const DashboardPage = () => {
               <Icon icon="solar:chart-bold" className="mr-2" /> View Progress
             </Button>
           </div>
-        </div>
+        </div> */}
 
         {/* Main Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -135,6 +141,17 @@ const DashboardPage = () => {
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        <div className="mt-3 sm:mt-6 flex flex-col gap-6">
+          {/* Recent Habits */}
+          <RecentHabits />
+
+          {/* Recent Tasks */}
+          <RecentTasks />
+
+          {/* Recent Todos */}
+          <RecentTodos />
         </div>
       </div>
     </div>

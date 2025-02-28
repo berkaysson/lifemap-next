@@ -11,11 +11,11 @@ const buttonVariants = cva(
       variant: {
         default: "bg-primary text-back hover:brightness-90",
         destructive: "bg-error text-back dark:text-fore hover:brightness-90",
-        outline: "border border-input bg-back brightness-95 hover:brightness-90",
-        secondary:
-          "bg-secondary text-fore hover:bg-secondary/80",
+        outline:
+          "border border-input bg-back brightness-95 hover:brightness-90",
+        secondary: "bg-secondary text-fore hover:bg-secondary/80",
         ghost: "hover:bg-back hover:brightness-90",
-        link: "text-primary underline-offset-4 hover:underline",
+        link: "text-primary underline-offset-4 hover:no-underline underline",
       },
       size: {
         default: "h-10 px-4 py-2",
