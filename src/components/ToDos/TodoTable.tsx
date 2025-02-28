@@ -39,6 +39,7 @@ const TodoTable = ({ sortedTodos }: { sortedTodos: any[] }) => {
   const handleComplete = async (todo) => {
     const updatedTodo = { ...todo, completed: !todo.completed };
     await updateTodoMutation.mutateAsync(updatedTodo);
+    if (updatedTodo.completed) await archiveTodo(todo.id);
   };
 
   const handleArchive = async (todo) => {

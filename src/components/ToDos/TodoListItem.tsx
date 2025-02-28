@@ -41,6 +41,7 @@ const TodoListItem = ({ todo }) => {
   const handleComplete = async () => {
     const updatedTodo = { ...todo, completed: !todo.completed };
     await updateTodoMutation.mutateAsync(updatedTodo);
+    if (updatedTodo.completed) await archiveTodo(todo.id);
   };
 
   const handleArchive = async () => {

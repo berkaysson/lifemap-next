@@ -19,6 +19,7 @@ import { Button } from "../ui/Buttons/button";
 import { Badge } from "../ui/badge";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Loading from "@/app/(protected)/dashboard/todo/loading";
+import ArchiveTodoTable from "./ArchivedTodoTable";
 
 const TodoList = () => {
   const [isArcihivedOpen, setIsArcihivedOpen] = useState(false);
@@ -149,16 +150,18 @@ const TodoList = () => {
                     Error loading archived todos: {errorArchived.message}
                   </div>
                 )}
-                <ul className="rounded-sm grid grid-cols-1 gap-4 mt-2 sm:grid-cols-2 md:grid-cols-3">
-                  {sortedArchivedTodos.map((todo) => (
-                    <ArchivedTodoListItem key={todo.id} todo={todo} />
-                  ))}
-                </ul>
+                {viewMode === "grid" ? (
+                  <ul className="rounded-sm grid grid-cols-1 gap-4 mt-2 sm:grid-cols-2 md:grid-cols-3">
+                    {sortedArchivedTodos.map((todo) => (
+                      <ArchivedTodoListItem key={todo.id} todo={todo} />
+                    ))}
+                  </ul>
+                ) : (
+                  <ArchiveTodoTable sortedTodos={sortedArchivedTodos} />
+                )}
               </>
             ) : (
-              <p className="text-sm text-shade">
-                No archived todos found.
-              </p>
+              <p className="text-sm text-shade">No archived todos found.</p>
             )}
           </CollapsibleContent>
         </Collapsible>
