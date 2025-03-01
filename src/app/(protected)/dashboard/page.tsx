@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/Buttons/button";
 import RecentTodos from "@/components/Dashboard/RecentTodos";
 import RecentTasks from "@/components/Dashboard/RecentTasks";
 import RecentHabits from "@/components/Dashboard/RecentHabits";
+import DailyItemsCarousel from "@/components/Dashboard/DailyItemsCaraousel";
 
 const items = [
   {
@@ -104,6 +105,10 @@ const DashboardPage = () => {
             </Button>
           </div>
         </div> */}
+
+        <div className="mb-6 sm:mb-8">
+          <DailyItemsCarousel />
+        </div>
 
         {/* Main Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">

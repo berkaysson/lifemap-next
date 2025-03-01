@@ -18,7 +18,7 @@ const RecentTodoItem = ({ todo }) => {
   };
 
   return (
-    <div className="flex items-center gap-4 p-2 border rounded-lg">
+    <div className="flex items-center gap-2 sm:gap-4 p-1 sm:p-2 border rounded-lg">
       <ColorCircle colorCode={todo.colorCode || "darkblue"} />
 
       <LoadingButton
@@ -32,7 +32,9 @@ const RecentTodoItem = ({ todo }) => {
         <IsCompleted isCompleted={todo.completed} isExpired={expired} />
       </LoadingButton>
 
-      <span className="text-sm font-medium truncate">{todo.name}</span>
+      <span className="text-sm font-medium truncate max-w-[100px]">
+        {todo.name}
+      </span>
     </div>
   );
 };
