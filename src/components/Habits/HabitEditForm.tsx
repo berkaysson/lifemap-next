@@ -63,7 +63,7 @@ const HabitEditForm = ({
       setIsOpen={setIsOpen}
     >
       <div className="flex flex-col gap-2">
-        {/* <Label>Name</Label>
+        <Label>Name</Label>
         <Input
           type="text"
           defaultValue={initialValues.name}
@@ -71,7 +71,7 @@ const HabitEditForm = ({
           min={3}
           maxLength={50}
           placeholder="Doing something"
-        /> */}
+        />
 
         <Label>Project</Label>
         <ProjectSelect

@@ -32,7 +32,7 @@ const ProjectSelect: React.FC<ProjectSelectProps> = ({
   }, [defaultValue, onSelect]);
 
   const selectedProjectName =
-    projects.find((project) => project.id === defaultValue)?.name ||
+    projects.find((project) => project.id === value)?.name ||
     "Select a Project";
 
   return (

@@ -17,6 +17,8 @@ import {
 import { Card, CardContent, CardDescription, CardHeader } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Iconify } from "../ui/iconify";
+import HabitProjectEdit from "./HabitProjectEdit";
+import { Button } from "../ui/Buttons/button";
 
 const HabitListItem = ({
   habit,
@@ -127,6 +129,19 @@ const HabitListItem = ({
                 </Button>
               }
             /> */}
+            <HabitProjectEdit
+              habit={habit}
+              triggerButton={
+                <Button size={"sm"} variant={"outline"}>
+                  <Iconify
+                    icon="solar:folder-open-bold"
+                    width={16}
+                    className="mr-1"
+                  />
+                  Project
+                </Button>
+              }
+            />
             <ButtonWithConfirmation
               variant="destructive"
               size={"sm"}
