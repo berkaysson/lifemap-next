@@ -9,7 +9,12 @@ import { validateSession } from "@/lib/session";
 import { getHabits } from "@/services/habit/getHabits";
 import { createHabit } from "@/services/habit/createHabit";
 import { deleteHabit } from "@/services/habit/deleteHabit";
-import { archiveHabit, deleteArchivedHabit, getArchivedHabits } from "@/services/habit/archiveHabits";
+import {
+  archiveHabit,
+  deleteArchivedHabit,
+  getArchivedHabits,
+} from "@/services/habit/archiveHabits";
+import { getHabitProgressesEndingToday } from "@/services/habit/getHabitProgressesEndingToday";
 
 export const HABIT_QUERY_KEY = "habits";
 
@@ -59,8 +64,7 @@ export const useCreateHabit = () => {
     onError: (error: any) => {
       toast({
         title: "Habit Not Created",
-        description:
-           "An error occurred while creating the habit.",
+        description: "An error occurred while creating the habit.",
         duration: 3000,
         variant: "destructive",
       });
@@ -119,8 +123,7 @@ export const useUpdateHabit = () => {
       );
       toast({
         title: "Habit Not Updated",
-        description:
-           "An error occurred while updating the habit.",
+        description: "An error occurred while updating the habit.",
         duration: 3000,
         variant: "destructive",
       });
@@ -175,8 +178,7 @@ export const useDeleteHabit = () => {
       );
       toast({
         title: "Habit Not Deleted",
-        description:
-           "An error occurred while deleting the habit.",
+        description: "An error occurred while deleting the habit.",
         duration: 3000,
         variant: "destructive",
       });
@@ -232,8 +234,7 @@ export const useArchiveHabit = () => {
       );
       toast({
         title: "Habit Not Archived",
-        description:
-           "An error occurred while archiving the habit.",
+        description: "An error occurred while archiving the habit.",
         duration: 3000,
         variant: "destructive",
       });
@@ -284,12 +285,28 @@ export const useDeleteArchivedHabit = () => {
     onError: (error: any) => {
       toast({
         title: "Archived Habit Not Deleted",
-        description:
-          
-          "An error occurred while deleting the archived habit.",
+        description: "An error occurred while deleting the archived habit.",
         duration: 3000,
         variant: "destructive",
       });
     },
+  });
+};
+
+// 8. Fetch Habit Progresses Ending Today Query
+export const useFetchHabitProgressesEndingToday = () => {
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+
+  return useQuery({
+    queryKey: ["habitProgressesEndingToday", userId],
+    queryFn: async () => {
+      validateSession(session);
+      const response = await getHabitProgressesEndingToday(userId!);
+      if (!response.success) throw new Error(response.message);
+      return response.progresses;
+    },
+    enabled: !!userId,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 };

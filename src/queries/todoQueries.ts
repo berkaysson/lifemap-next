@@ -108,6 +108,7 @@ export const useUpdateTodo = () => {
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: [TODO_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: ["combinedDailyItems", userId] });
     },
     onError: (error: any, _, context) => {
       queryClient.setQueryData(

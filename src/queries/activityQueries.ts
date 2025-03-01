@@ -57,12 +57,15 @@ export const useCreateActivity = () => {
       queryClient.invalidateQueries({ queryKey: [ACTIVITY_QUERY_KEY, userId] });
       queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEY, userId] });
       queryClient.invalidateQueries({ queryKey: [HABIT_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({
+        queryKey: ["habitProgressesEndingToday", userId],
+      });
+      queryClient.invalidateQueries({ queryKey: ["combinedDailyItems", userId] });
     },
     onError: (error: any) => {
       toast({
         title: "Activity Not Created",
-        description:
-          "An error occurred while creating the activity.",
+        description: "An error occurred while creating the activity.",
         duration: 3000,
         variant: "destructive",
       });
@@ -125,8 +128,7 @@ export const useUpdateActivity = () => {
       );
       toast({
         title: "Activity Not Updated",
-        description:
-           "An error occurred while updating the activity.",
+        description: "An error occurred while updating the activity.",
         duration: 3000,
         variant: "destructive",
       });
@@ -185,8 +187,7 @@ export const useDeleteActivity = () => {
       );
       toast({
         title: "Activity Not Deleted",
-        description:
-           "An error occurred while deleting the activity.",
+        description: "An error occurred while deleting the activity.",
         duration: 3000,
         variant: "destructive",
       });
