@@ -20,7 +20,13 @@ import { Badge } from "../ui/badge";
 import { Iconify } from "../ui/iconify";
 import { Progress } from "../ui/progress";
 
-const TaskListItem = ({ task }: { task: ExtendedTask }) => {
+const TaskListItem = ({
+  task,
+  mode = "normal",
+}: {
+  task: ExtendedTask;
+  mode?: "normal" | "light";
+}) => {
   const { mutateAsync: deleteTask } = useDeleteTask();
   const { mutateAsync: archiveTask } = useArchiveTask();
   const { data: projects = [] } = useFetchProjects();
@@ -109,35 +115,37 @@ const TaskListItem = ({ task }: { task: ExtendedTask }) => {
           <Progress value={progressPercentage} className="w-full" />
         </div>
       </CardContent>
-      <CardFooter className="flex justify-end space-x-2">
-        <TaskEditForm
-          initialValues={task}
-          triggerButton={
-            <Button variant="outline" size="sm">
-              <Iconify
-                icon="solar:pen-new-square-bold-duotone"
-                width={16}
-                className="mr-1"
-              />
-              Edit
-            </Button>
-          }
-        />
-        <ButtonWithConfirmation
-          variant="destructive"
-          size="sm"
-          buttonText=""
-          icon="solar:trash-bin-trash-bold"
-          onConfirm={handleDelete}
-        />
-        <ButtonWithConfirmation
-          variant="destructive"
-          size="sm"
-          buttonText=""
-          icon="solar:archive-bold"
-          onConfirm={handleArchive}
-        />
-      </CardFooter>
+      {mode === "normal" && (
+        <CardFooter className="flex justify-end space-x-2">
+          <TaskEditForm
+            initialValues={task}
+            triggerButton={
+              <Button variant="outline" size="sm">
+                <Iconify
+                  icon="solar:pen-new-square-bold-duotone"
+                  width={16}
+                  className="mr-1"
+                />
+                Edit
+              </Button>
+            }
+          />
+          <ButtonWithConfirmation
+            variant="destructive"
+            size="sm"
+            buttonText=""
+            icon="solar:trash-bin-trash-bold"
+            onConfirm={handleDelete}
+          />
+          <ButtonWithConfirmation
+            variant="destructive"
+            size="sm"
+            buttonText=""
+            icon="solar:archive-bold"
+            onConfirm={handleArchive}
+          />
+        </CardFooter>
+      )}
     </Card>
   );
 };

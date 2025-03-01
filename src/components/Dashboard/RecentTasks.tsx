@@ -31,7 +31,7 @@ const RecentTasks = () => {
             </Button>
           </div>
           <div className="flex flex-col gap-2">
-            <TaskListItem key={recentTask.id} task={recentTask} />
+            <TaskListItem key={recentTask.id} task={recentTask} mode="light" />
           </div>
         </>
       )}

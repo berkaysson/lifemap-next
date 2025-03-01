@@ -18,7 +18,13 @@ import { Card, CardContent, CardDescription, CardHeader } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Iconify } from "../ui/iconify";
 
-const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
+const HabitListItem = ({
+  habit,
+  mode = "normal",
+}: {
+  habit: ExtendedHabit;
+  mode?: "normal" | "light";
+}) => {
   const { mutateAsync: deleteHabit } = useDeleteHabit();
   const { mutateAsync: archiveHabit } = useArchiveHabit();
   const { data: projects = [] } = useFetchProjects();
@@ -78,7 +84,10 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
         <h3 className="text-lg font-semibold">{habit.name}</h3>
       </CardHeader>
       <CardContent className="p-2 sm:p-3">
-        <CardDescription>{habit.description}</CardDescription>
+        {mode === "normal" && (
+          <CardDescription>{habit.description}</CardDescription>
+        )}
+
         <div className="flex justify-between flex-col sm:flex-row gap-1 sm:gap-4 mb-1 mt-1">
           <div className="flex items-center space-x-2 text-shade">
             <Iconify
@@ -102,43 +111,49 @@ const HabitListItem = ({ habit }: { habit: ExtendedHabit }) => {
           <Iconify icon="solar:fire-bold" width={20} className="mr-2" />
           <span className="text-sm">Best Streak: {habit.bestStreak}</span>
         </div>
-        <div className="flex justify-end space-x-2">
-          {/* <HabitEditForm
-            initialValues={habit}
-            triggerButton={
-              <Button variant={"outline"} size={"sm"}>
-                <Iconify
-                  icon="solar:pen-new-square-bold-duotone"
-                  width={16}
-                  className="mr-1"
-                />
-                Edit
-              </Button>
-            }
-          /> */}
-          <ButtonWithConfirmation
-            variant="destructive"
-            size={"sm"}
-            buttonText={""}
-            icon="solar:trash-bin-trash-bold"
-            onConfirm={handleDelete}
-          />
-          <ButtonWithConfirmation
-            variant="destructive"
-            size={"sm"}
-            buttonText={""}
-            icon="solar:archive-bold"
-            onConfirm={handleArchive}
-          />
-        </div>
+
+        {mode === "normal" && (
+          <div className="flex justify-end space-x-2">
+            {/* <HabitEditForm
+              initialValues={habit}
+              triggerButton={
+                <Button variant={"outline"} size={"sm"}>
+                  <Iconify
+                    icon="solar:pen-new-square-bold-duotone"
+                    width={16}
+                    className="mr-1"
+                  />
+                  Edit
+                </Button>
+              }
+            /> */}
+            <ButtonWithConfirmation
+              variant="destructive"
+              size={"sm"}
+              buttonText={""}
+              icon="solar:trash-bin-trash-bold"
+              onConfirm={handleDelete}
+            />
+            <ButtonWithConfirmation
+              variant="destructive"
+              size={"sm"}
+              buttonText={""}
+              icon="solar:archive-bold"
+              onConfirm={handleArchive}
+            />
+          </div>
+        )}
       </CardContent>
 
       <div className="px-2 sm:px-3 pb-1">
-        <Accordion type="single" collapsible className="w-full" defaultValue={habit.id}>
+        <Accordion
+          type="single"
+          collapsible
+          className="w-full"
+          defaultValue={habit.id}
+        >
           <AccordionItem value={habit.id}>
-            <AccordionTrigger
-              className="hover:opacity-80 hover:no-underline transition-colors underline"
-            >
+            <AccordionTrigger className="hover:opacity-80 hover:no-underline transition-colors underline">
               Habit Steps
             </AccordionTrigger>
             <AccordionContent>

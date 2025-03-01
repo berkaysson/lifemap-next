@@ -5,16 +5,18 @@ import ColorCircle from "../ui/Shared/ColorCircle";
 import { Badge } from "../ui/badge";
 import { Iconify } from "../ui/iconify";
 import { LoadingButton } from "../ui/Buttons/loading-button";
-import { useUpdateTodo } from "@/queries/todoQueries";
+import { useArchiveTodo, useUpdateTodo } from "@/queries/todoQueries";
 import { isExpired } from "@/lib/time";
 
 const RecentTodoItem = ({ todo }) => {
   const updateTodoMutation = useUpdateTodo();
+  const { mutateAsync: archiveTodo } = useArchiveTodo();
   const expired = isExpired(todo.endDate);
 
   const handleComplete = async () => {
     const updatedTodo = { ...todo, completed: !todo.completed };
     await updateTodoMutation.mutateAsync(updatedTodo);
+    if (updatedTodo.completed) await archiveTodo(todo.id);
   };
 
   return (

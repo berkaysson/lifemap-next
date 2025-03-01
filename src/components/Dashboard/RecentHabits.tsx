@@ -31,7 +31,7 @@ const RecentHabits = () => {
             </Button>
           </div>
           <div className="flex flex-col gap-2">
-            <HabitListItem key={recentHabit.id} habit={recentHabit} />
+            <HabitListItem key={recentHabit.id} habit={recentHabit} mode="light" />
           </div>
         </>
       )}
