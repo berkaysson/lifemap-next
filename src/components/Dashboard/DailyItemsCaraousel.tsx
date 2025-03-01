@@ -45,7 +45,7 @@ export default function DailyItemsCarousel() {
     });
   };
 
-  if (allItems.length === 0 && isLoading) {
+  if (allItems.length === 0 || isLoading) {
     return (
       <div className="text-center p-3 text-sm text-shade">
         No daily items found!
