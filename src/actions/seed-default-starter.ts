@@ -26,7 +26,7 @@ export const seedDefaultStarter = async (userId: string) => {
 const seedDefaultCategories = async (userId: string) => {
   try {
     const defaultCategories = ["Finishing the Book", "Walking Morning"];
-    const date = parseDate(new Date().toISOString());
+    const date = parseDate(new Date().toISOString().split('T')[0] + 'T00:00:00.000Z');
 
     await Promise.all(
       defaultCategories.map((name) =>
@@ -72,7 +72,7 @@ const seedDefaultTodos = async (userId: string) => {
       },
     ];
 
-    const startDate = parseDate(new Date().toISOString());
+    const startDate = parseDate(new Date().toISOString().split('T')[0] + 'T00:00:00.000Z');
 
     await Promise.all(
       defaultTodos.map((todo) =>
@@ -117,8 +117,10 @@ const seedDefaultTasks = async (userId: string) => {
     }
 
     const startDate = new Date();
+    startDate.setHours(0, 0, 0, 0);
     const endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + 30);
+    endDate.setHours(0, 0, 0, 0);
 
     await prisma.task.create({
       data: {
@@ -163,7 +165,7 @@ const seedDefaultHabits = async (userId: string) => {
       };
     }
 
-    const startDate = new Date().toISOString();
+    const startDate = new Date().toISOString().split('T')[0] + 'T00:00:00.000Z';
 
     const newHabit = {
       name: "Morning Walk",
