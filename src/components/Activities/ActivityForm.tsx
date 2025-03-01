@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { LoadingButton } from "../ui/Buttons/loading-button";
 import {
   Form,
@@ -30,15 +30,29 @@ import {
 import { DatePicker } from "../ui/Forms/date-picker-field";
 import { Iconify } from "../ui/iconify";
 import CategorySelectCreate from "../Category/CategorySelectCreate";
+import { useActivityDrawerState } from "@/hooks/use-activity-drawer-state";
 
-const ActivityForm = () => {
+// Default values type
+type ActivityFormValues = z.infer<typeof ActivitySchema>;
+
+// Props to allow external control
+interface ActivityFormProps {
+  drawerState?: ReturnType<typeof useActivityDrawerState>;
+  trigger?: React.ReactNode;
+}
+
+const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
   const { mutateAsync: createActivity } = useCreateActivity();
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
 
-  const form = useForm<z.infer<typeof ActivitySchema>>({
+  // Use provided drawerState or create a local one
+  const localDrawerState = useActivityDrawerState();
+  const { isOpen, open, close, formValues } =
+    drawerState || localDrawerState;
+
+  const form = useForm<ActivityFormValues>({
     resolver: zodResolver(ActivitySchema),
     defaultValues: {
       description: "",
@@ -50,7 +64,23 @@ const ActivityForm = () => {
 
   const { reset } = form;
 
-  const onSubmit = (data: z.infer<typeof ActivitySchema>) => {
+  // Reset form when drawer opens with new values
+  useEffect(() => {
+    if (isOpen && formValues) {
+      // Merge default values with any provided values
+      const newValues = {
+        description: formValues.description || "",
+        duration: formValues.duration || 0,
+        categoryId: formValues.categoryId || "",
+        date: formValues.date || new Date().toISOString().split("T")[0],
+      };
+
+      // Reset the form with new values
+      reset(newValues);
+    }
+  }, [isOpen, formValues, reset]);
+
+  const onSubmit = (data: ActivityFormValues) => {
     startTransition(async () => {
       try {
         const response = await createActivity(data);
@@ -59,6 +89,7 @@ const ActivityForm = () => {
           if (response.success) {
             setIsError(false);
             reset();
+            close();
           } else {
             setIsError(true);
           }
@@ -70,20 +101,33 @@ const ActivityForm = () => {
     });
   };
 
+  const handleOpenChange = (newIsOpen: boolean) => {
+    if (newIsOpen) {
+      setMessage("");
+      setIsError(false);
+      open();
+    } else {
+      close();
+    }
+  };
+
+  const defaultTrigger = (
+    <Button
+      onClick={() => {
+        setMessage("");
+        setIsError(false);
+        open();
+      }}
+      className="fixed bottom-4 right-4"
+    >
+      <Iconify icon="solar:bolt-circle-outline" width={32} />
+      <span className="hidden sm:inline">Create Activity</span>
+    </Button>
+  );
+
   return (
-    <Drawer open={isOpen} onOpenChange={setIsOpen}>
-      <DrawerTrigger asChild>
-        <Button
-          onClick={() => {
-            setMessage("");
-            setIsError(false);
-          }}
-          className="fixed bottom-4 right-4"
-        >
-          <Iconify icon="solar:bolt-circle-outline" width={32} />
-          <span className="hidden sm:inline">Create Activity</span>
-        </Button>
-      </DrawerTrigger>
+    <Drawer open={isOpen} onOpenChange={handleOpenChange}>
+      <DrawerTrigger asChild>{trigger || defaultTrigger}</DrawerTrigger>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
