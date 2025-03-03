@@ -24,7 +24,7 @@ const HabitListItem = ({
   habit,
   mode = "normal",
 }: {
-  habit: ExtendedHabit;
+  habit: ExtendedHabit | any;
   mode?: "normal" | "light";
 }) => {
   const { mutateAsync: deleteHabit } = useDeleteHabit();
@@ -109,10 +109,12 @@ const HabitListItem = ({
             </span>
           </div>
         </div>
-        <div className="flex items-center space-x-2 text-shade mb-3">
-          <Iconify icon="solar:fire-bold" width={20} className="mr-2" />
-          <span className="text-sm">Best Streak: {habit.bestStreak}</span>
-        </div>
+        {mode === "normal" && (
+          <div className="flex items-center space-x-2 text-shade mb-3">
+            <Iconify icon="solar:fire-bold" width={20} className="mr-2" />
+            <span className="text-sm">Best Streak: {habit.bestStreak}</span>
+          </div>
+        )}
 
         {mode === "normal" && (
           <div className="flex justify-end space-x-2">

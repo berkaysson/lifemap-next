@@ -110,7 +110,7 @@
     /* THEME PALETTE */
     --color-primary: #714DD9;
     --color-secondary: #abc4ff;
-    --color-back: #edf4f8;
+    --color-back: #e2edf3;
     --color-fore: #11213A;
     --color-success: #80c423;
     --color-warning: #f7b801;
@@ -133,6 +133,6 @@
     --color-primary: #714DD9;
     --color-secondary: #8caefd;
     --color-back: #11213A;
-    --color-fore: #edf4f8;
+    --color-fore: #e2edf3;
   }
 }
