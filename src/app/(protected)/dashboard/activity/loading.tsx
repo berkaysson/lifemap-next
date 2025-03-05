@@ -21,8 +21,8 @@ export default function Loading() {
   return (
     <div className="flex flex-col gap-2 m-2">
       <div className="flex sm:flex-row justify-between flex-col-reverse gap-2 mb-2">
-        <Skeleton className="h-10 w-40" />
-        <Skeleton className="h-10 w-20" />
+        <Skeleton className="h-10 w-full sm:w-40" />
+        <Skeleton className="h-10 w-full sm:w-20" />
       </div>
 
       {/* Table View Skeleton */}
@@ -30,16 +30,16 @@ export default function Loading() {
         <TableHeader>
           <TableRow>
             <TableHead>
-              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-4 w-full sm:w-20" />
             </TableHead>
             <TableHead>
-              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-4 w-full sm:w-20" />
             </TableHead>
             <TableHead>
-              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-4 w-full sm:w-20" />
             </TableHead>
             <TableHead>
-              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-4 w-full sm:w-20" />
             </TableHead>
           </TableRow>
         </TableHeader>
