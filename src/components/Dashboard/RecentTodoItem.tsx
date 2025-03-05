@@ -32,7 +32,7 @@ const RecentTodoItem = ({ todo }) => {
         <IsCompleted isCompleted={todo.completed} isExpired={expired} />
       </LoadingButton>
 
-      <span className="text-sm font-medium truncate max-w-[100px] sm:max-w-[400px]">
+      <span className="text-sm font-medium truncate max-w-[180px] min-[550px]:max-w-[400px] min-[860px]:max-w-[600px] min-[1000px]:max-w-[800px]">
         {todo.name}
       </span>
     </div>
