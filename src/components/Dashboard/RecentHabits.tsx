@@ -31,11 +31,13 @@ const RecentHabits = () => {
             </Button>
           </div>
 
-          <HabitListItem
-            key={recentHabit.id}
-            habit={recentHabit}
-            mode="light"
-          />
+          <div className="grid grid-cols-1">
+            <HabitListItem
+              key={recentHabit.id}
+              habit={recentHabit}
+              mode="light"
+            />
+          </div>
         </>
       )}
     </div>
