@@ -21,7 +21,7 @@ const RecentTasks = () => {
   const recentTask = sortedTasks[0];
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 px-2 sm:px-4">
       {recentTask && (
         <>
           <div className="flex items-center justify-between">

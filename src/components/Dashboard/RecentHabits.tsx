@@ -21,7 +21,7 @@ const RecentHabits = () => {
   const recentHabit = sortedHabits[0];
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 px-2 sm:px-4">
       {recentHabit && (
         <>
           <div className="flex items-center justify-between">

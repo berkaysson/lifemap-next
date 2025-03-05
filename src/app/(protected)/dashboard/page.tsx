@@ -13,6 +13,7 @@ import RecentTodos from "@/components/Dashboard/RecentTodos";
 import RecentTasks from "@/components/Dashboard/RecentTasks";
 import RecentHabits from "@/components/Dashboard/RecentHabits";
 import DailyItemsCarousel from "@/components/Dashboard/DailyItemsCaraousel";
+import QuickActions from "@/components/Dashboard/QuickActions";
 
 const items = [
   {
@@ -85,26 +86,7 @@ const DashboardPage = () => {
         </div>
 
         {/* Quick Actions */}
-        {/* <div className="mb-6 sm:mb-8">
-          <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">
-            Quick Actions
-          </h3>
-          <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0">
-            <Button variant="outline" className="w-full sm:w-auto" asChild>
-              <Link href="/dashboard/project">
-                <Icon icon="solar:add-circle-bold" className="mr-2" /> New
-                Project
-              </Link>
-            </Button>
-            <Button variant="outline" className="w-full sm:w-auto">
-              <Icon icon="solar:calendar-add-bold" className="mr-2" /> Schedule
-              Activity
-            </Button>
-            <Button variant="outline" className="w-full sm:w-auto">
-              <Icon icon="solar:chart-bold" className="mr-2" /> View Progress
-            </Button>
-          </div>
-        </div> */}
+        <QuickActions />
 
         <div className="mb-6 sm:mb-8">
           <DailyItemsCarousel />

@@ -27,7 +27,7 @@ import { Button } from "../ui/Buttons/button";
 import { Iconify } from "../ui/iconify";
 import { DatePicker } from "../ui/Forms/date-picker-field";
 
-const TodoForm = () => {
+const TodoForm = ({ useArea = "entity" }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { mutateAsync: createTodo } = useCreateTodo();
@@ -61,7 +61,7 @@ const TodoForm = () => {
           }
         }
       } catch (error: any) {
-        setMessage( "An error occurred");
+        setMessage("An error occurred");
         setIsError(true);
       }
     });
@@ -70,14 +70,25 @@ const TodoForm = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="sm">
-          <Iconify
-            icon="solar:add-square-linear"
-            width={32}
-            className="mr-0 sm:mr-1"
-          />
-          <span className="sm:inline hidden">Create Todo</span>
-        </Button>
+        {useArea === "entity" ? (
+          <Button variant="ghost" size="sm">
+            <Iconify
+              icon="solar:add-square-linear"
+              width={32}
+              className="mr-0 sm:mr-1"
+            />
+            <span className="sm:inline hidden">Create Todo</span>
+          </Button>
+        ) : (
+          <Button variant="outline" size="sm">
+            <Iconify
+              icon="solar:checklist-minimalistic-linear"
+              width={24}
+              className="mr-0 sm:mr-1"
+            />
+            <span>Create Todo</span>
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

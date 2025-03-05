@@ -37,7 +37,7 @@ import {
 import { Iconify } from "../ui/iconify";
 import CategorySelectCreate from "../Category/CategorySelectCreate";
 
-const HabitForm = () => {
+const HabitForm = ({ useArea = "entity" }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { mutateAsync: createHabit } = useCreateHabit();
@@ -120,14 +120,21 @@ const HabitForm = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="sm">
-          <Iconify
-            icon="solar:add-square-linear"
-            width={32}
-            className="mr-0 sm:mr-1"
-          />
-          <span className="sm:inline hidden">Create Habit</span>
-        </Button>
+        {useArea === "entity" ? (
+          <Button variant="ghost" size="sm">
+            <Iconify
+              icon="solar:add-square-linear"
+              width={32}
+              className="mr-0 sm:mr-1"
+            />
+            <span className="sm:inline hidden">Create Habit</span>
+          </Button>
+        ) : (
+          <Button variant="outline" size="sm">
+            <Iconify icon="ph:plant" width={24} className="mr-0 sm:mr-1" />
+            <span>Create Habit</span>
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>

@@ -21,7 +21,7 @@ const RecentTodos = () => {
   const recentTodos = sortedTodos.slice(0, 5);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 px-2 sm:px-4">
       {recentTodos.length > 0 && (
         <>
           <div className="flex items-center justify-between">

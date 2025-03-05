@@ -28,7 +28,7 @@ import { Iconify } from "../ui/iconify";
 import { DatePicker } from "../ui/Forms/date-picker-field";
 import CategorySelectCreate from "../Category/CategorySelectCreate";
 
-const TaskForm = () => {
+const TaskForm = ({ useArea = "entity" }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { mutateAsync: createTask } = useCreateTask();
@@ -74,14 +74,25 @@ const TaskForm = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="sm">
-          <Iconify
-            icon="solar:add-square-linear"
-            width={32}
-            className="mr-0 sm:mr-1"
-          />
-          <span className="sm:inline hidden">Create Task</span>
-        </Button>
+        {useArea === "entity" ? (
+          <Button variant="ghost" size="sm">
+            <Iconify
+              icon="solar:add-square-linear"
+              width={32}
+              className="mr-0 sm:mr-1"
+            />
+            <span className="sm:inline hidden">Create Task</span>
+          </Button>
+        ) : (
+          <Button variant="outline" size="sm">
+            <Iconify
+              icon="solar:check-read-linear"
+              width={24}
+              className="mr-0 sm:mr-1"
+            />
+            <span>Create Task</span>
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
