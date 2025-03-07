@@ -37,7 +37,7 @@ export function HomeHeader() {
           </span>
         </Link>
         <div className="hidden md:flex space-x-6 items-center text-back dark:text-fore">
-          {pathname === "/" && <NavLink href="/about">About Us</NavLink>}
+          {pathname === "/" && <NavLink href="/about-us">About Us</NavLink>}
           <NavLink href="/auth/login">Sign In</NavLink>
           <ThemeToggle />
         </div>
