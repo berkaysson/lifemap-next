@@ -38,7 +38,7 @@ const HabitList = () => {
   );
 
   useEffect(() => {
-    if (habits && habits.length > 0) {
+    if (habits) {
       const sorted = sortArrayOfObjectsByKey<ExtendedHabit>(
         habits,
         "name",
@@ -49,7 +49,7 @@ const HabitList = () => {
   }, [habits]);
 
   useEffect(() => {
-    if (archivedHabits && archivedHabits.length > 0) {
+    if (archivedHabits) {
       const sorted = sortArrayOfObjectsByKey(archivedHabits, "name", "desc");
       setSortedArchivedHabits(sorted);
     }

@@ -36,7 +36,7 @@ const TaskList = () => {
   );
 
   useEffect(() => {
-    if (tasks && tasks.length > 0) {
+    if (tasks) {
       const sorted = sortArrayOfObjectsByKey<ExtendedTask>(
         tasks,
         "name",
@@ -47,7 +47,7 @@ const TaskList = () => {
   }, [tasks]);
 
   useEffect(() => {
-    if (archivedTasks && archivedTasks.length > 0) {
+    if (archivedTasks) {
       const sorted = sortArrayOfObjectsByKey(archivedTasks, "name", "desc");
       setSortedArchivedTasks(sorted);
     }

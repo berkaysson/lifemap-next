@@ -15,7 +15,7 @@ const CategoryList = () => {
   );
 
   useEffect(() => {
-    if (categories && categories.length > 0) {
+    if (categories) {
       const sorted = sortArrayOfObjectsByKey<Category>(
         categories,
         "date",
