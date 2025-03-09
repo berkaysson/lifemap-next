@@ -1,7 +1,7 @@
 "use client";
 
 import { useFetchDailyItems } from "@/hooks/use-fetch-daily-items";
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Button } from "../ui/Buttons/button";
 import { Iconify } from "../ui/iconify";
 import RecentTodoItem from "./RecentTodoItem";
@@ -15,20 +15,36 @@ export default function DailyItemsCarousel() {
 
   const activityDrawerState = useActivityDrawerState();
 
-  const allItems = [
-    ...todos.map((todo) => ({ type: "todo", item: todo })),
-    ...tasks
-      .map((task) => ({ type: "activity", item: task }))
-      .filter((item) => !item.item.completed),
-    ...habitProgresses
-      .map((progress) => ({
-        type: "activity",
-        item: progress,
-      }))
-      .filter((item) => !item.item.completed),
-  ];
+  const allItems = useMemo(
+    () => [
+      ...todos.map((todo) => ({ type: "todo", item: todo })),
+      ...tasks
+        .map((task) => ({ type: "activity", item: task }))
+        .filter((item) => !item.item.completed),
+      ...habitProgresses
+        .map((progress) => ({
+          type: "activity",
+          item: progress,
+        }))
+        .filter((item) => !item.item.completed),
+    ],
+    [todos, tasks, habitProgresses]
+  );
 
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const newItemsCount = todos.length + tasks.length + habitProgresses.length;
+    if (newItemsCount !== allItems.length) {
+      setCurrentIndex(0);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [todos, tasks, habitProgresses]);
+
+  const currentItem = useMemo(
+    () => allItems[currentIndex],
+    [allItems, currentIndex]
+  );
 
   const handlePrevious = () => {
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : allItems.length - 1));
@@ -47,13 +63,11 @@ export default function DailyItemsCarousel() {
 
   if (allItems.length === 0 || isLoading) {
     return (
-      <div className="text-center p-3 text-sm text-shade">
+      <div className="text-center p-2 text-sm text-shade">
         No daily items found!
       </div>
     );
   }
-
-  const currentItem = allItems[currentIndex];
 
   return (
     <div className="w-full px-2 sm:px-4">
@@ -66,7 +80,8 @@ export default function DailyItemsCarousel() {
       </div>
       <div className="mb-2 sm:mb-4">
         <span className="text-sm text-muted-foreground">
-          You have {allItems.length} todos, tasks, or habit steps to complete
+          You have {allItems.length} item{allItems.length > 1 && "s"} to
+          complete
         </span>
       </div>
       <div className="relative flex items-center justify-between flex-col sm:flex-row gap-3 sm:gap-0">
@@ -88,7 +103,7 @@ export default function DailyItemsCarousel() {
                 <div className="absolute inset-0 bg-background/80 backdrop-blur-sm rounded-lg transform translate-y-0.5 translate-x-0.5 shadow-md"></div>
               </>
             )}
-            {currentItem.type === "todo" && (
+            {currentItem && currentItem.type === "todo" && (
               <Card className="shadow-lg relative z-10">
                 <CardContent className="p-2 sm:p-4 py-2">
                   <RecentTodoItem
@@ -98,7 +113,7 @@ export default function DailyItemsCarousel() {
                 </CardContent>
               </Card>
             )}
-            {currentItem.type === "activity" && (
+            {currentItem && currentItem.type === "activity" && (
               <ActivityCard
                 activity={currentItem.item}
                 onComplete={handleCompleteActivity}
