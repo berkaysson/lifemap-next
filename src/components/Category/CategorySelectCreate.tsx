@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CheckIcon, PlusCircle, Search } from "lucide-react";
+import { CheckIcon, Search } from "lucide-react";
 import { Button } from "../ui/Buttons/button";
 import {
   Command,
@@ -97,8 +97,8 @@ const CategorySelectCreate = ({ field, form }) => {
                     onChange={(e) => setNewCategoryName(e.target.value)}
                     placeholder="New Activity Type name"
                     className="mb-2"
-                    min={3}
-                    max={30}
+                    minLength={3}
+                    maxLength={30}
                   />
                   <LoadingButton
                     onClick={handleCreateCategory}
@@ -106,9 +106,15 @@ const CategorySelectCreate = ({ field, form }) => {
                     isLoading={isLoading}
                     loadingText=""
                     size={"sm"}
+                    disabled={newCategoryName.length < 3}
                   >
                     Create Activity Type
                   </LoadingButton>
+                  {newCategoryName.length < 3 && (
+                    <p className="text-xs text-red-500 mt-1">
+                      Minimum 3 characters required
+                    </p>
+                  )}
                 </div>
               ) : (
                 <Button
@@ -120,7 +126,11 @@ const CategorySelectCreate = ({ field, form }) => {
                   variant="link"
                   size={"sm"}
                 >
-                  <Iconify icon="solar:add-square-bold" className="mr-1" width={20} />
+                  <Iconify
+                    icon="solar:add-square-bold"
+                    className="mr-1"
+                    width={20}
+                  />
                   Create &quot;{searchTerm}&quot;
                 </Button>
               )}
