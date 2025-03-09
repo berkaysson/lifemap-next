@@ -34,12 +34,8 @@ export default function DailyItemsCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    const newItemsCount = todos.length + tasks.length + habitProgresses.length;
-    if (newItemsCount !== allItems.length) {
-      setCurrentIndex(0);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [todos, tasks, habitProgresses]);
+    setCurrentIndex(0);
+  }, [allItems.length]);
 
   const currentItem = useMemo(
     () => allItems[currentIndex],
