@@ -108,6 +108,9 @@ const HabitLineHeatmap = ({
                         ? `1px solid ${theme === "dark" ? "#fff" : "#000"}`
                         : "none",
                       backgroundColor: getBlockColor(level),
+                      boxShadow: isCompleted
+                        ? `0 0 8px ${colorCode || "#56585c"}`
+                        : "none",
                     }}
                     className="h-24 rounded-sm cursor-pointer transition-colors duration-200 relative active:!bg-secondary"
                     title={`${item.startDate.toLocaleDateString()}: ${
@@ -122,7 +125,7 @@ const HabitLineHeatmap = ({
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className={cn(
-                          "text-white",
+                          "text-gray-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
                           period === "MONTHLY" ? "w-8 h-8" : "w-6 h-6"
                         )}
                         fill="none"

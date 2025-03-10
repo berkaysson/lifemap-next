@@ -133,6 +133,12 @@ const HabitHeatmap = ({ habitProgresses, colorCode }: HabitHeatmapProps) => {
                       isToday ? (theme === "dark" ? "white" : "black") : "none"
                     }
                     strokeWidth={isToday ? 1 : 0}
+                    style={{
+                      filter:
+                        ratio >= 1
+                          ? `drop-shadow(0 0 4px ${colorCode})`
+                          : undefined,
+                    }}
                   />
                   {ratio >= 1 && (
                     <text
@@ -141,7 +147,8 @@ const HabitHeatmap = ({ habitProgresses, colorCode }: HabitHeatmapProps) => {
                       textAnchor="middle"
                       dominantBaseline="middle"
                       fontSize="16"
-                      fill="white"
+                      fill="gray"
+                      pointerEvents="none"
                     >
                       ✓
                     </text>
