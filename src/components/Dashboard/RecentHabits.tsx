@@ -50,7 +50,8 @@ const RecentHabits = () => {
               habit={currentHabit}
               mode="light"
             />
-            <div className="flex justify-between mt-1">
+
+            <div className="flex justify-between">
               <Button
                 size={"icon"}
                 className="h-8 w-8"
