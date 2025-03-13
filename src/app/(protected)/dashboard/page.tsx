@@ -36,8 +36,6 @@ const DashboardPage = () => {
           <DailyItemsCarousel />
         </div>
 
-        <Separator />
-
         <div className="my-6 sm:my-8 flex flex-col gap-6">
           {/* Recent Habits */}
           <RecentHabits />

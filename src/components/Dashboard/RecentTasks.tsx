@@ -32,48 +32,50 @@ const RecentTasks = () => {
   const currentTask = sortedTasks[currentIndex];
 
   return (
-    <div className="space-y-2 px-2 sm:px-4">
+    <>
       {currentTask && (
-        <>
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Recent Task</h2>
-            <Button asChild size="sm" variant="link" className="w-auto">
-              <Link href={"/dashboard/task"}>All Tasks</Link>
-            </Button>
-          </div>
-          <div className="flex flex-col gap-2">
-            <TaskListItem
-              key={currentTask.id}
-              task={currentTask}
-              mode="light"
-            />
-            <div className="flex justify-between">
-              <Button
-                size={"icon"}
-                className="h-8 w-8"
-                onClick={handlePrev}
-                variant="outline"
-              >
-                <Iconify icon="solar:alt-arrow-left-bold" width={16} />
-                <span className="sr-only">Previous</span>
-              </Button>
-              <span className="text-sm text-muted-foreground">
-                {currentIndex + 1} of {sortedTasks.length} task
-              </span>
-              <Button
-                size={"icon"}
-                onClick={handleNext}
-                variant="outline"
-                className="h-8 w-8"
-              >
-                <Iconify icon="solar:alt-arrow-right-bold" width={16} />
-                <span className="sr-only">Next</span>
+        <div className="space-y-2 px-2 sm:px-4">
+          <>
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold">Recent Task</h2>
+              <Button asChild size="sm" variant="link" className="w-auto">
+                <Link href={"/dashboard/task"}>All Tasks</Link>
               </Button>
             </div>
-          </div>
-        </>
+            <div className="flex flex-col gap-2">
+              <TaskListItem
+                key={currentTask.id}
+                task={currentTask}
+                mode="light"
+              />
+              <div className="flex justify-between">
+                <Button
+                  size={"icon"}
+                  className="h-8 w-8"
+                  onClick={handlePrev}
+                  variant="outline"
+                >
+                  <Iconify icon="solar:alt-arrow-left-bold" width={16} />
+                  <span className="sr-only">Previous</span>
+                </Button>
+                <span className="text-sm text-muted-foreground">
+                  {currentIndex + 1} of {sortedTasks.length} task
+                </span>
+                <Button
+                  size={"icon"}
+                  onClick={handleNext}
+                  variant="outline"
+                  className="h-8 w-8"
+                >
+                  <Iconify icon="solar:alt-arrow-right-bold" width={16} />
+                  <span className="sr-only">Next</span>
+                </Button>
+              </div>
+            </div>
+          </>
+        </div>
       )}
-    </div>
+    </>
   );
 };
 

@@ -63,6 +63,7 @@ const TodoForm = ({ useArea = "entity" }) => {
       } catch (error: any) {
         setMessage("An error occurred");
         setIsError(true);
+        console.log(error)
       }
     });
   };

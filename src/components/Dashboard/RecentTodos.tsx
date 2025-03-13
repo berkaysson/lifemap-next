@@ -21,23 +21,25 @@ const RecentTodos = () => {
   const recentTodos = sortedTodos;
 
   return (
-    <div className="space-y-4 px-2 sm:px-4">
+    <>
       {recentTodos.length > 0 && (
-        <>
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Recent Todos</h2>
-            <Button asChild size="sm" variant="link" className="w-auto">
-              <Link href={"/dashboard/todo"}>All Todos</Link>
-            </Button>
-          </div>
-          <div className="flex flex-col flex-wrap gap-2">
-            {recentTodos.map((todo) => (
-              <RecentTodoItem key={todo.id} todo={todo} />
-            ))}
-          </div>
-        </>
+        <div className="space-y-4 px-2 sm:px-4">
+          <>
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold">Recent Todos</h2>
+              <Button asChild size="sm" variant="link" className="w-auto">
+                <Link href={"/dashboard/todo"}>All Todos</Link>
+              </Button>
+            </div>
+            <div className="flex flex-col flex-wrap gap-2">
+              {recentTodos.map((todo) => (
+                <RecentTodoItem key={todo.id} todo={todo} />
+              ))}
+            </div>
+          </>
+        </div>
       )}
-    </div>
+    </>
   );
 };
 
