@@ -14,6 +14,7 @@ import RecentTasks from "@/components/Dashboard/RecentTasks";
 import RecentHabits from "@/components/Dashboard/RecentHabits";
 import DailyItemsCarousel from "@/components/Dashboard/DailyItemsCaraousel";
 import QuickActions from "@/components/Dashboard/QuickActions";
+import { Separator } from "@/components/ui/separator";
 
 const items = [
   {
@@ -134,8 +135,12 @@ const DashboardPage = () => {
           {/* Recent Habits */}
           <RecentHabits />
 
+          <Separator />
+
           {/* Recent Tasks */}
           <RecentTasks />
+
+          <Separator />
 
           {/* Recent Todos */}
           <RecentTodos />

@@ -18,7 +18,7 @@ const RecentTodos = () => {
     return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
   });
 
-  const recentTodos = sortedTodos.slice(0, 5);
+  const recentTodos = sortedTodos;
 
   return (
     <div className="space-y-4 px-2 sm:px-4">
