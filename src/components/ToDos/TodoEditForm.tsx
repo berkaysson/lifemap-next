@@ -6,6 +6,7 @@ import { Label } from "../ui/Forms/label";
 import ProjectSelect from "../ui/Shared/ProjectSelect";
 import { useUpdateTodo } from "@/queries/todoQueries";
 import { LoadingButton } from "../ui/Buttons/loading-button";
+import { DatePicker } from "../ui/Forms/date-picker-field";
 
 interface TodoEditFormProps {
   initialValues: ToDo;
@@ -20,6 +21,9 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
     initialValues.description
   );
   const [projectId, setProjectId] = useState(initialValues.projectId);
+  const [endDate, setEndDate] = useState<Date | undefined>(
+    initialValues.endDate || undefined
+  );
 
   const { mutateAsync: updateTodo } = useUpdateTodo();
   const [isOpen, setIsOpen] = useState(false);
@@ -32,6 +36,7 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
       name: newName,
       description: newDescription,
       projectId: projectId,
+      endDate: endDate,
     } as ToDo;
     try {
       const response = await updateTodo(newTodo);
@@ -50,6 +55,7 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
   useEffect(() => {
     setNewName(initialValues.name);
     setNewDescription(initialValues.description);
+    setEndDate(initialValues.endDate || undefined);
     setError(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
@@ -58,7 +64,6 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
     <ModalDialog
       triggerButton={triggerButton}
       title="Edit ToDo"
-      description="If you want to edit date of ToDo you should create new ToDo."
       isOpen={isOpen}
       setIsOpen={setIsOpen}
     >
@@ -85,6 +90,9 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
           maxLength={70}
           placeholder="Describe the ToDo"
         />
+
+        <Label>Due Date</Label>
+        <DatePicker date={endDate} onSelect={setEndDate} />
 
         <Label>Project</Label>
         <ProjectSelect
