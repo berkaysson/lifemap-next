@@ -29,7 +29,7 @@ const habitEndDate = getISODateString(
   new Date(today.setDate(today.getDate() + 69))
 ); // 70-day habit
 
-const getRandomDuration = () => Math.floor(Math.random() * 40) + 5;
+const getRandomDuration = () => Math.floor(Math.random() * 40) + 15;
 
 const generateProgress = (days: number) => {
   return Array.from({ length: days }, (_, index) => {

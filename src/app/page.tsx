@@ -1,5 +1,3 @@
-"use client";
-
 import { ElegantShape } from "@/components/Home/elegant-shape";
 import { ExamplesSection } from "@/components/Home/examples-section";
 import { FeaturesSection } from "@/components/Home/features-section";
@@ -7,9 +5,6 @@ import { Footer } from "@/components/Home/footer";
 import { HeroContent } from "@/components/Home/hero-content";
 import { HomeHeader } from "@/components/Home/home-header";
 import { Separator } from "@/components/ui/separator";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-const queryClient = new QueryClient();
 
 const HomePage = () => {
   const badge = "Habivita";
@@ -76,9 +71,7 @@ const HomePage = () => {
 
       <Separator />
 
-      <QueryClientProvider client={queryClient}>
-        <ExamplesSection />
-      </QueryClientProvider>
+      <ExamplesSection />
       <Footer />
     </div>
   );
