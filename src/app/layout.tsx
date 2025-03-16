@@ -14,7 +14,8 @@ const fontSans = FontSans({
 
 export const metadata: Metadata = {
   title: "habivita",
-  description: "habivita",
+  description:
+    "Your Personal Journey Companion Empower your aspirations, foster productivity, and cultivate meaningful habits. Navigate life's complexities and journey towards success and fulfillment.",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any", type: "image/x-icon" },
