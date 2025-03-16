@@ -1,5 +1,3 @@
-"use client";
-
 import { CheckCircle } from "lucide-react";
 import TryItNowButton from "@/components/Home/try-it-button";
 import { Footer } from "@/components/Home/footer";
