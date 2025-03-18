@@ -1,12 +1,10 @@
 "use client";
 
-import { formatDateFriendly } from "@/lib/time";
 import type { HabitProgress } from "@prisma/client";
 import React from "react";
 import { Tooltip } from "react-tooltip";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
-import { cn } from "@/lib/utils";
-import { useTheme } from "next-themes";
+import ProgressBlock from "./ProgressBlock";
 
 interface HabitLineHeatmapProps {
   period: "DAILY" | "WEEKLY" | "MONTHLY";
@@ -19,20 +17,6 @@ const HabitLineHeatmap = ({
   progresses,
   colorCode,
 }: HabitLineHeatmapProps) => {
-  const { theme } = useTheme();
-
-  const getIntensityLevel = (
-    completedDuration: number,
-    goalDuration: number
-  ) => {
-    if (completedDuration === 0) return 0;
-    const percentage = completedDuration / goalDuration;
-    if (percentage <= 0.25) return 0.25;
-    if (percentage <= 0.5) return 0.5;
-    if (percentage <= 0.75) return 0.75;
-    return 1;
-  };
-
   const getBlockColor = (level: number) => {
     const baseColor = colorCode || "#3B82F6";
     const colorMap = {
@@ -46,7 +30,7 @@ const HabitLineHeatmap = ({
   };
 
   // Define block width based on period
-  const blockWidth = period === "MONTHLY" ? 32 : 24; // px values
+  const blockWidth = period === "MONTHLY" ? 40 : 28; // px values
 
   return (
     <div className="w-full">
@@ -87,11 +71,6 @@ const HabitLineHeatmap = ({
             {/* Heatmap Blocks */}
             <div className="grid grid-flow-col auto-cols-max gap-1 mt-8">
               {progresses.map((item) => {
-                const level = getIntensityLevel(
-                  item.completedDuration,
-                  item.goalDuration
-                );
-                const isCompleted = item.completedDuration >= item.goalDuration;
                 const today = new Date();
                 const isCurrentPeriod =
                   new Date(today.setHours(0, 0, 0, 0)) >=
@@ -100,47 +79,19 @@ const HabitLineHeatmap = ({
                     new Date(item.endDate.setHours(0, 0, 0, 0));
 
                 return (
-                  <div
+                  <ProgressBlock
                     key={item.id}
-                    style={{
-                      width: `${blockWidth}px`,
-                      border: isCurrentPeriod
-                        ? `1px solid ${theme === "dark" ? "#fff" : "#000"}`
-                        : "none",
-                      backgroundColor: getBlockColor(level),
-                      boxShadow: isCompleted
-                        ? `0 0 8px ${colorCode || "#56585c"}`
-                        : "none",
-                    }}
-                    className="h-24 rounded-sm cursor-pointer transition-colors duration-200 relative active:!bg-secondary"
-                    title={`${item.startDate.toLocaleDateString()}: ${
-                      item.completedDuration
-                    }/${item.goalDuration} completed`}
-                    data-tooltip-id="line-heatmap-tooltip"
-                    data-tooltip-content={`${formatDateFriendly(item.startDate)}
-              - ${formatDateFriendly(item.endDate)}
-                    ${item.completedDuration}/${item.goalDuration}`}
-                  >
-                    {isCompleted && (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className={cn(
-                          "text-gray-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
-                          period === "MONTHLY" ? "w-8 h-8" : "w-6 h-6"
-                        )}
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                    )}
-                  </div>
+                    startDate={item.startDate}
+                    endDate={item.endDate}
+                    completedDuration={item.completedDuration}
+                    goalDuration={item.goalDuration}
+                    colorCode={colorCode || "#3B82F6"}
+                    width={blockWidth}
+                    height={24}
+                    tooltipId="line-heatmap-tooltip"
+                    isCurrentPeriod={isCurrentPeriod}
+                    period={period}
+                  />
                 );
               })}
             </div>

@@ -2,9 +2,9 @@ import { useMemo } from "react";
 import HeatMap, { HeatMapValue } from "@uiw/react-heat-map";
 import { HabitProgress } from "@prisma/client";
 import { Tooltip } from "react-tooltip";
-import { formatDateFriendly } from "@/lib/time";
 import { useTheme } from "next-themes";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import ProgressBlock from "./ProgressBlock";
 
 interface HabitHeatmapProps {
   habitProgresses: HabitProgress[];
@@ -96,9 +96,6 @@ const HabitHeatmap = ({ habitProgresses, colorCode }: HabitHeatmapProps) => {
                 goalDuration: 0,
                 count: 0,
               };
-              const ratio = customData.count || 0;
-              const colors = getColorScale(colorCode);
-              let color = colors[0];
 
               const today = new Date();
               const cellDate = new Date(data.date);
@@ -108,52 +105,32 @@ const HabitHeatmap = ({ habitProgresses, colorCode }: HabitHeatmapProps) => {
                 today.getDate() === cellDate.getDate();
 
               if (customData.goalDuration === 0) {
-                color = colors.zeroGoal;
-              } else if (ratio > 0.75) {
-                color = colors[1];
-              } else if (ratio > 0.5) {
-                color = colors[0.75];
-              } else if (ratio > 0.25) {
-                color = colors[0.5];
-              } else if (ratio > 0) {
-                color = colors[0.25];
+                // Return empty cell for days with no goal
+                return (
+                  <rect {...props} fill={getColorScale(colorCode).zeroGoal} />
+                );
               }
 
               return (
-                <g>
-                  <rect
-                    {...props}
-                    fill={color}
-                    data-tooltip-id="my-tooltip"
-                    data-tooltip-content={`Date: ${formatDateFriendly(
-                      data.date
-                    )}
-      Completed: ${customData.completedDuration}/${customData.goalDuration}`}
-                    stroke={
-                      isToday ? (theme === "dark" ? "white" : "black") : "none"
-                    }
-                    strokeWidth={isToday ? 1 : 0}
-                    style={{
-                      filter:
-                        ratio >= 1
-                          ? `drop-shadow(0 0 4px ${colorCode})`
-                          : undefined,
-                    }}
+                <foreignObject
+                  x={props.x}
+                  y={props.y}
+                  width={props.width}
+                  height={props.height}
+                >
+                  <ProgressBlock
+                    startDate={new Date(data.date)}
+                    endDate={new Date(data.date)}
+                    completedDuration={customData.completedDuration}
+                    goalDuration={customData.goalDuration}
+                    colorCode={colorCode}
+                    width={Number(props.width)}
+                    height={Number(props.height)}
+                    tooltipId="my-tooltip"
+                    isCurrentPeriod={isToday}
+                    period="DAILY"
                   />
-                  {ratio >= 1 && (
-                    <text
-                      x={Number(props.x ?? 0) + Number(props.width ?? 0) / 2}
-                      y={Number(props.y ?? 0) + Number(props.height ?? 0) / 2}
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                      fontSize="16"
-                      fill="gray"
-                      pointerEvents="none"
-                    >
-                      ✓
-                    </text>
-                  )}
-                </g>
+                </foreignObject>
               );
             }}
           />
