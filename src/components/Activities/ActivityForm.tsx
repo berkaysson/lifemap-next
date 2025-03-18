@@ -31,6 +31,7 @@ import { DatePicker } from "../ui/Forms/date-picker-field";
 import { Iconify } from "../ui/iconify";
 import CategorySelectCreate from "../Category/CategorySelectCreate";
 import { useActivityDrawerState } from "@/hooks/use-activity-drawer-state";
+import { Badge } from "../ui/badge";
 
 // Default values type
 type ActivityFormValues = z.infer<typeof ActivitySchema>;
@@ -49,8 +50,7 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
 
   // Use provided drawerState or create a local one
   const localDrawerState = useActivityDrawerState();
-  const { isOpen, open, close, formValues } =
-    drawerState || localDrawerState;
+  const { isOpen, open, close, formValues } = drawerState || localDrawerState;
 
   const form = useForm<ActivityFormValues>({
     resolver: zodResolver(ActivitySchema),
@@ -147,18 +147,38 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                     <FormItem>
                       <FormLabel>Duration (minutes)</FormLabel>
                       <FormControl>
-                        <Input
-                          disabled={isPending}
-                          {...field}
-                          value={field.value === 0 ? "" : field.value}
-                          placeholder="Your activity duration in minutes"
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            field.onChange(value === "" ? 0 : Number(value));
-                          }}
-                          type="number"
-                          max={5000}
-                        />
+                        <div className="flex flex-col gap-1">
+                          <Input
+                            disabled={isPending}
+                            {...field}
+                            value={field.value === 0 ? "" : field.value}
+                            placeholder="Your activity duration in minutes"
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              field.onChange(value === "" ? 0 : Number(value));
+                            }}
+                            type="number"
+                            max={5000}
+                          />
+                          <div className="flex gap-1 flex-wrap">
+                            {[10, 15, 30, 60, 90].map((minutes) => (
+                              <Badge
+                                key={minutes}
+                                variant={
+                                  field.value === minutes
+                                    ? "default"
+                                    : "outline"
+                                }
+                                className="cursor-pointer transition-colors"
+                                onClick={() =>
+                                  !isPending && field.onChange(minutes)
+                                }
+                              >
+                                {minutes} min.
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
