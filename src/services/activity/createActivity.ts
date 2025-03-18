@@ -7,6 +7,7 @@ import { z } from "zod";
 import { updateTasksCompletedDurationByActivityDate } from "@/helpers/task";
 import { updateHabitsCompletedDurationByActivityDate } from "@/helpers/habit";
 import { logService } from "@/lib/utils";
+import { archiveOutdatedEntities } from "../archivingService";
 
 export const createActivity = async (
   newActivity: z.infer<typeof ActivitySchema>,
@@ -41,6 +42,8 @@ export const createActivity = async (
         date: date,
       },
     });
+
+    await archiveOutdatedEntities();
 
     const updates = [
       updateTasksCompletedDurationByActivityDate(

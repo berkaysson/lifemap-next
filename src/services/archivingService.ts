@@ -3,7 +3,7 @@
 import prisma from "@/lib/prisma";
 import { logService } from "@/lib/utils";
 import { subDays } from "date-fns";
-import { archiveToDo } from "./todo/archiveTodo";
+// import { archiveToDo } from "./todo/archiveTodo";
 import { archiveTask } from "./task/archiveTask";
 import { archiveHabit } from "./habit/archiveHabits";
 
@@ -51,20 +51,24 @@ export async function archiveOutdatedEntities() {
       return {
         message: "Archive check was performed recently",
         success: true,
-        archivedCount: { todos: 0, tasks: 0, habits: 0 },
+        archivedCount: {
+          // todos: 0,
+          tasks: 0,
+          habits: 0,
+        },
       };
     }
 
     const fourteenDaysAgo = subDays(new Date(), 14);
 
-    // Get all outdated todos
-    const outdatedTodos = await prisma.toDo.findMany({
-      where: {
-        endDate: {
-          lt: fourteenDaysAgo,
-        },
-      },
-    });
+    // // Get all outdated todos
+    // const outdatedTodos = await prisma.toDo.findMany({
+    //   where: {
+    //     endDate: {
+    //       lt: fourteenDaysAgo,
+    //     },
+    //   },
+    // });
 
     // Get all outdated tasks
     const outdatedTasks = await prisma.task.findMany({
@@ -86,7 +90,7 @@ export async function archiveOutdatedEntities() {
 
     // Archive all outdated entities
     const archivePromises = [
-      ...outdatedTodos.map((todo) => archiveToDo(todo.id)),
+      // ...outdatedTodos.map((todo) => archiveToDo(todo.id)),
       ...outdatedTasks.map((task) => archiveTask(task.id)),
       ...outdatedHabits.map((habit) => archiveHabit(habit.id)),
     ];
@@ -98,7 +102,7 @@ export async function archiveOutdatedEntities() {
       message: "Successfully archived outdated entities",
       success: true,
       archivedCount: {
-        todos: outdatedTodos.length,
+        // todos: outdatedTodos.length,
         tasks: outdatedTasks.length,
         habits: outdatedHabits.length,
       },
