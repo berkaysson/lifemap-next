@@ -30,6 +30,7 @@ const CategorySelectCreate = ({ field, form }) => {
   const [isCreating, setIsCreating] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const options = categories || [];
   const optionKey = "id";
@@ -41,6 +42,7 @@ const CategorySelectCreate = ({ field, form }) => {
     setIsLoading(true);
     try {
       await createCategory({ name: newCategoryName });
+      setOpen(false);
     } catch (error) {
       console.error("Failed to create Activity Type:", error);
     }
@@ -58,7 +60,7 @@ const CategorySelectCreate = ({ field, form }) => {
   }, [searchTerm]);
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <FormControl>
           <Button
@@ -148,6 +150,7 @@ const CategorySelectCreate = ({ field, form }) => {
                     onSelect={() => {
                       form.setValue(formKey, option[optionKey]);
                       setSearchTerm("");
+                      setOpen(false);
                     }}
                   >
                     <span className="truncate">{option.name}</span>
