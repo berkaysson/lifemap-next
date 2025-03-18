@@ -147,21 +147,53 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                     <FormItem>
                       <FormLabel>Duration (minutes)</FormLabel>
                       <FormControl>
-                        <div className="flex flex-col gap-1">
-                          <Input
-                            disabled={isPending}
-                            {...field}
-                            value={field.value === 0 ? "" : field.value}
-                            placeholder="Your activity duration in minutes"
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              field.onChange(value === "" ? 0 : Number(value));
-                            }}
-                            type="number"
-                            max={5000}
-                          />
+                        <div className="flex flex-col gap-2">
+                          <div className="flex items-center gap-4">
+                            <Badge
+                              variant="outline"
+                              className="cursor-pointer py-2 px-4 transition-colors"
+                              onClick={() => {
+                                if (!isPending) {
+                                  const newValue = Math.max(
+                                    0,
+                                    (field.value || 0) - 5
+                                  );
+                                  field.onChange(newValue);
+                                }
+                              }}
+                            >
+                              -5
+                            </Badge>
+                            <Input
+                              disabled={isPending}
+                              {...field}
+                              value={field.value === 0 ? "" : field.value}
+                              placeholder="Your activity duration in minutes"
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                field.onChange(
+                                  value === "" ? 0 : Number(value)
+                                );
+                              }}
+                              type="number"
+                              max={5000}
+                              className="flex-1"
+                            />
+                            <Badge
+                              variant="outline"
+                              className="cursor-pointer py-2 px-4 transition-colors"
+                              onClick={() => {
+                                if (!isPending) {
+                                  const newValue = (field.value || 0) + 5;
+                                  field.onChange(newValue);
+                                }
+                              }}
+                            >
+                              +5
+                            </Badge>
+                          </div>
                           <div className="flex gap-1 flex-wrap">
-                            {[10, 15, 30, 60, 90].map((minutes) => (
+                            {[10, 30, 60, 90].map((minutes) => (
                               <Badge
                                 key={minutes}
                                 variant={
