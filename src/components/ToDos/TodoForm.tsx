@@ -26,6 +26,7 @@ import {
 import { Button } from "../ui/Buttons/button";
 import { Iconify } from "../ui/iconify";
 import { DatePicker } from "../ui/Forms/date-picker-field";
+import { ColorPicker } from "../ui/Forms/color-picker-field";
 
 const TodoForm = ({ useArea = "entity" }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,7 +42,7 @@ const TodoForm = ({ useArea = "entity" }) => {
       name: "",
       description: "",
       endDate: "",
-      colorCode: "#b83280",
+      colorCode: "#714DD9",
     },
   });
 
@@ -63,7 +64,7 @@ const TodoForm = ({ useArea = "entity" }) => {
       } catch (error: any) {
         setMessage("An error occurred");
         setIsError(true);
-        console.log(error)
+        console.log(error);
       }
     });
   };
@@ -172,11 +173,10 @@ const TodoForm = ({ useArea = "entity" }) => {
                   <FormItem>
                     <FormLabel>Pick a Color</FormLabel>
                     <FormControl>
-                      <Input
-                        className="w-20 rounded-full"
+                      <ColorPicker
+                        value={field.value || "#714DD9"}
+                        onChange={field.onChange}
                         disabled={isPending}
-                        {...field}
-                        type="color"
                       />
                     </FormControl>
                   </FormItem>

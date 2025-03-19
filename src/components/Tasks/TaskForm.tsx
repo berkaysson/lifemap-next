@@ -27,6 +27,7 @@ import {
 import { Iconify } from "../ui/iconify";
 import { DatePicker } from "../ui/Forms/date-picker-field";
 import CategorySelectCreate from "../Category/CategorySelectCreate";
+import { ColorPicker } from "../ui/Forms/color-picker-field";
 
 const TaskForm = ({ useArea = "entity" }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,7 +46,7 @@ const TaskForm = ({ useArea = "entity" }) => {
       categoryId: "",
       startDate: new Date().toISOString().split("T")[0],
       endDate: "",
-      colorCode: "#12a1cc",
+      colorCode: "#714DD9",
     },
   });
 
@@ -254,11 +255,10 @@ const TaskForm = ({ useArea = "entity" }) => {
                   <FormItem>
                     <FormLabel>Pick a Color</FormLabel>
                     <FormControl>
-                      <Input
-                        className="w-20 rounded-full"
+                      <ColorPicker
+                        value={field.value || "#714DD9"}
+                        onChange={field.onChange}
                         disabled={isPending}
-                        {...field}
-                        type="color"
                       />
                     </FormControl>
                   </FormItem>

@@ -36,6 +36,7 @@ import {
 } from "../ui/Modals/dialog";
 import { Iconify } from "../ui/iconify";
 import CategorySelectCreate from "../Category/CategorySelectCreate";
+import { ColorPicker } from "../ui/Forms/color-picker-field";
 
 const HabitForm = ({ useArea = "entity" }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -59,7 +60,7 @@ const HabitForm = ({ useArea = "entity" }) => {
       numberOfPeriods: 2,
       goalDurationPerPeriod: 0,
       categoryId: "",
-      colorCode: "#38328a",
+      colorCode: "#714DD9",
     },
   });
 
@@ -218,11 +219,10 @@ const HabitForm = ({ useArea = "entity" }) => {
                     <FormItem>
                       <FormLabel>Pick a Color</FormLabel>
                       <FormControl>
-                        <Input
-                          className="w-20 rounded-full"
+                        <ColorPicker
+                          value={field.value || "#714DD9"}
+                          onChange={field.onChange}
                           disabled={isPending}
-                          {...field}
-                          type="color"
                         />
                       </FormControl>
                     </FormItem>
