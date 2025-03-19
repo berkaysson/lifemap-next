@@ -54,7 +54,7 @@ export function HomeHeader() {
       {isMenuOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-back border-t border-shade py-4">
           <div className="container mx-auto flex flex-col space-y-4 px-4">
-            {pathname === "/" && <NavLink href="/about">About Us</NavLink>}
+            {pathname === "/" && <NavLink href="/about-us">About Us</NavLink>}
             <NavLink href="/auth/login">Sign In</NavLink>
             <span>
               <ThemeToggle />
