@@ -107,7 +107,11 @@ const HabitHeatmap = ({ habitProgresses, colorCode }: HabitHeatmapProps) => {
               if (customData.goalDuration === 0) {
                 // Return empty cell for days with no goal
                 return (
-                  <rect {...props} fill={getColorScale(colorCode).zeroGoal} />
+                  <rect
+                    {...props}
+                    fill={getColorScale(colorCode).zeroGoal}
+                    style={{ opacity: 0 }}
+                  />
                 );
               }
 
