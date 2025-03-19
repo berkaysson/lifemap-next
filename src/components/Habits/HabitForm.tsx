@@ -75,6 +75,7 @@ const HabitForm = ({ useArea = "entity" }) => {
           if (response.success) {
             setIsError(false);
             reset();
+            setCurrentStep(1);
           } else {
             setIsError(true);
           }
