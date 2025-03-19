@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Check } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn, getContrastColor } from "@/lib/utils";
 import {
   Popover,
   PopoverContent,
@@ -97,16 +97,4 @@ export function ColorPicker({
       </PopoverContent>
     </Popover>
   );
-}
-
-function getContrastColor(hexColor: string): "white" | "black" {
-  const hex = hexColor.replace("#", "");
-
-  const r = Number.parseInt(hex.substring(0, 2), 16);
-  const g = Number.parseInt(hex.substring(2, 4), 16);
-  const b = Number.parseInt(hex.substring(4, 6), 16);
-
-  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-
-  return luminance > 0.5 ? "black" : "white";
 }

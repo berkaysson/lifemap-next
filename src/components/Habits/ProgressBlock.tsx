@@ -1,5 +1,5 @@
 import { formatDateFriendly } from "@/lib/time";
-import { cn } from "@/lib/utils";
+import { cn, getContrastColor } from "@/lib/utils";
 import React from "react";
 
 interface ProgressBlockProps {
@@ -53,6 +53,8 @@ const ProgressBlock = ({
   const level = getIntensityLevel(completedDuration, goalDuration);
   const isCompleted = completedDuration >= goalDuration;
 
+  const contrastColor = getContrastColor(colorCode);
+
   return (
     <div
       style={{
@@ -74,7 +76,7 @@ ${completedDuration}/${goalDuration}`}
       {isCompleted && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="text-gray-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%]"
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] text-${contrastColor}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
