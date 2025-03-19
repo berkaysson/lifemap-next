@@ -12,6 +12,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "../ui/carousel";
+import Image from "next/image";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,8 @@ export function ExamplesSection() {
       setCurrent(api.selectedScrollSnap());
     });
   }, [api]);
+
+  const pages = [0, 1, 2, 3];
   return (
     <QueryClientProvider client={queryClient}>
       <section className="z-10 py-16 sm:py-20 md:py-24 bg-back">
@@ -46,7 +49,7 @@ export function ExamplesSection() {
             <div className="flex items-center justify-center gap-2 mb-6">
               <CarouselPrevious className="static transform-none" />
               <div className="flex gap-1">
-                {[0, 1, 2].map((idx) => (
+                {pages.map((idx) => (
                   <button
                     key={idx}
                     className={`w-2 h-2 rounded-full transition-colors ${
@@ -73,6 +76,29 @@ export function ExamplesSection() {
               </CarouselItem>
 
               <CarouselItem>
+                <h2 className="text-xl font-semibold">Add new activities</h2>
+                <p className="text-sm text-muted-foreground">
+                  Add new activities with modern ui and track your progress.
+                </p>
+                <div className="flex flex-col items-center min-h-[300px] justify-center w-full h-[70vh]">
+                  <div className="relative w-full h-full aspect-[9/16]">
+                    <Image
+                      src="/assets/images/home/home-activity-drawer.webp"
+                      alt="Activity drawer example"
+                      fill
+                      className="object-contain mx-auto"
+                      sizes="(max-width: 768px) 80vw, 60vw"
+                      priority
+                      style={{
+                        objectFit: "contain",
+                        maxWidth: "min(90vw, 400px)",
+                      }}
+                    />
+                  </div>
+                </div>
+              </CarouselItem>
+
+              <CarouselItem>
                 <div className="flex flex-col items-center min-h-[300px] justify-center">
                   <div className="flex flex-col items-center gap-4 mt-2 sm:mt-4">
                     <h3 className="text-lg font-semibold">
@@ -90,7 +116,7 @@ export function ExamplesSection() {
             <div className="flex items-center justify-center gap-2 mt-6">
               <CarouselPrevious className="static transform-none" />
               <div className="flex gap-1">
-                {[0, 1, 2].map((idx) => (
+                {pages.map((idx) => (
                   <button
                     key={idx}
                     className={`w-2 h-2 rounded-full transition-colors ${
