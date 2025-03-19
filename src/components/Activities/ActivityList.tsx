@@ -88,7 +88,9 @@ const ActivityList = () => {
       </div>
 
       {isError && (
-        <div className="opacity-80 mt-2 text-error">Error loading activities: {(error as Error).message}</div>
+        <div className="opacity-80 mt-2 text-error">
+          Error loading activities: {(error as Error).message}
+        </div>
       )}
       {sortedActivities.length === 0 && !isLoading && (
         <div className="opacity-80 mt-2 text-shade">No activities found.</div>
@@ -117,16 +119,38 @@ const ActivityList = () => {
               className={page === 1 ? "pointer-events-none opacity-50" : ""}
             />
           </PaginationItem>
-          {[...Array(totalPages)].map((_, index) => (
-            <PaginationItem key={index}>
-              <PaginationLink
-                onClick={() => handlePageChange(index + 1)}
-                isActive={page === index + 1}
-              >
-                {index + 1}
-              </PaginationLink>
-            </PaginationItem>
-          ))}
+
+          {totalPages > 0 && (
+            <>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (pageNumber) => {
+                  const isFirst = pageNumber === 1;
+                  const isLast = pageNumber === totalPages;
+                  const isNearCurrent = Math.abs(pageNumber - page) <= 1;
+                  const shouldShow = isFirst || isLast || isNearCurrent;
+
+                  return shouldShow ? (
+                    <PaginationItem key={pageNumber}>
+                      <PaginationLink
+                        onClick={() => handlePageChange(pageNumber)}
+                        isActive={page === pageNumber}
+                      >
+                        {pageNumber}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ) : (
+                    // Show ellipsis between gaps
+                    (pageNumber === 2 || pageNumber === totalPages - 1) && (
+                      <PaginationItem key={`ellipsis-${pageNumber}`}>
+                        <span className="px-2 py-1">...</span>
+                      </PaginationItem>
+                    )
+                  );
+                }
+              )}
+            </>
+          )}
+
           <PaginationItem>
             <PaginationNext
               onClick={() => handlePageChange(Math.min(page + 1, totalPages))}
