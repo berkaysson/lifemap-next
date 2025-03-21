@@ -5,11 +5,23 @@ import IsCompleted from "../ui/Shared/IsCompleted";
 import ColorCircle from "../ui/Shared/ColorCircle";
 import ButtonWithConfirmation from "../ui/Buttons/ButtonWithConfirmation";
 import { useDeleteArchivedHabit } from "@/queries/habitQueries";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "../ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+} from "../ui/card";
+import { lazy, Suspense, useState } from "react";
+import { Button } from "../ui/Buttons/button";
+import { Iconify } from "../ui/iconify";
+
+const LazyHabitForm = lazy(() => import("./HabitForm"));
 
 const ArchivedHabitListItem = ({ habit }) => {
   const expired = isExpired(habit.endDate);
   const deleteArchivedHabit = useDeleteArchivedHabit();
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   const handleDelete = () => {
     deleteArchivedHabit.mutate(habit.id);
@@ -34,9 +46,6 @@ const ArchivedHabitListItem = ({ habit }) => {
             <div>Start: {habit.startDate.toLocaleDateString()}</div>
             <div>Due: {habit.endDate.toLocaleDateString()}</div>
             <div>Archived: {habit.archivedAt.toLocaleDateString()}</div>
-            <div>
-              Progress: {habit.completedDuration}/{habit.goalDuration}
-            </div>
             <div>Activity Type: {habit.categoryName}</div>
             <div>Period: {habit.period}</div>
             <div>Best Streak: {habit.bestStreak} days</div>
@@ -48,7 +57,7 @@ const ArchivedHabitListItem = ({ habit }) => {
           )}
         </div>
       </CardContent>
-      <CardFooter className="flex justify-end">
+      <CardFooter className="flex justify-end gap-2 flex-wrap">
         <ButtonWithConfirmation
           buttonText="Delete"
           onConfirm={handleDelete}
@@ -56,7 +65,30 @@ const ArchivedHabitListItem = ({ habit }) => {
           size="sm"
           icon="solar:trash-bin-trash-bold"
         />
+        <Button variant="outline" size="sm" onClick={() => setIsFormOpen(true)}>
+          <Iconify icon="solar:archive-up-bold" width={20} />
+          Recreate
+        </Button>
       </CardFooter>
+      {isFormOpen && (
+        <Suspense fallback={null}>
+          <LazyHabitForm
+            useArea="archive"
+            defaultValues={{
+              name: habit.name,
+              description: habit.description || "",
+              period: habit.period,
+              startDate: habit.startDate.toISOString().split("T")[0],
+              numberOfPeriods: 2,
+              goalDurationPerPeriod: habit.goalDurationPerPeriod,
+              categoryId: habit.categoryId,
+              colorCode: habit.colorCode,
+            }}
+            isOpen={isFormOpen}
+            setIsOpen={setIsFormOpen}
+          />
+        </Suspense>
+      )}
     </Card>
   );
 };

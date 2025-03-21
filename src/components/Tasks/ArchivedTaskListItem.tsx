@@ -12,10 +12,16 @@ import {
   CardFooter,
   CardHeader,
 } from "../ui/card";
+import { lazy, Suspense, useState } from "react";
+import { Button } from "../ui/Buttons/button";
+import { Iconify } from "../ui/iconify";
+
+const LazyTaskForm = lazy(() => import("./TaskForm"));
 
 const ArchivedTaskListItem = ({ task }) => {
   const expired = isExpired(task.endDate);
   const deleteArchivedTask = useDeleteArchivedTask();
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   const handleDelete = () => {
     deleteArchivedTask.mutate(task.id);
@@ -52,7 +58,7 @@ const ArchivedTaskListItem = ({ task }) => {
           )}
         </div>
       </CardContent>
-      <CardFooter className="flex justify-end">
+      <CardFooter className="flex justify-end gap-2 flex-wrap">
         <ButtonWithConfirmation
           buttonText="Delete"
           onConfirm={handleDelete}
@@ -60,7 +66,32 @@ const ArchivedTaskListItem = ({ task }) => {
           size="sm"
           icon="solar:trash-bin-trash-bold"
         />
+        <Button variant="outline" size="sm" onClick={() => setIsFormOpen(true)}>
+          <Iconify icon="solar:archive-up-bold" width={20} />
+          Recreate
+        </Button>
       </CardFooter>
+      {isFormOpen && (
+        <Suspense fallback={null}>
+          <LazyTaskForm
+            useArea="archive"
+            defaultValues={{
+              name: task.name,
+              description: task.description,
+              goalDuration: task.goalDuration,
+              categoryId: task.categoryId,
+              startDate: task.startDate.toISOString().split("T")[0],
+              endDate:
+                new Date(task.endDate) < new Date()
+                  ? ""
+                  : task.endDate.toISOString().split("T")[0],
+              colorCode: task.colorCode,
+            }}
+            isOpen={isFormOpen}
+            setIsOpen={setIsFormOpen}
+          />
+        </Suspense>
+      )}
     </Card>
   );
 };

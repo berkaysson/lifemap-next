@@ -29,8 +29,23 @@ import { DatePicker } from "../ui/Forms/date-picker-field";
 import CategorySelectCreate from "../Category/CategorySelectCreate";
 import { ColorPicker } from "../ui/Forms/color-picker-field";
 
-const TaskForm = ({ useArea = "entity" }) => {
-  const [isOpen, setIsOpen] = useState(false);
+interface TaskFormProps {
+  useArea?: string;
+  defaultValues?: z.infer<typeof TaskSchema>;
+  isOpen?: boolean;
+  setIsOpen?: (open: boolean) => void;
+}
+
+const TaskForm = ({
+  useArea = "entity",
+  defaultValues,
+  isOpen,
+  setIsOpen,
+}: TaskFormProps) => {
+  const [isOpenInternal, setIsOpenInternal] = useState(false);
+  const actualIsOpen = isOpen !== undefined ? isOpen : isOpenInternal;
+  const actualSetIsOpen =
+    setIsOpen !== undefined ? setIsOpen : setIsOpenInternal;
 
   const { mutateAsync: createTask } = useCreateTask();
   const [isPending, startTransition] = useTransition();
@@ -39,7 +54,7 @@ const TaskForm = ({ useArea = "entity" }) => {
 
   const form = useForm<z.infer<typeof TaskSchema>>({
     resolver: zodResolver(TaskSchema),
-    defaultValues: {
+    defaultValues: defaultValues || {
       name: "",
       description: "",
       goalDuration: 0,
@@ -73,7 +88,7 @@ const TaskForm = ({ useArea = "entity" }) => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={actualIsOpen} onOpenChange={actualSetIsOpen}>
       <DialogTrigger asChild>
         {useArea === "entity" ? (
           <Button variant="ghost" size="sm">
@@ -84,7 +99,7 @@ const TaskForm = ({ useArea = "entity" }) => {
             />
             <span className="sm:inline hidden">Create Task</span>
           </Button>
-        ) : (
+        ) : useArea !== "archive" ? (
           <Button variant="outline" size="sm">
             <Iconify
               icon="solar:check-read-linear"
@@ -93,7 +108,7 @@ const TaskForm = ({ useArea = "entity" }) => {
             />
             <span>Create Task</span>
           </Button>
-        )}
+        ) : null}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>

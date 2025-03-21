@@ -38,8 +38,23 @@ import { Iconify } from "../ui/iconify";
 import CategorySelectCreate from "../Category/CategorySelectCreate";
 import { ColorPicker } from "../ui/Forms/color-picker-field";
 
-const HabitForm = ({ useArea = "entity" }) => {
-  const [isOpen, setIsOpen] = useState(false);
+interface HabitFormProps {
+  useArea?: string;
+  defaultValues?: z.infer<typeof HabitSchema>;
+  isOpen?: boolean;
+  setIsOpen?: (open: boolean) => void;
+}
+
+const HabitForm = ({
+  useArea = "entity",
+  defaultValues,
+  isOpen,
+  setIsOpen,
+}: HabitFormProps) => {
+  const [isOpenInternal, setIsOpenInternal] = useState(false);
+  const actualIsOpen = isOpen !== undefined ? isOpen : isOpenInternal;
+  const actualSetIsOpen =
+    setIsOpen !== undefined ? setIsOpen : setIsOpenInternal;
   const [currentStep, setCurrentStep] = useState(1);
 
   const { mutateAsync: createHabit } = useCreateHabit();
@@ -52,7 +67,7 @@ const HabitForm = ({ useArea = "entity" }) => {
 
   const form = useForm<z.infer<typeof HabitSchema>>({
     resolver: zodResolver(HabitSchema),
-    defaultValues: {
+    defaultValues: defaultValues || {
       name: "",
       description: "",
       period: Period.DAILY,
@@ -121,14 +136,18 @@ const HabitForm = ({ useArea = "entity" }) => {
   }, [startDate, period, numberOfPeriods]);
 
   const handleOpenChange = (event) => {
-    setIsOpen(event);
+    setIsOpenInternal(event);
     setCurrentStep(1);
     reset();
     setMessage("");
     setIsError(false);
   };
+
   return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+    <Dialog
+      open={actualIsOpen}
+      onOpenChange={useArea === "archive" ? actualSetIsOpen : handleOpenChange}
+    >
       <DialogTrigger asChild>
         {useArea === "entity" ? (
           <Button variant="ghost" size="sm">
@@ -139,16 +158,18 @@ const HabitForm = ({ useArea = "entity" }) => {
             />
             <span className="sm:inline hidden">Create Habit</span>
           </Button>
-        ) : (
+        ) : useArea !== "archive" ? (
           <Button variant="outline" size="sm">
             <Iconify icon="ph:plant" width={24} className="mr-0 sm:mr-1" />
             <span>Create Habit</span>
           </Button>
-        )}
+        ) : null}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Create a Habit</DialogTitle>
+          <DialogTitle>
+            {useArea === "archive" ? "Recreate Habit" : "Create a Habit"}
+          </DialogTitle>
           <div className="text-sm text-muted-foreground">
             Step {currentStep} of 2
           </div>
