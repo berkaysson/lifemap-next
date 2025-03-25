@@ -7,6 +7,7 @@ import ProjectSelect from "../ui/Shared/ProjectSelect";
 import { useUpdateTodo } from "@/queries/todoQueries";
 import { LoadingButton } from "../ui/Buttons/loading-button";
 import { DatePicker } from "../ui/Forms/date-picker-field";
+import { ColorPicker } from "../ui/Forms/color-picker-field";
 
 interface TodoEditFormProps {
   initialValues: ToDo;
@@ -24,6 +25,9 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
   const [endDate, setEndDate] = useState<Date | undefined>(
     initialValues.endDate || undefined
   );
+  const [colorCode, setColorCode] = useState(
+    initialValues.colorCode || "#31bb48"
+  );
 
   const { mutateAsync: updateTodo } = useUpdateTodo();
   const [isOpen, setIsOpen] = useState(false);
@@ -37,6 +41,7 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
       description: newDescription,
       projectId: projectId,
       endDate: endDate,
+      colorCode: colorCode,
     } as ToDo;
     try {
       const response = await updateTodo(newTodo);
@@ -56,6 +61,7 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
     setNewName(initialValues.name);
     setNewDescription(initialValues.description);
     setEndDate(initialValues.endDate || undefined);
+    setColorCode(initialValues.colorCode || "#31bb48");
     setError(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
@@ -93,6 +99,9 @@ const TodoEditForm = ({ initialValues, triggerButton }: TodoEditFormProps) => {
 
         <Label>Due Date</Label>
         <DatePicker date={endDate} onSelect={setEndDate} />
+
+        <Label>Color</Label>
+        <ColorPicker value={colorCode} onChange={setColorCode} />
 
         <Label>Project</Label>
         <ProjectSelect

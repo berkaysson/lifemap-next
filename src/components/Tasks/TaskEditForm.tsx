@@ -7,6 +7,7 @@ import ProjectSelect from "../ui/Shared/ProjectSelect";
 import { useUpdateTask } from "@/queries/taskQueries";
 import { LoadingButton } from "../ui/Buttons/loading-button";
 import { DatePicker } from "../ui/Forms/date-picker-field";
+import { ColorPicker } from "../ui/Forms/color-picker-field";
 
 interface TaskEditFormProps {
   initialValues: Task;
@@ -46,6 +47,11 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
   const handleFieldChange = (value: any, field: keyof Task) => {
     if (initialValues[field] === value) return;
     setNewTask({ ...newTask, [field]: value });
+  };
+
+  const handleColorChange = (color: string) => {
+    if (initialValues.colorCode === color) return;
+    setNewTask({ ...newTask, colorCode: color });
   };
 
   const handleStartDateChange = (date: Date | undefined) => {
@@ -126,6 +132,12 @@ const TaskEditForm = ({ initialValues, triggerButton }: TaskEditFormProps) => {
               : undefined
           }
           onSelect={handleEndDateChange}
+        />
+
+        <Label>Color</Label>
+        <ColorPicker
+          value={newTask.colorCode || initialValues.colorCode || "#31bb48"}
+          onChange={handleColorChange}
         />
 
         <Label>Project</Label>
