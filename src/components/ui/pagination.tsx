@@ -71,7 +71,7 @@ const PaginationPrevious = ({
     className={cn("gap-1", className)}
     {...props}
   >
-    <Iconify icon="solar:alt-arrow-left-bold" width={20} />
+    <Iconify icon="solar:alt-arrow-left-bold" width={16} />
   </PaginationLink>
 );
 PaginationPrevious.displayName = "PaginationPrevious";
@@ -86,7 +86,7 @@ const PaginationNext = ({
     className={cn("gap-1", className)}
     {...props}
   >
-    <Iconify icon="solar:alt-arrow-right-bold" width={20} />
+    <Iconify icon="solar:alt-arrow-right-bold" width={16} />
   </PaginationLink>
 );
 PaginationNext.displayName = "PaginationNext";

@@ -19,9 +19,12 @@ import {
 } from "../ui/pagination";
 import { Separator } from "../ui/separator";
 import Loading from "@/app/(protected)/dashboard/activity/loading";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const ActivityList = () => {
   const [viewMode, setViewMode] = useState<"table" | "grid">("table");
+  const isMobile = useIsMobile();
+
   const [page, setPage] = useState(1);
   const pageSize = 10;
 
@@ -126,8 +129,10 @@ const ActivityList = () => {
                 (pageNumber) => {
                   const isFirst = pageNumber === 1;
                   const isLast = pageNumber === totalPages;
-                  const isNearCurrent = Math.abs(pageNumber - page) <= 1;
-                  const shouldShow = isFirst || isLast || isNearCurrent;
+                  const isCurrent = pageNumber === page;
+                  const shouldShow = isMobile
+                    ? isFirst || isLast || isCurrent
+                    : isFirst || isLast || Math.abs(pageNumber - page) <= 1;
 
                   return shouldShow ? (
                     <PaginationItem key={pageNumber}>
@@ -142,7 +147,7 @@ const ActivityList = () => {
                     // Show ellipsis between gaps
                     (pageNumber === 2 || pageNumber === totalPages - 1) && (
                       <PaginationItem key={`ellipsis-${pageNumber}`}>
-                        <span className="px-2 py-1">...</span>
+                        <span className="px-1 py-1">...</span>
                       </PaginationItem>
                     )
                   );
