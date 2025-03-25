@@ -16,15 +16,33 @@ import { deleteActivity } from "@/services/activity/deleteActivity";
 export const ACTIVITY_QUERY_KEY = "activities";
 
 // 1. Fetch Activities Query with Pagination
-export const useFetchActivities = (page: number = 1, pageSize: number = 25) => {
+export const useFetchActivities = (
+  page: number = 1,
+  pageSize: number = 25,
+  sortField: keyof Activity = "date",
+  sortOrder: "asc" | "desc" = "desc"
+) => {
   const { data: session } = useSession();
   const userId = session?.user?.id;
 
   return useQuery({
-    queryKey: [ACTIVITY_QUERY_KEY, userId, page, pageSize],
+    queryKey: [
+      ACTIVITY_QUERY_KEY,
+      userId,
+      page,
+      pageSize,
+      sortField,
+      sortOrder,
+    ],
     queryFn: async () => {
       validateSession(session);
-      const response = await getActivities(userId!, page, pageSize);
+      const response = await getActivities(
+        userId!,
+        page,
+        pageSize,
+        sortField,
+        sortOrder
+      );
       if (!response.success) throw new Error(response.message);
       return response;
     },
@@ -60,7 +78,9 @@ export const useCreateActivity = () => {
       queryClient.invalidateQueries({
         queryKey: ["habitProgressesEndingToday", userId],
       });
-      queryClient.invalidateQueries({ queryKey: ["combinedDailyItems", userId] });
+      queryClient.invalidateQueries({
+        queryKey: ["combinedDailyItems", userId],
+      });
     },
     onError: (error: any) => {
       toast({

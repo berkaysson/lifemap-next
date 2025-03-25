@@ -7,24 +7,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import { Separator } from "@/components/ui/separator";
 
 export default function Loading() {
   return (
     <div className="flex flex-col gap-2 m-2">
-      <div className="flex sm:flex-row justify-between flex-col-reverse gap-2 mb-2">
-        <Skeleton className="h-10 w-full sm:w-40" />
-        <Skeleton className="h-10 w-full sm:w-20" />
-      </div>
-
       {/* Table View Skeleton */}
       <Table>
         <TableHeader>
@@ -62,25 +48,6 @@ export default function Loading() {
           ))}
         </TableBody>
       </Table>
-
-      <Separator className="my-2" />
-
-      {/* Pagination Skeleton */}
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          {[...Array(3)].map((_, index) => (
-            <PaginationItem key={index}>
-              <PaginationLink href="#">{index + 1}</PaginationLink>
-            </PaginationItem>
-          ))}
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
     </div>
   );
 }

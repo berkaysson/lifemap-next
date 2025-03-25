@@ -1,11 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import ActivityListItem from "./ActivityListItem";
 import SelectSort from "../ui/Shared/SelectSort";
-import { sortArrayOfObjectsByKey } from "@/lib/utils";
 import type { Activity } from "@prisma/client";
-import type { ExtendedActivity } from "@/types/Entitities";
 import { useFetchActivities } from "@/queries/activityQueries";
 import ActivityTable from "./ActivityTable";
 import ListViewToggle from "../ui/Buttons/list-view-toggle";
@@ -27,49 +25,30 @@ const ActivityList = () => {
 
   const [page, setPage] = useState(1);
   const pageSize = 10;
+  const [sortField, setSortField] = useState<keyof Activity>("date");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
-  const { data, isLoading, isError, error } = useFetchActivities(
+  const { data, isLoading } = useFetchActivities(
     page,
-    pageSize
+    pageSize,
+    sortField,
+    sortOrder
   );
 
   const activities = useMemo(() => data?.activities || [], [data?.activities]);
   const total = data?.total || 0;
   const totalPages = Math.ceil(total / pageSize);
 
-  const [sortedActivities, setSortedActivities] = useState(activities);
-
-  useEffect(() => {
-    if (activities) {
-      const sorted = sortArrayOfObjectsByKey<ExtendedActivity>(
-        activities,
-        "date",
-        "desc"
-      );
-      setSortedActivities(sorted);
-    }
-  }, [activities]);
-
-  const handleSort = useCallback(
-    (sortBy: keyof Activity, direction: "asc" | "desc") => {
-      if (!activities || activities.length === 0) return;
-      const sorted = sortArrayOfObjectsByKey<ExtendedActivity>(
-        activities,
-        sortBy,
-        direction
-      );
-      setSortedActivities(sorted);
-    },
-    [activities]
-  );
+  const handleSort = (sortBy: keyof Activity, direction: "asc" | "desc") => {
+    if (isLoading) return;
+    setSortField(sortBy);
+    setSortOrder(direction);
+    setPage(1);
+  };
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
-
-  if (isLoading) {
-    return <Loading />;
-  }
 
   return (
     <div className="flex flex-col gap-2 m-2">
@@ -85,30 +64,27 @@ const ActivityList = () => {
         <div>
           <ListViewToggle
             currentView={viewMode}
-            onSelect={(view) => setViewMode(view)}
+            onSelect={(view) => !isLoading && setViewMode(view)}
           />
         </div>
       </div>
 
-      {isError && (
-        <div className="opacity-80 mt-2 text-error">
-          Error loading activities: {(error as Error).message}
-        </div>
-      )}
-      {sortedActivities.length === 0 && !isLoading && (
+      {isLoading && <Loading />}
+
+      {activities.length === 0 && !isLoading && (
         <div className="opacity-80 mt-2 text-shade">No activities found.</div>
       )}
 
-      {viewMode === "grid" && (
+      {viewMode === "grid" && !isLoading && (
         <ul className="rounded-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {sortedActivities.map((activity) => (
+          {activities.map((activity) => (
             <ActivityListItem key={activity.id} activity={activity} />
           ))}
         </ul>
       )}
 
-      {viewMode === "table" && (
-        <ActivityTable sortedActivities={sortedActivities} />
+      {viewMode === "table" && !isLoading && (
+        <ActivityTable sortedActivities={activities} />
       )}
 
       <Separator className="my-2" />

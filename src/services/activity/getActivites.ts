@@ -2,11 +2,14 @@
 
 import prisma from "@/lib/prisma";
 import { logService } from "@/lib/utils";
+import { Activity } from "@prisma/client";
 
 export const getActivities = async (
   userId: string,
   page: number = 1,
-  pageSize: number = 10
+  pageSize: number = 10,
+  sortField: keyof Activity = "date",
+  sortOrder: "asc" | "desc" = "desc"
 ) => {
   logService("getActivities");
   if (!userId) {
@@ -24,7 +27,7 @@ export const getActivities = async (
       prisma.activity.findMany({
         where: { userId },
         include: { category: true },
-        orderBy: { date: "desc" },
+        orderBy: { [sortField]: sortOrder },
         skip,
         take: pageSize,
       }),
