@@ -12,14 +12,18 @@ const RecentHabits = () => {
   const { data: habits = [] } = useFetchHabits();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const sortedHabits = habits.sort((a, b) => {
-    const aIsToday = a.endDate && isToday(new Date(a.endDate));
-    const bIsToday = b.endDate && isToday(new Date(b.endDate));
+  const sortedHabits = habits
+    ?.filter((habit) => {
+      return !habit.endDate || new Date(habit.endDate) >= new Date();
+    })
+    ?.sort((a, b) => {
+      const aIsToday = a.endDate && isToday(new Date(a.endDate));
+      const bIsToday = b.endDate && isToday(new Date(b.endDate));
 
-    if (aIsToday && !bIsToday) return -1;
-    if (!aIsToday && bIsToday) return 1;
-    return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
-  });
+      if (aIsToday && !bIsToday) return -1;
+      if (!aIsToday && bIsToday) return 1;
+      return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
+    });
 
   const handleNext = () => {
     setCurrentIndex((prev) => (prev + 1) % sortedHabits.length);
