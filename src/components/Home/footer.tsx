@@ -8,10 +8,10 @@ export function Footer() {
         <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
           <div className="flex items-center">
             <Image
-              src="/logo.svg"
+              src="/logo.png"
               alt="Habivita"
-              width={24}
-              height={24}
+              width={32}
+              height={32}
               className="mr-2"
             />
             <span className="text-secondary font-semibold">Habivita</span>

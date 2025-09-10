@@ -43,10 +43,10 @@ export function HeroContent({ badge, title1, title2 }: HeroContentProps) {
           className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/[0.08] mb-6 sm:mb-8 md:mb-12"
         >
           <Image
-            src="/logo.svg"
+            src="/logo.png"
             alt="Habivita"
-            width={16}
-            height={16}
+            width={24}
+            height={24}
           />
           <span className="text-xs sm:text-sm text-secondary tracking-wide">
             {badge}

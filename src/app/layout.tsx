@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
     other: [
       { rel: "manifest", url: "/site.webmanifest" },
-      { rel: "mask-icon", url: "/logo.svg", color: "#5bbad5" },
+      { rel: "mask-icon", url: "/logo.png", color: "#5bbad5" },
     ],
   },
 };

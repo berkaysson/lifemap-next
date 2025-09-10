@@ -31,7 +31,7 @@ export function HomeHeader() {
     <nav className="relative z-20 w-full py-4 px-0 sm:px-6 text-fore">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/" className="flex items-center space-x-2">
-          <Image src="/logo.svg" alt="Habivita" width={28} height={28} />
+          <Image src="/logo.png" alt="Habivita" width={54} height={54} />
           <span className="text-secondary text-lg sm:text-xl font-bold">
             Habivita
           </span>

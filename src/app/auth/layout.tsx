@@ -6,7 +6,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     <div className="h-full flex flex-col">
       <header className="p-4 flex justify-between items-center bg-back">
         <Link href="/" className="flex items-center space-x-2 text-primary">
-          <Image src="/logo.svg" alt="Logo" width={40} height={40} />
+          <Image src="/logo.png" alt="Logo" width={48} height={48} />
           <span className="text-lg font-bold text-primary group-data-[collapsible=icon]:hidden">
             habivita
           </span>
