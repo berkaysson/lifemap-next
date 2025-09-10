@@ -1,5 +1,6 @@
 import credentials from "next-auth/providers/credentials";
 import google from "next-auth/providers/google";
+import github from "next-auth/providers/github";
 import { LoginSchema } from "./schema";
 import { NextAuthConfig } from "next-auth";
 import bcrypt from "bcryptjs";
@@ -7,10 +8,10 @@ import { getUserByEmail } from "./helpers/user";
 
 export default {
   providers: [
-    // github({
-    //   clientId: process.env.GITHUB_CLIENT_ID,
-    //   clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    // }),
+    github({
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    }),
     google({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
