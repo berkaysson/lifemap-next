@@ -15,6 +15,13 @@ export const updateTasksCompletedDurationByActivityDate = async (
     },
   });
 
+  // Calculate how many tasks will newly become completed with this activity
+  const newlyCompletedCount = tasks.reduce((count, task) => {
+    const newCompletedDuration = task.completedDuration + duration;
+    const willBeCompleted = newCompletedDuration >= task.goalDuration;
+    return count + (!task.completed && willBeCompleted ? 1 : 0);
+  }, 0);
+
   const taskUpdates = tasks
     .map((task) => {
       const newCompletedDuration = task.completedDuration + duration;
@@ -39,4 +46,6 @@ export const updateTasksCompletedDurationByActivityDate = async (
   if (taskUpdates.length > 0) {
     await Promise.all(taskUpdates);
   }
+
+  return newlyCompletedCount;
 };

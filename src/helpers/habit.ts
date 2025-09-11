@@ -23,6 +23,13 @@ export const updateHabitsCompletedDurationByActivityDate = async (
     include: { habit: true },
   });
 
+  // Count how many habit progresses will newly become completed
+  const newlyCompletedCount = habitProgresses.reduce((count, habitProgress) => {
+    const newCompletedDuration = habitProgress.completedDuration + duration;
+    const willBeCompleted = newCompletedDuration >= habitProgress.goalDuration;
+    return count + (!habitProgress.completed && willBeCompleted ? 1 : 0);
+  }, 0);
+
   // Batch update for habit progresses
   const habitProgressUpdates = habitProgresses.map((habitProgress) => {
     const newCompletedDuration = habitProgress.completedDuration + duration;
@@ -43,6 +50,8 @@ export const updateHabitsCompletedDurationByActivityDate = async (
   );
 
   await Promise.all(habitCompletionUpdates);
+
+  return newlyCompletedCount;
 };
 
 export const updateHabitCompleted = async (habitId: string) => {

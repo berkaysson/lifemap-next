@@ -45,7 +45,7 @@ export const createActivity = async (
 
     await archiveOutdatedEntities();
 
-    const updates = [
+    const [newlyCompletedTasks, newlyCompletedHabitProgresses] = await Promise.all([
       updateTasksCompletedDurationByActivityDate(
         userId,
         newActivity.categoryId,
@@ -58,13 +58,13 @@ export const createActivity = async (
         date,
         newActivity.duration
       ),
-    ];
-
-    await Promise.all(updates);
+    ]);
 
     return {
       message: "Successfully created activity",
       success: true,
+      newlyCompletedTasks,
+      newlyCompletedHabitProgresses,
     };
   } catch (error) {
     return {

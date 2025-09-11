@@ -65,11 +65,28 @@ export const useCreateActivity = () => {
       if (!response.success) throw new Error(response.message);
       return response;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      const tasks = (data as any).newlyCompletedTasks ?? 0;
+      const habits = (data as any).newlyCompletedHabitProgresses ?? 0;
+
+      let title = "Activity Created";
+      let description = "Activity created successfully";
+
+      if (tasks > 0 || habits > 0) {
+        const parts: string[] = [];
+        if (tasks > 0) parts.push(`${tasks} task${tasks > 1 ? "s" : ""}`);
+        if (habits > 0)
+          parts.push(
+            `${habits} habit progress${habits > 1 ? "es" : ""}`
+          );
+        title = "Great job!";
+        description = `You completed ${parts.join(" and ")}.`;
+      }
+
       toast({
-        title: "Activity Created",
-        description: "Activity created successfully",
-        duration: 3000,
+        title,
+        description,
+        duration: 3500,
       });
 
       queryClient.invalidateQueries({ queryKey: [ACTIVITY_QUERY_KEY, userId] });
