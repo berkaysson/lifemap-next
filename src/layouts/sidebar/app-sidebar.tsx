@@ -46,7 +46,7 @@ export function AppSidebar() {
       className="group-data-[collapsible=icon]:w-[70px]"
     >
       <SidebarHeader className="p-4 group-data-[collapsible=icon]:p-1">
-        <Link href="/" className="flex items-center space-x-2">
+        <Link href={pathname === "/" ? "/" : "/dashboard"} className="flex items-center space-x-2">
           <Image src="/logo.png" alt="Logo" width={62} height={62} />
           <span className="text-lg font-bold text-fore group-data-[collapsible=icon]:hidden">
             habivita

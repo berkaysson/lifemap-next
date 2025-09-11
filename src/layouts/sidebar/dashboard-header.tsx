@@ -3,6 +3,9 @@ import { SidebarTrigger } from "../../layouts/sidebar/sidebar";
 import ThemeToggle from "@/components/ui/Buttons/theme-toggle";
 import { memo, Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { IconButton } from "@mui/material";
+import Link from "next/link";
+import { Iconify } from "@/components/ui/iconify";
 
 const DashboardHeader = ({
   title,
@@ -28,6 +31,11 @@ const DashboardHeader = ({
           </Suspense>
         )}
         <Separator orientation="vertical" className="h-6" />
+        <Link href="/dashboard" aria-label="Go to dashboard">
+          <IconButton>
+            <Iconify icon="solar:home-2-bold" />
+          </IconButton>
+        </Link>
         <ThemeToggle />
       </div>
     </header>
