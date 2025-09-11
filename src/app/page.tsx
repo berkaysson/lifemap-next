@@ -5,6 +5,7 @@ import { Footer } from "@/components/Home/footer";
 import { HeroContent } from "@/components/Home/hero-content";
 import { HomeHeader } from "@/components/Home/home-header";
 import { Separator } from "@/components/ui/separator";
+import PricingSection from "@/components/Home/pricing-section";
 
 const HomePage = () => {
   const badge = "Habivita";
@@ -72,6 +73,7 @@ const HomePage = () => {
       <Separator />
 
       <ExamplesSection />
+      <PricingSection />
       <Footer />
     </div>
   );
