@@ -6,10 +6,28 @@ import { createHabit } from "@/services/habit/createHabit";
 
 export const seedDefaultStarter = async (userId: string) => {
   try {
+    // Idempotency guard: skip if already seeded for this user
+    const executionName = `seed-default-starter:${userId}`;
+    const existingExecution = await prisma.functionExecution.findUnique({
+      where: { name: executionName },
+    });
+
+    if (existingExecution) {
+      return {
+        message: "Default starter already seeded",
+        success: true,
+      };
+    }
+
     await seedDefaultCategories(userId);
     await seedDefaultTodos(userId);
     await seedDefaultTasks(userId);
     await seedDefaultHabits(userId);
+
+    // Mark as seeded
+    await prisma.functionExecution.create({
+      data: { name: executionName },
+    });
 
     return {
       message: "Successfully seeded default starter",

@@ -4,6 +4,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { getUserById } from "./helpers/user";
 import authConfig from "./auth.config";
 import { UserRole } from "@prisma/client";
+import { seedDefaultStarter } from "@/actions/seed-default-starter";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   callbacks: {
@@ -39,6 +40,14 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     },
   },
   events: {
+    async createUser({ user }) {
+      if (!user?.id) return;
+      try {
+        await seedDefaultStarter(user.id);
+      } catch (error) {
+        // intentionally ignore seeding errors to not block auth flow
+      }
+    },
     async linkAccount({ user }) {
       await prisma.user.update({
         where: { id: user.id },
