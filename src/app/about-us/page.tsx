@@ -1,4 +1,4 @@
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, CircleDashed } from "lucide-react";
 import TryItNowButton from "@/components/Home/try-it-button";
 import { Footer } from "@/components/Home/footer";
 import { HomeHeader } from "@/components/Home/home-header";
@@ -41,6 +41,23 @@ export default function AboutPage() {
             ].map((feature, index) => (
               <li key={index} className="flex items-start">
                 <CheckCircle className="h-6 w-6 text-green-500 mr-2 flex-shrink-0" />
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+
+          <h2 className="text-2xl font-semibold mb-4 mt-8">Planned Features</h2>
+          <ul className="space-y-4">
+            {[
+              "Todo Based Habits",
+              "Notes",
+              "Enhanced Projects",
+              "Charts and Graphs to visualize your data",
+              "Templates for Habits",
+              "Gamification Features",
+            ].map((feature, index) => (
+              <li key={index} className="flex items-start">
+                <CircleDashed className="h-6 w-6 text-yellow-500 mr-2 flex-shrink-0" />
                 <span>{feature}</span>
               </li>
             ))}
