@@ -46,7 +46,10 @@ export function AppSidebar() {
       className="group-data-[collapsible=icon]:w-[70px]"
     >
       <SidebarHeader className="p-4 group-data-[collapsible=icon]:p-1">
-        <Link href={pathname === "/" ? "/" : "/dashboard"} className="flex items-center space-x-2">
+        <Link
+          href={pathname === "/" ? "/" : "/dashboard"}
+          className="flex items-center space-x-2"
+        >
           <Image src="/logo.png" alt="Logo" width={62} height={62} />
           <span className="text-lg font-bold text-fore group-data-[collapsible=icon]:hidden">
             habivita
@@ -134,16 +137,10 @@ const items = [
     activeIcon: "solar:home-angle-2-bold-duotone",
   },
   {
-    title: "Activities",
-    url: "/dashboard/activity",
-    icon: "solar:bolt-bold",
-    activeIcon: "solar:bolt-bold-duotone",
-  },
-  {
-    title: "Activity Types",
-    url: "/dashboard/category",
-    icon: "solar:hashtag-square-bold",
-    activeIcon: "solar:hashtag-square-bold-duotone",
+    title: "Progress",
+    url: "/dashboard/progress",
+    icon: "solar:chart-2-bold",
+    activeIcon: "solar:chart-2-bold-duotone",
   },
   {
     title: "ToDos",
@@ -168,6 +165,18 @@ const items = [
     url: "/dashboard/project",
     icon: "solar:folder-with-files-bold",
     activeIcon: "solar:folder-with-files-bold-duotone",
+  },
+  {
+    title: "Activities",
+    url: "/dashboard/activity",
+    icon: "solar:bolt-bold",
+    activeIcon: "solar:bolt-bold-duotone",
+  },
+  {
+    title: "Activity Types",
+    url: "/dashboard/category",
+    icon: "solar:hashtag-square-bold",
+    activeIcon: "solar:hashtag-square-bold-duotone",
   },
 ];
 
