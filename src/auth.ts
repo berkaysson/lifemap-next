@@ -23,8 +23,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       if (token.sub && session.user) {
         session.user.id = token.sub;
         session.user.role = token.role as UserRole;
-        // also expose emailVerified to the client session
-        // @ts-expect-error augmented in next-auth.d.ts
+        // add more fields to the session object if needed
+        // to add additional fields also update the next-auth.d.ts file like UserRole
+        // for more info check next-auth.d.ts
         session.user.emailVerified = (token as any).emailVerified ?? null;
       }
       return session;
