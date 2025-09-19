@@ -35,7 +35,7 @@ export function ExamplesSection() {
     <QueryClientProvider client={queryClient}>
       <section className="z-10 py-16 sm:py-20 md:py-24 bg-back">
         <div className="container mx-auto px-4 sm:px-6 md:px-8">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-primary mb-4 sm:mb-6 md:mb-8">
+          <h2 className="text-primary text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4 sm:mb-6 md:mb-8">
             How habivita Works
           </h2>
           <Carousel
@@ -47,7 +47,7 @@ export function ExamplesSection() {
             }}
           >
             <div className="flex items-center justify-center gap-2 mb-6">
-              <CarouselPrevious className="static transform-none" />
+              <CarouselPrevious className="static transform-none text-gray-400" />
               <div className="flex gap-1">
                 {pages.map((idx) => (
                   <button
@@ -60,7 +60,7 @@ export function ExamplesSection() {
                   />
                 ))}
               </div>
-              <CarouselNext className="static transform-none" />
+              <CarouselNext className="static transform-none text-gray-400" />
             </div>
             <CarouselContent>
               <CarouselItem>
@@ -76,7 +76,7 @@ export function ExamplesSection() {
               </CarouselItem>
 
               <CarouselItem>
-                <h2 className="text-xl font-semibold">Add new activities</h2>
+                <h2 className="text-xl font-semibold text-primary">Add new activities</h2>
                 <p className="text-sm text-muted-foreground">
                   Add new activities with modern ui and track your progress.
                 </p>
@@ -89,6 +89,28 @@ export function ExamplesSection() {
                       className="object-contain mx-auto"
                       sizes="(max-width: 768px) 80vw, 60vw"
                       priority
+                      style={{
+                        objectFit: "contain",
+                        maxWidth: "min(90vw, 400px)",
+                      }}
+                    />
+                  </div>
+                </div>
+              </CarouselItem>
+
+              <CarouselItem>
+                <h2 className="text-xl font-semibold text-primary">Follow Your Progress</h2>
+                <p className="text-sm text-muted-foreground">
+                  Visualize your weekly activity summaries and stay motivated
+                  with habivita.
+                </p>
+                <div className="flex flex-col items-center min-h-[300px] justify-center w-full h-[70vh]">
+                  <div className="relative w-full h-full aspect-[9/16]">
+                    <Image
+                      src="/assets/images/home/home-weekly-summary.webp"
+                      alt="Activity drawer example"
+                      fill
+                      className="object-contain mx-auto rounded-lg"
                       style={{
                         objectFit: "contain",
                         maxWidth: "min(90vw, 400px)",
@@ -114,7 +136,7 @@ export function ExamplesSection() {
             </CarouselContent>
 
             <div className="flex items-center justify-center gap-2 mt-6">
-              <CarouselPrevious className="static transform-none" />
+              <CarouselPrevious className="static transform-none text-gray-400" />
               <div className="flex gap-1">
                 {pages.map((idx) => (
                   <button
@@ -127,7 +149,7 @@ export function ExamplesSection() {
                   />
                 ))}
               </div>
-              <CarouselNext className="static transform-none" />
+              <CarouselNext className="static transform-none text-gray-400" />
             </div>
           </Carousel>
         </div>

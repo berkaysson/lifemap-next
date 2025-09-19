@@ -3,7 +3,7 @@ import HabitListItem from "../Habits/HabitListItem";
 const ExampleHabit = () => {
   return (
     <div className="w-full">
-      <h2 className="text-xl font-semibold">Build Your Habit</h2>
+      <h2 className="text-xl font-semibold text-primary">Build Your Habit</h2>
       <p className="text-sm text-muted-foreground">
         Want to develop a new positive routine?
       </p>

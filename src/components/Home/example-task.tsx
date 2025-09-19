@@ -25,7 +25,7 @@ const ExampleTask = () => {
 
   return (
     <div className="w-full">
-      <h2 className="text-xl font-semibold">Create Your Tasks</h2>
+      <h2 className="text-xl font-semibold text-primary">Create Your Tasks</h2>
       <p className="text-sm text-muted-foreground">
         Want to finish your book? Create a task to track your progress.
       </p>

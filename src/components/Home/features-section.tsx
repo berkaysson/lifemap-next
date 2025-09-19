@@ -55,15 +55,22 @@ export function FeaturesSection() {
             description=" Establish and maintain positive habits with guided tracking and habit streaks based on logged activity.."
           />
           <FeatureCard
+            icon="solar:chart-2-bold-duotone"
+            title="Progress Insights"
+            description="Visualize your productivity patterns with detailed charts and reports."
+          />
+          <FeatureCard
             icon="solar:folder-with-files-bold-duotone"
             title="Project Organizer"
             description="Organize related tasks, habits, and to-dos effectively with project-based structuring for better organization and goal-setting."
           />
-          <FeatureCard
-            icon="solar:stars-line-duotone"
-            title="And More!"
-            description="We're constantly working on new features to enhance your productivity experience. Stay tuned!"
-          />
+          <div className="lg:col-span-3 flex justify-center w-full">
+            <FeatureCard
+              icon="solar:stars-line-duotone"
+              title="And More!"
+              description="We're constantly working on new features to enhance your productivity experience. Stay tuned!"
+            />
+          </div>
         </div>
       </div>
     </section>

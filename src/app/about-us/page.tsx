@@ -38,6 +38,7 @@ export default function AboutPage() {
               "Task Tracking",
               "Habit Formation",
               "Project Management",
+              "Charts and Graphs to visualize your data",
             ].map((feature, index) => (
               <li key={index} className="flex items-start">
                 <CheckCircle className="h-6 w-6 text-green-500 mr-2 flex-shrink-0" />
@@ -52,7 +53,6 @@ export default function AboutPage() {
               "Todo Based Habits",
               "Notes",
               "Enhanced Projects",
-              "Charts and Graphs to visualize your data",
               "Templates for Habits",
               "Gamification Features",
             ].map((feature, index) => (
