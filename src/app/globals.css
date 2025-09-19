@@ -12,7 +12,7 @@
 
     --popover: 216.92 34.27% 92.22%;
     --popover-foreground: 229.14 53.81% 19.1%;
-    
+
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 201.82 44% 95.1%;
 
@@ -49,6 +49,23 @@
     --sidebar-border: 220 13% 91%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* CHART COLORS */
+    --chart-1: oklch(0.646 0.222 41.116);
+    --chart-2: oklch(0.6 0.118 184.704);
+    --chart-3: oklch(0.398 0.07 227.392);
+    --chart-4: oklch(0.524 0.207 330.5);
+    --chart-5: oklch(0.769 0.188 70.08);
+    --chart-6: oklch(0.875 0.23 146.074);
+    --chart-7: oklch(0.312 0.182 281.216);
+    --chart-8: oklch(0.71 0.17 210);
+    --chart-9: oklch(0.58 0.19 20);
+    --chart-10: oklch(0.8 0.14 120);
+    --chart-11: oklch(0.72 0.18 260);
+    --chart-12: oklch(0.5 0.2 300);
+    --chart-13: oklch(0.9 0.12 60);
+    --chart-14: oklch(0.45 0.17 180);
+    --chart-15: oklch(0.82 0.16 20);
   }
 
   .dark {
@@ -87,6 +104,23 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 291.55 100% 4.25%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* CHART COLORS */
+    --chart-1: oklch(0.488 0.243 264.376);
+    --chart-2: oklch(0.696 0.17 162.48);
+    --chart-3: oklch(0.769 0.188 70.08);
+    --chart-4: oklch(0.526 0.272 300.33);
+    --chart-5: oklch(0.645 0.246 16.439);
+    --chart-6: oklch(0.606 0.167 145.584);
+    --chart-7: oklch(0.733 0.133 343.34);
+    --chart-8: oklch(0.52 0.2 200);
+    --chart-9: oklch(0.75 0.15 100);
+    --chart-10: oklch(0.57 0.21 30);
+    --chart-11: oklch(0.68 0.19 280);
+    --chart-12: oklch(0.8 0.16 180);
+    --chart-13: oklch(0.86 0.14 50);
+    --chart-14: oklch(0.49 0.22 320);
+    --chart-15: oklch(0.78 0.15 200);
   }
 }
 
@@ -108,10 +142,10 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
 
     /* THEME PALETTE */
-    --color-primary: #714DD9;
+    --color-primary: #714dd9;
     --color-secondary: #abc4ff;
     --color-back: #e2edf3;
-    --color-fore: #11213A;
+    --color-fore: #11213a;
     --color-success: #80c423;
     --color-warning: #f7b801;
     --color-error: #d1105a;
@@ -130,9 +164,9 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
 
     /* THEME PALETTE*/
-    --color-primary: #714DD9;
+    --color-primary: #714dd9;
     --color-secondary: #8caefd;
-    --color-back: #11213A;
+    --color-back: #11213a;
     --color-fore: #e2edf3;
   }
 }

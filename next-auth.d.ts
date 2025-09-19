@@ -10,6 +10,8 @@ import { DefaultSession } from "next-auth";
 
 export type ExtendedUser = DefaultSession["user"] & {
   role: UserRole;
+  // ISO string or null; we only need it for client-side limits
+  emailVerified?: string | null;
 };
 
 declare module "next-auth" {
