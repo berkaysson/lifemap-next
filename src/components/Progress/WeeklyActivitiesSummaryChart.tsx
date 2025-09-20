@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { format, addMonths, subMonths, endOfDay, startOfDay } from "date-fns";
 import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/chart";
 import { Button } from "../ui/Buttons/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const CATEGORY_COLORS = [
   "var(--chart-1)",
@@ -43,26 +44,9 @@ const CATEGORY_COLORS = [
   "var(--chart-15)",
 ];
 
-// Helper hook to detect screen size for responsiveness
-const useMediaQuery = (query: string) => {
-  const [matches, setMatches] = useState(false);
-
-  useEffect(() => {
-    const media = window.matchMedia(query);
-    const listener = () => setMatches(media.matches);
-    // Check on mount and add listener
-    listener();
-    media.addEventListener("change", listener);
-
-    return () => media.removeEventListener("change", listener);
-  }, [query]);
-
-  return matches;
-};
-
 export function WeeklyActivitiesSummaryChart() {
   const [desktopTimeframe, setDesktopTimeframe] = useState<"1m" | "3m">("3m");
-  const isMobile = useMediaQuery("(max-width: 639px)"); // Tailwind's `sm` breakpoint
+  const isMobile = useIsMobile();
 
   // On mobile, always show the monthly view. On desktop, use the selected state.
   const timeframe = isMobile ? "1m" : desktopTimeframe;
@@ -271,7 +255,10 @@ export function WeeklyActivitiesSummaryChart() {
     <Card>
       <CardHeader>{renderCardHeader()}</CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="w-full h-[450px] sm:h-[300px] md:h-[350px] lg:h-[400px]">
+        <ChartContainer
+          config={chartConfig}
+          className="w-full h-[450px] sm:h-[300px] md:h-[350px] lg:h-[400px]"
+        >
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
