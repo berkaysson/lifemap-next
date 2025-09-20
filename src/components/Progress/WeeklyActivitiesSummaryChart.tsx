@@ -156,14 +156,14 @@ export function WeeklyActivitiesSummaryChart() {
             <XAxis
               dataKey="week"
               tickLine={false}
-              tickMargin={10}
+              tickMargin={6}
               axisLine={false}
             />
             <YAxis
               tickFormatter={(v) => `${Math.round(Number(v) / 60)}h`}
               tickLine={false}
               axisLine={false}
-              width={30}
+              width={24}
             />
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
             <ChartLegend content={<ChartLegendContent />} />
