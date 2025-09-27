@@ -2,7 +2,6 @@
 
 import { useSession } from "next-auth/react";
 import React from "react";
-import { WeeklyActivitiesSummaryRadialChart } from "../Progress/WeeklyActivitiesSummaryRadialChart";
 
 export const WelcomeHeader = () => {
   const { data: session } = useSession();
@@ -31,10 +30,6 @@ export const WelcomeHeader = () => {
         <p className="text-white/70 text-sm sm:text-base animate-fade-in delay-300">
           Ready to tackle your goals today?
         </p>
-      </div>
-
-      <div className="relative z-10 mt-4">
-        <WeeklyActivitiesSummaryRadialChart />
       </div>
     </div>
   );

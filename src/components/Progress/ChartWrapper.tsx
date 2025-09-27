@@ -77,7 +77,7 @@ export function ChartWrapper({
   return (
     <Card>
       <CardHeader>
-        <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="grid gap-1">
             <CardTitle>{title}</CardTitle>
             <CardDescription>{description}</CardDescription>

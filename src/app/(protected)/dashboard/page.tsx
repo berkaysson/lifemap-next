@@ -7,6 +7,7 @@ import QuickActions from "@/components/Dashboard/QuickActions";
 import { Separator } from "@/components/ui/separator";
 import { DashboardCardGrid } from "@/components/Dashboard/DashboardCardGrid";
 import { WelcomeHeader } from "@/components/Dashboard/WelcomeHeader";
+import { WeeklyActivitiesSummaryRadialChart } from "@/components/Progress/WeeklyActivitiesSummaryRadialChart";
 
 const DashboardPage = () => {
   return (
@@ -16,6 +17,10 @@ const DashboardPage = () => {
       <div className="py-4 sm:py-6 px-2 sm:px-3">
         {/* Summary Section */}
         <WelcomeHeader />
+
+        <div className="mt-4">
+          <WeeklyActivitiesSummaryRadialChart />
+        </div>
 
         {/* Quick Actions */}
         <div className="my-6 sm:my-8">

@@ -119,7 +119,7 @@ export function WeeklyActivitiesSummaryRadialChart() {
       <div className="flex flex-col">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[400px] min-h-[140px]"
+          className="mx-auto max-h-[400px] min-h-[240px]"
         >
           <RadialBarChart
             data={chartData}
@@ -148,9 +148,6 @@ export function WeeklyActivitiesSummaryRadialChart() {
             <span className="text-foreground">
               {formatDuration(currentWeekData?.totalDuration || 0)}
             </span>
-          </div>
-          <div className="text-muted-foreground leading-none">
-            Time spent across all categories
           </div>
         </CardFooter>
       </div>
