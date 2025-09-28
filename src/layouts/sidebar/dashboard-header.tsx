@@ -15,12 +15,11 @@ const DashboardHeader = ({
   DialogComponent?: React.ReactNode;
 }) => {
   return (
-    <header className="flex h-16 items-center px-4 gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+    <header className="flex h-16 items-center px-2 gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
       {/* Left Section */}
       <div className="flex items-center gap-2">
         <SidebarTrigger className="-ml-1" />
-        <Separator orientation="vertical" className="h-6" />
-        <h2 className="text-lg font-semibold text-fore">{title}</h2>
+        <h2 className="text-md font-semibold text-fore">{title}</h2>
       </div>
 
       {/* Right Section */}
@@ -30,7 +29,6 @@ const DashboardHeader = ({
             {DialogComponent}
           </Suspense>
         )}
-        <Separator orientation="vertical" className="h-6" />
         <Link href="/dashboard" aria-label="Go to dashboard">
           <IconButton>
             <Iconify icon="solar:home-2-bold" />

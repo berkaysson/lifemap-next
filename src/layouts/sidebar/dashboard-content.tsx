@@ -45,8 +45,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({
         display: "flex",
         flex: "1 1 auto",
         flexDirection: "column",
-        pt: 2,
-        pb: 2,
+        p: { xs: 0.5, sm: 2 },
         mb: 10,
         ...(disablePadding && {
           p: {
@@ -57,8 +56,9 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({
             xl: 0,
           },
         }),
+
         ...sx,
-      }}
+      }}  
       {...other}
     >
       <Card className="min-h-[50vh] bg-back">{children}</Card>
