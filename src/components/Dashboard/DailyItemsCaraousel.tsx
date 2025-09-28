@@ -86,7 +86,7 @@ export default function DailyItemsCarousel() {
           size="icon"
           onClick={handlePrevious}
           aria-label="Previous item"
-          className="z-10 mr-0 sm:mr-2"
+          className=" mr-0 sm:mr-2"
         >
           <Iconify icon="solar:alt-arrow-left-bold" width={20} />
         </Button>
@@ -100,7 +100,7 @@ export default function DailyItemsCarousel() {
               </>
             )}
             {currentItem && currentItem.type === "todo" && (
-              <Card className="shadow-lg relative z-10">
+              <Card className="shadow-lg relative ">
                 <CardContent className="p-2 sm:p-4 py-2">
                   <RecentTodoItem
                     key={currentItem.item.id}
@@ -123,7 +123,7 @@ export default function DailyItemsCarousel() {
           size="icon"
           onClick={handleNext}
           aria-label="Next item"
-          className="z-10 ml-0 sm:ml-3"
+          className=" ml-0 sm:ml-3"
         >
           <Iconify icon="solar:alt-arrow-right-bold" width={20} />
         </Button>
@@ -142,7 +142,7 @@ function ActivityCard({
   const minutesNeeded = activity.goalDuration - activity.completedDuration;
 
   return (
-    <Card className="shadow-lg relative z-10">
+    <Card className="shadow-lg relative">
       <CardContent className="p-2 sm:p-4">
         <div className="flex items-center justify-between flex-col sm:flex-row gap-4 sm:gap-0">
           <div className="flex-1 mr-0 sm:mr-4">
