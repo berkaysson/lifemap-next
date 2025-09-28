@@ -118,10 +118,14 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
         setIsError(false);
         open();
       }}
-      className="fixed bottom-4 right-4"
+      className="fixed bottom-8 right-4 bg-gradient-to-r from-secondary to-primary text-black font-semibold border-0 transition-all duration-300 hover:scale-105 active:scale-95"
+      style={{
+        boxShadow:
+          "0 4px 12px rgba(59, 130, 246, 0.3), 0 3px 12px rgba(147, 51, 234, 0.2)",
+      }}
     >
-      <Iconify icon="solar:bolt-circle-outline" width={32} />
-      <span className="hidden sm:inline">Create Activity</span>
+      <Iconify icon="solar:bolt-circle-outline" width={28} />
+      <span className="hidden sm:inline ml-2">Create Activity</span>
     </Button>
   );
 
