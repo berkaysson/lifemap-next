@@ -150,6 +150,7 @@ export function WeeklyActivitiesSummaryChart() {
         <ChartContainer
           config={processedData.chartConfig}
           className="w-full h-[350px]"
+          height={350}
         >
           <BarChart accessibilityLayer data={processedData.chartData}>
             <CartesianGrid vertical={false} />

@@ -120,6 +120,7 @@ export function WeeklyActivitiesSummaryRadialChart() {
         <ChartContainer
           config={chartConfig}
           className="mx-auto max-h-[400px] min-h-[240px]"
+          height={240}
         >
           <RadialBarChart
             data={chartData}
