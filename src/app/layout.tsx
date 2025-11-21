@@ -6,6 +6,7 @@ import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { Toaster } from "@/components/ui/Misc/toaster";
 import ThemeProvider from "@/contexts/theme-provider";
+import { Analytics } from "@vercel/analytics/next";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -50,6 +51,8 @@ export default async function RootLayout({
           <SessionProvider session={session}>{children}</SessionProvider>
         </ThemeProvider>
         <Toaster />
+
+        <Analytics />
       </body>
     </html>
   );
