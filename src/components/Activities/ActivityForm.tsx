@@ -36,6 +36,7 @@ import CategorySelectCreate from "../Category/CategorySelectCreate";
 import { useActivityDrawerState } from "@/hooks/use-activity-drawer-state";
 import { Badge } from "../ui/badge";
 import { ExtendedActivity } from "@/types/Entitities";
+import { ActivityFromTriggerButton } from "./ActivityFromTriggerButton";
 
 // Default values type
 type ActivityFormValues = z.infer<typeof ActivitySchema>;
@@ -134,21 +135,11 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
   };
 
   const defaultTrigger = (
-    <Button
-      onClick={() => {
-        setMessage("");
-        setIsError(false);
-        open();
-      }}
-      className="fixed bottom-8 right-4 bg-gradient-to-r from-secondary to-primary text-black font-semibold border-0 transition-all duration-300 hover:scale-105 active:scale-95"
-      style={{
-        boxShadow:
-          "0 4px 12px rgba(59, 130, 246, 0.3), 0 3px 12px rgba(147, 51, 234, 0.2)",
-      }}
-    >
-      <Iconify icon="solar:bolt-circle-outline" width={28} />
-      <span className="hidden sm:inline ml-2">Create Activity</span>
-    </Button>
+    <ActivityFromTriggerButton
+      open={open}
+      setMessage={setMessage}
+      setIsError={setIsError}
+    />
   );
 
   return (
