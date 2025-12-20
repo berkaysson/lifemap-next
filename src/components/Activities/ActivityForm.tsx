@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, useEffect } from "react";
+import { useState, useTransition, useEffect, useMemo } from "react";
 import { LoadingButton } from "../ui/Buttons/loading-button";
 import {
   Form,
@@ -15,7 +15,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ActivitySchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCreateActivity } from "@/queries/activityQueries";
+import {
+  useCreateActivity,
+  useFetchActivitiesByCategory,
+} from "@/queries/activityQueries";
 import { Button } from "../ui/Buttons/button";
 import {
   Drawer,
@@ -63,6 +66,34 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
   });
 
   const { reset } = form;
+
+  const categoryId = form.watch("categoryId");
+  const { data: activitiesData } = useFetchActivitiesByCategory(categoryId, 20);
+
+  const suggestedDurations = useMemo(() => {
+    if (!activitiesData?.activities || activitiesData.activities.length === 0)
+      return [10, 30, 60, 90];
+
+    // Activities are already filtered by category and sorted by date from the server
+    const matchingActivities = activitiesData.activities;
+
+    if (matchingActivities.length === 0) return [10, 30, 60, 90];
+
+    const durationCounts: Record<number, number> = {};
+    matchingActivities.forEach((a) => {
+      if (a.duration) {
+        durationCounts[a.duration] = (durationCounts[a.duration] || 0) + 1;
+      }
+    });
+
+    const sorted = Object.entries(durationCounts)
+      .sort(([, a], [, b]) => b - a)
+      .map(([duration]) => Number(duration));
+
+    const distinct = Array.from(new Set(sorted)).slice(0, 4);
+
+    return distinct.length > 0 ? distinct : [10, 30, 60, 90];
+  }, [activitiesData]);
 
   // Reset form when drawer opens with new values
   useEffect(() => {
@@ -146,6 +177,18 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
               >
                 <FormField
                   control={form.control}
+                  name="categoryId"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Select a Activity Type</FormLabel>
+                      <CategorySelectCreate field={field} form={form} />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
                   name="duration"
                   render={({ field }) => (
                     <FormItem>
@@ -197,7 +240,7 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                             </Badge>
                           </div>
                           <div className="flex gap-1 flex-wrap">
-                            {[10, 30, 60, 90].map((minutes) => (
+                            {suggestedDurations.map((minutes) => (
                               <Badge
                                 key={minutes}
                                 variant={
@@ -216,18 +259,6 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                           </div>
                         </div>
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="categoryId"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col">
-                      <FormLabel>Select a Activity Type</FormLabel>
-                      <CategorySelectCreate field={field} form={form} />
                       <FormMessage />
                     </FormItem>
                   )}

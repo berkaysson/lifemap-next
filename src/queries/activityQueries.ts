@@ -12,6 +12,7 @@ import { getActivities } from "@/services/activity/getActivites";
 import { createActivity } from "@/services/activity/createActivity";
 import { updateActivity } from "@/services/activity/updateActivity";
 import { deleteActivity } from "@/services/activity/deleteActivity";
+import { getActivitiesByCategory } from "@/services/activity/getActivitiesByCategory";
 
 export const ACTIVITY_QUERY_KEY = "activities";
 
@@ -51,6 +52,33 @@ export const useFetchActivities = (
   });
 };
 
+// 1.5 Fetch Activities by Category Query
+export const useFetchActivitiesByCategory = (
+  categoryId: string | undefined,
+  limit: number = 20
+) => {
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+
+  return useQuery({
+    queryKey: [ACTIVITY_QUERY_KEY, "by-category", userId, categoryId, limit],
+    queryFn: async () => {
+      validateSession(session);
+      if (!categoryId) return { success: true, activities: [] };
+
+      const response = await getActivitiesByCategory(
+        userId!,
+        categoryId,
+        limit
+      );
+      if (!response.success) throw new Error(response.message);
+      return response;
+    },
+    enabled: !!userId && !!categoryId,
+    staleTime: 1000 * 60 * 5,
+  });
+};
+
 // 2. Create Activity Mutation
 export const useCreateActivity = () => {
   const { data: session } = useSession();
@@ -76,9 +104,7 @@ export const useCreateActivity = () => {
         const parts: string[] = [];
         if (tasks > 0) parts.push(`${tasks} task${tasks > 1 ? "s" : ""}`);
         if (habits > 0)
-          parts.push(
-            `${habits} habit progress${habits > 1 ? "es" : ""}`
-          );
+          parts.push(`${habits} habit progress${habits > 1 ? "es" : ""}`);
         title = "Great job!";
         description = `You completed ${parts.join(" and ")}.`;
       }
