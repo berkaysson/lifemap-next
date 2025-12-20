@@ -26,7 +26,6 @@ import {
   DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -117,7 +116,7 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
             setIsError(true);
           }
         }
-      } catch (error: any) {
+      } catch {
         setMessage("An error occurred");
         setIsError(true);
       }
@@ -157,44 +156,67 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
       <DrawerTrigger asChild>{trigger || defaultTrigger}</DrawerTrigger>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
-          <DrawerHeader>
-            <DrawerTitle>Create Activity</DrawerTitle>
-            <DrawerDescription>Create a new activity</DrawerDescription>
+          <DrawerHeader className="text-center sm:text-left mb-2">
+            <DrawerTitle className="text-2xl font-bold tracking-tight bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
+              Create Activity
+            </DrawerTitle>
+            <DrawerDescription className="text-white/50">
+              Log your progress and track your journey
+            </DrawerDescription>
           </DrawerHeader>
-          <div className="p-4">
+          <div className="p-4 pt-0">
             <Form {...form}>
               <form
-                className="space-y-4"
+                className="space-y-6"
                 onSubmit={form.handleSubmit(onSubmit)}
               >
                 <FormField
                   control={form.control}
                   name="categoryId"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col">
-                      <FormLabel>Select an Activity Type</FormLabel>
+                    <FormItem className="flex flex-col space-y-3">
+                      <div className="flex items-center gap-2">
+                        <Iconify
+                          icon="solar:tag-bold-duotone"
+                          className="text-primary"
+                          width={18}
+                        />
+                        <FormLabel className="text-sm font-medium text-white/80">
+                          Activity Type
+                        </FormLabel>
+                      </div>
                       <CategorySelectCreate field={field} form={form} />
                       <FormMessage />
                       {suggestedCategories.length > 0 && (
-                        <div className="flex gap-1 flex-wrap mt-2">
-                          {suggestedCategories.map((category) => (
-                            <Badge
-                              key={category.id}
-                              variant={
-                                field.value === category.id
-                                  ? "default"
-                                  : "outline"
-                              }
-                              className="cursor-pointer transition-colors"
-                              onClick={() => {
-                                if (!isPending) {
-                                  field.onChange(category.id);
+                        <div className="flex flex-col gap-1">
+                          <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-white/40 font-semibold ml-1">
+                            <Iconify icon="iconoir:spark-solid" width={16} />
+                            Quick Select
+                          </span>
+                          <div className="flex gap-1 flex-wrap">
+                            {suggestedCategories.map((category) => (
+                              <Badge
+                                key={category.id}
+                                variant={
+                                  field.value === category.id
+                                    ? "default"
+                                    : "secondary"
                                 }
-                              }}
-                            >
-                              {category.name}
-                            </Badge>
-                          ))}
+                                className={`cursor-pointer px-3 py-1 transition-all duration-200 border-none ${
+                                  field.value === category.id
+                                    ? "bg-primary text-white scale-105 shadow-lg shadow-primary/20"
+                                    : "bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
+                                }`}
+                                onClick={() => {
+                                  if (!isPending) {
+                                    field.onChange(category.id);
+                                  }
+                                }}
+                              >
+                                {category.name}
+                              </Badge>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </FormItem>
@@ -205,14 +227,25 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                   control={form.control}
                   name="duration"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Duration (minutes)</FormLabel>
+                    <FormItem className="space-y-3">
+                      <div className="flex items-center gap-2">
+                        <Iconify
+                          icon="solar:clock-circle-bold-duotone"
+                          className="text-secondary"
+                          width={18}
+                        />
+                        <FormLabel className="text-sm font-medium text-white/80">
+                          Duration (minutes)
+                        </FormLabel>
+                      </div>
                       <FormControl>
-                        <div className="flex flex-col gap-2">
-                          <div className="flex items-center gap-4">
-                            <Badge
-                              variant="outline"
-                              className="cursor-pointer py-2 px-4 transition-colors"
+                        <div className="flex flex-col gap-3">
+                          <div className="flex items-center gap-2">
+                            <Button
+                              type="button"
+                              variant="secondary"
+                              size="icon"
+                              className="h-10 w-10 flex-shrink-0 bg-white/5 border-none hover:bg-white/10 text-white/80"
                               onClick={() => {
                                 if (!isPending) {
                                   const newValue = Math.max(
@@ -223,26 +256,30 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                                 }
                               }}
                             >
-                              -5
-                            </Badge>
-                            <Input
-                              disabled={isPending}
-                              {...field}
-                              value={field.value === 0 ? "" : field.value}
-                              placeholder="Your activity duration in minutes"
-                              onChange={(e) => {
-                                const value = e.target.value;
-                                field.onChange(
-                                  value === "" ? 0 : Number(value)
-                                );
-                              }}
-                              type="number"
-                              max={5000}
-                              className="flex-1"
-                            />
-                            <Badge
-                              variant="outline"
-                              className="cursor-pointer py-2 px-4 transition-colors"
+                              <Iconify icon="lucide:minus" width={16} />
+                            </Button>
+                            <div className="relative flex-1">
+                              <Input
+                                disabled={isPending}
+                                {...field}
+                                value={field.value === 0 ? "" : field.value}
+                                placeholder="0"
+                                onChange={(e) => {
+                                  const value = e.target.value;
+                                  field.onChange(
+                                    value === "" ? 0 : Number(value)
+                                  );
+                                }}
+                                type="number"
+                                max={5000}
+                                className="h-10 bg-white/5 border-white/10 text-center text-lg font-medium focus-visible:ring-primary/50 placeholder:text-white/20"
+                              />
+                            </div>
+                            <Button
+                              type="button"
+                              variant="secondary"
+                              size="icon"
+                              className="h-10 w-10 flex-shrink-0 bg-white/5 border-none hover:bg-white/10 text-white/80"
                               onClick={() => {
                                 if (!isPending) {
                                   const newValue = (field.value || 0) + 5;
@@ -250,26 +287,36 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                                 }
                               }}
                             >
-                              +5
-                            </Badge>
+                              <Iconify icon="lucide:plus" width={16} />
+                            </Button>
                           </div>
-                          <div className="flex gap-1 flex-wrap">
-                            {suggestedDurations.map((minutes) => (
-                              <Badge
-                                key={minutes}
-                                variant={
-                                  field.value === minutes
-                                    ? "default"
-                                    : "outline"
-                                }
-                                className="cursor-pointer transition-colors"
-                                onClick={() =>
-                                  !isPending && field.onChange(minutes)
-                                }
-                              >
-                                {minutes} min.
-                              </Badge>
-                            ))}
+                          <div className="flex flex-col gap-1">
+                            <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-white/40 font-semibold ml-1">
+                              <Iconify icon="iconoir:spark-solid" width={16} />
+                              Quick Select
+                            </span>
+                            <div className="flex gap-1 flex-wrap">
+                              {suggestedDurations.map((minutes) => (
+                                <Badge
+                                  key={minutes}
+                                  variant={
+                                    field.value === minutes
+                                      ? "default"
+                                      : "secondary"
+                                  }
+                                  className={`cursor-pointer px-3 py-1 transition-all duration-200 border-none ${
+                                    field.value === minutes
+                                      ? "bg-secondary text-white scale-105 shadow-lg shadow-secondary/20"
+                                      : "bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
+                                  }`}
+                                  onClick={() =>
+                                    !isPending && field.onChange(minutes)
+                                  }
+                                >
+                                  {minutes} min.
+                                </Badge>
+                              ))}
+                            </div>
                           </div>
                         </div>
                       </FormControl>
@@ -282,15 +329,25 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                   control={form.control}
                   name="date"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col">
-                      <FormLabel>Activity Date</FormLabel>
+                    <FormItem className="flex flex-col space-y-3">
+                      <div className="flex items-center gap-2">
+                        <Iconify
+                          icon="solar:calendar-bold-duotone"
+                          className="text-blue-400"
+                          width={18}
+                        />
+                        <FormLabel className="text-sm font-medium text-white/80">
+                          Activity Date
+                        </FormLabel>
+                      </div>
                       <FormControl>
                         <div className="flex items-center gap-2">
                           <Button
                             type="button"
-                            variant="outline"
+                            variant="secondary"
                             size="icon"
                             disabled={isPending}
+                            className="bg-white/5 border-none hover:bg-white/10 text-white/80"
                             onClick={() => {
                               const date = new Date(field.value);
                               date.setUTCDate(date.getUTCDate() - 1);
@@ -316,9 +373,10 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                           </div>
                           <Button
                             type="button"
-                            variant="outline"
+                            variant="secondary"
                             size="icon"
                             disabled={isPending}
+                            className="bg-white/5 border-none hover:bg-white/10 text-white/80"
                             onClick={() => {
                               const date = new Date(field.value);
                               date.setUTCDate(date.getUTCDate() + 1);
@@ -334,47 +392,36 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description (optional)</FormLabel>
-                      <FormControl>
-                        <Input
-                          disabled={isPending}
-                          {...field}
-                          placeholder="Describe the activity"
-                          type="text"
-                          maxLength={70}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {message && isError && (
+                  <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm font-medium text-center">
+                    {message}
+                  </div>
+                )}
 
-                {message && isError && <FormMessage>{message}</FormMessage>}
+                <div className="pt-2 flex flex-col gap-3">
+                  <LoadingButton
+                    disabled={isPending}
+                    type="submit"
+                    className="w-full h-11 bg-gradient-to-r from-secondary to-primary hover:opacity-90 text-white font-bold text-base shadow-xl shadow-primary/10 transition-all active:scale-[0.98]"
+                    isLoading={isPending}
+                    loadingText="Creating..."
+                  >
+                    Create Activity
+                  </LoadingButton>
 
-                <LoadingButton
-                  disabled={isPending}
-                  type="submit"
-                  className="w-full"
-                  isLoading={isPending}
-                  loadingText="Creating..."
-                >
-                  Create
-                </LoadingButton>
+                  <DrawerClose asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full text-white/40 hover:text-white/80 hover:bg-white/5"
+                    >
+                      Cancel
+                    </Button>
+                  </DrawerClose>
+                </div>
               </form>
             </Form>
           </div>
-          <DrawerFooter>
-            <DrawerClose asChild>
-              <Button variant="ghost" size="sm">
-                Cancel
-              </Button>
-            </DrawerClose>
-          </DrawerFooter>
         </div>
       </DrawerContent>
     </Drawer>
