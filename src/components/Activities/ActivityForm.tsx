@@ -271,16 +271,49 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                     <FormItem className="flex flex-col">
                       <FormLabel>Activity Date</FormLabel>
                       <FormControl>
-                        <DatePicker
-                          date={field.value ? new Date(field.value) : undefined}
-                          onSelect={(date) =>
-                            field.onChange(
-                              new Date((date?.getTime() ?? 0) + 10800000)
-                                .toISOString()
-                                .split("T")[0]
-                            )
-                          }
-                        />
+                        <div className="flex items-center gap-2">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            disabled={isPending}
+                            onClick={() => {
+                              const date = new Date(field.value);
+                              date.setUTCDate(date.getUTCDate() - 1);
+                              field.onChange(date.toISOString().split("T")[0]);
+                            }}
+                          >
+                            <Iconify icon="lucide:chevron-left" width={20} />
+                          </Button>
+                          <div className="flex-1">
+                            <DatePicker
+                              date={
+                                field.value ? new Date(field.value) : undefined
+                              }
+                              showTodayButton={true}
+                              onSelect={(date) =>
+                                field.onChange(
+                                  new Date((date?.getTime() ?? 0) + 10800000)
+                                    .toISOString()
+                                    .split("T")[0]
+                                )
+                              }
+                            />
+                          </div>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            disabled={isPending}
+                            onClick={() => {
+                              const date = new Date(field.value);
+                              date.setUTCDate(date.getUTCDate() + 1);
+                              field.onChange(date.toISOString().split("T")[0]);
+                            }}
+                          >
+                            <Iconify icon="lucide:chevron-right" width={20} />
+                          </Button>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
