@@ -62,13 +62,16 @@ export function WeeklyActivitiesSummaryRadialChart() {
       return { chartData: [], chartConfig: {}, currentWeekData: null };
     }
 
-    const transformedData = Object.entries(data.categoryBreakdown).map(
-      ([name, duration], index) => ({
+    const transformedData = Object.entries(data.categoryBreakdown)
+      .map(([name, duration]) => ({
         name,
         duration,
+      }))
+      .sort((a, b) => a.duration - b.duration)
+      .map((item, index) => ({
+        ...item,
         fill: COLORS[index % COLORS.length],
-      })
-    );
+      }));
 
     const config: ChartConfig = transformedData.reduce((acc, item) => {
       acc[item.name] = { label: item.name, color: item.fill };
@@ -131,7 +134,7 @@ export function WeeklyActivitiesSummaryRadialChart() {
           >
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent nameKey="browser" />}
+              content={<ChartTooltipContent nameKey="name" />}
             />
             <RadialBar dataKey="duration" background>
               <LabelList
