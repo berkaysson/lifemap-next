@@ -18,6 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   useCreateActivity,
   useFetchActivitiesByCategory,
+  useFetchRecentActivities,
 } from "@/queries/activityQueries";
 import { Button } from "../ui/Buttons/button";
 import {
@@ -35,6 +36,7 @@ import { Iconify } from "../ui/iconify";
 import CategorySelectCreate from "../Category/CategorySelectCreate";
 import { useActivityDrawerState } from "@/hooks/use-activity-drawer-state";
 import { Badge } from "../ui/badge";
+import { ExtendedActivity } from "@/types/Entitities";
 
 // Default values type
 type ActivityFormValues = z.infer<typeof ActivitySchema>;
@@ -69,31 +71,21 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
 
   const categoryId = form.watch("categoryId");
   const { data: activitiesData } = useFetchActivitiesByCategory(categoryId, 20);
+  const { data: recentActivitiesData } = useFetchRecentActivities(20);
 
-  const suggestedDurations = useMemo(() => {
-    if (!activitiesData?.activities || activitiesData.activities.length === 0)
-      return [10, 30, 60, 90];
+  const suggestedCategories = useMemo(
+    () =>
+      getSuggestedCategories(
+        recentActivitiesData?.activities as ExtendedActivity[]
+      ),
+    [recentActivitiesData]
+  );
 
-    // Activities are already filtered by category and sorted by date from the server
-    const matchingActivities = activitiesData.activities;
-
-    if (matchingActivities.length === 0) return [10, 30, 60, 90];
-
-    const durationCounts: Record<number, number> = {};
-    matchingActivities.forEach((a) => {
-      if (a.duration) {
-        durationCounts[a.duration] = (durationCounts[a.duration] || 0) + 1;
-      }
-    });
-
-    const sorted = Object.entries(durationCounts)
-      .sort(([, a], [, b]) => b - a)
-      .map(([duration]) => Number(duration));
-
-    const distinct = Array.from(new Set(sorted)).slice(0, 4);
-
-    return distinct.length > 0 ? distinct : [10, 30, 60, 90];
-  }, [activitiesData]);
+  const suggestedDurations = useMemo(
+    () =>
+      getSuggestedDurations(activitiesData?.activities as ExtendedActivity[]),
+    [activitiesData]
+  );
 
   // Reset form when drawer opens with new values
   useEffect(() => {
@@ -180,9 +172,31 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                   name="categoryId"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>Select a Activity Type</FormLabel>
+                      <FormLabel>Select an Activity Type</FormLabel>
                       <CategorySelectCreate field={field} form={form} />
                       <FormMessage />
+                      {suggestedCategories.length > 0 && (
+                        <div className="flex gap-1 flex-wrap mt-2">
+                          {suggestedCategories.map((category) => (
+                            <Badge
+                              key={category.id}
+                              variant={
+                                field.value === category.id
+                                  ? "default"
+                                  : "outline"
+                              }
+                              className="cursor-pointer transition-colors"
+                              onClick={() => {
+                                if (!isPending) {
+                                  field.onChange(category.id);
+                                }
+                              }}
+                            >
+                              {category.name}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
                     </FormItem>
                   )}
                 />
@@ -356,7 +370,9 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
           </div>
           <DrawerFooter>
             <DrawerClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="ghost" size="sm">
+                Cancel
+              </Button>
             </DrawerClose>
           </DrawerFooter>
         </div>
@@ -364,5 +380,64 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
     </Drawer>
   );
 };
+
+// --- Helper Functions ---
+
+function getSuggestedCategories(activities: ExtendedActivity[] | undefined) {
+  if (!activities || activities.length === 0) return [];
+
+  const categoryCounts: Record<string, { count: number; name: string }> = {};
+
+  activities.forEach((act) => {
+    if (act.categoryId && act.category) {
+      if (!categoryCounts[act.categoryId]) {
+        categoryCounts[act.categoryId] = {
+          count: 0,
+          name: act.category.name,
+        };
+      }
+      categoryCounts[act.categoryId].count++;
+    }
+  });
+
+  const sorted = Object.entries(categoryCounts)
+    .sort(([, a], [, b]) => b.count - a.count)
+    .map(([id, { name }]) => ({ id, name }));
+
+  const top2 = sorted.slice(0, 2);
+
+  const lastUsed = activities[0]?.category
+    ? { id: activities[0].categoryId, name: activities[0].category.name }
+    : null;
+
+  const result = [...top2];
+  // Add last used if it's not already in top 2
+  if (lastUsed && !result.find((c) => c.id === lastUsed.id)) {
+    result.push(lastUsed);
+  }
+
+  return result;
+}
+
+function getSuggestedDurations(activities: ExtendedActivity[] | undefined) {
+  if (!activities || activities.length === 0) return [10, 30, 60, 90];
+
+  const matchingActivities = activities;
+
+  const durationCounts: Record<number, number> = {};
+  matchingActivities.forEach((a) => {
+    if (a.duration) {
+      durationCounts[a.duration] = (durationCounts[a.duration] || 0) + 1;
+    }
+  });
+
+  const sorted = Object.entries(durationCounts)
+    .sort(([, a], [, b]) => b - a)
+    .map(([duration]) => Number(duration));
+
+  const distinct = Array.from(new Set(sorted)).slice(0, 4);
+
+  return distinct.length > 0 ? distinct : [10, 30, 60, 90];
+}
 
 export default ActivityForm;

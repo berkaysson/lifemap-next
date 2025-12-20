@@ -13,6 +13,7 @@ import { createActivity } from "@/services/activity/createActivity";
 import { updateActivity } from "@/services/activity/updateActivity";
 import { deleteActivity } from "@/services/activity/deleteActivity";
 import { getActivitiesByCategory } from "@/services/activity/getActivitiesByCategory";
+import { getRecentActivities } from "@/services/activity/getRecentActivities";
 
 export const ACTIVITY_QUERY_KEY = "activities";
 
@@ -76,6 +77,24 @@ export const useFetchActivitiesByCategory = (
     },
     enabled: !!userId && !!categoryId,
     staleTime: 1000 * 60 * 5,
+  });
+};
+
+// 1.6 Fetch Recent Activities Query
+export const useFetchRecentActivities = (limit: number = 20) => {
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+
+  return useQuery({
+    queryKey: [ACTIVITY_QUERY_KEY, "recent", userId, limit],
+    queryFn: async () => {
+      validateSession(session);
+      const response = await getRecentActivities(userId!, limit);
+      if (!response.success) throw new Error(response.message);
+      return response;
+    },
+    enabled: !!userId,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 };
 
