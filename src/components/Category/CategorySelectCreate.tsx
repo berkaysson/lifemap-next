@@ -89,7 +89,11 @@ const CategorySelectCreate = ({ field, form }) => {
             value={searchTerm}
             onValueChange={setSearchTerm}
           />
-          <CommandList>
+          <CommandList
+            onPointerDown={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
+            onWheel={(e) => e.stopPropagation()}
+          >
             <CommandEmpty>
               {isCreating ? (
                 <div className="p-2">
