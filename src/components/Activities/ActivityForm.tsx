@@ -148,10 +148,10 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader className="text-center sm:text-left mb-2">
-            <DrawerTitle className="text-2xl font-bold tracking-tight bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
+            <DrawerTitle className="text-2xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
               Create Activity
             </DrawerTitle>
-            <DrawerDescription className="text-white/50">
+            <DrawerDescription className="text-muted-foreground">
               Log your progress and track your journey
             </DrawerDescription>
           </DrawerHeader>
@@ -172,7 +172,7 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                           className="text-primary"
                           width={18}
                         />
-                        <FormLabel className="text-sm font-medium text-white/80">
+                        <FormLabel className="text-sm font-medium text-foreground/80">
                           Activity Type
                         </FormLabel>
                       </div>
@@ -180,7 +180,7 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                       <FormMessage />
                       {suggestedCategories.length > 0 && (
                         <div className="flex flex-col gap-1">
-                          <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-white/40 font-semibold ml-1">
+                          <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-muted-foreground/80 font-semibold ml-1">
                             <Iconify icon="iconoir:spark-solid" width={16} />
                             Quick Select
                           </span>
@@ -195,8 +195,8 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                                 }
                                 className={`cursor-pointer px-3 py-1 transition-all duration-200 border-none ${
                                   field.value === category.id
-                                    ? "bg-primary text-white scale-105 shadow-lg shadow-primary/20"
-                                    : "bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
+                                    ? "bg-primary text-primary-foreground scale-105 shadow-lg shadow-primary/20"
+                                    : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
                                 }`}
                                 onClick={() => {
                                   if (!isPending) {
@@ -225,7 +225,7 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                           className="text-secondary"
                           width={18}
                         />
-                        <FormLabel className="text-sm font-medium text-white/80">
+                        <FormLabel className="text-sm font-medium text-foreground/80">
                           Duration (minutes)
                         </FormLabel>
                       </div>
@@ -236,7 +236,7 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                               type="button"
                               variant="secondary"
                               size="icon"
-                              className="h-10 w-10 flex-shrink-0 bg-white/5 border-none hover:bg-white/10 text-white/80"
+                              className="h-10 w-10 flex-shrink-0 bg-muted border-none hover:bg-muted/80 text-foreground/80"
                               onClick={() => {
                                 if (!isPending) {
                                   const newValue = Math.max(
@@ -263,14 +263,14 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                                 }}
                                 type="number"
                                 max={5000}
-                                className="h-10 bg-white/5 border-white/10 text-center text-lg font-medium focus-visible:ring-primary/50 placeholder:text-white/20"
+                                className="h-10 bg-muted border-border text-center text-lg font-medium focus-visible:ring-primary/50 placeholder:text-muted-foreground/30"
                               />
                             </div>
                             <Button
                               type="button"
                               variant="secondary"
                               size="icon"
-                              className="h-10 w-10 flex-shrink-0 bg-white/5 border-none hover:bg-white/10 text-white/80"
+                              className="h-10 w-10 flex-shrink-0 bg-muted border-none hover:bg-muted/80 text-foreground/80"
                               onClick={() => {
                                 if (!isPending) {
                                   const newValue = (field.value || 0) + 5;
@@ -282,7 +282,7 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                             </Button>
                           </div>
                           <div className="flex flex-col gap-1">
-                            <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-white/40 font-semibold ml-1">
+                            <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-muted-foreground/80 font-semibold ml-1">
                               <Iconify icon="iconoir:spark-solid" width={16} />
                               Quick Select
                             </span>
@@ -297,8 +297,8 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                                   }
                                   className={`cursor-pointer px-3 py-1 transition-all duration-200 border-none ${
                                     field.value === minutes
-                                      ? "bg-secondary text-white scale-105 shadow-lg shadow-secondary/20"
-                                      : "bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
+                                      ? "bg-secondary text-secondary-foreground scale-105 shadow-lg shadow-secondary/20"
+                                      : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
                                   }`}
                                   onClick={() =>
                                     !isPending && field.onChange(minutes)
@@ -324,10 +324,10 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                       <div className="flex items-center gap-2">
                         <Iconify
                           icon="solar:calendar-bold-duotone"
-                          className="text-blue-400"
+                          className="text-info"
                           width={18}
                         />
-                        <FormLabel className="text-sm font-medium text-white/80">
+                        <FormLabel className="text-sm font-medium text-foreground/80">
                           Activity Date
                         </FormLabel>
                       </div>
@@ -338,7 +338,7 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                             variant="secondary"
                             size="icon"
                             disabled={isPending}
-                            className="bg-white/5 border-none hover:bg-white/10 text-white/80"
+                            className="bg-muted border-none hover:bg-muted/80 text-foreground/80"
                             onClick={() => {
                               const date = new Date(field.value);
                               date.setUTCDate(date.getUTCDate() - 1);
@@ -367,7 +367,7 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                             variant="secondary"
                             size="icon"
                             disabled={isPending}
-                            className="bg-white/5 border-none hover:bg-white/10 text-white/80"
+                            className="bg-muted border-none hover:bg-muted/80 text-foreground/80"
                             onClick={() => {
                               const date = new Date(field.value);
                               date.setUTCDate(date.getUTCDate() + 1);
@@ -393,7 +393,7 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                   <LoadingButton
                     disabled={isPending}
                     type="submit"
-                    className="w-full h-11 bg-gradient-to-r from-secondary to-primary hover:opacity-90 text-white font-bold text-base shadow-xl shadow-primary/10 transition-all active:scale-[0.98]"
+                    className="w-full h-11 bg-gradient-to-r from-secondary to-primary hover:opacity-90 text-primary-foreground font-bold text-base shadow-xl shadow-primary/10 transition-all active:scale-[0.98]"
                     isLoading={isPending}
                     loadingText="Creating..."
                   >
@@ -404,7 +404,7 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="w-full text-white/40 hover:text-white/80 hover:bg-white/5"
+                      className="w-full text-muted-foreground hover:text-foreground/80 hover:bg-muted"
                     >
                       Cancel
                     </Button>
