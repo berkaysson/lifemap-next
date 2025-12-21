@@ -50,7 +50,16 @@ export function AppSidebar() {
           href={pathname === "/" ? "/" : "/dashboard"}
           className="flex items-center space-x-2"
         >
-          <Image src="/logo.png" alt="Logo" width={62} height={62} />
+          <Image
+            quality={100}
+            src="/logo.png"
+            alt="Habivita"
+            width={62}
+            height={62}
+            priority
+            unoptimized
+            loading="eager"
+          />
           <span className="text-lg font-bold text-fore group-data-[collapsible=icon]:hidden">
             habivita
           </span>

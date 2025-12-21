@@ -43,10 +43,14 @@ export function HeroContent({ badge, title1, title2 }: HeroContentProps) {
           className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/[0.08] mb-6 sm:mb-8 md:mb-12"
         >
           <Image
+            quality={100}
             src="/logo.png"
             alt="Habivita"
             width={24}
             height={24}
+            priority
+            unoptimized
+            loading="eager"
           />
           <span className="text-xs sm:text-sm text-secondary tracking-wide">
             {badge}
@@ -83,8 +87,8 @@ export function HeroContent({ badge, title1, title2 }: HeroContentProps) {
         >
           <p className="text-sm sm:text-base md:text-lg lg:text-xl text-secondary mb-8 leading-relaxed font-light tracking-wide max-w-2xl mx-auto px-2 sm:px-4">
             Empower your aspirations, foster productivity, and cultivate
-            meaningful habits. Navigate life&apos;s complexities and journey towards
-            success and fulfillment.
+            meaningful habits. Navigate life&apos;s complexities and journey
+            towards success and fulfillment.
           </p>
         </motion.div>
 
