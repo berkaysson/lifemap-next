@@ -14,24 +14,28 @@ const DashboardPage = () => {
     <div>
       <DashboardHeader title="Dashboard" />
 
-      <div className="py-4 sm:py-6 px-2 sm:px-3">
+      <div className="p2-4 sm:py-6 px-2 sm:px-3">
         {/* Summary Section */}
         <WelcomeHeader />
 
-        <div className="mt-4">
+        <div className="mt-2">
           <WeeklyActivitiesSummaryRadialChart />
         </div>
-
-        {/* Quick Actions */}
-        <div className="my-6 sm:my-8">
-          <QuickActions />
-        </div>
-
-        <Separator />
 
         <div className="my-6 sm:my-8">
           <DailyItemsCarousel />
         </div>
+
+        <Separator />
+
+        {/* Quick Actions */}
+        <div className="my-4 sm:my-6">
+          <QuickActions />
+
+          <DashboardCardGrid />
+        </div>
+
+        <Separator />
 
         <div className="my-6 sm:my-8 flex flex-col gap-6">
           {/* Recent Habits */}
@@ -42,13 +46,6 @@ const DashboardPage = () => {
 
           {/* Recent Todos */}
           <RecentTodos />
-        </div>
-
-        <Separator />
-
-        {/* Card Item Grid */}
-        <div className="my-6 sm:my-8">
-          <DashboardCardGrid />
         </div>
       </div>
     </div>

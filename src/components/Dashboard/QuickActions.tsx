@@ -7,7 +7,7 @@ const HabitForm = lazy(() => import("../Habits/HabitForm"));
 
 const QuickActions = () => {
   return (
-    <div className="mb-6 sm:mb-8 px-2 sm:px-4">
+    <div className="mb-3 sm:mb-4 px-2 sm:px-2">
       <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">
         Quick Actions
       </h3>
