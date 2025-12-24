@@ -452,6 +452,8 @@ function getSuggestedCategories(activities: ExtendedActivity[] | undefined) {
   // Add last used if it's not already in top 2
   if (lastUsed && !result.find((c) => c.id === lastUsed.id)) {
     result.push(lastUsed);
+  } else {
+    result.push(sorted[2]);
   }
 
   return result;
