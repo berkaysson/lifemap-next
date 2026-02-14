@@ -3,7 +3,15 @@
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
-import { Sun, Moon, CloudSun, Sparkles, Calendar } from "lucide-react";
+import {
+  Sun,
+  Moon,
+  CloudSun,
+  Sparkles,
+  Calendar,
+  BarChart3,
+} from "lucide-react";
+import Link from "next/link";
 
 export const WelcomeHeader = () => {
   const { data: session } = useSession();
@@ -79,6 +87,16 @@ export const WelcomeHeader = () => {
             </h2>
           </div>
         </div>
+
+        <Link
+          href="/dashboard/progress"
+          className="hover:border-secondary border-2 border-solid border-primary relative z-10 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-primary/10 to-secondary/10"
+        >
+          <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+          <span className="text-xs sm:text-sm font-semibold text-primary">
+            Progress
+          </span>
+        </Link>
       </div>
     </div>
   );
