@@ -35,4 +35,4 @@ export const DEFAULT_LOGIN_REDIRECT = "/dashboard";
  * The main domain of the application.
  * @type {string}
  */
-export const MAIN_DOMAIN = "https://habivita.com";
+export const MAIN_DOMAIN = "https://lifemap-next.vercel.app";

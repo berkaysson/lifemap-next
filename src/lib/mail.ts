@@ -7,7 +7,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 // Send verification email
 export const sendVerificationEmail = async (
   email: string | null | undefined,
-  token: string | null | undefined
+  token: string | null | undefined,
 ) => {
   if (!email || !token) {
     throw new Error("Email or token is null or undefined");
@@ -44,7 +44,7 @@ export const sendVerificationEmail = async (
 // Send reset password email
 export const sendResetPasswordEmail = async (
   email: string | null | undefined,
-  token: string | null | undefined
+  token: string | null | undefined,
 ) => {
   if (!email || !token) {
     throw new Error("Email or token is null or undefined");
