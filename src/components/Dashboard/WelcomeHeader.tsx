@@ -90,11 +90,13 @@ export const WelcomeHeader = () => {
 
         <Link
           href="/dashboard/progress"
-          className="hover:border-secondary border-2 border-solid border-primary relative z-10 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-primary/10 to-secondary/10"
+          className="relative z-10 group flex items-center gap-3 px-5 py-2.5 rounded-xl bg-primary/5 hover:bg-primary/10 border border-primary/20 hover:border-primary/40 transition-all duration-300 shadow-sm hover:shadow-md"
         >
-          <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-          <span className="text-xs sm:text-sm font-semibold text-primary">
-            Progress
+          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+            <BarChart3 className="w-4 h-4" />
+          </div>
+          <span className="text-sm font-semibold text-primary transition-colors">
+            Click to see your progress
           </span>
         </Link>
       </div>
