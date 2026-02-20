@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ActivityListItem from "./ActivityListItem";
 import SelectSort from "../ui/Shared/SelectSort";
 import type { Activity } from "@prisma/client";
@@ -27,12 +27,20 @@ const ActivityList = () => {
   const pageSize = 10;
   const [sortField, setSortField] = useState<keyof Activity>("date");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [isInitialViewModeSet, setIsInitialViewModeSet] = useState(false);
+
+  useEffect(() => {
+    if (isMobile && !isInitialViewModeSet) {
+      setViewMode("grid");
+      setIsInitialViewModeSet(true);
+    }
+  }, [isMobile, isInitialViewModeSet]);
 
   const { data, isLoading } = useFetchActivities(
     page,
     pageSize,
     sortField,
-    sortOrder
+    sortOrder,
   );
 
   const activities = useMemo(() => data?.activities || [], [data?.activities]);
@@ -127,7 +135,7 @@ const ActivityList = () => {
                       </PaginationItem>
                     )
                   );
-                }
+                },
               )}
             </>
           )}

@@ -20,11 +20,22 @@ import { Badge } from "../ui/badge";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Loading from "@/app/(protected)/dashboard/todo/loading";
 import ArchiveTodoTable from "./ArchivedTodoTable";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const TodoList = () => {
   const [isArcihivedOpen, setIsArcihivedOpen] = useState(false);
 
   const [viewMode, setViewMode] = useState<"table" | "grid">("table");
+  const isMobile = useIsMobile();
+  const [isInitialViewModeSet, setIsInitialViewModeSet] = useState(false);
+
+  useEffect(() => {
+    if (isMobile && !isInitialViewModeSet) {
+      setViewMode("grid");
+      setIsInitialViewModeSet(true);
+    }
+  }, [isMobile, isInitialViewModeSet]);
+
   const { data: todos, isLoading, isError, error } = useFetchTodos();
   const {
     data: archivedTodos,
@@ -35,7 +46,7 @@ const TodoList = () => {
 
   const [sortedTodos, setSortedTodos] = useState<ToDo[]>(todos || []);
   const [sortedArchivedTodos, setSortedArchivedTodos] = useState(
-    archivedTodos || []
+    archivedTodos || [],
   );
 
   useEffect(() => {
@@ -58,7 +69,7 @@ const TodoList = () => {
       const sorted = sortArrayOfObjectsByKey<ToDo>(todos, sortBy, direction);
       setSortedTodos(sorted);
     },
-    [todos]
+    [todos],
   );
 
   const handleArchiveSort = useCallback(
@@ -67,7 +78,7 @@ const TodoList = () => {
       const sorted = sortArrayOfObjectsByKey(archivedTodos, sortBy, direction);
       setSortedArchivedTodos(sorted);
     },
-    [archivedTodos]
+    [archivedTodos],
   );
 
   if (isLoading) {
