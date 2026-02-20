@@ -6,6 +6,10 @@ import { LoadingButton } from "../ui/Buttons/loading-button";
 import { useArchiveTodo, useUpdateTodo } from "@/queries/todoQueries";
 import { isExpired } from "@/lib/time";
 
+import { Button } from "../ui/Buttons/button";
+import { Iconify } from "../ui/iconify";
+import TodoEditForm from "../ToDos/TodoEditForm";
+
 const RecentTodoItem = ({ todo }) => {
   const updateTodoMutation = useUpdateTodo();
   const { mutateAsync: archiveTodo } = useArchiveTodo();
@@ -18,23 +22,33 @@ const RecentTodoItem = ({ todo }) => {
   };
 
   return (
-    <div className="flex items-center gap-2 sm:gap-4 p-1 sm:p-2 border rounded-lg">
-      <ColorCircle colorCode={todo.colorCode || "darkblue"} />
+    <div className="flex flex-col gap-2 p-2 border rounded-lg hover:bg-accent/10 transition-colors">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <ColorCircle colorCode={todo.colorCode || "darkblue"} />
+          <LoadingButton
+            isLoading={updateTodoMutation.isPending}
+            loadingText=""
+            variant={"outline"}
+            size={"icon"}
+            onClick={handleComplete}
+            className="h-8 w-8"
+          >
+            <IsCompleted isCompleted={todo.completed} isExpired={expired} />
+          </LoadingButton>
+        </div>
 
-      <LoadingButton
-        isLoading={updateTodoMutation.isPending}
-        loadingText=""
-        variant={"outline"}
-        size={"icon"}
-        onClick={handleComplete}
-        className="h-8 w-8"
-      >
-        <IsCompleted isCompleted={todo.completed} isExpired={expired} />
-      </LoadingButton>
+        <TodoEditForm
+          initialValues={todo}
+          triggerButton={
+            <Button variant="ghost" size="icon" className="h-8 w-8">
+              <Iconify icon="solar:pen-new-square-bold-duotone" width={18} />
+            </Button>
+          }
+        />
+      </div>
 
-      <span className="text-sm font-medium truncate max-w-[180px] min-[550px]:max-w-[400px]">
-        {todo.name}
-      </span>
+      <span className="text-sm font-medium truncate w-full">{todo.name}</span>
     </div>
   );
 };

@@ -31,7 +31,7 @@ const RecentTodos = () => {
                 <Link href={"/dashboard/todo"}>All Todos</Link>
               </Button>
             </div>
-            <div className="flex flex-col flex-wrap gap-2">
+            <div className="grid grid-cols-1 min-[500px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
               {recentTodos.map((todo) => (
                 <RecentTodoItem key={todo.id} todo={todo} />
               ))}
