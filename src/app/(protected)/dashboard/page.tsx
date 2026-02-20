@@ -4,6 +4,7 @@ import RecentTasks from "@/components/Dashboard/RecentTasks";
 import RecentHabits from "@/components/Dashboard/RecentHabits";
 import DailyItemsCarousel from "@/components/Dashboard/DailyItemsCaraousel";
 import QuickActions from "@/components/Dashboard/QuickActions";
+import RecentActivities from "@/components/Dashboard/RecentActivities";
 import { Separator } from "@/components/ui/separator";
 import { DashboardCardGrid } from "@/components/Dashboard/DashboardCardGrid";
 import { WelcomeHeader } from "@/components/Dashboard/WelcomeHeader";
@@ -38,6 +39,9 @@ const DashboardPage = () => {
         <Separator />
 
         <div className="my-6 sm:my-8 flex flex-col gap-6">
+          {/* Recent Activities */}
+          <RecentActivities />
+
           {/* Recent Habits */}
           <RecentHabits />
 
