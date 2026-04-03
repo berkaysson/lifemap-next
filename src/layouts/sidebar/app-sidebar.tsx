@@ -80,7 +80,7 @@ export function AppSidebar() {
                       isActive={isActive}
                       className={cn(
                         isActive && "text-fore",
-                        "transition-colors hover:bg-secondary"
+                        "transition-colors hover:bg-secondary",
                       )}
                     >
                       <Link href={item.url}>
@@ -108,7 +108,7 @@ export function AppSidebar() {
                   isActive={isActive}
                   className={cn(
                     isActive && "text-fore",
-                    "transition-colors hover:bg-secondary"
+                    "transition-colors hover:bg-secondary",
                   )}
                 >
                   <Link href={item.url}>
@@ -152,6 +152,12 @@ const items = [
     activeIcon: "solar:chart-2-bold-duotone",
   },
   {
+    title: "Activity Types",
+    url: "/dashboard/category",
+    icon: "solar:hashtag-square-bold",
+    activeIcon: "solar:hashtag-square-bold-duotone",
+  },
+  {
     title: "ToDos",
     url: "/dashboard/todo",
     icon: "solar:checklist-minimalistic-bold",
@@ -170,6 +176,12 @@ const items = [
     activeIcon: "ph:plant-duotone",
   },
   {
+    title: "Notes",
+    url: "/dashboard/note",
+    icon: "solar:book-bookmark-bold",
+    activeIcon: "solar:book-bookmark-bold-duotone",
+  },
+  {
     title: "Projects",
     url: "/dashboard/project",
     icon: "solar:folder-with-files-bold",
@@ -180,12 +192,6 @@ const items = [
     url: "/dashboard/activity",
     icon: "solar:bolt-bold",
     activeIcon: "solar:bolt-bold-duotone",
-  },
-  {
-    title: "Activity Types",
-    url: "/dashboard/category",
-    icon: "solar:hashtag-square-bold",
-    activeIcon: "solar:hashtag-square-bold-duotone",
   },
 ];
 
