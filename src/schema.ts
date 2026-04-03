@@ -40,12 +40,9 @@ export const TodoSchema = z.object({
   endDate: z
     .string()
     .optional()
-    .refine(
-      (date) => !date || new Date(date) > new Date(),
-      {
-        message: "Due date must be in the future",
-      }
-    ),
+    .refine((date) => !date || new Date(date) > new Date(), {
+      message: "Due date must be in the future",
+    }),
   colorCode: z.string().optional(),
 });
 
@@ -70,7 +67,7 @@ export const TaskSchema = z
       .date()
       .refine(
         (date) => new Date(date) > new Date(),
-        "Due date must be in the future"
+        "Due date must be in the future",
       ),
     colorCode: z.string().optional(),
     goalDuration: z.number().min(1, "Goal duration is required"),
@@ -91,11 +88,11 @@ export const HabitSchema = z.object({
     .number()
     .min(
       2,
-      "Number of periods must be at least 2, if you want to create one period habit, you should create a Task"
+      "Number of periods must be at least 2, if you want to create one period habit, you should create a Task",
     )
     .max(
       90,
-      "Number of periods cannot exceed 90, for longer times change the period to weekly or monthly"
+      "Number of periods cannot exceed 90, for longer times change the period to weekly or monthly",
     ),
   goalDurationPerPeriod: z
     .number()
@@ -109,4 +106,19 @@ export const HabitSchema = z.object({
 export const ProjectSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().optional(),
+});
+
+export const NoteSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  content: z.any().optional(),
+  colorCode: z.string().optional(),
+  pinned: z.boolean().optional(),
+  mentions: z
+    .array(
+      z.object({
+        entityType: z.enum(["habit", "task", "todo", "project", "category"]),
+        entityId: z.string(),
+      }),
+    )
+    .optional(),
 });

@@ -38,6 +38,7 @@ model User {
     projects   Project[]
     activities Activity[]
     categories Category[]
+    notes      Note[]
 }
 
 model Account {
@@ -257,6 +258,32 @@ model ArchivedHabit {
     archivedAt DateTime @default(now())
 
     @@index([userId])
+}
+
+model Note {
+    id        String         @id @default(cuid())
+    title     String
+    content   Json?
+    colorCode String?
+    pinned    Boolean        @default(false)
+    userId    String
+    user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+    mentions  NoteMention[]
+    createdAt DateTime       @default(now())
+    updatedAt DateTime       @updatedAt
+
+    @@index([userId])
+}
+
+model NoteMention {
+    id         String @id @default(cuid())
+    noteId     String
+    note       Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+    entityType String
+    entityId   String
+
+    @@unique([noteId, entityType, entityId])
+    @@index([entityType, entityId])
 }
 
 model FunctionExecution {
