@@ -24,7 +24,7 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 
-const NoteListItem = ({ note }: { note: Note & { mentions: any[] } }) => {
+const NoteListItem = ({ note }: { note: Note }) => {
   const { mutateAsync: deleteNote } = useDeleteNote();
   const updateNoteMutation = useUpdateNote();
 
@@ -38,7 +38,6 @@ const NoteListItem = ({ note }: { note: Note & { mentions: any[] } }) => {
   };
 
   const contentPreview = getContentPreview(note.content as any);
-  const hasMentions = note?.mentions?.length > 0;
 
   return (
     <NoteShowDialog
@@ -58,21 +57,6 @@ const NoteListItem = ({ note }: { note: Note & { mentions: any[] } }) => {
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className="text-xs">Pinned Note</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          )}
-
-          {hasMentions && (
-            <TooltipProvider delayDuration={100}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="absolute bottom-1 right-1 z-10 w-6 h-6 rounded-full bg-background flex items-center justify-center text-foreground shadow-sm border border-border">
-                    <Iconify icon="solar:mention-circle-linear" width={16} />
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p className="text-xs">Has mentions</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
