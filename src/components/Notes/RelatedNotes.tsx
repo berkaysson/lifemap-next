@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useFetchNotesByEntity } from "@/queries/noteQueries";
 import { Note } from "@prisma/client";
 import { Iconify } from "../ui/iconify";
@@ -26,13 +25,12 @@ const RelatedNotes = ({ entityType, entityId }: RelatedNotesProps) => {
   );
   const [isOpen, setIsOpen] = useState(false);
 
-
   if (isLoading || !notes || notes.length === 0) {
     return null;
   }
 
   return (
-    <div className="mt-2">
+    <div className="my-2">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors w-full">
           <Iconify
@@ -61,7 +59,9 @@ const RelatedNotes = ({ entityType, entityId }: RelatedNotesProps) => {
                     style={{ backgroundColor: note.colorCode || "#714DD9" }}
                   />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate group-hover:underline underline-offset-2 decoration-muted-foreground/30">{note.title}</p>
+                    <p className="text-sm font-medium truncate group-hover:underline underline-offset-2 decoration-muted-foreground/30">
+                      {note.title}
+                    </p>
                     <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
                       {getContentPreview(note.content as any, 80)}
                     </p>
