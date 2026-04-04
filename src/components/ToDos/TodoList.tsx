@@ -25,7 +25,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 const TodoList = () => {
   const [isArcihivedOpen, setIsArcihivedOpen] = useState(false);
 
-  const [viewMode, setViewMode] = useState<"table" | "grid">("table");
+  const [viewMode, setViewMode] = useState<"table" | "grid">("grid");
   const isMobile = useIsMobile();
   const [isInitialViewModeSet, setIsInitialViewModeSet] = useState(false);
 
@@ -113,7 +113,7 @@ const TodoList = () => {
         )}
 
         {viewMode === "grid" && (
-          <ul className="rounded-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
+          <ul className="rounded-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
             {sortedTodos.map((todo) => (
               <TodoListItem key={todo.id} todo={todo} />
             ))}

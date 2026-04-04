@@ -24,7 +24,7 @@ const ArchivedTodoListItem = ({ todo }) => {
   };
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full max-w-md h-full flex flex-col">
       <div className="p-1 pb-0">
         <ColorCircle colorCode={todo.colorCode || "darkblue"} />
       </div>
@@ -40,7 +40,7 @@ const ArchivedTodoListItem = ({ todo }) => {
         </div>
       </CardHeader>
 
-      <CardContent className="px-3">
+      <CardContent className="px-3 flex-1 flex flex-col">
         <CardDescription>{todo.description}</CardDescription>
         <div className="flex flex-col gap-2">
           {todo.endDate && (
