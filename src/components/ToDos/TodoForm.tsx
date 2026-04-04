@@ -28,8 +28,23 @@ import { Iconify } from "../ui/iconify";
 import { DatePicker } from "../ui/Forms/date-picker-field";
 import { ColorPicker } from "../ui/Forms/color-picker-field";
 
-const TodoForm = ({ useArea = "entity" }) => {
-  const [isOpen, setIsOpen] = useState(false);
+interface TodoFormProps {
+  useArea?: string;
+  isOpen?: boolean;
+  setIsOpen?: (open: boolean) => void;
+  hideTrigger?: boolean;
+}
+
+const TodoForm = ({
+  useArea = "entity",
+  isOpen: propIsOpen,
+  setIsOpen: propSetIsOpen,
+  hideTrigger = false,
+}: TodoFormProps) => {
+  const [isOpenInternal, setIsOpenInternal] = useState(false);
+  const isOpen = propIsOpen !== undefined ? propIsOpen : isOpenInternal;
+  const setIsOpen =
+    propSetIsOpen !== undefined ? propSetIsOpen : setIsOpenInternal;
 
   const { mutateAsync: createTodo } = useCreateTodo();
   const [isPending, startTransition] = useTransition();
@@ -71,27 +86,29 @@ const TodoForm = ({ useArea = "entity" }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        {useArea === "entity" ? (
-          <Button variant="ghost" size="sm">
-            <Iconify
-              icon="solar:add-square-linear"
-              width={32}
-              className="mr-0 sm:mr-1"
-            />
-            <span className="sm:inline hidden">Create Todo</span>
-          </Button>
-        ) : (
-          <Button variant="outline" size="sm">
-            <Iconify
-              icon="solar:checklist-minimalistic-linear"
-              width={24}
-              className="mr-0 sm:mr-1"
-            />
-            <span>Create Todo</span>
-          </Button>
-        )}
-      </DialogTrigger>
+      {!hideTrigger && (
+        <DialogTrigger asChild>
+          {useArea === "entity" ? (
+            <Button variant="ghost" size="sm">
+              <Iconify
+                icon="solar:add-square-linear"
+                width={32}
+                className="mr-0 sm:mr-1"
+              />
+              <span className="sm:inline hidden">Create Todo</span>
+            </Button>
+          ) : (
+            <Button variant="outline" size="sm">
+              <Iconify
+                icon="solar:checklist-minimalistic-linear"
+                width={24}
+                className="mr-0 sm:mr-1"
+              />
+              <span>Create Todo</span>
+            </Button>
+          )}
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Create a Todo</DialogTitle>
@@ -153,7 +170,7 @@ const TodoForm = ({ useArea = "entity" }) => {
                           field.onChange(
                             new Date((date?.getTime() ?? 0) + 10800000)
                               .toISOString()
-                              .split("T")[0]
+                              .split("T")[0],
                           )
                         }
                       />

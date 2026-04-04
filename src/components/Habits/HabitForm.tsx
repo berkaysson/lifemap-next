@@ -43,6 +43,7 @@ interface HabitFormProps {
   defaultValues?: z.infer<typeof HabitSchema>;
   isOpen?: boolean;
   setIsOpen?: (open: boolean) => void;
+  hideTrigger?: boolean;
 }
 
 const HabitForm = ({
@@ -50,6 +51,7 @@ const HabitForm = ({
   defaultValues,
   isOpen,
   setIsOpen,
+  hideTrigger = false,
 }: HabitFormProps) => {
   const [isOpenInternal, setIsOpenInternal] = useState(false);
   const actualIsOpen = isOpen !== undefined ? isOpen : isOpenInternal;
@@ -91,11 +93,12 @@ const HabitForm = ({
             setIsError(false);
             reset();
             setCurrentStep(1);
+            actualSetIsOpen(false);
           } else {
             setIsError(true);
           }
         }
-      } catch (error: any) {
+      } catch {
         setMessage("An error occurred");
         setIsError(true);
       }
@@ -136,7 +139,7 @@ const HabitForm = ({
   }, [startDate, period, numberOfPeriods]);
 
   const handleOpenChange = (event) => {
-    setIsOpenInternal(event);
+    actualSetIsOpen(event);
     setCurrentStep(1);
     reset();
     setMessage("");
@@ -148,23 +151,25 @@ const HabitForm = ({
       open={actualIsOpen}
       onOpenChange={useArea === "archive" ? actualSetIsOpen : handleOpenChange}
     >
-      <DialogTrigger asChild>
-        {useArea === "entity" ? (
-          <Button variant="ghost" size="sm">
-            <Iconify
-              icon="solar:add-square-linear"
-              width={32}
-              className="mr-0 sm:mr-1"
-            />
-            <span className="sm:inline hidden">Create Habit</span>
-          </Button>
-        ) : useArea !== "archive" ? (
-          <Button variant="outline" size="sm">
-            <Iconify icon="ph:plant" width={24} className="mr-0 sm:mr-1" />
-            <span>Create Habit</span>
-          </Button>
-        ) : null}
-      </DialogTrigger>
+      {!hideTrigger && (
+        <DialogTrigger asChild>
+          {useArea === "entity" ? (
+            <Button variant="ghost" size="sm">
+              <Iconify
+                icon="solar:add-square-linear"
+                width={32}
+                className="mr-0 sm:mr-1"
+              />
+              <span className="sm:inline hidden">Create Habit</span>
+            </Button>
+          ) : useArea !== "archive" ? (
+            <Button variant="outline" size="sm">
+              <Iconify icon="ph:plant" width={24} className="mr-0 sm:mr-1" />
+              <span>Create Habit</span>
+            </Button>
+          ) : null}
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>

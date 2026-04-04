@@ -34,6 +34,7 @@ interface TaskFormProps {
   defaultValues?: z.infer<typeof TaskSchema>;
   isOpen?: boolean;
   setIsOpen?: (open: boolean) => void;
+  hideTrigger?: boolean;
 }
 
 const TaskForm = ({
@@ -41,6 +42,7 @@ const TaskForm = ({
   defaultValues,
   isOpen,
   setIsOpen,
+  hideTrigger = false,
 }: TaskFormProps) => {
   const [isOpenInternal, setIsOpenInternal] = useState(false);
   const actualIsOpen = isOpen !== undefined ? isOpen : isOpenInternal;
@@ -89,27 +91,29 @@ const TaskForm = ({
 
   return (
     <Dialog open={actualIsOpen} onOpenChange={actualSetIsOpen}>
-      <DialogTrigger asChild>
-        {useArea === "entity" ? (
-          <Button variant="ghost" size="sm">
-            <Iconify
-              icon="solar:add-square-linear"
-              width={32}
-              className="mr-0 sm:mr-1"
-            />
-            <span className="sm:inline hidden">Create Task</span>
-          </Button>
-        ) : useArea !== "archive" ? (
-          <Button variant="outline" size="sm">
-            <Iconify
-              icon="solar:check-read-linear"
-              width={24}
-              className="mr-0 sm:mr-1"
-            />
-            <span>Create Task</span>
-          </Button>
-        ) : null}
-      </DialogTrigger>
+      {!hideTrigger && (
+        <DialogTrigger asChild>
+          {useArea === "entity" ? (
+            <Button variant="ghost" size="sm">
+              <Iconify
+                icon="solar:add-square-linear"
+                width={32}
+                className="mr-0 sm:mr-1"
+              />
+              <span className="sm:inline hidden">Create Task</span>
+            </Button>
+          ) : useArea !== "archive" ? (
+            <Button variant="outline" size="sm">
+              <Iconify
+                icon="solar:check-read-linear"
+                width={24}
+                className="mr-0 sm:mr-1"
+              />
+              <span>Create Task</span>
+            </Button>
+          ) : null}
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Create a Task</DialogTitle>
@@ -221,7 +225,7 @@ const TaskForm = ({
                             field.onChange(
                               new Date((date?.getTime() ?? 0) + 10800000)
                                 .toISOString()
-                                .split("T")[0]
+                                .split("T")[0],
                             )
                           }
                         />
@@ -249,7 +253,7 @@ const TaskForm = ({
                             field.onChange(
                               new Date((date?.getTime() ?? 0) + 10800000)
                                 .toISOString()
-                                .split("T")[0]
+                                .split("T")[0],
                             )
                           }
                         />

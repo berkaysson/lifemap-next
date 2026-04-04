@@ -26,8 +26,21 @@ import {
 import { Button } from "../ui/Buttons/button";
 import { Iconify } from "../ui/iconify";
 
-const CategoryForm = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface CategoryFormProps {
+  isOpen?: boolean;
+  setIsOpen?: (open: boolean) => void;
+  hideTrigger?: boolean;
+}
+
+const CategoryForm = ({
+  isOpen: propIsOpen,
+  setIsOpen: propSetIsOpen,
+  hideTrigger = false,
+}: CategoryFormProps = {}) => {
+  const [isOpenInternal, setIsOpenInternal] = useState(false);
+  const isOpen = propIsOpen !== undefined ? propIsOpen : isOpenInternal;
+  const setIsOpen =
+    propSetIsOpen !== undefined ? propSetIsOpen : setIsOpenInternal;
 
   const { mutateAsync: createCategory } = useCreateCategory();
   const [isPending, startTransition] = useTransition();
@@ -59,7 +72,7 @@ const CategoryForm = () => {
           }
         }
       } catch (error: any) {
-        setMessage( "An error occurred");
+        setMessage("An error occurred");
         setIsError(true);
       }
       setIsLoading(false);
@@ -68,16 +81,18 @@ const CategoryForm = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button variant="ghost" size="sm">
-          <Iconify
-            icon="solar:add-square-linear"
-            width={32}
-            className="mr-0 sm:mr-1"
-          />
-          <span className="sm:inline hidden">Create Activity Type</span>
-        </Button>
-      </DialogTrigger>
+      {!hideTrigger && (
+        <DialogTrigger asChild>
+          <Button variant="ghost" size="sm">
+            <Iconify
+              icon="solar:add-square-linear"
+              width={32}
+              className="mr-0 sm:mr-1"
+            />
+            <span className="sm:inline hidden">Create Activity Type</span>
+          </Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Create a Activity Type</DialogTitle>

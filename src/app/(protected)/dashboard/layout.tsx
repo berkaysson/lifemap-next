@@ -1,4 +1,5 @@
 import ActivityForm from "@/components/Activities/ActivityForm";
+import { CreateAnythingMenu } from "@/components/CreateMenu/CreateAnythingMenu";
 import { DashboardContent } from "@/layouts/sidebar/dashboard-content";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
@@ -6,6 +7,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     <div>
       <DashboardContent>{children}</DashboardContent>
 
+      <CreateAnythingMenu />
       <ActivityForm />
     </div>
   );

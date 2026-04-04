@@ -33,8 +33,17 @@ import { useMentionData } from "@/hooks/use-mention-data";
 import type { JSONContent } from "@tiptap/core";
 import { extractMentionsFromJSON } from "@/helpers/note";
 
-const NoteForm = ({ useArea = "entity" }) => {
-  const [isOpen, setIsOpen] = useState(false);
+interface NoteFormProps {
+  useArea?: string;
+  isOpen?: boolean;
+  setIsOpen?: (open: boolean) => void;
+  hideTrigger?: boolean;
+}
+
+const NoteForm = ({ useArea = "entity", isOpen: propIsOpen, setIsOpen: propSetIsOpen, hideTrigger = false }: NoteFormProps) => {
+  const [isOpenInternal, setIsOpenInternal] = useState(false);
+  const isOpen = propIsOpen !== undefined ? propIsOpen : isOpenInternal;
+  const setIsOpen = propSetIsOpen !== undefined ? propSetIsOpen : setIsOpenInternal;
 
   const { mutateAsync: createNote } = useCreateNote();
   const [isPending, startTransition] = useTransition();
@@ -106,27 +115,29 @@ const NoteForm = ({ useArea = "entity" }) => {
       open={isOpen}
       onOpenChange={handleOpenChange}
     >
-      <DrawerTrigger asChild>
-        {useArea === "entity" ? (
-          <Button variant="ghost" size="sm">
-            <Iconify
-              icon="solar:add-square-linear"
-              width={32}
-              className="mr-0 sm:mr-1"
-            />
-            <span className="sm:inline hidden">Create Note</span>
-          </Button>
-        ) : (
-          <Button variant="outline" size="sm">
-            <Iconify
-              icon="solar:document-text-linear"
-              width={24}
-              className="mr-0 sm:mr-1"
-            />
-            <span>Create Note</span>
-          </Button>
-        )}
-      </DrawerTrigger>
+      {!hideTrigger && (
+        <DrawerTrigger asChild>
+          {useArea === "entity" ? (
+            <Button variant="ghost" size="sm">
+              <Iconify
+                icon="solar:add-square-linear"
+                width={32}
+                className="mr-0 sm:mr-1"
+              />
+              <span className="sm:inline hidden">Create Note</span>
+            </Button>
+          ) : (
+            <Button variant="outline" size="sm">
+              <Iconify
+                icon="solar:document-text-linear"
+                width={24}
+                className="mr-0 sm:mr-1"
+              />
+              <span>Create Note</span>
+            </Button>
+          )}
+        </DrawerTrigger>
+      )}
       <DrawerContent className="!left-auto !bottom-auto !h-full !mt-0 fixed inset-y-0 right-0 w-full sm:max-w-[720px] !rounded-none border-l [&>div:first-child]:hidden">
         <div className="h-full flex flex-col overflow-hidden">
           <DrawerHeader className="text-left mb-2 flex-shrink-0 relative">
