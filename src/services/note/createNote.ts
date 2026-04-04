@@ -36,8 +36,14 @@ export async function createNote(
     });
 
     if (mentions.length > 0) {
+      const uniqueMentions = Array.from(
+        new Map(
+          mentions.map((m) => [`${m.entityType}-${m.entityId}`, m]),
+        ).values(),
+      );
+
       await prisma.noteMention.createMany({
-        data: mentions.map((m) => ({
+        data: uniqueMentions.map((m) => ({
           noteId: note.id,
           entityType: m.entityType,
           entityId: m.entityId,

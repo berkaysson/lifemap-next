@@ -48,7 +48,8 @@ export const useCreateNote = () => {
   return useMutation({
     mutationFn: async (data: z.infer<typeof NoteSchema>) => {
       validateSession(session);
-      const response = await createNote(data, userId!);
+      const serializableData = JSON.parse(JSON.stringify(data));
+      const response = await createNote(serializableData, userId!);
       if (!response.success) throw new Error(response.message);
       return response;
     },
@@ -86,7 +87,8 @@ export const useUpdateNote = () => {
       },
     ) => {
       validateSession(session);
-      const response = await updateNote(data);
+      const serializableData = JSON.parse(JSON.stringify(data));
+      const response = await updateNote(serializableData);
       if (!response.success) throw new Error(response.message);
       return response;
     },
