@@ -19,6 +19,7 @@ import { Badge } from "../ui/badge";
 import { Iconify } from "../ui/iconify";
 import HabitProjectEdit from "./HabitProjectEdit";
 import { Button } from "../ui/Buttons/button";
+import RelatedNotes from "../Notes/RelatedNotes";
 
 const HabitListItem = ({
   habit,
@@ -32,7 +33,7 @@ const HabitListItem = ({
   const { data: projects = [] } = useFetchProjects();
 
   const habitProject = projects.find(
-    (project) => project.id === habit.projectId
+    (project) => project.id === habit.projectId,
   );
 
   const category = habit.category;
@@ -161,6 +162,10 @@ const HabitListItem = ({
           </div>
         )}
       </CardContent>
+
+      <div className="px-2 sm:px-3">
+        <RelatedNotes entityType="habit" entityId={habit.id} />
+      </div>
 
       <div className="px-2 sm:px-3 pb-1">
         <Accordion

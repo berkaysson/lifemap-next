@@ -19,6 +19,7 @@ import {
 import { Badge } from "../ui/badge";
 import { Iconify } from "../ui/iconify";
 import { Progress } from "../ui/progress";
+import RelatedNotes from "../Notes/RelatedNotes";
 
 const TaskListItem = ({
   task,
@@ -115,6 +116,9 @@ const TaskListItem = ({
           <Progress value={progressPercentage} className="w-full" />
         </div>
       </CardContent>
+      <div className="px-2 sm:px-3">
+        <RelatedNotes entityType="task" entityId={task.id} />
+      </div>
       {mode === "normal" && (
         <CardFooter className="flex justify-end space-x-2">
           <TaskEditForm

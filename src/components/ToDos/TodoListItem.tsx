@@ -23,6 +23,7 @@ import {
 import { Badge } from "../ui/badge";
 import { Iconify } from "../ui/iconify";
 import { LoadingButton } from "../ui/Buttons/loading-button";
+import RelatedNotes from "../Notes/RelatedNotes";
 
 const TodoListItem = ({ todo }) => {
   const { data: projects = [] } = useFetchProjects();
@@ -114,6 +115,9 @@ const TodoListItem = ({ todo }) => {
           )}
         </div>
       </CardContent>
+      <div className="px-3">
+        <RelatedNotes entityType="todo" entityId={todo.id} />
+      </div>
       <CardFooter className="px-3 pb-2">
         <div className="flex flex-wrap gap-2">
           <TodoEditForm

@@ -27,6 +27,7 @@ import {
 import { Badge } from "../ui/badge";
 import { Iconify } from "../ui/iconify";
 import { LoadingButton } from "../ui/Buttons/loading-button";
+import RelatedNotes from "../Notes/RelatedNotes";
 
 const ProjectListItem = ({ project }: { project: ExtendedProject }) => {
   const deleteProjectMutation = useDeleteProject();
@@ -198,6 +199,9 @@ const ProjectListItem = ({ project }: { project: ExtendedProject }) => {
           </CollapsibleContent>
         </Collapsible>
       </CardContent>
+      <div className="px-4 pb-2">
+        <RelatedNotes entityType="project" entityId={project.id} />
+      </div>
       <CardFooter className="flex justify-between">
         <ButtonWithConfirmation
           variant="destructive"
