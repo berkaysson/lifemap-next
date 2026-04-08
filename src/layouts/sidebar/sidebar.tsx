@@ -519,15 +519,36 @@ SidebarMenu.displayName = "SidebarMenu";
 
 const SidebarMenuItem = React.forwardRef<
   HTMLLIElement,
-  React.ComponentProps<"li">
->(({ className, ...props }, ref) => (
-  <li
-    ref={ref}
-    data-sidebar="menu-item"
-    className={cn("group/menu-item relative", className)}
-    {...props}
-  />
-));
+  React.ComponentProps<"li"> & { title?: string }
+>(({ className, title, children, ...props }, ref) => {
+  const { state, isMobile } = useSidebar();
+
+  const item = (
+    <li
+      ref={ref}
+      data-sidebar="menu-item"
+      className={cn("group/menu-item relative", className)}
+      {...props}
+    >
+      {children}
+    </li>
+  );
+
+  // If there's no title or we're not collapsed, just return the item
+  if (!title || state !== "collapsed" || isMobile) {
+    return item;
+  }
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>{item}</TooltipTrigger>
+      <TooltipContent side="right" align="center">
+        {title}
+      </TooltipContent>
+    </Tooltip>
+  );
+});
+
 SidebarMenuItem.displayName = "SidebarMenuItem";
 
 const sidebarMenuButtonVariants = cva(

@@ -74,7 +74,7 @@ export function AppSidebar() {
               {items.map((item) => {
                 const isActive = isLinkActive(item.url);
                 return (
-                  <SidebarMenuItem key={item.title}>
+                  <SidebarMenuItem key={item.title} title={item.title}>
                     <SidebarMenuButton
                       asChild
                       isActive={isActive}
