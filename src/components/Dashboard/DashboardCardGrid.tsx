@@ -5,7 +5,7 @@ import { Icon } from "@iconify/react";
 
 export const DashboardCardGrid = () => {
   return (
-    <div className="grid grid-cols-3 gap-2 sm:gap-4 mt-4">
+    <div className="grid grid-cols-3 sm:grid-cols-7 gap-2 sm:gap-4 mt-4">
       {items.map((item) => (
         <Link
           key={item.title}
@@ -32,7 +32,7 @@ const items = [
     activeIcon: "solar:bolt-bold-duotone",
   },
   {
-    title: "Categories",
+    title: "Activity Types",
     url: "/dashboard/category",
     activeIcon: "solar:hashtag-square-bold-duotone",
   },
@@ -55,5 +55,10 @@ const items = [
     title: "Projects",
     url: "/dashboard/project",
     activeIcon: "solar:folder-with-files-bold-duotone",
+  },
+  {
+    title: "Notes",
+    url: "/dashboard/note",
+    activeIcon: "solar:book-bookmark-bold-duotone",
   },
 ];

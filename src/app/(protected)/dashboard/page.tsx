@@ -3,7 +3,6 @@ import RecentTodos from "@/components/Dashboard/RecentTodos";
 import RecentTasks from "@/components/Dashboard/RecentTasks";
 import RecentHabits from "@/components/Dashboard/RecentHabits";
 import DailyItemsCarousel from "@/components/Dashboard/DailyItemsCaraousel";
-import QuickActions from "@/components/Dashboard/QuickActions";
 import RecentActivities from "@/components/Dashboard/RecentActivities";
 import { Separator } from "@/components/ui/separator";
 import { DashboardCardGrid } from "@/components/Dashboard/DashboardCardGrid";
@@ -31,8 +30,6 @@ const DashboardPage = () => {
 
         {/* Quick Actions */}
         <div className="my-4 sm:my-6">
-          <QuickActions />
-
           <DashboardCardGrid />
         </div>
 
