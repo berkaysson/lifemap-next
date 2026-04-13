@@ -28,7 +28,7 @@ const NoteShowDialog = ({ note, triggerButton }: NoteShowDialogProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>{triggerButton}</DialogTrigger>
-      <DialogContent className="sm:max-w-[720px] max-h-[85vh] flex flex-col p-0 overflow-hidden sm:rounded-xl">
+      <DialogContent className="sm:max-w-[720px] flex flex-col p-0 sm:rounded-xl">
         <DialogHeader className="px-6 py-5 border-b shrink-0 bg-muted/20">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-3 mt-1">
@@ -57,7 +57,7 @@ const NoteShowDialog = ({ note, triggerButton }: NoteShowDialogProps) => {
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="flex-1">
+        <ScrollArea className="flex-1 min-h-0">
           <div className="px-6 py-4">
             <RichTextEditor
               content={note.content as JSONContent}
