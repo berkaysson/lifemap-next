@@ -18,19 +18,17 @@ const DashboardPage = () => {
         {/* Summary Section */}
         <WelcomeHeader />
 
+        {/* Quick Actions */}
+        <div className="my-4 sm:my-6">
+          <DashboardCardGrid />
+        </div>
+
         <div className="mt-2">
           <WeeklyActivitiesSummaryRadialChart />
         </div>
 
         <div className="my-6 sm:my-8">
           <DailyItemsCarousel />
-        </div>
-
-        <Separator />
-
-        {/* Quick Actions */}
-        <div className="my-4 sm:my-6">
-          <DashboardCardGrid />
         </div>
 
         <Separator />
