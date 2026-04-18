@@ -141,6 +141,9 @@ export const useCreateActivity = () => {
         queryKey: ["habitProgressesEndingToday", userId],
       });
       queryClient.invalidateQueries({
+        queryKey: ["habitProgressesEndingSoon", userId],
+      });
+      queryClient.invalidateQueries({
         queryKey: ["combinedDailyItems", userId],
       });
     },
@@ -202,6 +205,9 @@ export const useUpdateActivity = () => {
       queryClient.invalidateQueries({ queryKey: [ACTIVITY_QUERY_KEY, userId] });
       queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEY, userId] });
       queryClient.invalidateQueries({ queryKey: [HABIT_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({
+        queryKey: ["habitProgressesEndingSoon", userId],
+      });
     },
     onError: (error: any, _, context) => {
       queryClient.setQueryData(
@@ -261,6 +267,9 @@ export const useDeleteActivity = () => {
       queryClient.invalidateQueries({ queryKey: [ACTIVITY_QUERY_KEY, userId] });
       queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEY, userId] });
       queryClient.invalidateQueries({ queryKey: [HABIT_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({
+        queryKey: ["habitProgressesEndingSoon", userId],
+      });
     },
     onError: (error: any, _, context) => {
       queryClient.setQueryData(
