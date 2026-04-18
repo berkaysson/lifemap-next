@@ -15,6 +15,7 @@ import {
   getArchivedHabits,
 } from "@/services/habit/archiveHabits";
 import { getHabitProgressesEndingToday } from "@/services/habit/getHabitProgressesEndingToday";
+import { getHabitProgressesEndingInDays } from "@/services/habit/getHabitProgressesEndingInDays";
 
 export const HABIT_QUERY_KEY = "habits";
 
@@ -303,6 +304,23 @@ export const useFetchHabitProgressesEndingToday = () => {
     queryFn: async () => {
       validateSession(session);
       const response = await getHabitProgressesEndingToday(userId!);
+      if (!response.success) throw new Error(response.message);
+      return response.progresses;
+    },
+    enabled: !!userId,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+};
+// 9. Fetch Habit Progresses Ending In Days Query
+export const useFetchHabitProgressesEndingInDays = (days: number) => {
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+
+  return useQuery({
+    queryKey: ["habitProgressesEndingSoon", userId, days],
+    queryFn: async () => {
+      validateSession(session);
+      const response = await getHabitProgressesEndingInDays(userId!, days);
       if (!response.success) throw new Error(response.message);
       return response.progresses;
     },
