@@ -64,11 +64,18 @@ export const calculateEndDateWithPeriod = (
   }
 };
 
-export const formatDateFriendly = (date: Date | string): string => {
+export const formatDateFriendly = (
+  date: Date | string,
+  isYearOn: boolean = true
+): string => {
   const parsedDate = new Date(date);
   const dayWithSuffix = format(parsedDate, "do");
 
-  return format(parsedDate, `MMMM '${dayWithSuffix},' yyyy`, { locale: enUS });
+  const formatStr = isYearOn
+    ? `MMMM '${dayWithSuffix},' yyyy`
+    : `MMMM '${dayWithSuffix}'`;
+
+  return format(parsedDate, formatStr, { locale: enUS });
 };
 
 export function isToday(date: Date): boolean {

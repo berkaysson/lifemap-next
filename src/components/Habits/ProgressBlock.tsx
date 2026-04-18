@@ -55,6 +55,19 @@ const ProgressBlock = ({
 
   const contrastColor = getContrastColor(colorCode);
 
+  const formattedStart = formatDateFriendly(startDate, false);
+  const formattedEnd = formatDateFriendly(endDate, false);
+  const isSameDay = formattedStart === formattedEnd;
+  const isExceeded = completedDuration > goalDuration;
+  const diffValue = Math.abs(goalDuration - completedDuration);
+
+  const tooltipContent = `${formattedStart}${
+    isSameDay ? "" : ` - ${formattedEnd}`
+  }
+${completedDuration}/${goalDuration} (${
+    isExceeded ? "Exceeded" : "Remained"
+  }: ${diffValue})`;
+
   return (
     <div
       style={{
@@ -66,12 +79,10 @@ const ProgressBlock = ({
       }}
       className={cn(
         "rounded-lg cursor-pointer transition-colors duration-200 relative active:!bg-secondary",
-        className
+        className,
       )}
       data-tooltip-id={tooltipId}
-      data-tooltip-content={`${formatDateFriendly(startDate)}
-- ${formatDateFriendly(endDate)}
-${completedDuration}/${goalDuration}`}
+      data-tooltip-content={tooltipContent}
     >
       {isCompleted && (
         <svg
