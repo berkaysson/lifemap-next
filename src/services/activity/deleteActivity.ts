@@ -5,6 +5,7 @@ import { updateTasksCompletedDurationByActivityDate } from "@/helpers/task";
 import { updateHabitsCompletedDurationByActivityDate } from "@/helpers/habit";
 import { logService } from "@/lib/utils";
 import { ExtendedActivity } from "@/types/Entitities";
+import { revalidateTag } from "next/cache";
 
 export const deleteActivity = async (activity: ExtendedActivity) => {
   logService("deleteActivity");
@@ -47,6 +48,9 @@ export const deleteActivity = async (activity: ExtendedActivity) => {
     ];
 
     await Promise.all(updates);
+
+    revalidateTag("activities");
+    revalidateTag(`activities-${activity.userId}`);
 
     return {
       message: "Successfully deleted activity",

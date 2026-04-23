@@ -13,9 +13,11 @@ import {
   startOfDay,
 } from "date-fns";
 
+import { unstable_cache } from "next/cache";
+
 export const getWeeklyActivitiesSummary = async (
   userId: string,
-  monthOffset: number = 0
+  monthOffset: number = 0,
 ) => {
   logService("getWeeklyActivitiesSummary");
   if (!userId) {
@@ -25,94 +27,111 @@ export const getWeeklyActivitiesSummary = async (
     };
   }
 
-  try {
-    // Clamp end date to today at end of day (disallow future)
-    const candidateEnd = endOfDay(addMonths(new Date(), monthOffset));
-    const todayEnd = endOfDay(new Date());
-    const endDate = candidateEnd > todayEnd ? todayEnd : candidateEnd;
+  const fetchSummary = unstable_cache(
+    async (userId: string, monthOffset: number) => {
+      logService("getWeeklyActivitiesSummary - calculate");
+      try {
+        // Clamp end date to today at end of day (disallow future)
+        const candidateEnd = endOfDay(addMonths(new Date(), monthOffset));
+        const todayEnd = endOfDay(new Date());
+        const endDate = candidateEnd > todayEnd ? todayEnd : candidateEnd;
 
-    // Fetch user's emailVerified to limit earliest start date
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { emailVerified: true },
-    });
-
-    const proposedStart = subMonths(endDate, 3);
-    const startDate = user?.emailVerified
-      ? new Date(
-          Math.max(startOfDay(user.emailVerified).getTime(), proposedStart.getTime())
-        )
-      : proposedStart;
-
-    const activities = await prisma.activity.findMany({
-      where: {
-        userId,
-        date: {
-          gte: startDate,
-          lte: endDate,
-        },
-      },
-      include: {
-        category: {
-          select: {
-            name: true,
-          },
-        },
-      },
-      orderBy: {
-        date: "asc",
-      },
-    });
-
-    if (!activities.length) {
-      return {
-        message: "No activities found in the selected period.",
-        success: true,
-        data: [],
-      };
-    }
-
-    const summaryMap = new Map<string, WeeklyActivitySummary>();
-
-    for (const activity of activities) {
-      const weekStartDate = startOfWeek(activity.date, { weekStartsOn: 1 });
-      const weekKey = formatISO(weekStartDate, { representation: "date" });
-
-      if (!summaryMap.has(weekKey)) {
-        const weekEndDate = endOfWeek(weekStartDate, { weekStartsOn: 1 });
-        summaryMap.set(weekKey, {
-          weekStartDate,
-          weekEndDate,
-          totalDuration: 0,
-          categoryBreakdown: {},
+        // Fetch user's emailVerified to limit earliest start date
+        const user = await prisma.user.findUnique({
+          where: { id: userId },
+          select: { emailVerified: true },
         });
+
+        const proposedStart = subMonths(endDate, 3);
+        const startDate = user?.emailVerified
+          ? new Date(
+              Math.max(
+                startOfDay(user.emailVerified).getTime(),
+                proposedStart.getTime(),
+              ),
+            )
+          : proposedStart;
+
+        const activities = await prisma.activity.findMany({
+          where: {
+            userId,
+            date: {
+              gte: startDate,
+              lte: endDate,
+            },
+          },
+          include: {
+            category: {
+              select: {
+                name: true,
+              },
+            },
+          },
+          orderBy: {
+            date: "asc",
+          },
+        });
+
+        if (!activities.length) {
+          return {
+            message: "No activities found in the selected period.",
+            success: true,
+            data: [],
+          };
+        }
+
+        const summaryMap = new Map<string, WeeklyActivitySummary>();
+
+        for (const activity of activities) {
+          const weekStartDate = startOfWeek(activity.date, { weekStartsOn: 1 });
+          const weekKey = formatISO(weekStartDate, { representation: "date" });
+
+          if (!summaryMap.has(weekKey)) {
+            const weekEndDate = endOfWeek(weekStartDate, { weekStartsOn: 1 });
+            summaryMap.set(weekKey, {
+              weekStartDate,
+              weekEndDate,
+              totalDuration: 0,
+              categoryBreakdown: {},
+            });
+          }
+
+          const weeklySummary = summaryMap.get(weekKey)!;
+          weeklySummary.totalDuration += activity.duration;
+
+          const categoryName = activity.category.name;
+          weeklySummary.categoryBreakdown[categoryName] =
+            (weeklySummary.categoryBreakdown[categoryName] || 0) +
+            activity.duration;
+        }
+
+        const result = Array.from(summaryMap.values()).sort(
+          (a, b) => a.weekStartDate.getTime() - b.weekStartDate.getTime(),
+        );
+
+        return {
+          message: "Successfully fetched weekly activity summary",
+          success: true,
+          data: result,
+        };
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : "Unknown error";
+        console.error(
+          `Failed to fetch weekly activity summary: ${errorMessage}`,
+        );
+        return {
+          message: `Failed to fetch weekly activity summary: ${errorMessage}`,
+          success: false,
+        };
       }
+    },
+    [`weekly-activities-summary-${userId}-${monthOffset}`],
+    {
+      tags: [`activities-${userId}`, "activities"],
+      revalidate: 3600, // Cache for 1 hour by default, but can be invalidated by tags
+    },
+  );
 
-      const weeklySummary = summaryMap.get(weekKey)!;
-      weeklySummary.totalDuration += activity.duration;
-
-      const categoryName = activity.category.name;
-      weeklySummary.categoryBreakdown[categoryName] =
-        (weeklySummary.categoryBreakdown[categoryName] || 0) +
-        activity.duration;
-    }
-
-    const result = Array.from(summaryMap.values()).sort(
-      (a, b) => a.weekStartDate.getTime() - b.weekStartDate.getTime()
-    );
-
-    return {
-      message: "Successfully fetched weekly activity summary",
-      success: true,
-      data: result,
-    };
-  } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
-    console.error(`Failed to fetch weekly activity summary: ${errorMessage}`);
-    return {
-      message: `Failed to fetch weekly activity summary: ${errorMessage}`,
-      success: false,
-    };
-  }
+  return fetchSummary(userId, monthOffset);
 };

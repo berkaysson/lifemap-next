@@ -8,6 +8,7 @@ import { updateTasksCompletedDurationByActivityDate } from "@/helpers/task";
 import { updateHabitsCompletedDurationByActivityDate } from "@/helpers/habit";
 import { logService } from "@/lib/utils";
 import { archiveOutdatedEntities } from "../archivingService";
+import { revalidateTag } from "next/cache";
 
 export const createActivity = async (
   newActivity: z.infer<typeof ActivitySchema>,
@@ -59,6 +60,9 @@ export const createActivity = async (
         newActivity.duration
       ),
     ]);
+
+    revalidateTag("activities");
+    revalidateTag(`activities-${userId}`);
 
     return {
       message: "Successfully created activity",

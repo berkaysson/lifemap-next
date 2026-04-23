@@ -4,6 +4,7 @@ import { checkIsCategoryExistByCategoryName } from "@/helpers/category";
 import prisma from "@/lib/prisma";
 import { logService } from "@/lib/utils";
 import { Category } from "@prisma/client";
+import { revalidateTag } from "next/cache";
 
 export const updateCategory = async (data: Category) => {
   logService("updateCategory");
@@ -33,6 +34,10 @@ export const updateCategory = async (data: Category) => {
       },
       data: data,
     });
+
+    revalidateTag("activities");
+    revalidateTag(`activities-${data.userId}`);
+
     return {
       message: "Successfully updated Activity Type",
       success: true,

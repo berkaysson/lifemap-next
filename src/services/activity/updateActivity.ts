@@ -6,6 +6,7 @@ import { updateTasksCompletedDurationByActivityDate } from "@/helpers/task";
 import { updateHabitsCompletedDurationByActivityDate } from "@/helpers/habit";
 import { getActivityDuration } from "@/helpers/activity";
 import { logService } from "@/lib/utils";
+import { revalidateTag } from "next/cache";
 
 export const updateActivity = async (data: Activity) => {
   logService("updateActivity");
@@ -63,6 +64,9 @@ export const updateActivity = async (data: Activity) => {
     ];
 
     await Promise.all(updates);
+
+    revalidateTag("activities");
+    revalidateTag(`activities-${data.userId}`);
 
     return {
       message: "Successfully updated activity",
