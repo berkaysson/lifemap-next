@@ -23,7 +23,7 @@ export const getWeeklyCategoryActivitiesSummary = async (
   logService("getWeeklyCategoryActivitiesSummary");
 
   if (!userId) {
-    return { message: "userId is required", success: false };
+    return { message: "userId is required", success: false, data: [] };
   }
 
   if (!categoryId) {
@@ -120,6 +120,7 @@ export const getWeeklyCategoryActivitiesSummary = async (
         return {
           message: `Failed to fetch weekly category activity summary: ${errorMessage}`,
           success: false,
+          data: [],
         };
       }
     },

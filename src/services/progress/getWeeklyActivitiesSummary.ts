@@ -24,6 +24,7 @@ export const getWeeklyActivitiesSummary = async (
     return {
       message: "userId is required",
       success: false,
+      data: [],
     };
   }
 
@@ -123,6 +124,7 @@ export const getWeeklyActivitiesSummary = async (
         return {
           message: `Failed to fetch weekly activity summary: ${errorMessage}`,
           success: false,
+          data: [],
         };
       }
     },
