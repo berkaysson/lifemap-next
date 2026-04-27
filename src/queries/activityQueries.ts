@@ -14,6 +14,10 @@ import { updateActivity } from "@/services/activity/updateActivity";
 import { deleteActivity } from "@/services/activity/deleteActivity";
 import { getActivitiesByCategory } from "@/services/activity/getActivitiesByCategory";
 import { getRecentActivities } from "@/services/activity/getRecentActivities";
+import {
+  CATEGORY_ACTIVITIES_SUMMARY_QUERY_KEY,
+  WEEKLY_ACTIVITIES_SUMMARY_QUERY_KEY,
+} from "./progressQueries";
 
 export const ACTIVITY_QUERY_KEY = "activities";
 
@@ -62,7 +66,7 @@ export const useFetchActivitiesByCategory = (
   const userId = session?.user?.id;
 
   return useQuery({
-    queryKey: [ACTIVITY_QUERY_KEY, "by-category", userId, categoryId, limit],
+    queryKey: [ACTIVITY_QUERY_KEY, userId, "by-category", categoryId, limit],
     queryFn: async () => {
       validateSession(session);
       if (!categoryId) return { success: true, activities: [] };
@@ -86,7 +90,7 @@ export const useFetchRecentActivities = (limit: number = 20) => {
   const userId = session?.user?.id;
 
   return useQuery({
-    queryKey: [ACTIVITY_QUERY_KEY, "recent", userId, limit],
+    queryKey: [ACTIVITY_QUERY_KEY, userId, "recent", limit],
     queryFn: async () => {
       validateSession(session);
       const response = await getRecentActivities(userId!, limit);
@@ -145,6 +149,12 @@ export const useCreateActivity = () => {
       });
       queryClient.invalidateQueries({
         queryKey: ["combinedDailyItems", userId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [WEEKLY_ACTIVITIES_SUMMARY_QUERY_KEY, userId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [CATEGORY_ACTIVITIES_SUMMARY_QUERY_KEY, userId],
       });
     },
     onError: (error: any) => {
@@ -208,6 +218,12 @@ export const useUpdateActivity = () => {
       queryClient.invalidateQueries({
         queryKey: ["habitProgressesEndingSoon", userId],
       });
+      queryClient.invalidateQueries({
+        queryKey: [WEEKLY_ACTIVITIES_SUMMARY_QUERY_KEY, userId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [CATEGORY_ACTIVITIES_SUMMARY_QUERY_KEY, userId],
+      });
     },
     onError: (error: any, _, context) => {
       queryClient.setQueryData(
@@ -269,6 +285,12 @@ export const useDeleteActivity = () => {
       queryClient.invalidateQueries({ queryKey: [HABIT_QUERY_KEY, userId] });
       queryClient.invalidateQueries({
         queryKey: ["habitProgressesEndingSoon", userId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [WEEKLY_ACTIVITIES_SUMMARY_QUERY_KEY, userId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [CATEGORY_ACTIVITIES_SUMMARY_QUERY_KEY, userId],
       });
     },
     onError: (error: any, _, context) => {
