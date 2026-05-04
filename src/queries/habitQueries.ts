@@ -30,10 +30,13 @@ export const useFetchHabits = () => {
       validateSession(session);
       const response = await getHabits(userId!);
       if (!response.success) throw new Error(response.message);
-      response.habits?.forEach((habit) => {
-        habit.progress.sort((a, b) => a.order - b.order);
-      });
-      return response.habits as ExtendedHabit[];
+      if ("habits" in response && response.habits) {
+        response.habits.forEach((habit: any) => {
+          habit.progress.sort((a: any, b: any) => a.order - b.order);
+        });
+        return response.habits as ExtendedHabit[];
+      }
+      return [];
     },
     enabled: !!userId,
     staleTime: 1000 * 60 * 5,
@@ -102,9 +105,11 @@ export const useUpdateHabit = () => {
         (old: ExtendedHabit[] | undefined) => {
           if (!old) return [updatedHabit];
           return old.map((habit) =>
-            habit.id === updatedHabit.id ? { ...habit, ...updatedHabit } : habit
+            habit.id === updatedHabit.id
+              ? { ...habit, ...updatedHabit }
+              : habit,
           );
-        }
+        },
       );
 
       return { previousHabits };
@@ -120,7 +125,7 @@ export const useUpdateHabit = () => {
     onError: (error: any, _, context) => {
       queryClient.setQueryData(
         [HABIT_QUERY_KEY, userId],
-        context?.previousHabits
+        context?.previousHabits,
       );
       toast({
         title: "Habit Not Updated",
@@ -159,7 +164,7 @@ export const useDeleteHabit = () => {
         (old: ExtendedHabit[] | undefined) => {
           if (!old) return [];
           return old.filter((habit) => habit.id !== deletedId);
-        }
+        },
       );
 
       return { previousHabits };
@@ -175,7 +180,7 @@ export const useDeleteHabit = () => {
     onError: (error: any, _, context) => {
       queryClient.setQueryData(
         [HABIT_QUERY_KEY, userId],
-        context?.previousHabits
+        context?.previousHabits,
       );
       toast({
         title: "Habit Not Deleted",
@@ -214,7 +219,7 @@ export const useArchiveHabit = () => {
         (old: ExtendedHabit[] | undefined) => {
           if (!old) return [];
           return old.filter((habit) => habit.id !== archivedId);
-        }
+        },
       );
 
       return { previousHabits };
@@ -231,7 +236,7 @@ export const useArchiveHabit = () => {
     onError: (error: any, _, context) => {
       queryClient.setQueryData(
         [HABIT_QUERY_KEY, userId],
-        context?.previousHabits
+        context?.previousHabits,
       );
       toast({
         title: "Habit Not Archived",
@@ -254,7 +259,10 @@ export const useFetchArchivedHabits = () => {
       validateSession(session);
       const response = await getArchivedHabits(userId!);
       if (!response.success) throw new Error(response.message);
-      return response.archivedHabits;
+      if ("archivedHabits" in response && response.archivedHabits) {
+        return response.archivedHabits;
+      }
+      return [];
     },
     enabled: !!userId,
     staleTime: 1000 * 60 * 5, // 5 minutes
@@ -305,7 +313,10 @@ export const useFetchHabitProgressesEndingToday = () => {
       validateSession(session);
       const response = await getHabitProgressesEndingToday(userId!);
       if (!response.success) throw new Error(response.message);
-      return response.progresses;
+      if ("progresses" in response && response.progresses) {
+        return response.progresses;
+      }
+      return [];
     },
     enabled: !!userId,
     staleTime: 1000 * 60 * 5, // 5 minutes
@@ -322,7 +333,10 @@ export const useFetchHabitProgressesEndingInDays = (days: number) => {
       validateSession(session);
       const response = await getHabitProgressesEndingInDays(userId!, days);
       if (!response.success) throw new Error(response.message);
-      return response.progresses;
+      if ("progresses" in response && response.progresses) {
+        return response.progresses;
+      }
+      return [];
     },
     enabled: !!userId,
     staleTime: 1000 * 60 * 5, // 5 minutes

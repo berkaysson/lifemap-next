@@ -28,7 +28,10 @@ export const useFetchTodos = () => {
       validateSession(session);
       const response = await getToDos(userId!);
       if (!response.success) throw new Error(response.message);
-      return response.todos as ToDo[];
+      if ("todos" in response && response.todos) {
+        return response.todos as ToDo[];
+      }
+      return [];
     },
     enabled: !!userId,
     staleTime: 1000 * 60 * 5,
@@ -245,7 +248,10 @@ export const useFetchArchivedTodos = () => {
       validateSession(session);
       const response = await getArchivedToDos(userId!);
       if (!response.success) throw new Error(response.message);
-      return response.archivedTodos;
+      if ("archivedTodos" in response && response.archivedTodos) {
+        return response.archivedTodos;
+      }
+      return [];
     },
     enabled: !!userId,
     staleTime: 1000 * 60 * 5, // 5 minutes

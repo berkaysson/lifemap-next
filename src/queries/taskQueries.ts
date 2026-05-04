@@ -29,7 +29,10 @@ export const useFetchTasks = () => {
       validateSession(session);
       const response = await getTasks(userId!);
       if (!response.success) throw new Error(response.message);
-      return response.tasks as ExtendedTask[];
+      if ("tasks" in response && response.tasks) {
+        return response.tasks as ExtendedTask[];
+      }
+      return [];
     },
     enabled: !!userId,
     staleTime: 1000 * 60 * 5,
@@ -244,7 +247,10 @@ export const useFetchArchivedTasks = () => {
       validateSession(session);
       const response = await getArchivedTasks(userId!);
       if (!response.success) throw new Error(response.message);
-      return response.archivedTasks;
+      if ("archivedTasks" in response && response.archivedTasks) {
+        return response.archivedTasks;
+      }
+      return [];
     },
     enabled: !!userId,
     staleTime: 1000 * 60 * 5, // 5 minutes
