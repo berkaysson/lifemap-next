@@ -56,12 +56,25 @@ export const useFetchUpcomingHabits = (days: number = 7) => {
 
     const dailyHabits = Object.values(dailyGroups);
     
+    const PERIOD_PRIORITY: Record<string, number> = {
+      [Period.MONTHLY]: 1,
+      [Period.WEEKLY]: 2,
+      [Period.DAILY]: 3,
+    };
+
     return {
       dailyHabits,
       otherHabits,
-      allGrouped: [...dailyHabits, ...otherHabits].sort((a, b) => 
-        new Date(a.endDate).getTime() - new Date(b.endDate).getTime()
-      ),
+      allGrouped: [...dailyHabits, ...otherHabits].sort((a, b) => {
+        const priorityA = PERIOD_PRIORITY[a.habit.period] || 99;
+        const priorityB = PERIOD_PRIORITY[b.habit.period] || 99;
+
+        if (priorityA !== priorityB) {
+          return priorityA - priorityB;
+        }
+
+        return new Date(a.endDate).getTime() - new Date(b.endDate).getTime();
+      }),
     };
   }, [progresses]);
 

@@ -1,6 +1,9 @@
 "use client";
 
-import { useFetchUpcomingHabits, GroupedHabitProgress } from "@/hooks/use-fetch-upcoming-habits";
+import {
+  useFetchUpcomingHabits,
+  GroupedHabitProgress,
+} from "@/hooks/use-fetch-upcoming-habits";
 import { useState, useMemo, useEffect } from "react";
 import { Button } from "../ui/Buttons/button";
 import { Iconify } from "../ui/iconify";
@@ -26,7 +29,7 @@ export default function UpcomingItemsCarousel() {
 
   const currentItem = useMemo(
     () => allGrouped[currentIndex],
-    [allGrouped, currentIndex]
+    [allGrouped, currentIndex],
   );
 
   const handlePrevious = () => {
@@ -67,7 +70,8 @@ export default function UpcomingItemsCarousel() {
       </div>
       <div className="mb-2 sm:mb-4">
         <span className="text-sm text-muted-foreground">
-          You have {allGrouped.length} distinct item{allGrouped.length > 1 && "s"} coming up
+          You have {allGrouped.length} distinct item
+          {allGrouped.length > 1 && "s"} coming up
         </span>
       </div>
       <div className="relative flex items-center justify-between flex-col sm:flex-row gap-3 sm:gap-0">
