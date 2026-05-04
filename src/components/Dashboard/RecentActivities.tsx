@@ -11,7 +11,7 @@ import Tooltip from "@mui/material/Tooltip";
 
 const RecentActivities = () => {
   const { data } = useFetchRecentActivities(50);
-  const activities = data?.activities || [];
+  const activities = (data && "activities" in data) ? data.activities : [];
 
   const todayActivities = activities
     ?.filter((activity: any) => {
