@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { logService } from "@/lib/utils";
+import { revalidateTag } from "next/cache";
 
 export async function archiveToDo(id: string) {
   logService("archiveToDo");
@@ -38,6 +39,9 @@ export async function archiveToDo(id: string) {
       where: { id },
     });
 
+    revalidateTag("todos");
+    revalidateTag(`todos-${todo.userId}`);
+
     return { message: "Successfully archived todo", success: true };
   } catch (error) {
     return { message: `${error}`, success: false };
@@ -70,9 +74,13 @@ export async function deleteArchivedToDo(id: string) {
   }
 
   try {
-    await prisma.archivedToDo.delete({
+    const archivedTodo = await prisma.archivedToDo.delete({
       where: { id },
     });
+
+    revalidateTag("todos");
+    revalidateTag(`todos-${archivedTodo.userId}`);
+
     return { message: "Successfully deleted archived todo", success: true };
   } catch (error) {
     return {

@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { logService } from "@/lib/utils";
+import { revalidateTag } from "next/cache";
 
 export const deleteTask = async (id: string) => {
   logService("deleteTask");
@@ -14,27 +15,34 @@ export const deleteTask = async (id: string) => {
   }
 
   try {
-    // Delete the task directly
-    await prisma.task.delete({
+    const task = await prisma.task.findUnique({
       where: { id },
+      select: { userId: true },
     });
 
-    return {
-      message: "Successfully deleted task",
-      success: true,
-    };
-  } catch (error: any) {
-    // Handle specific errors (e.g., task not found)
-    if (error.code === "P2025") {
+    if (!task) {
       return {
         message: "Task does not exist",
         success: false,
       };
     }
 
+    // Delete the task directly
+    await prisma.task.delete({
+      where: { id },
+    });
+
+    revalidateTag("tasks");
+    revalidateTag(`tasks-${task.userId}`);
+
+    return {
+      message: "Successfully deleted task",
+      success: true,
+    };
+  } catch (error: any) {
     // General error handling
     return {
-      message: "Failed to delete task due to an unexpected error",
+      message: `Failed to delete task: ${error.message}`,
       success: false,
     };
   }

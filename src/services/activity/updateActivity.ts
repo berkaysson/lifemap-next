@@ -67,6 +67,10 @@ export const updateActivity = async (data: Activity) => {
 
     revalidateTag("activities");
     revalidateTag(`activities-${data.userId}`);
+    revalidateTag("habits");
+    revalidateTag(`habits-${data.userId}`);
+    revalidateTag("tasks");
+    revalidateTag(`tasks-${data.userId}`);
 
     return {
       message: "Successfully updated activity",

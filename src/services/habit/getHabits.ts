@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { logService } from "@/lib/utils";
+import { unstable_cache } from "next/cache";
 
 export const getHabits = async (userId: string) => {
   logService("getHabits");
@@ -11,25 +12,38 @@ export const getHabits = async (userId: string) => {
       success: false,
     };
   }
-  try {
-    const habits = await prisma.habit.findMany({
-      where: {
-        userId,
-      },
-      include: {
-        category: true,
-        progress: true,
-      },
-    });
-    return {
-      message: "Successfully fetched habits",
-      success: true,
-      habits,
-    };
-  } catch (error) {
-    return {
-      message: `Failed to fetch habits: ${error}`,
-      success: false,
-    };
-  }
+
+  const fetchHabits = unstable_cache(
+    async (userId: string) => {
+      logService("getHabits - calculate");
+      try {
+        const habits = await prisma.habit.findMany({
+          where: {
+            userId,
+          },
+          include: {
+            category: true,
+            progress: true,
+          },
+        });
+        return {
+          message: "Successfully fetched habits",
+          success: true,
+          habits,
+        };
+      } catch (error) {
+        return {
+          message: `Failed to fetch habits: ${error}`,
+          success: false,
+        };
+      }
+    },
+    [`habits-${userId}`],
+    {
+      tags: [`habits-${userId}`, "habits"],
+      revalidate: 3600,
+    },
+  );
+
+  return fetchHabits(userId);
 };

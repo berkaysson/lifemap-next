@@ -5,6 +5,7 @@ import { checkIsStartDateBeforeEndDate, parseDate } from "@/lib/time";
 import { logService } from "@/lib/utils";
 import { TaskSchema } from "@/schema";
 import { z } from "zod";
+import { revalidateTag } from "next/cache";
 
 export const createTask = async (
   newTask: z.infer<typeof TaskSchema>,
@@ -70,6 +71,9 @@ export const createTask = async (
         completed,
       },
     });
+
+    revalidateTag("tasks");
+    revalidateTag(`tasks-${userId}`);
 
     return { message: "Successfully created task", success: true };
   } catch (error: any) {

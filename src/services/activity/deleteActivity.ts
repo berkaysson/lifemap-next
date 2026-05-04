@@ -51,6 +51,10 @@ export const deleteActivity = async (activity: ExtendedActivity) => {
 
     revalidateTag("activities");
     revalidateTag(`activities-${activity.userId}`);
+    revalidateTag("habits");
+    revalidateTag(`habits-${activity.userId}`);
+    revalidateTag("tasks");
+    revalidateTag(`tasks-${activity.userId}`);
 
     return {
       message: "Successfully deleted activity",

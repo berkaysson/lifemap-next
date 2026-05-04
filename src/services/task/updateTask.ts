@@ -5,6 +5,7 @@ import prisma from "@/lib/prisma";
 import { checkIsStartDateBeforeEndDate } from "@/lib/time";
 import { logService } from "@/lib/utils";
 import { Task } from "@prisma/client";
+import { revalidateTag } from "next/cache";
 
 export const updateTask = async (taskId: string, data: Partial<Task>) => {
   logService("updateTask");
@@ -78,6 +79,9 @@ export const updateTask = async (taskId: string, data: Partial<Task>) => {
       where: { id: taskId },
       data: updateData,
     });
+
+    revalidateTag("tasks");
+    revalidateTag(`tasks-${existingTask.userId}`);
 
     return {
       message: "Successfully updated task",

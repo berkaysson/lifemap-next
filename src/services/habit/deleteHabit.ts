@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { logService } from "@/lib/utils";
+import { revalidateTag } from "next/cache";
 
 export const deleteHabit = async (id: string) => {
   logService("deleteHabit");
@@ -26,6 +27,8 @@ export const deleteHabit = async (id: string) => {
       };
     }
 
+    const userId = habit.userId;
+
     await prisma.habitProgress.deleteMany({
       where: {
         habitId: id,
@@ -37,6 +40,9 @@ export const deleteHabit = async (id: string) => {
         id: id,
       },
     });
+
+    revalidateTag("habits");
+    revalidateTag(`habits-${userId}`);
 
     return {
       message: "Successfully deleted Habit",

@@ -5,6 +5,7 @@ import { parseDate } from "@/lib/time";
 import { logService } from "@/lib/utils";
 import { TodoSchema } from "@/schema";
 import { z } from "zod";
+import { revalidateTag } from "next/cache";
 
 export async function createToDo(
   data: z.infer<typeof TodoSchema>,
@@ -40,6 +41,9 @@ export async function createToDo(
         projectId: undefined,
       },
     });
+
+    revalidateTag("todos");
+    revalidateTag(`todos-${_userId}`);
 
     return { message: "Successfully created todo", success: true };
   } catch (error: any) {

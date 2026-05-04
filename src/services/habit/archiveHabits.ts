@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { logService } from "@/lib/utils";
+import { revalidateTag } from "next/cache";
 
 export async function archiveHabit(id: string) {
   logService("archiveHabit");
@@ -58,6 +59,9 @@ export async function archiveHabit(id: string) {
       where: { id },
     });
 
+    revalidateTag("habits");
+    revalidateTag(`habits-${habit.userId}`);
+
     return { message: "Successfully archived habit", success: true };
   } catch (error) {
     return { message: `Failed to archive habit: ${error}`, success: false };
@@ -96,9 +100,13 @@ export async function deleteArchivedHabit(id: string) {
   }
 
   try {
-    await prisma.archivedHabit.delete({
+    const archivedHabit = await prisma.archivedHabit.delete({
       where: { id },
     });
+
+    revalidateTag("habits");
+    revalidateTag(`habits-${archivedHabit.userId}`);
+
     return { message: "Successfully deleted archived habit", success: true };
   } catch (error) {
     return {

@@ -16,6 +16,7 @@ import { HabitSchema } from "@/schema";
 import { Habit, HabitProgress } from "@prisma/client";
 import { addDays } from "date-fns";
 import { z } from "zod";
+import { revalidateTag } from "next/cache";
 
 export const createHabit = async (
   newHabit: z.infer<typeof HabitSchema>,
@@ -109,6 +110,9 @@ export const createHabit = async (
         data: { completed: true },
       });
     }
+
+    revalidateTag("habits");
+    revalidateTag(`habits-${userId}`);
 
     return {
       message: "Successfully created habit",

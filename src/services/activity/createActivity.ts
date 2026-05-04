@@ -63,6 +63,10 @@ export const createActivity = async (
 
     revalidateTag("activities");
     revalidateTag(`activities-${userId}`);
+    revalidateTag("habits");
+    revalidateTag(`habits-${userId}`);
+    revalidateTag("tasks");
+    revalidateTag(`tasks-${userId}`);
 
     return {
       message: "Successfully created activity",

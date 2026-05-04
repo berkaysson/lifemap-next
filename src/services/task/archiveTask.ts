@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { logService } from "@/lib/utils";
+import { revalidateTag } from "next/cache";
 
 export async function archiveTask(id: string) {
   logService("archiveTask");
@@ -26,6 +27,9 @@ export async function archiveTask(id: string) {
 
     // Delete original task
     await prisma.task.delete({ where: { id } });
+
+    revalidateTag("tasks");
+    revalidateTag(`tasks-${task.userId}`);
 
     return { message: "Successfully archived task", success: true };
   } catch (error: any) {
@@ -69,7 +73,11 @@ export async function deleteArchivedTask(id: string) {
   }
 
   try {
-    await prisma.archivedTask.delete({ where: { id } });
+    const archivedTask = await prisma.archivedTask.delete({ where: { id } });
+
+    revalidateTag("tasks");
+    revalidateTag(`tasks-${archivedTask.userId}`);
+
     return { message: "Successfully deleted archived task", success: true };
   } catch (error: any) {
     return {
