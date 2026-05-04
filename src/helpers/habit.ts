@@ -8,7 +8,7 @@ export const updateHabitsCompletedDurationByActivityDate = async (
   userId: string,
   categoryId: string,
   activityDate: Date,
-  duration: number
+  duration: number,
 ) => {
   const endDate = activityDate;
 
@@ -46,7 +46,7 @@ export const updateHabitsCompletedDurationByActivityDate = async (
   // Update the habits after all progress updates
   const habitIds = habitProgresses.map((hp) => hp.habitId);
   const habitCompletionUpdates = habitIds.map((habitId) =>
-    updateHabitCompleted(habitId)
+    updateHabitCompleted(habitId),
   );
 
   await Promise.all(habitCompletionUpdates);
@@ -68,10 +68,10 @@ export const updateHabitCompleted = async (habitId: string) => {
 };
 
 export const calculateIsHabitCompleted = async (
-  habitProgresses: HabitProgress[]
+  habitProgresses: HabitProgress[],
 ) => {
   const isHabitCompleted = habitProgresses.every(
-    (progress) => progress.completed
+    (progress) => progress.completed,
   );
 
   return isHabitCompleted;
@@ -81,7 +81,7 @@ export const calculateProgress = async (
   habit: Habit,
   currentDate: Date,
   order: number,
-  activities: { date: Date; duration: number }[]
+  activities: { date: Date; duration: number }[],
 ) => {
   const endDate = getEndDate(habit.period, currentDate);
   const correctedEndDate = removeOneDay(endDate);
@@ -89,7 +89,7 @@ export const calculateProgress = async (
   const completedDuration = calculateTotalDurationForDateRange(
     activities,
     currentDate,
-    correctedEndDate
+    correctedEndDate,
   );
   const completed = completedDuration >= habit.goalDurationPerPeriod;
 
@@ -106,19 +106,19 @@ export const calculateProgress = async (
   } as HabitProgress;
 };
 
-const calculateTotalDurationForDateRange = (
+export const calculateTotalDurationForDateRange = (
   activities: { date: Date; duration: number }[],
   startDate: Date,
-  endDate: Date
+  endDate: Date,
 ): number => {
   return activities
     .filter(
-      (activity) => activity.date >= startDate && activity.date <= endDate
+      (activity) => activity.date >= startDate && activity.date <= endDate,
     )
     .reduce((total, activity) => total + activity.duration, 0);
 };
 
-const calculateStreaks = async (habitProgresses: HabitProgress[]) => {
+export const calculateStreaks = async (habitProgresses: HabitProgress[]) => {
   let currentStreak = 0;
   let bestStreak = 0;
   let tempStreak = 0;
@@ -133,6 +133,8 @@ const calculateStreaks = async (habitProgresses: HabitProgress[]) => {
       tempStreak = 0;
     }
   }
+
+  currentStreak = tempStreak;
 
   return { currentStreak, bestStreak };
 };
@@ -153,7 +155,7 @@ const getEndDate = (period: string, date: Date) => {
 export const validateHabitPeriodAndDate = (
   numberOfPeriods: number,
   startDate: Date,
-  endDate: Date
+  endDate: Date,
 ): ServiceResponse => {
   if (numberOfPeriods < 2) {
     return {
