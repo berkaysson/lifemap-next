@@ -76,14 +76,20 @@ const ActivityForm = ({ drawerState, trigger }: ActivityFormProps) => {
   const suggestedCategories = useMemo(
     () =>
       getSuggestedCategories(
-        recentActivitiesData?.activities as ExtendedActivity[]
+        recentActivitiesData && "activities" in recentActivitiesData
+          ? (recentActivitiesData.activities as ExtendedActivity[])
+          : undefined
       ),
     [recentActivitiesData]
   );
 
   const suggestedDurations = useMemo(
     () =>
-      getSuggestedDurations(activitiesData?.activities as ExtendedActivity[]),
+      getSuggestedDurations(
+        activitiesData && "activities" in activitiesData
+          ? (activitiesData.activities as ExtendedActivity[])
+          : undefined
+      ),
     [activitiesData]
   );
 
