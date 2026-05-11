@@ -8,6 +8,7 @@ import { validateSession } from "@/lib/session";
 import { ExtendedActivity } from "@/types/Entitities";
 import { TASK_QUERY_KEY } from "./taskQueries";
 import { HABIT_QUERY_KEY } from "./habitQueries";
+import { CATEGORY_QUERY_KEY } from "./categoryQueries";
 import { getActivities } from "@/services/activity/getActivites";
 import { createActivity } from "@/services/activity/createActivity";
 import { updateActivity } from "@/services/activity/updateActivity";
@@ -139,6 +140,7 @@ export const useCreateActivity = () => {
       });
 
       queryClient.invalidateQueries({ queryKey: [ACTIVITY_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: [CATEGORY_QUERY_KEY, userId] });
       queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEY, userId] });
       queryClient.invalidateQueries({ queryKey: [HABIT_QUERY_KEY, userId] });
       queryClient.invalidateQueries({
@@ -213,6 +215,7 @@ export const useUpdateActivity = () => {
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: [ACTIVITY_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: [CATEGORY_QUERY_KEY, userId] });
       queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEY, userId] });
       queryClient.invalidateQueries({ queryKey: [HABIT_QUERY_KEY, userId] });
       queryClient.invalidateQueries({
@@ -281,6 +284,7 @@ export const useDeleteActivity = () => {
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: [ACTIVITY_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: [CATEGORY_QUERY_KEY, userId] });
       queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEY, userId] });
       queryClient.invalidateQueries({ queryKey: [HABIT_QUERY_KEY, userId] });
       queryClient.invalidateQueries({

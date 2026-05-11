@@ -24,7 +24,7 @@ import { Label } from "../ui/Forms/label";
 import { Iconify } from "../ui/iconify";
 
 const CategorySelectCreate = ({ field, form }) => {
-  const { data: categories } = useFetchCategories();
+  const { data: categories } = useFetchCategories(true);
   const { mutateAsync: createCategory } = useCreateCategory();
   const [searchTerm, setSearchTerm] = useState("");
   const [isCreating, setIsCreating] = useState(false);

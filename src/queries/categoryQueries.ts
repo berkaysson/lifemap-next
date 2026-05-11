@@ -13,15 +13,15 @@ import { deleteCategory } from "@/services/category/deleteCategory";
 export const CATEGORY_QUERY_KEY = "categories";
 
 // 1. Fetch Categories Query
-export const useFetchCategories = () => {
+export const useFetchCategories = (sortByLastUsed: boolean = false) => {
   const { data: session } = useSession();
   const userId = session?.user?.id;
 
   return useQuery({
-    queryKey: [CATEGORY_QUERY_KEY, userId],
+    queryKey: [CATEGORY_QUERY_KEY, userId, sortByLastUsed],
     queryFn: async () => {
       validateSession(session);
-      const response = await getCategories(userId!);
+      const response = await getCategories(userId!, sortByLastUsed);
       if (!response.success) throw new Error(response.message);
       return response.categories as Category[];
     },
