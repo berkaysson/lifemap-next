@@ -87,7 +87,7 @@ const RichTextEditor = ({
       attributes: {
         class: cn(
           "prose prose-sm dark:prose-invert max-w-none min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none",
-          !editable && "cursor-default opacity-70",
+          !editable && "cursor-default",
         ),
       },
     },
@@ -147,7 +147,7 @@ const RichTextEditor = ({
       )}
       <EditorContent
         editor={editor}
-        className="flex-1 [&>.tiptap]:h-full [&>.tiptap]:min-h-[200px]"
+        className="flex-1 overflow-y-auto min-h-0 [&>.tiptap]:min-h-full"
       />
     </div>
   );

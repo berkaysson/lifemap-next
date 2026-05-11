@@ -112,8 +112,8 @@ const NoteEditForm = ({ initialValues, triggerButton }: NoteEditFormProps) => {
               Update your note content and settings
             </DrawerDescription>
           </DrawerHeader>
-          <div className="p-4 pt-0 flex-1 flex flex-col gap-4 overflow-y-auto">
-            <div className="flex flex-col gap-2">
+          <div className="p-4 pt-0 flex-1 flex flex-col gap-4 overflow-hidden">
+            <div className="flex flex-col gap-2 flex-shrink-0">
               <Label>Title</Label>
               <Input
                 type="text"
@@ -126,7 +126,7 @@ const NoteEditForm = ({ initialValues, triggerButton }: NoteEditFormProps) => {
                 placeholder="Note title"
               />
             </div>
-            <div className="flex flex-col gap-2 flex-1">
+            <div className="flex flex-col gap-2 flex-1 overflow-hidden min-h-0">
               <Label>Content</Label>
               <RichTextEditor
                 content={editorContent}
@@ -135,42 +135,44 @@ const NoteEditForm = ({ initialValues, triggerButton }: NoteEditFormProps) => {
                 enableMentions
                 mentionData={mentionData}
                 editable={!isLoading}
-                className="flex-1 [&_.tiptap]:min-h-full"
+                className="flex-1 overflow-hidden"
               />
             </div>
 
-            <div className="flex flex-col gap-2">
-              <Label>Color</Label>
-              <ColorPicker value={colorCode} onChange={setColorCode} />
-            </div>
-
-            {error && (
-              <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm font-medium text-center">
-                {error}
+            <div className="flex flex-col gap-2 flex-shrink-0 pt-2 border-t mt-auto">
+              <div className="flex flex-col gap-2">
+                <Label>Color</Label>
+                <ColorPicker value={colorCode} onChange={setColorCode} />
               </div>
-            )}
 
-            <div className="pt-2 flex flex-col gap-3">
-              <LoadingButton
-                isLoading={isLoading}
-                loadingText="Saving..."
-                variant="default"
-                size="sm"
-                onClick={handleSubmit}
-                className="w-full"
-              >
-                Save
-              </LoadingButton>
+              {error && (
+                <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm font-medium text-center">
+                  {error}
+                </div>
+              )}
 
-              <DrawerClose asChild>
-                <Button
-                  variant="ghost"
+              <div className="flex flex-row gap-3">
+                <LoadingButton
+                  isLoading={isLoading}
+                  loadingText="Saving..."
+                  variant="default"
                   size="sm"
-                  className="w-full text-muted-foreground hover:text-foreground/80 hover:bg-muted"
+                  onClick={handleSubmit}
+                  className="w-full"
                 >
-                  Cancel
-                </Button>
-              </DrawerClose>
+                  Save
+                </LoadingButton>
+
+                <DrawerClose asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full text-muted-foreground hover:text-foreground/80 hover:bg-muted"
+                  >
+                    Cancel
+                  </Button>
+                </DrawerClose>
+              </div>
             </div>
           </div>
         </div>
