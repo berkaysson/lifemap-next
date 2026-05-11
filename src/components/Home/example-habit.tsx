@@ -23,10 +23,10 @@ const getISODateString = (date: Date) =>
 
 const today = new Date();
 const habitStartDate = getISODateString(
-  new Date(today.setDate(today.getDate() - 7))
+  new Date(today.setDate(today.getDate() - 7)),
 ); // 7 days ago
 const habitEndDate = getISODateString(
-  new Date(today.setDate(today.getDate() + 69))
+  new Date(today.setDate(today.getDate() + 69)),
 ); // 70-day habit
 
 const getRandomDuration = () => Math.floor(Math.random() * 40) + 15;
@@ -73,6 +73,7 @@ const habitData = {
     name: "Walking Morning",
     date: getISODateString(new Date(today.setDate(today.getDate() - 1))),
     userId: "1",
+    isActive: true,
   },
   progress: generateProgress(70),
 };

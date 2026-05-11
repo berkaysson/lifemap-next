@@ -20,6 +20,7 @@ const ExampleTask = () => {
       name: "Finishing the Book",
       date: new Date("2025-02-28T16:55:55.057Z"),
       userId: "1",
+      isActive: true,
     },
   };
 
