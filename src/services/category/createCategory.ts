@@ -38,6 +38,7 @@ export const createCategory = async (
         name: newCategory.name,
         date,
         userId,
+        isActive: newCategory.isActive ?? true,
       },
     });
 

@@ -106,6 +106,7 @@ model Category {
     tasks      Task[]
     habits     Habit[]
     userId     String
+    isActive   Boolean    @default(true)
     user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@index([userId])

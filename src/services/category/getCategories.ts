@@ -5,7 +5,8 @@ import { logService } from "@/lib/utils";
 
 export const getCategories = async (
   userId: string,
-  sortByLastUsed: boolean = false
+  sortByLastUsed: boolean = false,
+  onlyActive: boolean = false
 ) => {
   logService("getCategories");
   if (!userId) {
@@ -18,6 +19,7 @@ export const getCategories = async (
     const categories = await prisma.category.findMany({
       where: {
         userId,
+        ...(onlyActive ? { isActive: true } : {}),
       },
       include: sortByLastUsed
         ? {

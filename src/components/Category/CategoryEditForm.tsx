@@ -19,6 +19,7 @@ const CategoryEditForm = ({
 }: CategoryEditFormProps) => {
   const [error, setError] = useState<string | null>(null);
   const [newName, setNewName] = useState(initialValues.name);
+  const [isActive, setIsActive] = useState(initialValues.isActive);
   const { mutateAsync: updateCategory } = useUpdateCategory();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +27,7 @@ const CategoryEditForm = ({
   const handleSubmit = async () => {
     setIsLoading(true);
     setError(null);
-    const newCategory = { ...initialValues, name: newName };
+    const newCategory = { ...initialValues, name: newName, isActive: isActive };
     try {
       const response = await updateCategory(newCategory);
       if (response.success) {
@@ -35,15 +36,14 @@ const CategoryEditForm = ({
         setError(response.message);
       }
     } catch (error: any) {
-      setError(
-         "An error occurred while updating the activity type."
-      );
+      setError("An error occurred while updating the activity type.");
     }
     setIsLoading(false);
   };
 
   useEffect(() => {
     setNewName(initialValues.name);
+    setIsActive(initialValues.isActive);
     setError(null);
   }, [initialValues, isOpen]);
 
@@ -66,6 +66,19 @@ const CategoryEditForm = ({
           placeholder="Learning to code"
           maxLength={50}
         />
+
+        <div className="flex items-center gap-2 mt-2">
+          <input
+            type="checkbox"
+            id={`is-active-${initialValues.id}`}
+            checked={isActive}
+            onChange={(e) => setIsActive(e.target.checked)}
+            className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
+          />
+          <Label htmlFor={`is-active-${initialValues.id}`} className="cursor-pointer">
+            Active
+          </Label>
+        </div>
         {error && <p className="text-red-500">{error}</p>}
 
         <LoadingButton

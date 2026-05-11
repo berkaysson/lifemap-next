@@ -15,12 +15,15 @@ export const updateCategory = async (data: Category) => {
     };
   }
 
-  const isCategoryExist = await checkIsCategoryExistByCategoryName(
-    data.name,
-    data.userId
-  );
-
-  if (isCategoryExist) {
+  const existingCategoryWithSameName = await prisma.category.findFirst({
+    where: {
+      name: data.name,
+      userId: data.userId,
+      id: { not: data.id },
+    },
+  });
+  
+  if (existingCategoryWithSameName) {
     return {
       message: "Activity Type already exists",
       success: false,

@@ -39,6 +39,7 @@ const CategoryTable = ({
               <TableRow>
                 <TableHead>Name</TableHead>
                 <TableHead className="sm:block hidden">Creation Date</TableHead>
+                <TableHead>Status</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -58,6 +59,11 @@ const CategoryTable = ({
                     </TableCell>
                     <TableCell className="sm:block hidden">
                       {formatDateFriendly(category.date)}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={category.isActive ? "default" : "secondary"}>
+                        {category.isActive ? "Active" : "Passive"}
+                      </Badge>
                     </TableCell>
                     <TableCell>
                       <div className="flex space-x-2">

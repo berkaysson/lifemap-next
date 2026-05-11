@@ -48,6 +48,7 @@ export const TodoSchema = z.object({
 
 export const CategorySchema = z.object({
   name: z.string().min(1, "Name is required"),
+  isActive: z.boolean().optional(),
 });
 
 export const ActivitySchema = z.object({
