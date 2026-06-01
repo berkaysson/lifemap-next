@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { CACHE_STRATEGIES } from "./queryConfig";
 import { useToast } from "@/components/ui/Misc/use-toast";
 import { CategorySchema } from "@/schema";
 import { Category } from "@prisma/client";
@@ -29,7 +30,7 @@ export const useFetchCategories = (
       return response.categories as Category[];
     },
     enabled: !!userId,
-    staleTime: 1000 * 60 * 5,
+    ...CACHE_STRATEGIES.STATIC,
   });
 };
 

@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { CACHE_STRATEGIES } from "./queryConfig";
 import { useToast } from "@/components/ui/Misc/use-toast";
 import { TodoSchema } from "@/schema";
 import { ToDo } from "@prisma/client";
@@ -31,7 +32,7 @@ export const useFetchTodos = () => {
       return response.todos as ToDo[];
     },
     enabled: !!userId,
-    staleTime: 1000 * 60 * 5,
+    ...CACHE_STRATEGIES.CRITICAL,
   });
 };
 
@@ -248,7 +249,7 @@ export const useFetchArchivedTodos = () => {
       return response.archivedTodos;
     },
     enabled: !!userId,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    ...CACHE_STRATEGIES.CRITICAL,
   });
 };
 

@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { CACHE_STRATEGIES } from "./queryConfig";
 import { useToast } from "@/components/ui/Misc/use-toast";
 import { HabitSchema } from "@/schema";
 import { ExtendedHabit } from "@/types/Entitities";
@@ -36,7 +37,7 @@ export const useFetchHabits = () => {
       return response.habits as ExtendedHabit[];
     },
     enabled: !!userId,
-    staleTime: 1000 * 60 * 5,
+    ...CACHE_STRATEGIES.REGULAR,
   });
 };
 
@@ -257,7 +258,7 @@ export const useFetchArchivedHabits = () => {
       return response.archivedHabits;
     },
     enabled: !!userId,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    ...CACHE_STRATEGIES.REGULAR,
   });
 };
 
@@ -308,7 +309,7 @@ export const useFetchHabitProgressesEndingToday = () => {
       return response.progresses;
     },
     enabled: !!userId,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    ...CACHE_STRATEGIES.REGULAR,
   });
 };
 // 9. Fetch Habit Progresses Ending In Days Query
@@ -325,6 +326,6 @@ export const useFetchHabitProgressesEndingInDays = (days: number) => {
       return response.progresses;
     },
     enabled: !!userId,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    ...CACHE_STRATEGIES.REGULAR,
   });
 };

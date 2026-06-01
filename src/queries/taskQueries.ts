@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { CACHE_STRATEGIES } from "./queryConfig";
 import { useToast } from "@/components/ui/Misc/use-toast";
 import { TaskSchema } from "@/schema";
 import { ExtendedTask } from "@/types/Entitities";
@@ -32,7 +33,7 @@ export const useFetchTasks = () => {
       return response.tasks as ExtendedTask[];
     },
     enabled: !!userId,
-    staleTime: 1000 * 60 * 5,
+    ...CACHE_STRATEGIES.REGULAR,
   });
 };
 
@@ -247,7 +248,7 @@ export const useFetchArchivedTasks = () => {
       return response.archivedTasks;
     },
     enabled: !!userId,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    ...CACHE_STRATEGIES.REGULAR,
   });
 };
 

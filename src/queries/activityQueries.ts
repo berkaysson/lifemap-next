@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { CACHE_STRATEGIES } from "./queryConfig";
 import { useToast } from "@/components/ui/Misc/use-toast";
 import { ActivitySchema } from "@/schema";
 import { Activity } from "@prisma/client";
@@ -54,7 +55,7 @@ export const useFetchActivities = (
       return response;
     },
     enabled: !!userId,
-    staleTime: 1000 * 60 * 5,
+    ...CACHE_STRATEGIES.CRITICAL,
   });
 };
 
@@ -81,7 +82,7 @@ export const useFetchActivitiesByCategory = (
       return response;
     },
     enabled: !!userId && !!categoryId,
-    staleTime: 1000 * 60 * 5,
+    ...CACHE_STRATEGIES.CRITICAL,
   });
 };
 
@@ -99,7 +100,7 @@ export const useFetchRecentActivities = (limit: number = 20) => {
       return response;
     },
     enabled: !!userId,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    ...CACHE_STRATEGIES.CRITICAL,
   });
 };
 

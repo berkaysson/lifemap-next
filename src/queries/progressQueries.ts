@@ -2,6 +2,7 @@ import { validateSession } from "@/lib/session";
 import { getWeeklyActivitiesSummary } from "@/services/progress/getWeeklyActivitiesSummary";
 import { getWeeklyCategoryActivitiesSummary } from "@/services/progress/getWeeklyCategoryActivitiesSummary";
 import { useQuery } from "@tanstack/react-query";
+import { CACHE_STRATEGIES } from "./queryConfig";
 import { useSession } from "next-auth/react";
 
 export const WEEKLY_ACTIVITIES_SUMMARY_QUERY_KEY = "weeklyActivitiesSummary";
@@ -22,7 +23,7 @@ export const useFetchWeeklyActivitiesSummary = (monthOffset: number) => {
       return response;
     },
     enabled: !!userId && typeof monthOffset === "number",
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    ...CACHE_STRATEGIES.REGULAR,
   });
 };
 
@@ -55,6 +56,6 @@ export const useFetchWeeklyCategoryActivitiesSummary = ({
       return response.data;
     },
     enabled: !!userId && !!categoryId && typeof weekOffset === "number",
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    ...CACHE_STRATEGIES.REGULAR,
   });
 };

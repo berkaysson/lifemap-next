@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { CACHE_STRATEGIES } from "./queryConfig";
 import { useToast } from "@/components/ui/Misc/use-toast";
 import { NoteSchema } from "@/schema";
 import { Note } from "@prisma/client";
@@ -34,7 +35,7 @@ export const useFetchNotes = () => {
       })[];
     },
     enabled: !!userId,
-    staleTime: 1000 * 60 * 5,
+    ...CACHE_STRATEGIES.REGULAR,
   });
 };
 
@@ -198,6 +199,6 @@ export const useFetchNotesByEntity = (entityType: string, entityId: string) => {
       return response.notes as Note[];
     },
     enabled: !!userId && !!entityType && !!entityId,
-    staleTime: 1000 * 60 * 5,
+    ...CACHE_STRATEGIES.REGULAR,
   });
 };

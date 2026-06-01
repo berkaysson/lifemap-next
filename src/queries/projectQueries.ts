@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { CACHE_STRATEGIES } from "./queryConfig";
 import { useToast } from "@/components/ui/Misc/use-toast";
 import { ProjectSchema } from "@/schema";
 
@@ -38,7 +39,7 @@ export const useFetchProjects = () => {
       return response.projects as ExtendedProject[];
     },
     enabled: !!userId,
-    staleTime: 1000 * 60 * 5,
+    ...CACHE_STRATEGIES.STATIC,
   });
 };
 
