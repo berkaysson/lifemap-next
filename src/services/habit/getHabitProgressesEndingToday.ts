@@ -27,10 +27,39 @@ export const getHabitProgressesEndingToday = async (userId: string) => {
           lte: todayEnd,
         },
       },
-      include: {
+      select: {
+        id: true,
+        userId: true,
+        categoryId: true,
+        goalDuration: true,
+        order: true,
+        startDate: true,
+        endDate: true,
+        completedDuration: true,
+        completed: true,
+        habitId: true,
         habit: {
-          include: {
-            category: true,
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            colorCode: true,
+            completed: true,
+            period: true,
+            numberOfPeriods: true,
+            startDate: true,
+            endDate: true,
+            goalDurationPerPeriod: true,
+            currentStreak: true,
+            bestStreak: true,
+            categoryId: true,
+            projectId: true,
+            category: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
           },
         },
       },

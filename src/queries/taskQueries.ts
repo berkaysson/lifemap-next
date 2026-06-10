@@ -59,6 +59,7 @@ export const useCreateTask = () => {
       });
 
       queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: ["dailyItemsToday", userId] });
     },
     onError: (error: any) => {
       toast({
@@ -110,6 +111,7 @@ export const useUpdateTask = () => {
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: ["dailyItemsToday", userId] });
     },
     onError: (error: any, _, context) => {
       queryClient.setQueryData(
@@ -163,6 +165,7 @@ export const useDeleteTask = () => {
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: ["dailyItemsToday", userId] });
     },
     onError: (error: any, _, context) => {
       queryClient.setQueryData(
@@ -216,6 +219,7 @@ export const useArchiveTask = () => {
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: ["dailyItemsToday", userId] });
       queryClient.invalidateQueries({ queryKey: ["archivedTasks", userId] });
     },
     onError: (error: any, _, context) => {

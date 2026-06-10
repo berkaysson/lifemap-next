@@ -58,6 +58,7 @@ export const useCreateTodo = () => {
       });
 
       queryClient.invalidateQueries({ queryKey: [TODO_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: ["dailyItemsToday", userId] });
     },
     onError: (error: any) => {
       toast({
@@ -109,6 +110,7 @@ export const useUpdateTodo = () => {
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: [TODO_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: ["dailyItemsToday", userId] });
       queryClient.invalidateQueries({ queryKey: ["combinedDailyItems", userId] });
     },
     onError: (error: any, _, context) => {
@@ -163,6 +165,7 @@ export const useDeleteTodo = () => {
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: [TODO_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: ["dailyItemsToday", userId] });
     },
     onError: (error: any, _, context) => {
       queryClient.setQueryData(
@@ -216,6 +219,7 @@ export const useArchiveTodo = () => {
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: [TODO_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: ["dailyItemsToday", userId] });
       // Also invalidate archived todos query if it exists
       queryClient.invalidateQueries({ queryKey: ["archivedTodos", userId] });
     },

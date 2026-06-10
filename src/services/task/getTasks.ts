@@ -16,8 +16,24 @@ export const getTasks = async (userId: string) => {
       where: {
         userId,
       },
-      include: {
-        category: true,
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        colorCode: true,
+        completed: true,
+        completedDuration: true,
+        goalDuration: true,
+        startDate: true,
+        endDate: true,
+        categoryId: true,
+        projectId: true,
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
     return {

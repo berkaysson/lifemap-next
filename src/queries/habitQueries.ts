@@ -62,6 +62,7 @@ export const useCreateHabit = () => {
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: [HABIT_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: ["dailyItemsToday", userId] });
     },
     onError: (error: any) => {
       toast({
@@ -117,6 +118,7 @@ export const useUpdateHabit = () => {
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: [HABIT_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: ["dailyItemsToday", userId] });
     },
     onError: (error: any, _, context) => {
       queryClient.setQueryData(
@@ -172,6 +174,7 @@ export const useDeleteHabit = () => {
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: [HABIT_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: ["dailyItemsToday", userId] });
     },
     onError: (error: any, _, context) => {
       queryClient.setQueryData(
@@ -227,6 +230,7 @@ export const useArchiveHabit = () => {
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: [HABIT_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: ["dailyItemsToday", userId] });
       queryClient.invalidateQueries({ queryKey: ["archivedHabits", userId] });
     },
     onError: (error: any, _, context) => {

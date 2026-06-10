@@ -1,18 +1,13 @@
-import { useFetchHabitProgressesEndingToday } from "@/queries/habitQueries";
-import { useFetchTasks } from "@/queries/taskQueries";
-import { useFetchTodos } from "@/queries/todoQueries";
+import { useFetchDailyItemsToday } from "@/queries/dashboardQueries";
 import { useSession } from "next-auth/react";
 
 export const useFetchDailyItems = () => {
   const { data: session } = useSession();
   const userId = session?.user?.id;
 
-  const { data: todos, isLoading: todosLoading } = useFetchTodos();
-  const { data: tasks, isLoading: tasksLoading } = useFetchTasks();
-  const { data: habitProgresses, isLoading: habitProgressesLoading } =
-    useFetchHabitProgressesEndingToday();
+  const { data, isLoading } = useFetchDailyItemsToday();
 
-  if (!userId || todosLoading || tasksLoading || habitProgressesLoading) {
+  if (!userId || isLoading || !data) {
     return {
       todos: [],
       tasks: [],
@@ -21,26 +16,10 @@ export const useFetchDailyItems = () => {
     };
   }
 
-  // Filter todos and tasks that are due today
-  const today = new Date().toISOString().split("T")[0];
-  const filteredTodos =
-    todos?.filter(
-      (todo) =>
-        todo.endDate &&
-        new Date(todo.endDate).toISOString().split("T")[0] === today
-    ) || [];
-
-  const filteredTasks =
-    tasks?.filter(
-      (task) =>
-        task.endDate &&
-        new Date(task.endDate).toISOString().split("T")[0] === today
-    ) || [];
-
   return {
-    todos: filteredTodos,
-    tasks: filteredTasks,
-    habitProgresses: habitProgresses || [],
+    todos: data.todos,
+    tasks: data.tasks,
+    habitProgresses: data.habitProgresses,
     isLoading: false,
   };
 };

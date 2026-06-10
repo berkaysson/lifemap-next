@@ -14,6 +14,17 @@ export async function getToDos(userId: string | undefined) {
       where: {
         userId,
       },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        colorCode: true,
+        completed: true,
+        startDate: true,
+        endDate: true,
+        userId: true,
+        projectId: true,
+      },
     });
     return { message: "Successfully fetched todos", success: true, todos };
   } catch (error) {

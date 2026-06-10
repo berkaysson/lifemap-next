@@ -18,7 +18,20 @@ export const getRecentActivities = async (
   try {
     const activities = await prisma.activity.findMany({
       where: { userId },
-      include: { category: true },
+      select: {
+        id: true,
+        description: true,
+        duration: true,
+        categoryId: true,
+        userId: true,
+        date: true,
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
       orderBy: { date: "desc" },
       take: limit,
     });

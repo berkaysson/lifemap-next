@@ -154,6 +154,9 @@ export const useCreateActivity = () => {
         queryKey: ["combinedDailyItems", userId],
       });
       queryClient.invalidateQueries({
+        queryKey: ["dailyItemsToday", userId],
+      });
+      queryClient.invalidateQueries({
         queryKey: [WEEKLY_ACTIVITIES_SUMMARY_QUERY_KEY, userId],
       });
       queryClient.invalidateQueries({
@@ -223,6 +226,9 @@ export const useUpdateActivity = () => {
         queryKey: ["habitProgressesEndingSoon", userId],
       });
       queryClient.invalidateQueries({
+        queryKey: ["dailyItemsToday", userId],
+      });
+      queryClient.invalidateQueries({
         queryKey: [WEEKLY_ACTIVITIES_SUMMARY_QUERY_KEY, userId],
       });
       queryClient.invalidateQueries({
@@ -290,6 +296,9 @@ export const useDeleteActivity = () => {
       queryClient.invalidateQueries({ queryKey: [HABIT_QUERY_KEY, userId] });
       queryClient.invalidateQueries({
         queryKey: ["habitProgressesEndingSoon", userId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["dailyItemsToday", userId],
       });
       queryClient.invalidateQueries({
         queryKey: [WEEKLY_ACTIVITIES_SUMMARY_QUERY_KEY, userId],
