@@ -80,22 +80,41 @@ ${completedDuration}/${goalDuration} (${
     isExceeded ? "Exceeded" : "Remained"
   }: ${diffValue})`;
 
+  const glowShadow = isCompleted
+    ? `0 0 6px 1px ${colorCode}99, 0 0 18px 4px ${colorCode}55, 0 0 32px 8px ${colorCode}22`
+    : level >= 7
+    ? `0 0 4px 1px ${colorCode}44, 0 0 10px 2px ${colorCode}22`
+    : level >= 4
+    ? `0 0 3px 1px ${colorCode}25`
+    : "none";
+
   return (
     <div
       style={{
         width: `${width}px`,
-        height: `${period === "DAILY" ? height : 96}px`,
-        border: isCurrentPeriod ? `1px solid lightgray` : "none",
+        height: `${period === "DAILY" ? height : 108}px`,
+        border: isCurrentPeriod ? `1.5px solid ${colorCode}88` : "none",
         backgroundImage: getBlockColor(level),
-        boxShadow: isCompleted ? `0 0 8px ${colorCode}` : "none",
+        boxShadow: glowShadow,
+        borderRadius: "10px",
       }}
       className={cn(
-        "rounded-lg cursor-pointer transition-colors duration-200 relative active:!bg-secondary",
+        "cursor-pointer transition-all duration-200 relative active:!bg-secondary",
         className,
       )}
       data-tooltip-id={tooltipId}
       data-tooltip-content={tooltipContent}
     >
+      {/* Inner highlight shimmer */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          borderRadius: "10px",
+          background: `linear-gradient(135deg, ${colorCode}18 0%, transparent 60%)`,
+          pointerEvents: "none",
+        }}
+      />
       {isCompleted && (
         <svg
           xmlns="http://www.w3.org/2000/svg"

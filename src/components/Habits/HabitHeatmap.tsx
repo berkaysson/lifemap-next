@@ -53,7 +53,7 @@ const HabitHeatmap = ({ habitProgresses, colorCode }: HabitHeatmapProps) => {
     [heatmapData]
   );
   const heatmapWidth = useMemo(
-    () => columnCount * (32 + 4) + 24,
+    () => columnCount * (36 + 5) + 24,
     [columnCount]
   );
   return (
@@ -73,9 +73,9 @@ const HabitHeatmap = ({ habitProgresses, colorCode }: HabitHeatmapProps) => {
             startDate={new Date(startDate)}
             endDate={new Date(endDate)}
             panelColors={getColorScale(colorCode)}
-            rectProps={{ rx: 4 }}
-            rectSize={32}
-            space={4}
+            rectProps={{ rx: 8 }}
+            rectSize={36}
+            space={5}
             style={{
               color: theme === "dark" ? "#FFFFFF" : "#1C252E",
             }}

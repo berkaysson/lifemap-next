@@ -36,7 +36,7 @@ const HabitLineHeatmap = ({
   };
 
   // Define block width based on period
-  const blockWidth = period === "MONTHLY" ? 40 : 28; // px values
+  const blockWidth = period === "MONTHLY" ? 46 : 32; // px values
 
   return (
     <div className="w-full">
@@ -93,7 +93,7 @@ const HabitLineHeatmap = ({
                     goalDuration={item.goalDuration}
                     colorCode={colorCode || "#3B82F6"}
                     width={blockWidth}
-                    height={24}
+                    height={30}
                     tooltipId="line-heatmap-tooltip"
                     isCurrentPeriod={isCurrentPeriod}
                     period={period}
@@ -110,7 +110,7 @@ const HabitLineHeatmap = ({
                 <div
                   key={level}
                   style={{ backgroundColor: getBlockColor(level) }}
-                  className="w-3 h-3"
+                  className="w-3.5 h-3.5 rounded-sm"
                 />
               ))}
             </div>
