@@ -21,10 +21,16 @@ const HabitLineHeatmap = ({
     const baseColor = colorCode || "#3B82F6";
     const colorMap = {
       0: `${baseColor}10`,
-      0.25: `${baseColor}30`,
-      0.5: `${baseColor}50`,
-      0.75: `${baseColor}60`,
-      1: baseColor,
+      1: `${baseColor}20`,
+      2: `${baseColor}30`,
+      3: `${baseColor}40`,
+      4: `${baseColor}50`,
+      5: `${baseColor}60`,
+      6: `${baseColor}70`,
+      7: `${baseColor}80`,
+      8: `${baseColor}90`,
+      9: `${baseColor}A0`,
+      10: baseColor,
     };
     return colorMap[level as keyof typeof colorMap];
   };
@@ -100,7 +106,7 @@ const HabitLineHeatmap = ({
           {/* Color Scale Legend */}
           <div className="flex items-center gap-2 text-xs text-shade mt-2">
             <div className="flex">
-              {[0, 0.25, 0.5, 0.75, 1].map((level) => (
+              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((level) => (
                 <div
                   key={level}
                   style={{ backgroundColor: getBlockColor(level) }}

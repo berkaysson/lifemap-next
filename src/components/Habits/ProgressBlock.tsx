@@ -29,23 +29,35 @@ const ProgressBlock = ({
   className,
   period,
 }: ProgressBlockProps) => {
-  const getIntensityLevel = (completed: number, goal: number) => {
+  const getIntensityLevel = (completed: number, goal: number): number => {
     if (completed === 0) return 0;
     const percentage = completed / goal;
-    if (percentage <= 0.25) return 0.25;
-    if (percentage <= 0.5) return 0.5;
-    if (percentage <= 0.75) return 0.75;
-    return 1;
+    if (percentage <= 0.1) return 1;
+    if (percentage <= 0.2) return 2;
+    if (percentage <= 0.3) return 3;
+    if (percentage <= 0.4) return 4;
+    if (percentage <= 0.5) return 5;
+    if (percentage <= 0.6) return 6;
+    if (percentage <= 0.7) return 7;
+    if (percentage <= 0.8) return 8;
+    if (percentage <= 0.9) return 9;
+    return 10;
   };
 
   const getBlockColor = (level: number) => {
     const baseColor = colorCode;
     const colorMap = {
       0: `linear-gradient(135deg, ${baseColor}10 0%, ${baseColor}15 100%)`,
-      0.25: `linear-gradient(135deg, ${baseColor}20 0%, ${baseColor}30 100%)`,
-      0.5: `linear-gradient(135deg, ${baseColor}40 0%, ${baseColor}50 100%)`,
-      0.75: `linear-gradient(135deg, ${baseColor}50 0%, ${baseColor}60 100%)`,
-      1: `linear-gradient(135deg, ${baseColor}80 0%, ${baseColor} 100%)`,
+      1: `linear-gradient(135deg, ${baseColor}20 0%, ${baseColor}28 100%)`,
+      2: `linear-gradient(135deg, ${baseColor}30 0%, ${baseColor}3B 100%)`,
+      3: `linear-gradient(135deg, ${baseColor}40 0%, ${baseColor}4E 100%)`,
+      4: `linear-gradient(135deg, ${baseColor}50 0%, ${baseColor}61 100%)`,
+      5: `linear-gradient(135deg, ${baseColor}60 0%, ${baseColor}73 100%)`,
+      6: `linear-gradient(135deg, ${baseColor}70 0%, ${baseColor}85 100%)`,
+      7: `linear-gradient(135deg, ${baseColor}80 0%, ${baseColor}96 100%)`,
+      8: `linear-gradient(135deg, ${baseColor}90 0%, ${baseColor}A8 100%)`,
+      9: `linear-gradient(135deg, ${baseColor}A0 0%, ${baseColor}B9 100%)`,
+      10: `linear-gradient(135deg, ${baseColor}B0 0%, ${baseColor} 100%)`,
     };
     return colorMap[level as keyof typeof colorMap];
   };
