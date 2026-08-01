@@ -35,11 +35,15 @@ const CATEGORY_COLORS = [
   "var(--chart-15)",
 ];
 
-export function WeeklyActivitiesSummaryChart() {
+export function WeeklyActivitiesSummaryChart({ lockedMonthOffset }: { lockedMonthOffset?: number } = {}) {
   const [offset, setOffset] = useState(0);
   const [desktopTimeframe, setDesktopTimeframe] = useState<"1m" | "3m">("3m");
   const isMobile = useIsMobile();
-  const timeframe = isMobile ? "1m" : desktopTimeframe;
+
+  // When locked to a month (from monthly report), force 1m view and use that offset
+  const isLocked = lockedMonthOffset !== undefined;
+  const timeframe = isLocked ? "1m" : (isMobile ? "1m" : desktopTimeframe);
+  const effectiveOffset = isLocked ? lockedMonthOffset : offset;
   const step = useMemo(() => (timeframe === "1m" ? 1 : 3), [timeframe]);
 
   const { data: session } = useSession();
@@ -47,7 +51,7 @@ export function WeeklyActivitiesSummaryChart() {
     data: response,
     isLoading,
     isError,
-  } = useFetchWeeklyActivitiesSummary(offset);
+  } = useFetchWeeklyActivitiesSummary(effectiveOffset);
 
   const emailVerifiedDate = useMemo(() => {
     const iso = (session?.user as any)?.emailVerified as string | undefined;
@@ -72,12 +76,12 @@ export function WeeklyActivitiesSummaryChart() {
 
   const { description, noDataMessage } = useMemo(() => {
     const periodLabel = timeframe === "1m" ? "Month" : "3 Months";
-    if (offset === 0)
+    if (effectiveOffset === 0)
       return {
         description: `Last ${periodLabel}`,
         noDataMessage: `No activity data for the last ${periodLabel.toLowerCase()}.`,
       };
-    const endDate = addMonths(new Date(), offset);
+    const endDate = addMonths(new Date(), effectiveOffset);
     const startDate = subMonths(endDate, step);
     return {
       description: `${format(startDate, "MMM d, yyyy")} - ${format(
@@ -86,13 +90,13 @@ export function WeeklyActivitiesSummaryChart() {
       )}`,
       noDataMessage: "No activity data for this period.",
     };
-  }, [offset, timeframe, step]);
+  }, [effectiveOffset, timeframe, step]);
 
   const processedData = useMemo(() => {
     if (!response?.data || response.data.length === 0) return null;
     let dataToProcess = response.data;
     if (timeframe === "1m") {
-      const monthEndDate = endOfDay(addMonths(new Date(), offset));
+      const monthEndDate = endOfDay(addMonths(new Date(), effectiveOffset));
       const monthStartDate = startOfDay(subMonths(monthEndDate, 1));
       dataToProcess = response.data.filter(
         (w) =>
@@ -121,6 +125,7 @@ export function WeeklyActivitiesSummaryChart() {
       ...w.categoryBreakdown,
     }));
     return { chartData, chartConfig, allCategories };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response?.data, timeframe, offset]);
 
   const handleTimeframeChange = (value: "1m" | "3m") => {
@@ -138,13 +143,13 @@ export function WeeklyActivitiesSummaryChart() {
       isError={isError}
       hasData={!!processedData}
       noDataMessage={noDataMessage}
-      timeframe={timeframe}
-      onTimeframeChange={handleTimeframeChange}
-      onPrevious={() => setOffset((prev) => Math.max(prev - step, minOffset))}
-      onNext={() => setOffset((prev) => Math.min(prev + step, 0))}
-      isPreviousDisabled={offset <= minOffset}
-      isNextDisabled={offset >= 0}
-      showTimeframeToggle={!isMobile}
+      timeframe={isLocked ? undefined : timeframe}
+      onTimeframeChange={isLocked ? undefined : handleTimeframeChange}
+      onPrevious={isLocked ? undefined : () => setOffset((prev) => Math.max(prev - step, minOffset))}
+      onNext={isLocked ? undefined : () => setOffset((prev) => Math.min(prev + step, 0))}
+      isPreviousDisabled={isLocked ? undefined : offset <= minOffset}
+      isNextDisabled={isLocked ? undefined : offset >= 0}
+      showTimeframeToggle={!isLocked && !isMobile}
     >
       {processedData && (
         <ChartContainer
