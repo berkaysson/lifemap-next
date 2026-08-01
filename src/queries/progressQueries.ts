@@ -1,7 +1,6 @@
 import { validateSession } from "@/lib/session";
 import { getWeeklyActivitiesSummary } from "@/services/progress/getWeeklyActivitiesSummary";
 import { getWeeklyCategoryActivitiesSummary } from "@/services/progress/getWeeklyCategoryActivitiesSummary";
-import { getMonthlyReport } from "@/services/progress/getMonthlyReport";
 import { useQuery } from "@tanstack/react-query";
 import { CACHE_STRATEGIES } from "./queryConfig";
 import { useSession } from "next-auth/react";
@@ -57,26 +56,6 @@ export const useFetchWeeklyCategoryActivitiesSummary = ({
       return response.data;
     },
     enabled: !!userId && !!categoryId && typeof weekOffset === "number",
-    ...CACHE_STRATEGIES.REGULAR,
-  });
-};
-
-// 3. Fetch Monthly Report Query
-export const MONTHLY_REPORT_QUERY_KEY = "monthlyReport";
-
-export const useFetchMonthlyReport = (year: number, month: number) => {
-  const { data: session } = useSession();
-  const userId = session?.user?.id;
-
-  return useQuery({
-    queryKey: [MONTHLY_REPORT_QUERY_KEY, userId, year, month],
-    queryFn: async () => {
-      validateSession(session);
-      const response = await getMonthlyReport(userId!, year, month);
-      if (!response.success) throw new Error(response.message);
-      return response.data;
-    },
-    enabled: !!userId && !!year && !!month,
     ...CACHE_STRATEGIES.REGULAR,
   });
 };
