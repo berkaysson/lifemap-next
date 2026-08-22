@@ -7,11 +7,11 @@ import Loading from "./loading";
 const NoteForm = lazy(() => import("@/components/Notes/NoteForm"));
 
 interface AlbumPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-const AlbumPage = ({ params }: AlbumPageProps) => {
-  const { id } = params;
+const AlbumPage = async ({ params }: AlbumPageProps) => {
+  const { id } = await params;
 
   return (
     <div>
