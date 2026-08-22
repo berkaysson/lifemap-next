@@ -10,7 +10,7 @@ const NotePage = () => {
     <div>
       <DashboardHeader title="Notes" DialogComponent={<NoteForm />} />
       <Suspense fallback={<Loading />}>
-        <NoteList />
+        <NoteList albumId={null} />
       </Suspense>
     </div>
   );

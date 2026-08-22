@@ -38,9 +38,18 @@ interface NoteFormProps {
   isOpen?: boolean;
   setIsOpen?: (open: boolean) => void;
   hideTrigger?: boolean;
+  defaultAlbumId?: string;
+  triggerButton?: React.ReactNode;
 }
 
-const NoteForm = ({ useArea = "entity", isOpen: propIsOpen, setIsOpen: propSetIsOpen, hideTrigger = false }: NoteFormProps) => {
+const NoteForm = ({
+  useArea = "entity",
+  isOpen: propIsOpen,
+  setIsOpen: propSetIsOpen,
+  hideTrigger = false,
+  defaultAlbumId,
+  triggerButton,
+}: NoteFormProps) => {
   const [isOpenInternal, setIsOpenInternal] = useState(false);
   const isOpen = propIsOpen !== undefined ? propIsOpen : isOpenInternal;
   const setIsOpen = propSetIsOpen !== undefined ? propSetIsOpen : setIsOpenInternal;
@@ -61,6 +70,7 @@ const NoteForm = ({ useArea = "entity", isOpen: propIsOpen, setIsOpen: propSetIs
       content: undefined,
       colorCode: "#714DD9",
       pinned: false,
+      albumId: defaultAlbumId || undefined,
       mentions: [],
     },
   });
@@ -80,7 +90,11 @@ const NoteForm = ({ useArea = "entity", isOpen: propIsOpen, setIsOpen: propSetIs
   const onSubmit = (data: z.infer<typeof NoteSchema>) => {
     startTransition(async () => {
       try {
-        const response = await createNote(data);
+        const payload = {
+          ...data,
+          albumId: defaultAlbumId || data.albumId,
+        };
+        const response = await createNote(payload);
         if (response.message) {
           setMessage(response.message);
           if (response.success) {
@@ -104,6 +118,9 @@ const NoteForm = ({ useArea = "entity", isOpen: propIsOpen, setIsOpen: propSetIs
     if (newIsOpen) {
       setMessage("");
       setIsError(false);
+      if (defaultAlbumId) {
+        form.setValue("albumId", defaultAlbumId);
+      }
     }
     setIsOpen(newIsOpen);
   };
@@ -117,7 +134,9 @@ const NoteForm = ({ useArea = "entity", isOpen: propIsOpen, setIsOpen: propSetIs
     >
       {!hideTrigger && (
         <DrawerTrigger asChild>
-          {useArea === "entity" ? (
+          {triggerButton ? (
+            triggerButton
+          ) : useArea === "entity" ? (
             <Button variant="ghost" size="sm">
               <Iconify
                 icon="solar:add-square-linear"

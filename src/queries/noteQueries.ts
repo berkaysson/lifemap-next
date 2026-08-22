@@ -61,7 +61,11 @@ export const useCreateNote = () => {
         duration: 3000,
       });
 
-      queryClient.invalidateQueries({ queryKey: [NOTE_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: [NOTE_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: ["notesByAlbum"] });
+      queryClient.invalidateQueries({ queryKey: ["rootNotes"] });
+      queryClient.invalidateQueries({ queryKey: ["pinnedNotes"] });
+      queryClient.invalidateQueries({ queryKey: ["noteAlbums"] });
     },
     onError: (error: any) => {
       toast({
@@ -116,7 +120,11 @@ export const useUpdateNote = () => {
         description: "Note updated successfully",
         duration: 3000,
       });
-      queryClient.invalidateQueries({ queryKey: [NOTE_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: [NOTE_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: ["notesByAlbum"] });
+      queryClient.invalidateQueries({ queryKey: ["pinnedNotes"] });
+      queryClient.invalidateQueries({ queryKey: ["rootNotes"] });
+      queryClient.invalidateQueries({ queryKey: ["noteAlbums"] });
     },
     onError: (error: any, _, context) => {
       queryClient.setQueryData(
@@ -168,7 +176,11 @@ export const useDeleteNote = () => {
         description: "Note deleted successfully",
         duration: 3000,
       });
-      queryClient.invalidateQueries({ queryKey: [NOTE_QUERY_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: [NOTE_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: ["notesByAlbum"] });
+      queryClient.invalidateQueries({ queryKey: ["pinnedNotes"] });
+      queryClient.invalidateQueries({ queryKey: ["rootNotes"] });
+      queryClient.invalidateQueries({ queryKey: ["noteAlbums"] });
     },
     onError: (error: any, _, context) => {
       queryClient.setQueryData(

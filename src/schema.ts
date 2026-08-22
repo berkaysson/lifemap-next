@@ -114,6 +114,7 @@ export const NoteSchema = z.object({
   content: z.any().optional(),
   colorCode: z.string().optional(),
   pinned: z.boolean().optional(),
+  albumId: z.string().optional(),
   mentions: z
     .array(
       z.object({
@@ -122,4 +123,12 @@ export const NoteSchema = z.object({
       }),
     )
     .optional(),
+});
+
+export const NoteAlbumSchema = z.object({
+  name: z.string().min(1, "Name is required").max(60),
+  description: z.string().optional(),
+  colorCode: z.string().optional(),
+  icon: z.string().optional(),
+  parentId: z.string().optional(),
 });

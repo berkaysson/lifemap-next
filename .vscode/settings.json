@@ -2,4 +2,5 @@
     "deno.enablePaths": ["src/supabase/functions"],
     "deno.enable": true,
     "deno.lint": true,
+    "prisma.pinToPrisma6": true,
 }

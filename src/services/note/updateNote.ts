@@ -18,14 +18,16 @@ export async function updateNote(data: UpdateNoteData) {
     };
   }
 
+  const { mentions } = data;
   const {
     id,
-    mentions,
+    mentions: _mentions,
+    albums: _albums,
     userId: _userId,
     createdAt: _createdAt,
     updatedAt: _updatedAt,
     ...updatableFields
-  } = data;
+  } = data as any;
 
   try {
     await prisma.note.update({
@@ -41,7 +43,7 @@ export async function updateNote(data: UpdateNoteData) {
 
       if (mentions.length > 0) {
         const uniqueMentions = Array.from(
-          new Map(
+          new Map<string, { entityType: string; entityId: string }>(
             mentions.map((m) => [`${m.entityType}-${m.entityId}`, m])
           ).values()
         );

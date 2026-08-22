@@ -16,6 +16,11 @@ export async function getNotes(userId: string | undefined) {
       },
       include: {
         mentions: true,
+        albums: {
+          include: {
+            album: { select: { id: true, name: true, colorCode: true } },
+          },
+        },
       },
       orderBy: {
         updatedAt: "desc",

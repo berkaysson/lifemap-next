@@ -21,6 +21,7 @@ export async function createNote(
     content = undefined,
     colorCode = "#714DD9",
     pinned = false,
+    albumId = undefined,
     mentions = [],
   } = validatedFields.data;
 
@@ -32,6 +33,15 @@ export async function createNote(
         colorCode,
         pinned,
         userId: _userId,
+        ...(albumId
+          ? {
+              albums: {
+                create: {
+                  albumId,
+                },
+              },
+            }
+          : {}),
       },
     });
 

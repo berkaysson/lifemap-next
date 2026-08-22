@@ -32,13 +32,14 @@ model User {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    todos      ToDo[]
-    tasks      Task[]
-    habits     Habit[]
-    projects   Project[]
-    activities Activity[]
-    categories Category[]
-    notes      Note[]
+    todos           ToDo[]
+    tasks           Task[]
+    habits          Habit[]
+    projects        Project[]
+    activities      Activity[]
+    categories      Category[]
+    notes           Note[]
+    noteAlbums      NoteAlbum[]
 }
 
 model Account {
@@ -262,18 +263,48 @@ model ArchivedHabit {
 }
 
 model Note {
-    id        String         @id @default(cuid())
+    id        String          @id @default(cuid())
     title     String
     content   Json?
     colorCode String?
-    pinned    Boolean        @default(false)
+    pinned    Boolean         @default(false)
     userId    String
-    user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+    user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
     mentions  NoteMention[]
-    createdAt DateTime       @default(now())
-    updatedAt DateTime       @updatedAt
+    albums    NoteAlbumNote[]
+    createdAt DateTime        @default(now())
+    updatedAt DateTime        @updatedAt
 
     @@index([userId])
+}
+
+model NoteAlbum {
+    id          String          @id @default(cuid())
+    name        String
+    description String?
+    colorCode   String?
+    icon        String?
+    userId      String
+    user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+    parentId    String?
+    parent      NoteAlbum?      @relation("AlbumChildren", fields: [parentId], references: [id])
+    children    NoteAlbum[]     @relation("AlbumChildren")
+    notes       NoteAlbumNote[]
+    createdAt   DateTime        @default(now())
+    updatedAt   DateTime        @updatedAt
+
+    @@index([userId])
+    @@index([parentId])
+}
+
+model NoteAlbumNote {
+    noteId  String
+    albumId String
+    note    Note      @relation(fields: [noteId], references: [id], onDelete: Cascade)
+    album   NoteAlbum @relation(fields: [albumId], references: [id], onDelete: Cascade)
+
+    @@id([noteId, albumId])
+    @@index([albumId])
 }
 
 model NoteMention {
